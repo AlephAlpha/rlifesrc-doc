@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["VIEW_FREQ",""]],"enum":[["Mode","Different modes to handle events."]],"fn":[["tui","Runs the search with a TUI."]],"struct":[["App",""]]});

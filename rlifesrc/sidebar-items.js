@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["main",""],["run_search","Runs the search without TUI."]],"mod":[["args","Parsing command-line arguments."],["tui",""]]});
