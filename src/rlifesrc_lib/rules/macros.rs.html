@@ -376,11 +376,13 @@
 <span id="373">373</span>
 <span id="374">374</span>
 <span id="375">375</span>
+<span id="376">376</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! A macro to generate the corresponding Generations rule of a rule.</span>
 <span class="attribute">#![<span class="ident">macro_use</span>]</span>
 
 <span class="doccomment">/// Implements `Rule` trait for a rule and the corresponding Generations rule.</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_rule</span> {
     {
         $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc_desc</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span>
