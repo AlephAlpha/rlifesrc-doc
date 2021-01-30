@@ -527,13 +527,27 @@
 <span id="524">524</span>
 <span id="525">525</span>
 <span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The world.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">Coord</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>, <span class="ident">DEAD</span>},
     <span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">SearchOrder</span>, <span class="ident">SkipLevel</span>, <span class="ident">Symmetry</span>, <span class="ident">Transform</span>},
-    <span class="ident">error</span>::<span class="ident">Error</span>,
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
     <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>},
 };
@@ -666,6 +680,11 @@
         ];
         <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">1</span>..<span class="op">=</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> {
             <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="op">-</span><span class="number">1</span>..<span class="op">=</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">d</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span> {
+                    <span class="kw">if</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&gt;</span> <span class="ident">d</span> <span class="op">+</span> <span class="number">1</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
                 <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
                     <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
                     <span class="kw">for</span> (<span class="ident">i</span>, (<span class="ident">nx</span>, <span class="ident">ny</span>)) <span class="kw">in</span> <span class="ident">NBHD</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
@@ -690,6 +709,11 @@
     <span class="kw">fn</span> <span class="ident">init_pred_succ</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">1</span>..<span class="op">=</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> {
             <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="op">-</span><span class="number">1</span>..<span class="op">=</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">d</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span> {
+                    <span class="kw">if</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&gt;</span> <span class="ident">d</span> <span class="op">+</span> <span class="number">1</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
                 <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
                     <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
                     <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
@@ -710,6 +734,8 @@
                             <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span>
                             <span class="op">&amp;&amp;</span> <span class="number">0</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">y</span>
                             <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span>
+                            <span class="op">&amp;&amp;</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
+                                <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>())
                             <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">cell</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>)
                         {
                             <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">Reason</span>::<span class="ident">Deduce</span>));
@@ -740,6 +766,11 @@
     <span class="kw">fn</span> <span class="ident">init_sym</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="op">-</span><span class="number">1</span>..<span class="op">=</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> {
             <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="op">-</span><span class="number">1</span>..<span class="op">=</span><span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> {
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">d</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span> {
+                    <span class="kw">if</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&gt;</span> <span class="ident">d</span> <span class="op">+</span> <span class="number">1</span> {
+                        <span class="kw">continue</span>;
+                    }
+                }
                 <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
                     <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
                     <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
@@ -794,6 +825,8 @@
                             <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span>
                             <span class="op">&amp;&amp;</span> <span class="number">0</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">y</span>
                             <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span>
+                            <span class="op">&amp;&amp;</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
+                                <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>())
                             <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">cell</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>)
                         {
                             <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">Reason</span>::<span class="ident">Deduce</span>));
@@ -834,7 +867,7 @@
     <span class="doccomment">/// [`next_unknown`](#structfield.next_unknown) to be this cell.</span>
     <span class="kw">fn</span> <span class="ident">set_next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cell</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>(<span class="ident">coord</span>) {
-            <span class="kw">if</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() {
+            <span class="kw">if</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">cell</span>.<span class="ident">next</span>.<span class="ident">is_none</span>() {
                 <span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">next_unknown</span>, <span class="prelude-val">Some</span>(<span class="ident">cell</span>));
                 <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>(<span class="ident">coord</span>).<span class="ident">unwrap</span>();
                 <span class="kw">unsafe</span> {
@@ -880,6 +913,8 @@
             <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span>
             <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>
             <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span>
+            <span class="op">&amp;&amp;</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
+                <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>() <span class="op">+</span> <span class="number">1</span>)
         {
             <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> ((<span class="ident">x</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">*</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">+</span> <span class="ident">y</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">*</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> <span class="op">+</span> <span class="ident">t</span>;
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cells</span>[<span class="ident">index</span> <span class="kw">as</span> <span class="ident">usize</span>])
@@ -999,11 +1034,7 @@
                     .<span class="ident">step_by</span>(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> <span class="kw">as</span> <span class="ident">usize</span>)
                     .<span class="ident">all</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> {
                         <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">c</span>.<span class="ident">coord</span>;
-                        <span class="ident">c</span>.<span class="ident">state</span>.<span class="ident">get</span>()
-                            <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span> <span class="op">-</span> <span class="ident">dx</span>, <span class="ident">y</span> <span class="op">-</span> <span class="ident">dy</span>, <span class="ident">t</span>)).<span class="ident">map_or_else</span>(
-                                <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">map</span>(<span class="op">|</span><span class="ident">c1</span><span class="op">|</span> <span class="ident">c1</span>.<span class="ident">background</span>),
-                                <span class="op">|</span><span class="ident">c1</span><span class="op">|</span> <span class="ident">c1</span>.<span class="ident">state</span>.<span class="ident">get</span>(),
-                            )
+                        <span class="ident">c</span>.<span class="ident">state</span>.<span class="ident">get</span>() <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">get_cell_state</span>((<span class="ident">x</span> <span class="op">-</span> <span class="ident">dx</span>, <span class="ident">y</span> <span class="op">-</span> <span class="ident">dy</span>, <span class="ident">t</span>))
                     })
             }
         })
@@ -1033,18 +1064,17 @@
                             (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>)
                         }
                     };
-                    <span class="ident">c</span>.<span class="ident">state</span>.<span class="ident">get</span>()
-                        <span class="op">=</span><span class="op">=</span> <span class="self">self</span>
-                            .<span class="ident">find_cell</span>((<span class="ident">new_x</span>, <span class="ident">new_y</span>, <span class="ident">t</span>))
-                            .<span class="ident">map_or</span>(<span class="prelude-val">Some</span>(<span class="ident">c</span>.<span class="ident">background</span>), <span class="op">|</span><span class="ident">c1</span><span class="op">|</span> <span class="ident">c1</span>.<span class="ident">state</span>.<span class="ident">get</span>())
+                    <span class="ident">c</span>.<span class="ident">state</span>.<span class="ident">get</span>() <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">get_cell_state</span>((<span class="ident">new_x</span>, <span class="ident">new_y</span>, <span class="ident">t</span>))
                 })
     }
 
     <span class="doccomment">/// Gets the state of a cell. Returns `Err(())` if there is no such cell.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_cell_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">find_cell</span>(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">translate</span>(<span class="ident">coord</span>))
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">cell</span><span class="op">|</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>())
-            .<span class="ident">ok_or</span>(<span class="ident">Error</span>::<span class="ident">GetCellError</span>(<span class="ident">coord</span>))
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_cell_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">translate</span>(<span class="ident">coord</span>);
+        <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">map_or_else</span>(
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="number">0</span>, <span class="number">0</span>, <span class="ident">t</span>)).<span class="ident">map</span>(<span class="op">|</span><span class="ident">c1</span><span class="op">|</span> <span class="ident">c1</span>.<span class="ident">background</span>),
+            <span class="op">|</span><span class="ident">c1</span><span class="op">|</span> <span class="ident">c1</span>.<span class="ident">state</span>.<span class="ident">get</span>(),
+        )
     }
 
     <span class="doccomment">/// Minimum number of known living cells in all generation.</span>

@@ -26,9 +26,6 @@
 <span id="23">23</span>
 <span id="24">24</span>
 <span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! All kinds of errors in this crate.</span>
 
@@ -39,9 +36,6 @@
 <span class="doccomment">/// All kinds of errors in this crate.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Error</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// Unable to get the state of a cell.</span>
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unable to get the state of cell {0:?}.&quot;</span>)]</span>
-    <span class="ident">GetCellError</span>(<span class="ident">Coord</span>),
     <span class="doccomment">/// Unable to set a cell.</span>
     <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Unable to set cell at {0:?}.&quot;</span>)]</span>
     <span class="ident">SetCellError</span>(<span class="ident">Coord</span>),
