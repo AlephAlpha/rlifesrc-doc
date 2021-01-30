@@ -527,47 +527,6 @@
 <span id="524">524</span>
 <span id="525">525</span>
 <span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
-<span id="549">549</span>
-<span id="550">550</span>
-<span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The world.</span>
 
@@ -622,6 +581,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// There must be no unknown cell before this cell.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">next_unknown</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Whether to force the first row/column to be nonempty.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Depending on the search order, the &#39;front&#39; means:</span>
+    <span class="doccomment">/// * the first row, when the search order is row first;</span>
+    <span class="doccomment">/// * the first column, when the search order is column first;</span>
+    <span class="doccomment">/// * the first row plus the first column, when the search order is diagonal.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">non_empty_front</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
@@ -632,31 +599,7 @@
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> ((<span class="ident">config</span>.<span class="ident">width</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">*</span> (<span class="ident">config</span>.<span class="ident">height</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">*</span> <span class="ident">config</span>.<span class="ident">period</span>) <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">size</span>);
 
-        <span class="comment">// Whether to consider only the first generation of the front.</span>
-        <span class="kw">let</span> <span class="ident">front_gen0</span> <span class="op">=</span> <span class="op">!</span><span class="ident">rule</span>.<span class="ident">has_b0</span>()
-            <span class="op">&amp;&amp;</span> <span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
-            <span class="op">&amp;&amp;</span> <span class="kw">match</span> <span class="ident">search_order</span> {
-                <span class="ident">SearchOrder</span>::<span class="ident">ColumnFirst</span> <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">config</span>.<span class="ident">dy</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>
-                        <span class="op">&amp;&amp;</span> <span class="ident">config</span>.<span class="ident">dx</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>
-                        <span class="op">&amp;&amp;</span> (<span class="ident">config</span>.<span class="ident">transform</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Transform</span>::<span class="ident">Id</span>
-                            <span class="op">|</span><span class="op">|</span> <span class="ident">config</span>.<span class="ident">transform</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-                }
-                <span class="ident">SearchOrder</span>::<span class="ident">RowFirst</span> <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">config</span>.<span class="ident">dx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>
-                        <span class="op">&amp;&amp;</span> <span class="ident">config</span>.<span class="ident">dy</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>
-                        <span class="op">&amp;&amp;</span> (<span class="ident">config</span>.<span class="ident">transform</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Transform</span>::<span class="ident">Id</span>
-                            <span class="op">|</span><span class="op">|</span> <span class="ident">config</span>.<span class="ident">transform</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-                }
-                <span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
-            };
-
-        <span class="comment">// Whether to consider only half of the first generation of the front.</span>
-        <span class="kw">let</span> <span class="ident">front_half</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
-            <span class="op">&amp;&amp;</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">symmetry</span> {
-                <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span> <span class="op">|</span> <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span> <span class="op">|</span> <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">front_gen0</span>,
-            };
+        <span class="kw">let</span> <span class="ident">is_front</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">is_front_fn</span>(<span class="ident">rule</span>.<span class="ident">has_b0</span>(), <span class="kw-2">&amp;</span><span class="ident">search_order</span>);
 
         <span class="comment">// Fills the vector with dead cells,</span>
         <span class="comment">// and checks whether it is on the first row or column.</span>
@@ -677,35 +620,9 @@
                         <span class="ident">DEAD</span>
                     };
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">LifeCell</span>::<span class="ident">new</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>), <span class="ident">state</span>, <span class="ident">succ_state</span>);
-                    <span class="kw">match</span> <span class="ident">search_order</span> {
-                        <span class="ident">SearchOrder</span>::<span class="ident">ColumnFirst</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">if</span> <span class="ident">front_gen0</span> {
-                                <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">config</span>.<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>)
-                                    <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>
-                                    <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="ident">front_half</span> <span class="op">|</span><span class="op">|</span> <span class="number">2</span> <span class="op">*</span> <span class="ident">y</span> <span class="op">&lt;</span> <span class="ident">config</span>.<span class="ident">height</span>)
-                                {
-                                    <span class="ident">cell</span>.<span class="ident">is_front</span> <span class="op">=</span> <span class="bool-val">true</span>
-                                }
-                            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                                <span class="ident">cell</span>.<span class="ident">is_front</span> <span class="op">=</span> <span class="bool-val">true</span>
-                            }
-                        }
-                        <span class="ident">SearchOrder</span>::<span class="ident">RowFirst</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">if</span> <span class="ident">front_gen0</span> {
-                                <span class="kw">if</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">config</span>.<span class="ident">dy</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>)
-                                    <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>
-                                    <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="ident">front_half</span> <span class="op">|</span><span class="op">|</span> <span class="number">2</span> <span class="op">*</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">config</span>.<span class="ident">width</span>)
-                                {
-                                    <span class="ident">cell</span>.<span class="ident">is_front</span> <span class="op">=</span> <span class="bool-val">true</span>
-                                }
-                            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                                <span class="ident">cell</span>.<span class="ident">is_front</span> <span class="op">=</span> <span class="bool-val">true</span>
-                            }
-                        }
-                        <span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                                <span class="ident">cell</span>.<span class="ident">is_front</span> <span class="op">=</span> <span class="bool-val">true</span>
-                            }
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">is_front</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">is_front</span> {
+                        <span class="kw">if</span> <span class="ident">is_front</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)) {
+                            <span class="ident">cell</span>.<span class="ident">is_front</span> <span class="op">=</span> <span class="bool-val">true</span>;
                         }
                     }
                     <span class="ident">cells</span>.<span class="ident">push</span>(<span class="ident">cell</span>);
@@ -723,12 +640,13 @@
             <span class="ident">set_stack</span>: <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">size</span>),
             <span class="ident">check_index</span>: <span class="number">0</span>,
             <span class="ident">next_unknown</span>: <span class="prelude-val">None</span>,
+            <span class="ident">non_empty_front</span>: <span class="ident">is_front</span>.<span class="ident">is_some</span>(),
         }
         .<span class="ident">init_nbhd</span>()
         .<span class="ident">init_pred_succ</span>()
         .<span class="ident">init_sym</span>()
         .<span class="ident">init_state</span>()
-        .<span class="ident">init_search_order</span>()
+        .<span class="ident">init_search_order</span>(<span class="ident">search_order</span>.<span class="ident">as_ref</span>())
     }
 
     <span class="doccomment">/// Links the cells to their neighbors.</span>
@@ -928,8 +846,8 @@
     }
 
     <span class="doccomment">/// Sets the search order.</span>
-    <span class="kw">fn</span> <span class="ident">init_search_order</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">for</span> <span class="ident">coord</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">search_order_iter</span>() {
+    <span class="kw">fn</span> <span class="ident">init_search_order</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">search_order</span>: <span class="kw-2">&amp;</span><span class="ident">SearchOrder</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">for</span> <span class="ident">coord</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">search_order_iter</span>(<span class="ident">search_order</span>) {
             <span class="self">self</span>.<span class="ident">set_next</span>(<span class="ident">coord</span>);
         }
         <span class="self">self</span>
@@ -992,7 +910,7 @@
         }
         <span class="kw">if</span> <span class="ident">cell</span>.<span class="ident">is_front</span> <span class="op">&amp;&amp;</span> <span class="ident">state</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>.<span class="ident">background</span> {
             <span class="self">self</span>.<span class="ident">front_cell_count</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">non_empty_front</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">front_cell_count</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">non_empty_front</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">front_cell_count</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                 <span class="ident">result</span> <span class="op">=</span> <span class="bool-val">false</span>;
             }
         }
