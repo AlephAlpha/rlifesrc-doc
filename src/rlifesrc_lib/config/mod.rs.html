@@ -274,6 +274,17 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! World configuration.</span>
 
@@ -294,7 +305,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">cells</span>::{<span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">doc</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="doccomment">/// How to choose a state for an unknown cell.</span>
@@ -508,6 +519,18 @@
         <span class="self">self</span>
     }
 
+    <span class="doccomment">/// Whether the configuration requires the world to be square.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">symmetry</span>.<span class="ident">require_square_world</span>()
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">require_square_world</span>()
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">search_order</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span>)
+    }
+
+    <span class="doccomment">/// Whether the configuration requires the world to have no diagonal width.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">symmetry</span>.<span class="ident">require_no_diagonal_width</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">require_no_diagonal_width</span>()
+    }
+
     <span class="doccomment">/// Creates a new world from the configuration.</span>
     <span class="doccomment">/// Returns an error if the rule string is invalid.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
@@ -519,12 +542,11 @@
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">NonPositiveError</span>);
             }
         }
-        <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">symmetry</span>.<span class="ident">square_world</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">square_world</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">search_order</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span>))
-            <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span>
-        {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">require_square_world</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">SquareWorldError</span>);
+        }
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">require_no_diagonal_width</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_some</span>() {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">DiagonalWidthError</span>);
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">Life</span><span class="op">&gt;</span>() {
             <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">World</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">rule</span>)))

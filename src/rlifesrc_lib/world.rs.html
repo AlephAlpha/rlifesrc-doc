@@ -500,54 +500,12 @@
 <span id="497">497</span>
 <span id="498">498</span>
 <span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The world.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">Coord</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>, <span class="ident">DEAD</span>},
-    <span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">SearchOrder</span>, <span class="ident">SkipLevel</span>, <span class="ident">Symmetry</span>, <span class="ident">Transform</span>},
+    <span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">SearchOrder</span>, <span class="ident">SkipLevel</span>, <span class="ident">Transform</span>},
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
     <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>},
 };
@@ -775,47 +733,15 @@
                     <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
                     <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
 
-                    <span class="kw">let</span> <span class="ident">sym_coords</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">symmetry</span> {
-                        <span class="ident">Symmetry</span>::<span class="ident">C1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[],
-                        <span class="ident">Symmetry</span>::<span class="ident">C2</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">vec</span><span class="macro">!</span>[(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>)]
-                        }
-                        <span class="ident">Symmetry</span>::<span class="ident">C4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
-                            (<span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-                        ],
-                        <span class="ident">Symmetry</span>::<span class="ident">D2Row</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>)],
-                        <span class="ident">Symmetry</span>::<span class="ident">D2Col</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)],
-                        <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[(<span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>)],
-                        <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            <span class="macro">vec</span><span class="macro">!</span>[(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>)]
-                        }
-                        <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
-                            (<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-                        ],
-                        <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
-                            (<span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-                        ],
-                        <span class="ident">Symmetry</span>::<span class="ident">D8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
-                            (<span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
-                            (<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-                            (<span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-                        ],
-                    };
-                    <span class="kw">for</span> <span class="ident">coord</span> <span class="kw">in</span> <span class="ident">sym_coords</span> {
+                    <span class="kw">for</span> <span class="ident">transform</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">symmetry</span>.<span class="ident">members</span>() {
+                        <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span>
+                            <span class="ident">transform</span>.<span class="ident">act_on</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>), <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span>);
                         <span class="kw">if</span> <span class="number">0</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">coord</span>.<span class="number">0</span>
                             <span class="op">&amp;&amp;</span> <span class="ident">coord</span>.<span class="number">0</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span>
                             <span class="op">&amp;&amp;</span> <span class="number">0</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">coord</span>.<span class="number">1</span>
                             <span class="op">&amp;&amp;</span> <span class="ident">coord</span>.<span class="number">1</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span>
+                            <span class="op">&amp;&amp;</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
+                                <span class="op">|</span><span class="op">|</span> (<span class="ident">coord</span>.<span class="number">0</span> <span class="op">-</span> <span class="ident">coord</span>.<span class="number">1</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>())
                         {
                             <span class="kw">unsafe</span> {
                                 <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">cell_ptr</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>();
@@ -1049,22 +975,12 @@
                 .<span class="ident">iter</span>()
                 .<span class="ident">step_by</span>(<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> <span class="kw">as</span> <span class="ident">usize</span>)
                 .<span class="ident">all</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> {
-                    <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>) <span class="op">=</span> <span class="ident">c</span>.<span class="ident">coord</span>;
-                    <span class="kw">let</span> (<span class="ident">new_x</span>, <span class="ident">new_y</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">transform</span> {
-                        <span class="ident">Transform</span>::<span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">x</span>, <span class="ident">y</span>),
-                        <span class="ident">Transform</span>::<span class="ident">Rotate90</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">x</span>),
-                        <span class="ident">Transform</span>::<span class="ident">Rotate180</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>)
-                        }
-                        <span class="ident">Transform</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>),
-                        <span class="ident">Transform</span>::<span class="ident">FlipRow</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>),
-                        <span class="ident">Transform</span>::<span class="ident">FlipCol</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">y</span>),
-                        <span class="ident">Transform</span>::<span class="ident">FlipDiag</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">y</span>, <span class="ident">x</span>),
-                        <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span> <span class="op">=</span><span class="op">&gt;</span> {
-                            (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>)
-                        }
-                    };
-                    <span class="ident">c</span>.<span class="ident">state</span>.<span class="ident">get</span>() <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">get_cell_state</span>((<span class="ident">new_x</span>, <span class="ident">new_y</span>, <span class="ident">t</span>))
+                    <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">transform</span>.<span class="ident">act_on</span>(
+                        <span class="ident">c</span>.<span class="ident">coord</span>,
+                        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span>,
+                        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span>,
+                    );
+                    <span class="ident">c</span>.<span class="ident">state</span>.<span class="ident">get</span>() <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">get_cell_state</span>(<span class="ident">coord</span>)
                 })
     }
 
