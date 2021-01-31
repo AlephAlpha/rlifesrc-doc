@@ -273,18 +273,6 @@
 <span id="270">270</span>
 <span id="271">271</span>
 <span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
-<span id="281">281</span>
-<span id="282">282</span>
-<span id="283">283</span>
-<span id="284">284</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! World configuration.</span>
 
@@ -309,7 +297,7 @@
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="doccomment">/// How to choose a state for an unknown cell.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
 <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">NewState</span> {
@@ -343,38 +331,10 @@
     <span class="doccomment">/// the probability of each state is `1/n`.</span>
     <span class="ident">Random</span>,
 }
-
-<span class="doccomment">/// What patterns are considered boring and should be skip.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">SkipLevel</span> {
-    <span class="doccomment">/// Only skips trivial (empty) patterns.</span>
-    <span class="ident">SkipTrivial</span>,
-
-    <span class="doccomment">/// Skips stable patterns when period &gt; 1.</span>
-    <span class="ident">SkipStable</span>,
-
-    <span class="doccomment">/// Skips stable patterns, and oscillators</span>
-    <span class="doccomment">/// whose actual periods are smaller than the given period.</span>
-    <span class="ident">SkipSubperiodOscillator</span>,
-
-    <span class="doccomment">/// Skips stable patterns, and oscillators and spaceships</span>
-    <span class="doccomment">/// whose actual periods are smaller than the given period.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
-    <span class="ident">SkipSubperiodSpaceship</span>,
-
-    <span class="doccomment">/// Skips all the above, and symmetric patterns which are invariant</span>
-    <span class="doccomment">/// under the current [`Transform`].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For example, skips patterns with `D2|` symmetry when the [`Transform`] is `F|`.</span>
-    <span class="ident">SkipSymmetric</span>,
-}
-
 <span class="doccomment">/// World configuration.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The world will be generated from this configuration.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
 <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Config</span> {
@@ -442,8 +402,16 @@
     <span class="doccomment">/// where `abs(x - y) &gt;= n` are assumed to be dead.</span>
     <span class="kw">pub</span> <span class="ident">diagonal_width</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span>,
 
-    <span class="doccomment">/// What patterns are considered boring and should be skip.</span>
-    <span class="kw">pub</span> <span class="ident">skip_level</span>: <span class="ident">SkipLevel</span>,
+    <span class="doccomment">/// Whether to skip patterns whose fundamental period are smaller than the given period.</span>
+    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;true&quot;</span>))]</span>
+    <span class="kw">pub</span> <span class="ident">skip_subperiod</span>: <span class="ident">bool</span>,
+
+    <span class="doccomment">/// Whether to skip patterns which are invariant under more transformations than</span>
+    <span class="doccomment">/// required by the given symmetry.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// In another word, whether to skip patterns whose symmetry group properly contains</span>
+    <span class="doccomment">/// the given symmetry group.</span>
+    <span class="kw">pub</span> <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Config</span> {
@@ -513,9 +481,17 @@
         <span class="self">self</span>
     }
 
-    <span class="doccomment">/// Sets the skip level.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_skip_level</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_level</span>: <span class="ident">SkipLevel</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">skip_level</span> <span class="op">=</span> <span class="ident">skip_level</span>;
+    <span class="doccomment">/// Sets whether to skip patterns whose fundamental period</span>
+    <span class="doccomment">/// is smaller than the given period.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_skip_subperiod</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subperiod</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">skip_subperiod</span> <span class="op">=</span> <span class="ident">skip_subperiod</span>;
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Sets whether to skip patterns which are invariant under</span>
+    <span class="doccomment">/// more transformations than required by the given symmetry.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_skip_subsymmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">skip_subsymmetry</span> <span class="op">=</span> <span class="ident">skip_subsymmetry</span>;
         <span class="self">self</span>
     }
 
