@@ -738,6 +738,19 @@
 <span id="735">735</span>
 <span id="736">736</span>
 <span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Configurations related to the</span>
 <span class="doccomment">//! [dihedral group _D_&lt;sub&gt;8&lt;/sub&gt;](https://en.wikipedia.org/wiki/Examples_of_groups#dihedral_group_of_order_8).</span>
@@ -794,47 +807,54 @@
     <span class="doccomment">/// 90° rotation counterclockwise.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to be square and have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;R90&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;R90&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;R90&quot;</span>))]</span>
     <span class="ident">Rotate90</span>,
     <span class="doccomment">/// `R180`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// 180° rotation counterclockwise.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;R180&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;R180&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;R180&quot;</span>))]</span>
     <span class="ident">Rotate180</span>,
     <span class="doccomment">/// `R270`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// 270° rotation counterclockwise.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to be square and have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;R270&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;R270&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;R270&quot;</span>))]</span>
     <span class="ident">Rotate270</span>,
     <span class="doccomment">/// `F-`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Reflection across the middle row.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;F-&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F-&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F-&quot;</span>))]</span>
     <span class="ident">FlipRow</span>,
     <span class="doccomment">/// `F|`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Reflection across the middle column.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;F|&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F|&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F|&quot;</span>))]</span>
     <span class="ident">FlipCol</span>,
     <span class="doccomment">/// `F\`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Reflection across the diagonal.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;F\\&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F\\&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F\\&quot;</span>))]</span>
     <span class="ident">FlipDiag</span>,
     <span class="doccomment">/// `F/`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Reflection across the antidiagonal.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;F/&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F/&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F/&quot;</span>))]</span>
     <span class="ident">FlipAntidiag</span>,
 }
 
@@ -1047,28 +1067,32 @@
     <span class="doccomment">/// Symmetry under reflection across the middle row.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;D2-&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2-&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2-&quot;</span>))]</span>
     <span class="ident">D2Row</span>,
     <span class="doccomment">/// `D2|`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Symmetry under reflection across the middle column.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;D2|&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2|&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2|&quot;</span>))]</span>
     <span class="ident">D2Col</span>,
     <span class="doccomment">/// `D2\`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Symmetry under reflection across the diagonal.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;D2\\&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2\\&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2\\&quot;</span>))]</span>
     <span class="ident">D2Diag</span>,
     <span class="doccomment">/// `D2/`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Symmetry under reflection across the antidiagonal.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;D2/&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2/&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2/&quot;</span>))]</span>
     <span class="ident">D2Antidiag</span>,
     <span class="doccomment">/// `D4+`.</span>
     <span class="doccomment">///</span>
@@ -1076,7 +1100,8 @@
     <span class="doccomment">/// and the middle column.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;D4+&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D4+&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D4+&quot;</span>))]</span>
     <span class="ident">D4Ortho</span>,
     <span class="doccomment">/// `D4X`.</span>
     <span class="doccomment">///</span>
@@ -1084,7 +1109,8 @@
     <span class="doccomment">/// and the antidiagonal.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;D4X&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D4X&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D4X&quot;</span>))]</span>
     <span class="ident">D4Diag</span>,
     <span class="doccomment">/// `D8`.</span>
     <span class="doccomment">///</span>
