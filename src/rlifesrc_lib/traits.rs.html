@@ -222,7 +222,7 @@
     <span class="doccomment">/// Number of known living cells in some generation.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// For Generations rules, dying cells are not counted.</span>
-    <span class="kw">fn</span> <span class="ident">cell_count_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
+    <span class="kw">fn</span> <span class="ident">cell_count_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
 
     <span class="doccomment">/// Minumum number of known living cells in all generation.</span>
     <span class="doccomment">///</span>
@@ -254,7 +254,7 @@
     <span class="doccomment">/// * **Unknown** cells are represented by `?`;</span>
     <span class="doccomment">/// * Each line is ended with `$`;</span>
     <span class="doccomment">/// * The whole pattern is ended with `!`.</span>
-    <span class="kw">fn</span> <span class="ident">rle_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">fn</span> <span class="ident">rle_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">str</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
         <span class="macro">writeln</span><span class="macro">!</span>(
             <span class="ident">str</span>,
@@ -296,7 +296,7 @@
     <span class="doccomment">/// * **Dead** cells are represented by `.`;</span>
     <span class="doccomment">/// * **Living** and **Dying** cells are represented by `o`;</span>
     <span class="doccomment">/// * **Unknown** cells are represented by `?`.</span>
-    <span class="kw">fn</span> <span class="ident">plaintext_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">fn</span> <span class="ident">plaintext_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">str</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
         <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>().<span class="ident">height</span> {
             <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>().<span class="ident">width</span> {
@@ -335,7 +335,7 @@
         <span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">has_b0</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">cell_count_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">isize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">cell_count_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">cell_count</span>[<span class="ident">t</span> <span class="kw">as</span> <span class="ident">usize</span>]
     }
 
