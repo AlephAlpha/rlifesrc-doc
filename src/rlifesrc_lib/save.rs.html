@@ -135,6 +135,8 @@
 <span id="132">132</span>
 <span id="133">133</span>
 <span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">feature</span>(<span class="ident">doc_cfg</span>))]</span>
@@ -217,6 +219,8 @@
                 <span class="kw">if</span> <span class="ident">old_state</span> <span class="op">!</span><span class="op">=</span> <span class="ident">state</span> {
                     <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">SetCellError</span>(<span class="ident">coord</span>));
                 }
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">gen</span>() {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">SetCellError</span>(<span class="ident">coord</span>));
             } <span class="kw">else</span> {
                 <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">reason</span>);
             }

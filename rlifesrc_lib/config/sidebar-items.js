@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["NewState","How to choose a state for an unknown cell."]],"mod":[["d8","Configurations related to the dihedral group D8."],["search_order",""]],"struct":[["Config","World configuration."]]});
+initSidebarItems({"enum":[["NewState","How to choose a state for an unknown cell."]],"mod":[["d8","Configurations related to the dihedral group D8."],["search_order",""]],"struct":[["Config","World configuration."],["KnownCell","A cell whose state is known before the search."]]});

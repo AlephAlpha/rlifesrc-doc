@@ -274,11 +274,32 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! World configuration.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">cells</span>::<span class="ident">Coord</span>,
+    <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>},
     <span class="ident">error</span>::<span class="ident">Error</span>,
     <span class="ident">rules</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>, <span class="ident">NtLife</span>, <span class="ident">NtLifeGen</span>, <span class="ident">Rule</span>},
     <span class="ident">traits</span>::<span class="ident">Search</span>,
@@ -332,6 +353,18 @@
     <span class="doccomment">/// the probability of each state is `1/n`.</span>
     <span class="ident">Random</span>,
 }
+
+<span class="doccomment">/// A cell whose state is known before the search.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KnownCell</span> {
+    <span class="doccomment">/// The coordinates of the set cell.</span>
+    <span class="kw">pub</span> <span class="ident">coord</span>: <span class="ident">Coord</span>,
+
+    <span class="doccomment">/// The state.</span>
+    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">State</span>,
+}
+
 <span class="doccomment">/// World configuration.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The world will be generated from this configuration.</span>
@@ -414,6 +447,9 @@
     <span class="doccomment">/// In another word, whether to skip patterns whose symmetry group properly contains</span>
     <span class="doccomment">/// the given symmetry group.</span>
     <span class="kw">pub</span> <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>,
+
+    <span class="doccomment">/// Cells whose states are known before the search.</span>
+    <span class="kw">pub</span> <span class="ident">known_cells</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">KnownCell</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Config</span> {
@@ -494,6 +530,12 @@
     <span class="doccomment">/// more transformations than required by the given symmetry.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_skip_subsymmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">skip_subsymmetry</span> <span class="op">=</span> <span class="ident">skip_subsymmetry</span>;
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Sets cells whose states are known before the search.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_known_cells</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">KnownCell</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">known_cells</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">self</span>.<span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">known_cells</span>.<span class="ident">into</span>();
         <span class="self">self</span>
     }
 

@@ -477,12 +477,26 @@
 <span id="474">474</span>
 <span id="475">475</span>
 <span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The world.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">Coord</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>, <span class="ident">DEAD</span>},
-    <span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">SearchOrder</span>},
+    <span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">KnownCell</span>, <span class="ident">SearchOrder</span>},
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
     <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>},
 };
@@ -595,7 +609,9 @@
         .<span class="ident">init_pred_succ</span>()
         .<span class="ident">init_sym</span>()
         .<span class="ident">init_state</span>()
+        .<span class="ident">init_known_cells</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="ident">known_cells</span>)
         .<span class="ident">init_search_order</span>(<span class="ident">search_order</span>.<span class="ident">as_ref</span>())
+        .<span class="ident">presearch</span>()
     }
 
     <span class="doccomment">/// Links the cells to their neighbors.</span>
@@ -673,7 +689,7 @@
                                 <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>())
                             <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">cell</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>)
                         {
-                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">Reason</span>::<span class="ident">Deduce</span>));
+                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">Reason</span>::<span class="ident">Known</span>));
                         }
                     }
 
@@ -732,7 +748,7 @@
                                 <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>())
                             <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">cell</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>)
                         {
-                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">Reason</span>::<span class="ident">Deduce</span>));
+                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">Reason</span>::<span class="ident">Known</span>));
                         }
                     }
                 }
@@ -759,6 +775,18 @@
                     <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">cell</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>) {
                         <span class="self">self</span>.<span class="ident">clear_cell</span>(<span class="ident">cell</span>);
                     }
+                }
+            }
+        }
+        <span class="self">self</span>
+    }
+
+    <span class="doccomment">/// Sets the known cells.</span>
+    <span class="kw">fn</span> <span class="ident">init_known_cells</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">known_cells</span>: <span class="kw-2">&amp;</span>[<span class="ident">KnownCell</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">KnownCell</span> { <span class="ident">coord</span>, <span class="ident">state</span> } <span class="kw">in</span> <span class="ident">known_cells</span>.<span class="ident">iter</span>() {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cell</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>(<span class="ident">coord</span>) {
+                <span class="kw">if</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">state</span>.<span class="number">0</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>() {
+                    <span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">Reason</span>::<span class="ident">Known</span>);
                 }
             }
         }
