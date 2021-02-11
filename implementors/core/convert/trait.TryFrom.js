@@ -1,4 +1,4 @@
 (function() {var implementors = {};
 implementors["async_io"] = [{"text":"impl TryFrom&lt;TcpListener&gt; for Async&lt;TcpListener&gt;","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;TcpStream&gt; for Async&lt;TcpStream&gt;","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;UdpSocket&gt; for Async&lt;UdpSocket&gt;","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;UnixListener&gt; for Async&lt;UnixListener&gt;","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;UnixStream&gt; for Async&lt;UnixStream&gt;","synthetic":false,"types":[]},{"text":"impl TryFrom&lt;UnixDatagram&gt; for Async&lt;UnixDatagram&gt;","synthetic":false,"types":[]}];
-implementors["crossterm"] = [{"text":"impl&lt;'_&gt; TryFrom&lt;&amp;'_ str&gt; for Color","synthetic":false,"types":[]}];
+implementors["crossterm"] = [{"text":"impl TryFrom&lt;&amp;'_ str&gt; for Color","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
