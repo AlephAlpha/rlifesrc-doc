@@ -643,7 +643,7 @@
                         <span class="ident">DEAD</span>
                     };
                     <span class="kw">let</span> <span class="ident">succ_state</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">rule</span>.<span class="ident">has_b0</span>() {
-                        <span class="ident">State</span>((<span class="ident">t</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">rule</span>.<span class="ident">gen</span>())
+                        <span class="ident">State</span>(((<span class="ident">t</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">config</span>.<span class="ident">period</span>) <span class="kw">as</span> <span class="ident">usize</span> <span class="op">%</span> <span class="ident">rule</span>.<span class="ident">gen</span>())
                     } <span class="kw">else</span> {
                         <span class="ident">DEAD</span>
                     };
