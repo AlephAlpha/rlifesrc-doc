@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Reason","Reasons for setting a cell."],["Status","Search status."]],"struct":[["SetCell","Records the cells whose values are set and their reasons."]]});
+initSidebarItems({"enum":[["Status","Search status."]],"mod":[["backjump","The search process."],["no_backjump","The search process."]],"struct":[["SetCell","Records the cells whose values are set and their reasons."]],"trait":[["Reason","Reasons for setting a cell."]]});

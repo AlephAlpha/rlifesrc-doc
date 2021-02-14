@@ -178,6 +178,14 @@
 <span id="175">175</span>
 <span id="176">176</span>
 <span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Cells in the cellular automaton.</span>
 
@@ -274,6 +282,12 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Here the choice of row or column depends on the search order.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">is_front</span>: <span class="ident">bool</span>,
+
+    <span class="doccomment">/// The decision level for assigning the cell state.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">level</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// Whether the cell has been seen in the analysis.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">seen</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
@@ -293,6 +307,8 @@
             <span class="ident">sym</span>: <span class="ident">Default</span>::<span class="ident">default</span>(),
             <span class="ident">next</span>: <span class="ident">Default</span>::<span class="ident">default</span>(),
             <span class="ident">is_front</span>: <span class="bool-val">false</span>,
+            <span class="ident">level</span>: <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="number">0</span>),
+            <span class="ident">seen</span>: <span class="ident">Cell</span>::<span class="ident">new</span>(<span class="bool-val">false</span>),
         }
     }
 

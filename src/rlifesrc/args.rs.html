@@ -408,6 +408,26 @@
 <span id="405">405</span>
 <span id="406">406</span>
 <span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Parsing command-line arguments.</span>
 
@@ -650,12 +670,23 @@
                 <span class="ident">Arg</span>::<span class="ident">with_name</span>(<span class="string">&quot;SKIPSUBSYM&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Skip patterns invariant under more transformations than the given symmetry&quot;</span>)
                     .<span class="ident">long_help</span>(
-                            <span class="string">&quot;Skip patterns which are invariant under more transformations than \
-                             required by the given symmetry.\n\
-                             In another word, skip patterns whose symmetry group properly contains \
-                             the given symmetry group.\n&quot;</span>,
-                        )
+                        <span class="string">&quot;Skip patterns which are invariant under more transformations than \
+                         required by the given symmetry.\n\
+                         In another word, skip patterns whose symmetry group properly contains \
+                         the given symmetry group.\n&quot;</span>,
+                    )
                     .<span class="ident">long</span>(<span class="string">&quot;skip-subsym&quot;</span>)
+                    .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
+            )
+            .<span class="ident">arg</span>(
+                <span class="ident">Arg</span>::<span class="ident">with_name</span>(<span class="string">&quot;BACKJUMP&quot;</span>)
+                    .<span class="ident">help</span>(<span class="string">&quot;(Experimental) Enable backjumping&quot;</span>)
+                    .<span class="ident">long_help</span>(
+                        <span class="string">&quot;(Experimental) Enable backjumping\n\
+                        The current implementation of backjumping is very slow, only \
+                        useful for large (e.g., 64x64) still lifes.&quot;</span>,
+                    )
+                    .<span class="ident">long</span>(<span class="string">&quot;backjump&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             );
 
@@ -740,6 +771,7 @@
         <span class="kw">let</span> <span class="ident">reduce_max</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;REDUCE&quot;</span>);
         <span class="kw">let</span> <span class="ident">skip_subperiod</span> <span class="op">=</span> <span class="op">!</span><span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;SUBPERIOD&quot;</span>);
         <span class="kw">let</span> <span class="ident">skip_subsymmetry</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;SKIPSUBSYM&quot;</span>);
+        <span class="kw">let</span> <span class="ident">backjump</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;BACKJUMP&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">rule_string</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;RULE&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_string</span>();
 
@@ -802,9 +834,17 @@
             .<span class="ident">set_rule_string</span>(<span class="ident">rule_string</span>)
             .<span class="ident">set_diagonal_width</span>(<span class="ident">diagonal_width</span>)
             .<span class="ident">set_skip_subperiod</span>(<span class="ident">skip_subperiod</span>)
-            .<span class="ident">set_skip_subsymmetry</span>(<span class="ident">skip_subsymmetry</span>);
+            .<span class="ident">set_skip_subsymmetry</span>(<span class="ident">skip_subsymmetry</span>)
+            .<span class="ident">set_backjump</span>(<span class="ident">backjump</span>);
 
         <span class="kw">let</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">world</span>().<span class="ident">unwrap</span>();
+
+        <span class="kw">if</span> <span class="ident">search</span>.<span class="ident">is_gen_rule</span>() <span class="op">&amp;&amp;</span> <span class="ident">backjump</span> {
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
+                <span class="string">&quot;Backjumping is not yet supported for Generations rules.&quot;</span>,
+                <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
+            ));
+        }
 
         <span class="prelude-val">Ok</span>(<span class="ident">Args</span> {
             <span class="ident">search</span>,

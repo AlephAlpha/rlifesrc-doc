@@ -137,6 +137,7 @@
 <span id="134">134</span>
 <span id="135">135</span>
 <span id="136">136</span>
+<span id="137">137</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">feature</span>(<span class="ident">doc_cfg</span>))]</span>
@@ -146,35 +147,56 @@
     <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>},
     <span class="ident">config</span>::<span class="ident">Config</span>,
     <span class="ident">error</span>::<span class="ident">Error</span>,
-    <span class="ident">rules</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>, <span class="ident">NtLife</span>, <span class="ident">NtLifeGen</span>, <span class="ident">Rule</span>},
-    <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>},
+    <span class="ident">rules</span>::<span class="ident">Rule</span>,
+    <span class="ident">search</span>::<span class="ident">Reason</span>,
     <span class="ident">traits</span>::<span class="ident">Search</span>,
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
+<span class="doccomment">/// A representation of reasons for setting a cell which can be easily serialized.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ReasonSer</span> {
+    <span class="doccomment">/// Known before the search starts,</span>
+    <span class="ident">Known</span>,
+
+    <span class="doccomment">/// Decides the state of a cell by choice.</span>
+    <span class="ident">Decide</span>,
+
+    <span class="doccomment">/// Deduced from the rule when constitifying another cell.</span>
+    <span class="ident">Rule</span>(<span class="ident">Coord</span>),
+
+    <span class="doccomment">/// Deduced from symmetry.</span>
+    <span class="ident">Sym</span>(<span class="ident">Coord</span>),
+
+    <span class="doccomment">/// Deduced from conflicts.</span>
+    <span class="ident">Deduce</span>,
+
+    <span class="doccomment">/// Deduced from a learnt clause.</span>
+    <span class="ident">Clause</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Coord</span><span class="op">&gt;</span>),
+
+    <span class="doccomment">/// Tries another state of a cell when the original state</span>
+    <span class="doccomment">/// leads to a conflict.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Remembers the number of remaining states to try.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Only used in Generations rules.</span>
+    <span class="ident">TryAnother</span>(<span class="ident">usize</span>),
+}
+
 <span class="doccomment">/// A representation of setting a cell which can be easily serialized.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetCellSer</span> {
     <span class="doccomment">/// The coordinates of the set cell.</span>
-    <span class="ident">coord</span>: <span class="ident">Coord</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">coord</span>: <span class="ident">Coord</span>,
 
     <span class="doccomment">/// The state.</span>
-    <span class="ident">state</span>: <span class="ident">State</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">state</span>: <span class="ident">State</span>,
 
     <span class="doccomment">/// The reason for setting a cell.</span>
-    <span class="ident">reason</span>: <span class="ident">Reason</span>,
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SetCellSer</span> {
-        <span class="ident">SetCellSer</span> {
-            <span class="ident">coord</span>: <span class="self">self</span>.<span class="ident">cell</span>.<span class="ident">coord</span>,
-            <span class="ident">state</span>: <span class="self">self</span>.<span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>(),
-            <span class="ident">reason</span>: <span class="self">self</span>.<span class="ident">reason</span>,
-        }
-    }
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">reason</span>: <span class="ident">ReasonSer</span>,
 }
 
 <span class="doccomment">/// A representation of the world which can be easily serialized.</span>
@@ -205,13 +227,15 @@
 }
 
 <span class="kw">impl</span> <span class="ident">WorldSer</span> {
-    <span class="doccomment">/// Restores the world from the [`WorldSer`], with the given rule.</span>
-    <span class="kw">fn</span> <span class="ident">world_with_rule</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">world</span> <span class="op">=</span> <span class="ident">World</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">config</span>, <span class="ident">rule</span>);
+    <span class="doccomment">/// Restores the world from the [`WorldSer`].</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deser</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">SetCellSer</span> {
             <span class="ident">coord</span>,
             <span class="ident">state</span>,
-            <span class="ident">reason</span>,
+            <span class="kw-2">ref</span> <span class="ident">reason</span>,
         } <span class="kw">in</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>()
         {
             <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">find_cell</span>(<span class="ident">coord</span>).<span class="ident">ok_or</span>(<span class="ident">Error</span>::<span class="ident">SetCellError</span>(<span class="ident">coord</span>))<span class="question-mark">?</span>;
@@ -222,6 +246,7 @@
             } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">gen</span>() {
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">SetCellError</span>(<span class="ident">coord</span>));
             } <span class="kw">else</span> {
+                <span class="kw">let</span> <span class="ident">reason</span> <span class="op">=</span> <span class="ident">RE</span>::<span class="ident">deser</span>(<span class="ident">reason</span>, <span class="kw-2">&amp;</span><span class="ident">world</span>)<span class="question-mark">?</span>;
                 <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">reason</span>);
             }
         }
@@ -229,41 +254,18 @@
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">check_index</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span> {
             <span class="ident">world</span>.<span class="ident">check_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">check_index</span>;
         }
-        <span class="prelude-val">Ok</span>(<span class="ident">world</span>)
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="doccomment">/// Restores the world from the [`WorldSer`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">Life</span><span class="op">&gt;</span>() {
-            <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_with_rule</span>(<span class="ident">rule</span>)<span class="question-mark">?</span>;
-            <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">world</span>))
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">NtLife</span><span class="op">&gt;</span>() {
-            <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_with_rule</span>(<span class="ident">rule</span>)<span class="question-mark">?</span>;
-            <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">world</span>))
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">LifeGen</span><span class="op">&gt;</span>() {
-            <span class="kw">if</span> <span class="ident">rule</span>.<span class="ident">gen</span>() <span class="op">&gt;</span> <span class="number">2</span> {
-                <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_with_rule</span>(<span class="ident">rule</span>)<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">world</span>))
-            } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="ident">rule</span> <span class="op">=</span> <span class="ident">rule</span>.<span class="ident">non_gen</span>();
-                <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_with_rule</span>(<span class="ident">rule</span>)<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">world</span>))
-            }
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">rule</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">NtLifeGen</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">rule</span>.<span class="ident">gen</span>() <span class="op">&gt;</span> <span class="number">2</span> {
-                <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_with_rule</span>(<span class="ident">rule</span>)<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">world</span>))
-            } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="ident">rule</span> <span class="op">=</span> <span class="ident">rule</span>.<span class="ident">non_gen</span>();
-                <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_with_rule</span>(<span class="ident">rule</span>)<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">world</span>))
-            }
-        }
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">world</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">world</span>()<span class="question-mark">?</span>;
+        <span class="ident">world</span>.<span class="ident">deser</span>(<span class="self">self</span>)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="ident">world</span>)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Saves the world as a [`WorldSer`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">WorldSer</span> {
         <span class="ident">WorldSer</span> {

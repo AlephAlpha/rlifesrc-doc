@@ -81,6 +81,10 @@
 <span id="78">78</span>
 <span id="79">79</span>
 <span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Cellular automata rules.</span>
 <span class="doccomment">//!</span>
@@ -92,6 +96,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">State</span>},
+    <span class="ident">search</span>::<span class="ident">Reason</span>,
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">life</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>};
@@ -160,7 +165,10 @@
     <span class="doccomment">/// Returns `false` if there is a conflict,</span>
     <span class="doccomment">/// `true` if the cells are consistent.</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">RE</span><span class="op">&gt;</span>,
+        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "rlifesrc_lib";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

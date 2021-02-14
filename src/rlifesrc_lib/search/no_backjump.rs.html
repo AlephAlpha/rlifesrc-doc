@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/search.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>search.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../rlifesrc_lib/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/search/no_backjump.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>no_backjump.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../rlifesrc_lib/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -298,45 +298,23 @@
 <span id="295">295</span>
 <span id="296">296</span>
 <span id="297">297</span>
-<span id="298">298</span>
-<span id="299">299</span>
-<span id="300">300</span>
-<span id="301">301</span>
-<span id="302">302</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The search process.</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">State</span>},
     <span class="ident">config</span>::<span class="ident">NewState</span>,
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
+    <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>, <span class="ident">Status</span>},
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
-<span class="kw">use</span> <span class="ident">derivative</span>::<span class="ident">Derivative</span>;
 <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">thread_rng</span>, <span class="ident">Rng</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-
-<span class="doccomment">/// Search status.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Status</span> {
-    <span class="doccomment">/// Initial status. Waiting to start.</span>
-    <span class="ident">Initial</span>,
-    <span class="doccomment">/// A result is found.</span>
-    <span class="ident">Found</span>,
-    <span class="doccomment">/// Such pattern does not exist.</span>
-    <span class="prelude-val">None</span>,
-    <span class="doccomment">/// Still searching.</span>
-    <span class="ident">Searching</span>,
-    <span class="doccomment">/// Paused.</span>
-    <span class="ident">Paused</span>,
-}
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error</span>::<span class="ident">Error</span>, <span class="ident">save</span>::<span class="ident">ReasonSer</span>};
 
 <span class="doccomment">/// Reasons for setting a cell.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">Reason</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ReasonNoBackjump</span> {
     <span class="doccomment">/// Known before the search starts,</span>
     <span class="ident">Known</span>,
 
@@ -355,31 +333,55 @@
     <span class="ident">TryAnother</span>(<span class="ident">usize</span>),
 }
 
-<span class="doccomment">/// Records the cells whose values are set and their reasons.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Derivative</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(
-    <span class="ident">Clone</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Copy</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Debug</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">PartialEq</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Eq</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>)
-)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The set cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>,
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ReasonNoBackjump</span> {
+    <span class="kw">const</span> <span class="ident">KNOWN</span>: <span class="self">Self</span> <span class="op">=</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">Known</span>;
+    <span class="kw">const</span> <span class="ident">DECIDED</span>: <span class="self">Self</span> <span class="op">=</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">Decide</span>;
 
-    <span class="doccomment">/// The reason for setting a cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">reason</span>: <span class="ident">Reason</span>,
-}
+    <span class="kw">fn</span> <span class="ident">from_cell</span>(<span class="ident">_cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">ReasonNoBackjump</span>::<span class="ident">Deduce</span>
+    }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Get a reference to the set cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">reason</span>: <span class="ident">Reason</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">SetCell</span> { <span class="ident">cell</span>, <span class="ident">reason</span> }
+    <span class="kw">fn</span> <span class="ident">is_decided</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="macro">matches</span><span class="macro">!</span>(
+            <span class="self">self</span>,
+            <span class="ident">ReasonNoBackjump</span>::<span class="ident">Decide</span> <span class="op">|</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">TryAnother</span>(<span class="kw">_</span>)
+        )
+    }
+
+    <span class="kw">fn</span> <span class="ident">search</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">max_step</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Status</span> {
+        <span class="ident">world</span>.<span class="ident">search</span>(<span class="ident">max_step</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">retreat</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="ident">world</span>.<span class="ident">retreat</span>()
+    }
+
+    <span class="kw">fn</span> <span class="ident">presearch</span>(<span class="ident">world</span>: <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="ident">world</span>.<span class="ident">presearch</span>()
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ReasonSer</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">ReasonNoBackjump</span>::<span class="ident">Known</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonSer</span>::<span class="ident">Known</span>,
+            <span class="ident">ReasonNoBackjump</span>::<span class="ident">Decide</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonSer</span>::<span class="ident">Decide</span>,
+            <span class="ident">ReasonNoBackjump</span>::<span class="ident">Deduce</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonSer</span>::<span class="ident">Deduce</span>,
+            <span class="ident">ReasonNoBackjump</span>::<span class="ident">TryAnother</span>(<span class="ident">n</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonSer</span>::<span class="ident">TryAnother</span>(<span class="kw-2">*</span><span class="ident">n</span>),
+        }
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">deser</span>(<span class="ident">ser</span>: <span class="kw-2">&amp;</span><span class="ident">ReasonSer</span>, <span class="ident">_world</span>: <span class="kw-2">&amp;</span><span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="kw-2">*</span><span class="ident">ser</span> {
+            <span class="ident">ReasonSer</span>::<span class="ident">Known</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">Known</span>,
+            <span class="ident">ReasonSer</span>::<span class="ident">Decide</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">Decide</span>,
+            <span class="ident">ReasonSer</span>::<span class="ident">TryAnother</span>(<span class="ident">n</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">TryAnother</span>(<span class="ident">n</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">Deduce</span>,
+        })
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">ReasonNoBackjump</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Consistifies a cell.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Examines the state and the neighborhood descriptor of the cell,</span>
@@ -430,7 +432,7 @@
                     <span class="kw">if</span> <span class="ident">state</span> <span class="op">!</span><span class="op">=</span> <span class="ident">old_state</span> {
                         <span class="kw">return</span> <span class="bool-val">false</span>;
                     }
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">sym</span>, <span class="ident">state</span>, <span class="ident">Reason</span>::<span class="ident">Deduce</span>) {
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">sym</span>, <span class="ident">state</span>, <span class="ident">ReasonNoBackjump</span>::<span class="ident">Deduce</span>) {
                     <span class="kw">return</span> <span class="bool-val">false</span>;
                 }
             }
@@ -453,16 +455,16 @@
     <span class="kw">fn</span> <span class="ident">retreat</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">SetCell</span> { <span class="ident">cell</span>, <span class="ident">reason</span> }) <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">pop</span>() {
             <span class="kw">match</span> <span class="ident">reason</span> {
-                <span class="ident">Reason</span>::<span class="ident">Decide</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ReasonNoBackjump</span>::<span class="ident">Decide</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">state</span>;
                     <span class="kw">let</span> <span class="ident">reason</span>;
                     <span class="kw">if</span> <span class="ident">R</span>::<span class="ident">IS_GEN</span> {
                         <span class="kw">let</span> <span class="ident">State</span>(<span class="ident">j</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>();
                         <span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span>((<span class="ident">j</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>());
-                        <span class="ident">reason</span> <span class="op">=</span> <span class="ident">Reason</span>::<span class="ident">TryAnother</span>(<span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>() <span class="op">-</span> <span class="number">2</span>);
+                        <span class="ident">reason</span> <span class="op">=</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">TryAnother</span>(<span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>() <span class="op">-</span> <span class="number">2</span>);
                     } <span class="kw">else</span> {
                         <span class="ident">state</span> <span class="op">=</span> <span class="op">!</span><span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>();
-                        <span class="ident">reason</span> <span class="op">=</span> <span class="ident">Reason</span>::<span class="ident">Deduce</span>;
+                        <span class="ident">reason</span> <span class="op">=</span> <span class="ident">ReasonNoBackjump</span>::<span class="ident">Deduce</span>;
                     }
 
                     <span class="self">self</span>.<span class="ident">check_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>;
@@ -472,13 +474,13 @@
                         <span class="kw">return</span> <span class="bool-val">true</span>;
                     }
                 }
-                <span class="ident">Reason</span>::<span class="ident">TryAnother</span>(<span class="ident">n</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ReasonNoBackjump</span>::<span class="ident">TryAnother</span>(<span class="ident">n</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">State</span>(<span class="ident">j</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>();
                     <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span>((<span class="ident">j</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>());
                     <span class="kw">let</span> <span class="ident">reason</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">n</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
-                        <span class="ident">Reason</span>::<span class="ident">Deduce</span>
+                        <span class="ident">ReasonNoBackjump</span>::<span class="ident">Deduce</span>
                     } <span class="kw">else</span> {
-                        <span class="ident">Reason</span>::<span class="ident">TryAnother</span>(<span class="ident">n</span> <span class="op">-</span> <span class="number">1</span>)
+                        <span class="ident">ReasonNoBackjump</span>::<span class="ident">TryAnother</span>(<span class="ident">n</span> <span class="op">-</span> <span class="number">1</span>)
                     };
 
                     <span class="self">self</span>.<span class="ident">check_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>;
@@ -488,10 +490,10 @@
                         <span class="kw">return</span> <span class="bool-val">true</span>;
                     }
                 }
-                <span class="ident">Reason</span>::<span class="ident">Known</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ReasonNoBackjump</span>::<span class="ident">Known</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">break</span>;
                 }
-                <span class="ident">Reason</span>::<span class="ident">Deduce</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ReasonNoBackjump</span>::<span class="ident">Deduce</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">clear_cell</span>(<span class="ident">cell</span>);
                 }
             }
@@ -554,7 +556,7 @@
                 <span class="ident">NewState</span>::<span class="ident">ChooseAlive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">cell</span>.<span class="ident">background</span>,
                 <span class="ident">NewState</span>::<span class="ident">Random</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">State</span>(<span class="ident">thread_rng</span>().<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>())),
             };
-            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">Reason</span>::<span class="ident">Decide</span>))
+            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">ReasonNoBackjump</span>::<span class="ident">Decide</span>))
         } <span class="kw">else</span> {
             <span class="prelude-val">None</span>
         }
@@ -593,18 +595,6 @@
         }
         <span class="ident">Status</span>::<span class="prelude-val">None</span>
     }
-
-    <span class="doccomment">/// Set the max cell counts.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">set_max_cell_count</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_cell_count</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>) {
-        <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">max_cell_count</span> <span class="op">=</span> <span class="ident">max_cell_count</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">max</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">max_cell_count</span> {
-            <span class="kw">while</span> <span class="self">self</span>.<span class="ident">cell_count</span>() <span class="op">&gt;</span> <span class="ident">max</span> {
-                <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">retreat</span>() {
-                    <span class="kw">break</span>;
-                }
-            }
-        }
-    }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "rlifesrc_lib";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "rlifesrc_lib";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
