@@ -557,6 +557,10 @@
 <span id="554">554</span>
 <span id="555">555</span>
 <span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The world.</span>
 
@@ -620,6 +624,8 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">non_empty_front</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// The global decision level for assigning the cell state.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Only used when backjumping is enabled.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">level</span>: <span class="ident">u32</span>,
 }
 
@@ -995,10 +1001,12 @@
                 <span class="ident">result</span> <span class="op">=</span> <span class="bool-val">false</span>;
             }
         }
-        <span class="kw">if</span> <span class="ident">reason</span>.<span class="ident">is_decided</span>() {
-            <span class="self">self</span>.<span class="ident">level</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+        <span class="kw">if</span> <span class="ident">RE</span>::<span class="ident">LEVEL</span> {
+            <span class="kw">if</span> <span class="ident">reason</span>.<span class="ident">is_decided</span>() {
+                <span class="self">self</span>.<span class="ident">level</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            }
+            <span class="ident">cell</span>.<span class="ident">level</span>.<span class="ident">set</span>(<span class="self">self</span>.<span class="ident">level</span>);
         }
-        <span class="ident">cell</span>.<span class="ident">level</span>.<span class="ident">set</span>(<span class="self">self</span>.<span class="ident">level</span>);
         <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">reason</span>));
         <span class="ident">result</span>
     }

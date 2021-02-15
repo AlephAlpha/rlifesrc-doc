@@ -444,73 +444,15 @@
 <span id="441">441</span>
 <span id="442">442</span>
 <span id="443">443</span>
-<span id="444">444</span>
-<span id="445">445</span>
-<span id="446">446</span>
-<span id="447">447</span>
-<span id="448">448</span>
-<span id="449">449</span>
-<span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
-<span id="457">457</span>
-<span id="458">458</span>
-<span id="459">459</span>
-<span id="460">460</span>
-<span id="461">461</span>
-<span id="462">462</span>
-<span id="463">463</span>
-<span id="464">464</span>
-<span id="465">465</span>
-<span id="466">466</span>
-<span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
-<span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
-<span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
-<span id="487">487</span>
-<span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
-<span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
-<span id="495">495</span>
-<span id="496">496</span>
-<span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! The search process.</span>
+<span class="doccomment">//! The search process, with backjumping.</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">State</span>},
-    <span class="ident">config</span>::<span class="ident">NewState</span>,
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
-    <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>, <span class="ident">Status</span>},
+    <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>},
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
 <span class="kw">use</span> <span class="ident">derivative</span>::<span class="ident">Derivative</span>;
-<span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">thread_rng</span>, <span class="ident">Rng</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error</span>::<span class="ident">Error</span>, <span class="ident">save</span>::<span class="ident">ReasonSer</span>};
@@ -586,6 +528,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ReasonBackjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
     <span class="kw">const</span> <span class="ident">KNOWN</span>: <span class="self">Self</span> <span class="op">=</span> <span class="ident">ReasonBackjump</span>::<span class="ident">Known</span>;
     <span class="kw">const</span> <span class="ident">DECIDED</span>: <span class="self">Self</span> <span class="op">=</span> <span class="ident">ReasonBackjump</span>::<span class="ident">Decide</span>;
+    <span class="kw">const</span> <span class="ident">LEVEL</span>: <span class="ident">bool</span> <span class="op">=</span> <span class="bool-val">true</span>;
 
     <span class="kw">fn</span> <span class="ident">from_cell</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">ReasonBackjump</span>::<span class="ident">Rule</span>(<span class="ident">cell</span>)
@@ -595,8 +538,8 @@
         <span class="macro">matches</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">ReasonBackjump</span>::<span class="ident">Decide</span> <span class="op">|</span> <span class="ident">ReasonBackjump</span>::<span class="ident">TryAnother</span>(<span class="kw">_</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">search</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">max_step</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Status</span> {
-        <span class="ident">world</span>.<span class="ident">search</span>(<span class="ident">max_step</span>)
+    <span class="kw">fn</span> <span class="ident">go</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">step</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="ident">world</span>.<span class="ident">go</span>(<span class="ident">step</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">retreat</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
@@ -913,7 +856,7 @@
     <span class="doccomment">/// (and returns `false`).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It also records the number of steps it has walked in the parameter</span>
-    <span class="doccomment">/// `step`. A step consists of a [`proceed`](Self::proceed) and a [`retreat`](Self::retreat).</span>
+    <span class="doccomment">/// `step`. A step consists of a [`proceed`](Self::proceed) and a [`analyze`](Self::analyze).</span>
     <span class="kw">fn</span> <span class="ident">go</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">step</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">loop</span> {
             <span class="kw-2">*</span><span class="ident">step</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -943,61 +886,6 @@
                 }
             }
         }
-    }
-
-    <span class="doccomment">/// Makes a decision.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Chooses an unknown cell, assigns a state for it,</span>
-    <span class="doccomment">/// and push a reference to it to the [`set_stack`](#structfield.set_stack).</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `None` is there is no unknown cell,</span>
-    <span class="doccomment">/// `Some(false)` if the new state leads to an immediate conflict.</span>
-    <span class="kw">fn</span> <span class="ident">decide</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cell</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_unknown</span>() {
-            <span class="self">self</span>.<span class="ident">next_unknown</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">next</span>;
-            <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">new_state</span> {
-                <span class="ident">NewState</span>::<span class="ident">ChooseDead</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">cell</span>.<span class="ident">background</span>,
-                <span class="ident">NewState</span>::<span class="ident">ChooseAlive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">cell</span>.<span class="ident">background</span>,
-                <span class="ident">NewState</span>::<span class="ident">Random</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">State</span>(<span class="ident">thread_rng</span>().<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>())),
-            };
-            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">ReasonBackjump</span>::<span class="ident">Decide</span>))
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
-    }
-
-    <span class="doccomment">/// The search function.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns [`Status::Found`] if a result is found,</span>
-    <span class="doccomment">/// [`Status::None`] if such pattern does not exist,</span>
-    <span class="doccomment">/// [`Status::Searching`] if the number of steps exceeds `max_step`</span>
-    <span class="doccomment">/// and no results are found.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">search</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_step</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Status</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">step_count</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">next_unknown</span>.<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">retreat</span>() {
-            <span class="kw">return</span> <span class="ident">Status</span>::<span class="prelude-val">None</span>;
-        }
-        <span class="kw">while</span> <span class="self">self</span>.<span class="ident">go</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">step_count</span>) {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">result</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">decide</span>() {
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">result</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">retreat</span>() {
-                    <span class="kw">return</span> <span class="ident">Status</span>::<span class="prelude-val">None</span>;
-                }
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">is_boring</span>() {
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">reduce_max</span> {
-                    <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">max_cell_count</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">cell_count</span>() <span class="op">-</span> <span class="number">1</span>);
-                }
-                <span class="kw">return</span> <span class="ident">Status</span>::<span class="ident">Found</span>;
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">retreat</span>() {
-                <span class="kw">return</span> <span class="ident">Status</span>::<span class="prelude-val">None</span>;
-            }
-
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">max</span>) <span class="op">=</span> <span class="ident">max_step</span> {
-                <span class="kw">if</span> <span class="ident">step_count</span> <span class="op">&gt;</span> <span class="ident">max</span> {
-                    <span class="kw">return</span> <span class="ident">Status</span>::<span class="ident">Searching</span>;
-                }
-            }
-        }
-        <span class="ident">Status</span>::<span class="prelude-val">None</span>
     }
 }
 </pre></div>

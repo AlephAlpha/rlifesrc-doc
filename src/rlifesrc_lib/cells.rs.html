@@ -186,6 +186,10 @@
 <span id="183">183</span>
 <span id="184">184</span>
 <span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Cells in the cellular automaton.</span>
 
@@ -284,9 +288,13 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">is_front</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// The decision level for assigning the cell state.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Only used when backjumping is enabled.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">level</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Whether the cell has been seen in the analysis.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Only used when backjumping is enabled.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">seen</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
 }
 
