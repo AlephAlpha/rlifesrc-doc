@@ -428,11 +428,36 @@
 <span id="425">425</span>
 <span id="426">426</span>
 <span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Parsing command-line arguments.</span>
 
-<span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">App</span>, <span class="ident">AppSettings</span>, <span class="ident">Arg</span>, <span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">ClapResult</span>};
+<span class="kw">use</span> <span class="ident">clap</span>::{
+    <span class="ident">App</span>,
+    <span class="ident">AppSettings</span>::{<span class="ident">AllowNegativeNumbers</span>, <span class="ident">ColoredHelp</span>},
+    <span class="ident">Arg</span>, <span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">ClapResult</span>,
+};
 <span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{<span class="ident">rules</span>::<span class="ident">NtLifeGen</span>, <span class="ident">Config</span>, <span class="ident">NewState</span>, <span class="ident">Search</span>, <span class="ident">SearchOrder</span>, <span class="ident">Symmetry</span>, <span class="ident">Transform</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{
+    <span class="ident">fs</span>::<span class="ident">File</span>,
+    <span class="ident">io</span>::{<span class="ident">BufReader</span>, <span class="ident">Read</span>},
+    <span class="ident">path</span>::<span class="ident">Path</span>,
+};
 
 <span class="kw">fn</span> <span class="ident">is_positive</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
     <span class="ident">s</span>.<span class="ident">chars</span>().<span class="ident">all</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">is_ascii_digit</span>()) <span class="op">&amp;&amp;</span> <span class="ident">s</span> <span class="op">!</span><span class="op">=</span> <span class="string">&quot;0&quot;</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">s</span>.<span class="ident">starts_with</span>(<span class="string">&#39;-&#39;</span>)
@@ -461,25 +486,28 @@
                  The program is based on David Bell&#39;s lifesrc and Jason Summers&#39;s \n\
                  WinLifeSearch, using an algorithm invented by Dean Hickerson.\n\
                  \n\
-                 The search result is displayed in a mix of Plaintext and \n\
-                 RLE format.\n\
-                 * Dead cells are represented by `.`;\n\
-                 * Living cells are represented by `o` for rules with 2 states, \
-                 `A` for rules with more states;\n\
-                 * Dying cells are represented by uppercase letters starting from `B`;\n\
-                 * Unknown cells are represented by `?`;\n\
-                 * Each line is ended with `$`;\n\
-                 * The whole pattern is ended with `!`\n\
-                 \n\
-                 For a more detailed help, please visit:\n\
+                 For a detailed help, please visit:\n\
                  https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README.md (In Chinese)\n\
                  https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README_en.md (In English)\n&quot;</span>,
             )
-            .<span class="ident">settings</span>(<span class="kw-2">&amp;</span>[<span class="ident">AppSettings</span>::<span class="ident">AllowNegativeNumbers</span>, <span class="ident">AppSettings</span>::<span class="ident">ColoredHelp</span>])
+            .<span class="ident">settings</span>(<span class="kw-2">&amp;</span>[<span class="ident">AllowNegativeNumbers</span>, <span class="ident">ColoredHelp</span>])
+            .<span class="ident">arg</span>(
+                <span class="ident">Arg</span>::<span class="ident">with_name</span>(<span class="string">&quot;CONFIG&quot;</span>)
+                    .<span class="ident">help</span>(<span class="string">&quot;Read config from a file&quot;</span>)
+                    .<span class="ident">long_help</span>(
+                        <span class="string">&quot;Read config from a file\n\
+                         Supported formats: JSON, YAML, TOML.\n\
+                         When a config file is provided, all the other flags and options, \
+                         except --all (-a), --reset-time, --no-tui (-n), are ignored.\n&quot;</span>,
+                    )
+                    .<span class="ident">short</span>(<span class="string">&quot;C&quot;</span>)
+                    .<span class="ident">long</span>(<span class="string">&quot;config&quot;</span>)
+                    .<span class="ident">takes_value</span>(<span class="bool-val">true</span>),
+            )
             .<span class="ident">arg</span>(
                 <span class="ident">Arg</span>::<span class="ident">with_name</span>(<span class="string">&quot;X&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Width of the pattern&quot;</span>)
-                    .<span class="ident">required</span>(<span class="bool-val">true</span>)
+                    .<span class="ident">required_unless</span>(<span class="string">&quot;CONFIG&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">1</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
                         <span class="kw">if</span> <span class="ident">is_positive</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>) {
@@ -492,7 +520,7 @@
             .<span class="ident">arg</span>(
                 <span class="ident">Arg</span>::<span class="ident">with_name</span>(<span class="string">&quot;Y&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Height of the pattern&quot;</span>)
-                    .<span class="ident">required</span>(<span class="bool-val">true</span>)
+                    .<span class="ident">required_unless</span>(<span class="string">&quot;CONFIG&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">2</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">y</span><span class="op">|</span> {
                         <span class="kw">if</span> <span class="ident">is_positive</span>(<span class="kw-2">&amp;</span><span class="ident">y</span>) {
@@ -534,10 +562,11 @@
                     .<span class="ident">help</span>(<span class="string">&quot;Diagonal width&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Diagonal width\n\
-                        If the diagonal width is n &gt; 0, the cells at position (x, y)\
-                        where abs(x - y) &gt;= n are assumed to be dead.\n\
-                        If this value is set to 0, it would be ignored.\n&quot;</span>,
+                         If the diagonal width is n &gt; 0, the cells at position (x, y) \
+                         where abs(x - y) &gt;= n are assumed to be dead.\n\
+                         If this value is set to 0, it would be ignored.\n&quot;</span>,
                     )
+                    .<span class="ident">short</span>(<span class="string">&quot;d&quot;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;diag&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;0&quot;</span>)
@@ -656,6 +685,7 @@
                          The new max cell count will be set to the cell count of \
                          the current result minus one.\n&quot;</span>,
                     )
+                    .<span class="ident">short</span>(<span class="string">&quot;R&quot;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;reduce&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
@@ -663,6 +693,7 @@
                 <span class="ident">Arg</span>::<span class="ident">with_name</span>(<span class="string">&quot;SUBPERIOD&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Allow patterns with subperiod&quot;</span>)
                     .<span class="ident">long_help</span>(<span class="string">&quot;Allow patterns whose fundamental period are smaller than the given period&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&quot;p&quot;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;subperiod&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
@@ -675,6 +706,7 @@
                          In another word, skip patterns whose symmetry group properly contains \
                          the given symmetry group.\n&quot;</span>,
                     )
+                    .<span class="ident">short</span>(<span class="string">&quot;S&quot;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;skip-subsym&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
@@ -731,115 +763,115 @@
 
         <span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">get_matches_safe</span>()<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;X&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;Y&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;P&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">config</span>;
 
-        <span class="kw">let</span> <span class="ident">dx</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;DX&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">dy</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;DY&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">config_file</span>) <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;CONFIG&quot;</span>) {
+            <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="ident">config_file</span>);
+            <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">File</span>::<span class="ident">open</span>(<span class="ident">path</span>)
+                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">Error</span>::<span class="ident">with_description</span>(<span class="kw-2">&amp;</span><span class="ident">e</span>.<span class="ident">to_string</span>(), <span class="ident">ErrorKind</span>::<span class="ident">Io</span>))<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">BufReader</span>::<span class="ident">new</span>(<span class="ident">file</span>);
+            <span class="kw">match</span> <span class="ident">path</span>.<span class="ident">extension</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">to_str</span>()) {
+                <span class="prelude-val">Some</span>(<span class="string">&quot;json&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">config</span> <span class="op">=</span> <span class="ident">serde_json</span>::<span class="ident">from_reader</span>(<span class="ident">reader</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+                        <span class="ident">Error</span>::<span class="ident">with_description</span>(
+                            <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span> {<span class="string">&quot;Invalid config file: {}&quot;</span>,<span class="ident">e</span>},
+                            <span class="ident">ErrorKind</span>::<span class="ident">Io</span>,
+                        )
+                    })<span class="question-mark">?</span>;
+                }
+                <span class="prelude-val">Some</span>(<span class="string">&quot;yaml&quot;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&quot;yml&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">config</span> <span class="op">=</span> <span class="ident">serde_yaml</span>::<span class="ident">from_reader</span>(<span class="ident">reader</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+                        <span class="ident">Error</span>::<span class="ident">with_description</span>(
+                            <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span> {<span class="string">&quot;Invalid config file: {}&quot;</span>,<span class="ident">e</span>},
+                            <span class="ident">ErrorKind</span>::<span class="ident">Io</span>,
+                        )
+                    })<span class="question-mark">?</span>;
+                }
+                <span class="prelude-val">Some</span>(<span class="string">&quot;toml&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+                    <span class="ident">reader</span>
+                        .<span class="ident">read_to_end</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>)
+                        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">Error</span>::<span class="ident">with_description</span>(<span class="kw-2">&amp;</span><span class="ident">e</span>.<span class="ident">to_string</span>(), <span class="ident">ErrorKind</span>::<span class="ident">Io</span>))<span class="question-mark">?</span>;
+                    <span class="ident">config</span> <span class="op">=</span> <span class="ident">toml</span>::<span class="ident">from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+                        <span class="ident">Error</span>::<span class="ident">with_description</span>(
+                            <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span> {<span class="string">&quot;Invalid config file: {}&quot;</span>,<span class="ident">e</span>},
+                            <span class="ident">ErrorKind</span>::<span class="ident">Io</span>,
+                        )
+                    })<span class="question-mark">?</span>;
+                }
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
+                        <span class="string">&quot;Unsupported config file format&quot;</span>,
+                        <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
+                    ))
+                }
+            }
+        } <span class="kw">else</span> {
+            <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;X&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;Y&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;P&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
 
-        <span class="kw">let</span> <span class="ident">transform</span>: <span class="ident">Transform</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;TRANSFORM&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">symmetry</span>: <span class="ident">Symmetry</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;SYMMETRY&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">dx</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;DX&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">dy</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;DY&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+
+            <span class="kw">let</span> <span class="ident">transform</span>: <span class="ident">Transform</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;TRANSFORM&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">symmetry</span>: <span class="ident">Symmetry</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;SYMMETRY&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+
+            <span class="kw">let</span> <span class="ident">search_order</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;ORDER&quot;</span>).<span class="ident">unwrap</span>() {
+                <span class="string">&quot;row&quot;</span> <span class="op">|</span> <span class="string">&quot;r&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">RowFirst</span>),
+                <span class="string">&quot;column&quot;</span> <span class="op">|</span> <span class="string">&quot;c&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">ColumnFirst</span>),
+                <span class="string">&quot;diagonal&quot;</span> <span class="op">|</span> <span class="string">&quot;d&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            };
+            <span class="kw">let</span> <span class="ident">new_state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;CHOOSE&quot;</span>).<span class="ident">unwrap</span>() {
+                <span class="string">&quot;dead&quot;</span> <span class="op">|</span> <span class="string">&quot;d&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">ChooseDead</span>,
+                <span class="string">&quot;alive&quot;</span> <span class="op">|</span> <span class="string">&quot;a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">ChooseAlive</span>,
+                <span class="string">&quot;random&quot;</span> <span class="op">|</span> <span class="string">&quot;r&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">Random</span>,
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">ChooseAlive</span>,
+            };
+            <span class="kw">let</span> <span class="ident">max_cell_count</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;MAX&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">max_cell_count</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">max_cell_count</span> {
+                <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+                <span class="ident">i</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">i</span>),
+            };
+            <span class="kw">let</span> <span class="ident">diagonal_width</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;DIAG&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">diagonal_width</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">diagonal_width</span> {
+                <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+                <span class="ident">i</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">i</span>),
+            };
+            <span class="kw">let</span> <span class="ident">reduce_max</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;REDUCE&quot;</span>);
+            <span class="kw">let</span> <span class="ident">skip_subperiod</span> <span class="op">=</span> <span class="op">!</span><span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;SUBPERIOD&quot;</span>);
+            <span class="kw">let</span> <span class="ident">skip_subsymmetry</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;SKIPSUBSYM&quot;</span>);
+            <span class="kw">let</span> <span class="ident">backjump</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;BACKJUMP&quot;</span>);
+
+            <span class="kw">let</span> <span class="ident">rule_string</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;RULE&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_string</span>();
+
+            <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config</span>::<span class="ident">new</span>(<span class="ident">width</span>, <span class="ident">height</span>, <span class="ident">period</span>)
+                .<span class="ident">set_translate</span>(<span class="ident">dx</span>, <span class="ident">dy</span>)
+                .<span class="ident">set_transform</span>(<span class="ident">transform</span>)
+                .<span class="ident">set_symmetry</span>(<span class="ident">symmetry</span>)
+                .<span class="ident">set_search_order</span>(<span class="ident">search_order</span>)
+                .<span class="ident">set_new_state</span>(<span class="ident">new_state</span>)
+                .<span class="ident">set_max_cell_count</span>(<span class="ident">max_cell_count</span>)
+                .<span class="ident">set_reduce_max</span>(<span class="ident">reduce_max</span>)
+                .<span class="ident">set_rule_string</span>(<span class="ident">rule_string</span>)
+                .<span class="ident">set_diagonal_width</span>(<span class="ident">diagonal_width</span>)
+                .<span class="ident">set_skip_subperiod</span>(<span class="ident">skip_subperiod</span>)
+                .<span class="ident">set_skip_subsymmetry</span>(<span class="ident">skip_subsymmetry</span>)
+                .<span class="ident">set_backjump</span>(<span class="ident">backjump</span>);
+        }
 
         <span class="kw">let</span> <span class="ident">all</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;ALL&quot;</span>);
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tui&quot;</span>)]</span>
         <span class="kw">let</span> <span class="ident">reset</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;RESET&quot;</span>);
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tui&quot;</span>)]</span>
         <span class="kw">let</span> <span class="ident">no_tui</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;NOTUI&quot;</span>);
-        <span class="kw">let</span> <span class="ident">search_order</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;ORDER&quot;</span>).<span class="ident">unwrap</span>() {
-            <span class="string">&quot;row&quot;</span> <span class="op">|</span> <span class="string">&quot;r&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">RowFirst</span>),
-            <span class="string">&quot;column&quot;</span> <span class="op">|</span> <span class="string">&quot;c&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">ColumnFirst</span>),
-            <span class="string">&quot;diagonal&quot;</span> <span class="op">|</span> <span class="string">&quot;d&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-        };
-        <span class="kw">let</span> <span class="ident">new_state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;CHOOSE&quot;</span>).<span class="ident">unwrap</span>() {
-            <span class="string">&quot;dead&quot;</span> <span class="op">|</span> <span class="string">&quot;d&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">ChooseDead</span>,
-            <span class="string">&quot;alive&quot;</span> <span class="op">|</span> <span class="string">&quot;a&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">ChooseAlive</span>,
-            <span class="string">&quot;random&quot;</span> <span class="op">|</span> <span class="string">&quot;r&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">Random</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NewState</span>::<span class="ident">ChooseAlive</span>,
-        };
-        <span class="kw">let</span> <span class="ident">max_cell_count</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;MAX&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">max_cell_count</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">max_cell_count</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">i</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">i</span>),
-        };
-        <span class="kw">let</span> <span class="ident">diagonal_width</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;DIAG&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">diagonal_width</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">diagonal_width</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">i</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">i</span>),
-        };
-        <span class="kw">let</span> <span class="ident">reduce_max</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;REDUCE&quot;</span>);
-        <span class="kw">let</span> <span class="ident">skip_subperiod</span> <span class="op">=</span> <span class="op">!</span><span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;SUBPERIOD&quot;</span>);
-        <span class="kw">let</span> <span class="ident">skip_subsymmetry</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;SKIPSUBSYM&quot;</span>);
-        <span class="kw">let</span> <span class="ident">backjump</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;BACKJUMP&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">rule_string</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;RULE&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_string</span>();
+        <span class="kw">let</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">world</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+            <span class="ident">Error</span>::<span class="ident">with_description</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span> {<span class="string">&quot;Invalid config: {}&quot;</span>,<span class="ident">e</span>}, <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>)
+        })<span class="question-mark">?</span>;
 
-        <span class="kw">if</span> <span class="ident">width</span> <span class="op">!</span><span class="op">=</span> <span class="ident">height</span> {
-            <span class="kw">if</span> <span class="ident">transform</span>.<span class="ident">require_square_world</span>() {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
-                    <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                        <span class="string">&quot;The transformation &#39;{}&#39; is only valid for square worlds&quot;</span>,
-                        <span class="ident">transform</span>
-                    ),
-                    <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
-                ));
-            }
-            <span class="kw">if</span> <span class="ident">symmetry</span>.<span class="ident">require_square_world</span>() {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
-                    <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                        <span class="string">&quot;The symmetry &#39;{}&#39; is only valid for square worlds&quot;</span>,
-                        <span class="ident">symmetry</span>
-                    ),
-                    <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
-                ));
-            }
-            <span class="kw">if</span> <span class="ident">search_order</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span>) {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
-                    <span class="string">&quot;Diagonal search order is only valid for square worlds&quot;</span>,
-                    <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
-                ));
-            }
-        }
-
-        <span class="kw">if</span> <span class="ident">diagonal_width</span>.<span class="ident">is_some</span>() {
-            <span class="kw">if</span> <span class="ident">transform</span>.<span class="ident">require_no_diagonal_width</span>() {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
-                    <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                        <span class="string">&quot;The transformation &#39;{}&#39; is only valid for worlds without diagonal width&quot;</span>,
-                        <span class="ident">transform</span>
-                    ),
-                    <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
-                ));
-            }
-            <span class="kw">if</span> <span class="ident">symmetry</span>.<span class="ident">require_no_diagonal_width</span>() {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
-                    <span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(
-                        <span class="string">&quot;The symmetry &#39;{}&#39; is only valid for worlds without diagonal width&quot;</span>,
-                        <span class="ident">symmetry</span>
-                    ),
-                    <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
-                ));
-            }
-        }
-
-        <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config</span>::<span class="ident">new</span>(<span class="ident">width</span>, <span class="ident">height</span>, <span class="ident">period</span>)
-            .<span class="ident">set_translate</span>(<span class="ident">dx</span>, <span class="ident">dy</span>)
-            .<span class="ident">set_transform</span>(<span class="ident">transform</span>)
-            .<span class="ident">set_symmetry</span>(<span class="ident">symmetry</span>)
-            .<span class="ident">set_search_order</span>(<span class="ident">search_order</span>)
-            .<span class="ident">set_new_state</span>(<span class="ident">new_state</span>)
-            .<span class="ident">set_max_cell_count</span>(<span class="ident">max_cell_count</span>)
-            .<span class="ident">set_reduce_max</span>(<span class="ident">reduce_max</span>)
-            .<span class="ident">set_rule_string</span>(<span class="ident">rule_string</span>)
-            .<span class="ident">set_diagonal_width</span>(<span class="ident">diagonal_width</span>)
-            .<span class="ident">set_skip_subperiod</span>(<span class="ident">skip_subperiod</span>)
-            .<span class="ident">set_skip_subsymmetry</span>(<span class="ident">skip_subsymmetry</span>)
-            .<span class="ident">set_backjump</span>(<span class="ident">backjump</span>);
-
-        <span class="kw">let</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">world</span>().<span class="ident">unwrap</span>();
-
-        <span class="kw">if</span> <span class="ident">search</span>.<span class="ident">is_gen_rule</span>() <span class="op">&amp;&amp;</span> <span class="ident">backjump</span> {
+        <span class="kw">if</span> <span class="ident">search</span>.<span class="ident">is_gen_rule</span>() <span class="op">&amp;&amp;</span> <span class="ident">config</span>.<span class="ident">backjump</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">with_description</span>(
                 <span class="string">&quot;Backjumping is not yet supported for Generations rules.&quot;</span>,
                 <span class="ident">ErrorKind</span>::<span class="ident">InvalidValue</span>,
