@@ -570,7 +570,7 @@
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
     <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">ReasonBackjump</span>, <span class="ident">ReasonNoBackjump</span>, <span class="ident">SetCell</span>},
 };
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">ptr</span>};
 
 <span class="doccomment">/// The world.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -585,7 +585,7 @@
     <span class="doccomment">/// This vector will not be moved after its creation.</span>
     <span class="doccomment">/// All the cells will live throughout the lifetime of the world.</span>
     <span class="comment">// So the unsafe codes below are actually safe.</span>
-    <span class="ident">cells</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">cells</span>: <span class="ident">Box</span><span class="op">&lt;</span>[<span class="ident">LifeCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>]<span class="op">&gt;</span>,
 
     <span class="doccomment">/// Number of known living cells in each generation.</span>
     <span class="doccomment">///</span>
@@ -675,7 +675,7 @@
         <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="ident">World</span> {
             <span class="ident">config</span>: <span class="ident">config</span>.<span class="ident">clone</span>(),
             <span class="ident">rule</span>,
-            <span class="ident">cells</span>,
+            <span class="ident">cells</span>: <span class="ident">cells</span>.<span class="ident">into_boxed_slice</span>(),
             <span class="ident">cell_count</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">config</span>.<span class="ident">period</span> <span class="kw">as</span> <span class="ident">usize</span>],
             <span class="ident">front_cell_count</span>: <span class="number">0</span>,
             <span class="ident">conflicts</span>: <span class="number">0</span>,
@@ -758,7 +758,7 @@
                     }
                 }
                 <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
-                    <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
+                    <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>));
                     <span class="kw">for</span> (<span class="ident">i</span>, (<span class="ident">nx</span>, <span class="ident">ny</span>)) <span class="kw">in</span> <span class="ident">NBHD</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
                         <span class="kw">unsafe</span> {
                             <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">cell_ptr</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>();
@@ -787,7 +787,7 @@
                     }
                 }
                 <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
-                    <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
+                    <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>));
                     <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
 
                     <span class="kw">if</span> <span class="ident">t</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
@@ -844,7 +844,7 @@
                     }
                 }
                 <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
-                    <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
+                    <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>));
                     <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
 
                     <span class="kw">for</span> <span class="ident">transform</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">symmetry</span>.<span class="ident">members</span>() {
@@ -921,7 +921,7 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cell</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>(<span class="ident">coord</span>) {
             <span class="kw">if</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">cell</span>.<span class="ident">next</span>.<span class="ident">is_none</span>() {
                 <span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">next_unknown</span>, <span class="prelude-val">Some</span>(<span class="ident">cell</span>));
-                <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>(<span class="ident">coord</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">cell_ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell_mut</span>(<span class="ident">coord</span>);
                 <span class="kw">unsafe</span> {
                     <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">cell_ptr</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>();
                     <span class="ident">cell</span>.<span class="ident">next</span> <span class="op">=</span> <span class="ident">next</span>;
@@ -957,7 +957,7 @@
     }
 
     <span class="doccomment">/// Finds a cell by its coordinates. Returns a mutable pointer.</span>
-    <span class="kw">fn</span> <span class="ident">find_cell_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">find_cell_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
         <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>) <span class="op">=</span> <span class="ident">coord</span>;
         <span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span>
             <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span>
@@ -969,9 +969,9 @@
                 <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>() <span class="op">+</span> <span class="number">1</span>)
         {
             <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> ((<span class="ident">x</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">*</span> (<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">+</span> <span class="ident">y</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">*</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> <span class="op">+</span> <span class="ident">t</span>;
-            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cells</span>[<span class="ident">index</span> <span class="kw">as</span> <span class="ident">usize</span>])
+            <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">cells</span>[<span class="ident">index</span> <span class="kw">as</span> <span class="ident">usize</span>]
         } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
+            <span class="ident">ptr</span>::<span class="ident">null_mut</span>()
         }
     }
 
