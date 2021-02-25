@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["ConflReason","Reasons for a conflict."],["ReasonBackjump","Reasons for setting a cell."]]});
+initSidebarItems({"enum":[["ConflReason","Reasons for a conflict."],["ReasonBackjump","Reasons for setting a cell, with informations for backjumping."]]});
