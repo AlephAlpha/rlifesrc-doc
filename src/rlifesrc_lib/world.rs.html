@@ -550,6 +550,12 @@
 <span id="547">547</span>
 <span id="548">548</span>
 <span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The world.</span>
 
@@ -621,6 +627,11 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Only used when backjumping is enabled.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">front</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+
+    <span class="doccomment">/// A learnt clause.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Only used when backjumping is enabled.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">learnt</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">ReasonNoBackjump</span><span class="op">&gt;</span> {
@@ -680,6 +691,7 @@
             <span class="ident">non_empty_front</span>: <span class="ident">is_front</span>.<span class="ident">is_some</span>(),
             <span class="ident">level</span>: <span class="number">0</span>,
             <span class="ident">front</span>,
+            <span class="ident">learnt</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
         }
         .<span class="ident">init_front</span>()
         .<span class="ident">init_border</span>()

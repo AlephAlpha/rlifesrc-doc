@@ -190,6 +190,14 @@
 <span id="187">187</span>
 <span id="188">188</span>
 <span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Cells in the cellular automaton.</span>
 
@@ -198,7 +206,9 @@
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cell</span>::<span class="ident">Cell</span>,
     <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Error</span>, <span class="ident">Formatter</span>},
+    <span class="ident">hash</span>::{<span class="ident">Hash</span>, <span class="ident">Hasher</span>},
     <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">Not</span>},
+    <span class="ident">ptr</span>,
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
@@ -359,7 +369,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">eq</span>(<span class="self">self</span>.<span class="ident">cell</span>, <span class="ident">other</span>.<span class="ident">cell</span>)
+        <span class="ident">ptr</span>::<span class="ident">eq</span>(<span class="self">self</span>.<span class="ident">cell</span>, <span class="ident">other</span>.<span class="ident">cell</span>)
     }
 }
 
@@ -378,6 +388,12 @@
         <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;CellRef&quot;</span>)
             .<span class="ident">field</span>(<span class="string">&quot;coord&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">coord</span>)
             .<span class="ident">finish</span>()
+    }
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">Hash</span> <span class="kw">for</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">hash</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Hasher</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">state</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">H</span>) {
+        <span class="ident">ptr</span>::<span class="ident">hash</span>(<span class="self">self</span>.<span class="ident">cell</span>, <span class="ident">state</span>)
     }
 }
 </pre></div>

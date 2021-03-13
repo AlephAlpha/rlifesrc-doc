@@ -464,6 +464,17 @@
 <span id="461">461</span>
 <span id="462">462</span>
 <span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The search process, with backjumping.</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -675,28 +686,6 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">ConflReason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Cells involved in the reason.</span>
-    <span class="kw">fn</span> <span class="ident">cells</span>(<span class="self">self</span>, <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">ReasonBackjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ConflReason</span>::<span class="ident">Rule</span>(<span class="ident">cell</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">10</span>);
-                <span class="ident">cells</span>.<span class="ident">push</span>(<span class="ident">cell</span>);
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
-                    <span class="ident">cells</span>.<span class="ident">push</span>(<span class="ident">succ</span>);
-                }
-                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">8</span> {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">neigh</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">nbhd</span>[<span class="ident">i</span>] {
-                        <span class="ident">cells</span>.<span class="ident">push</span>(<span class="ident">neigh</span>);
-                    }
-                }
-                <span class="ident">cells</span>
-            }
-            <span class="ident">ConflReason</span>::<span class="ident">Sym</span>(<span class="ident">cell</span>, <span class="ident">sym</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">cell</span>, <span class="ident">sym</span>],
-            <span class="ident">ConflReason</span>::<span class="ident">Front</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">front</span>.<span class="ident">clone</span>(),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
-        }
-    }
-
     <span class="doccomment">/// Whether this reason should be analyzed before retreating.</span>
     <span class="kw">fn</span> <span class="ident">should_analyze</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="macro">matches</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">ConflReason</span>::<span class="ident">Deduce</span>)
@@ -704,6 +693,30 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">ReasonBackjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Store the cells involved in the conflict reason into  [`self.learnt`](Self::learnt).</span>
+    <span class="kw">fn</span> <span class="ident">learn_from_confl</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reason</span>: <span class="ident">ConflReason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) {
+        <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">clear</span>();
+        <span class="kw">match</span> <span class="ident">reason</span> {
+            <span class="ident">ConflReason</span>::<span class="ident">Rule</span>(<span class="ident">cell</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">cell</span>);
+                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
+                    <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">succ</span>);
+                }
+                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">8</span> {
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">neigh</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">nbhd</span>[<span class="ident">i</span>] {
+                        <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">neigh</span>);
+                    }
+                }
+            }
+            <span class="ident">ConflReason</span>::<span class="ident">Sym</span>(<span class="ident">cell</span>, <span class="ident">sym</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">cell</span>);
+                <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">sym</span>);
+            }
+            <span class="ident">ConflReason</span>::<span class="ident">Front</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">front</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+        }
+    }
+
     <span class="doccomment">/// Sets the [`state`](LifeCell#structfield.state) of a cell,</span>
     <span class="doccomment">/// push it to the [`set_stack`](#structfield.set_stack),</span>
     <span class="doccomment">/// and update the neighborhood descriptor of its neighbors.</span>
@@ -806,16 +819,20 @@
     <span class="doccomment">/// analyzes the conflict during the backtracking, and</span>
     <span class="doccomment">/// backjumps if possible.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// The reason of conflict must be stored in `self.learnt`</span>
+    <span class="doccomment">/// before calling this method.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` if successes,</span>
     <span class="doccomment">/// `false` if it goes back to the time before the first cell is set.</span>
-    <span class="kw">fn</span> <span class="ident">analyze</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reason</span>: <span class="kw-2">&amp;</span>[<span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="kw">if</span> <span class="ident">reason</span>.<span class="ident">is_empty</span>() {
+    <span class="kw">fn</span> <span class="ident">analyze</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">is_empty</span>() {
             <span class="kw">return</span> <span class="self">self</span>.<span class="ident">retreat_impl</span>();
         }
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_level</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">counter</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">learnt</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">reason</span>.<span class="ident">len</span>());
-        <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">reason_cell</span> <span class="kw">in</span> <span class="ident">reason</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="kw">while</span> <span class="ident">i</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">len</span>() {
+            <span class="kw">let</span> <span class="ident">reason_cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">learnt</span>[<span class="ident">i</span>];
             <span class="kw">if</span> <span class="ident">reason_cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_some</span>() {
                 <span class="kw">let</span> <span class="ident">level</span> <span class="op">=</span> <span class="ident">reason_cell</span>.<span class="ident">level</span>.<span class="ident">get</span>();
                 <span class="kw">if</span> <span class="ident">level</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">level</span> {
@@ -825,14 +842,18 @@
                     }
                 } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">level</span> <span class="op">&gt;</span> <span class="number">0</span> {
                     <span class="ident">max_level</span> <span class="op">=</span> <span class="ident">max_level</span>.<span class="ident">max</span>(<span class="ident">level</span>);
-                    <span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">reason_cell</span>);
+                    <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                    <span class="kw">continue</span>;
                 }
             }
+            <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">swap_remove</span>(<span class="ident">i</span>);
         }
         <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">SetCell</span> { <span class="ident">cell</span>, <span class="ident">reason</span> }) <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">pop</span>() {
             <span class="kw">match</span> <span class="ident">reason</span> {
                 <span class="ident">ReasonBackjump</span>::<span class="ident">Decide</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="op">!</span><span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>();
+                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">learnt</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">clone</span>();
+                    <span class="ident">learnt</span>.<span class="ident">shrink_to_fit</span>();
                     <span class="kw">let</span> <span class="ident">reason</span> <span class="op">=</span> <span class="ident">ReasonBackjump</span>::<span class="ident">Clause</span>(<span class="ident">learnt</span>);
 
                     <span class="self">self</span>.<span class="ident">check_index</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span>;
@@ -863,7 +884,7 @@
                                     }
                                 } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">level</span> <span class="op">&gt;</span> <span class="number">0</span> {
                                     <span class="ident">max_level</span> <span class="op">=</span> <span class="ident">max_level</span>.<span class="ident">max</span>(<span class="ident">level</span>);
-                                    <span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">reason_cell</span>);
+                                    <span class="self">self</span>.<span class="ident">learnt</span>.<span class="ident">push</span>(<span class="ident">reason_cell</span>);
                                 }
                             }
                         }
@@ -881,7 +902,7 @@
                                     <span class="self">self</span>.<span class="ident">next_unknown</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">next</span>;
                                     <span class="self">self</span>.<span class="ident">level</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
                                     <span class="kw">if</span> <span class="self">self</span>.<span class="ident">level</span> <span class="op">=</span><span class="op">=</span> <span class="ident">max_level</span> {
-                                        <span class="kw">return</span> <span class="self">self</span>.<span class="ident">analyze</span>(<span class="kw-2">&amp;</span><span class="ident">learnt</span>);
+                                        <span class="kw">return</span> <span class="self">self</span>.<span class="ident">analyze</span>();
                                     }
                                 } <span class="kw">else</span> {
                                     <span class="self">self</span>.<span class="ident">clear_cell</span>(<span class="ident">cell</span>);
@@ -916,7 +937,8 @@
                 <span class="prelude-val">Err</span>(<span class="ident">reason</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">conflicts</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                     <span class="kw">let</span> <span class="ident">failed</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">reason</span>.<span class="ident">should_analyze</span>() {
-                        <span class="op">!</span><span class="self">self</span>.<span class="ident">analyze</span>(<span class="kw-2">&amp;</span><span class="ident">reason</span>.<span class="ident">cells</span>(<span class="self">self</span>))
+                        <span class="self">self</span>.<span class="ident">learn_from_confl</span>(<span class="ident">reason</span>);
+                        <span class="op">!</span><span class="self">self</span>.<span class="ident">analyze</span>()
                     } <span class="kw">else</span> {
                         <span class="op">!</span><span class="self">self</span>.<span class="ident">retreat_impl</span>()
                     };
