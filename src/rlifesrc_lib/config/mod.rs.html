@@ -322,35 +322,6 @@
 <span id="319">319</span>
 <span id="320">320</span>
 <span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
-<span id="335">335</span>
-<span id="336">336</span>
-<span id="337">337</span>
-<span id="338">338</span>
-<span id="339">339</span>
-<span id="340">340</span>
-<span id="341">341</span>
-<span id="342">342</span>
-<span id="343">343</span>
-<span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! World configuration.</span>
 
@@ -361,7 +332,7 @@
     <span class="ident">traits</span>::<span class="ident">Search</span>,
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
-<span class="kw">use</span> <span class="ident">derivative</span>::<span class="ident">Derivative</span>;
+<span class="kw">use</span> <span class="ident">educe</span>::<span class="ident">Educe</span>;
 
 <span class="kw">mod</span> <span class="ident">d8</span>;
 <span class="kw">mod</span> <span class="ident">search_order</span>;
@@ -375,8 +346,8 @@
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="doccomment">/// How to choose a state for an unknown cell.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
+<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">NewState</span> {
     <span class="doccomment">/// Chooses the background state.</span>
@@ -397,7 +368,7 @@
     <span class="doccomment">/// For example, for non-Generations rules,</span>
     <span class="doccomment">/// it chooses [`ALIVE`] on even generations,</span>
     <span class="doccomment">/// [`DEAD`] on odd generations.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
     <span class="ident">ChooseAlive</span>,
 
     <span class="doccomment">/// Random.</span>
@@ -424,29 +395,27 @@
 <span class="doccomment">/// World configuration.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The world will be generated from this configuration.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
+<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Config</span> {
     <span class="doccomment">/// Width.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;16&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="number">16</span>)]</span>
     <span class="kw">pub</span> <span class="ident">width</span>: <span class="ident">i32</span>,
 
     <span class="doccomment">/// Height.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;16&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="number">16</span>)]</span>
     <span class="kw">pub</span> <span class="ident">height</span>: <span class="ident">i32</span>,
 
     <span class="doccomment">/// Period.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;1&quot;</span>))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;default_period&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="number">1</span>)]</span>
     <span class="kw">pub</span> <span class="ident">period</span>: <span class="ident">i32</span>,
 
     <span class="doccomment">/// Horizontal translation.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">dx</span>: <span class="ident">i32</span>,
 
     <span class="doccomment">/// Vertical translation.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">dy</span>: <span class="ident">i32</span>,
 
     <span class="doccomment">/// Transformations (rotations and reflections) after the last generation</span>
@@ -455,11 +424,9 @@
     <span class="doccomment">/// After the last generation in a period, the pattern will return to</span>
     <span class="doccomment">/// the first generation, applying this transformation first,</span>
     <span class="doccomment">/// and then the translation defined by `dx` and `dy`.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">transform</span>: <span class="ident">Transform</span>,
 
     <span class="doccomment">/// Symmetries of the pattern.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">symmetry</span>: <span class="ident">Symmetry</span>,
 
     <span class="doccomment">/// The order to find a new unknown cell.</span>
@@ -469,18 +436,15 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// `None` means that it will automatically choose a search order</span>
     <span class="doccomment">/// according to the width and height of the world.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">search_order</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SearchOrder</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// How to choose a state for an unknown cell.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">new_state</span>: <span class="ident">NewState</span>,
 
     <span class="doccomment">/// The number of minimum living cells in all generations must not</span>
     <span class="doccomment">/// exceed this number.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `None` means that there is no limit for the cell count.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">max_cell_count</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Whether to automatically reduce the [`max_cell_count`](#structfield.max_cell_count)</span>
@@ -488,24 +452,20 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The [`max_cell_count`](#structfield.max_cell_count) will be set to the cell count of</span>
     <span class="doccomment">/// the current result minus one.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">reduce_max</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// The rule string of the cellular automaton.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;default_rule_string()&quot;</span>))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;default_rule_string&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="string">&quot;B3/S23&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">rule_string</span>: <span class="ident">String</span>,
 
     <span class="doccomment">/// Diagonal width.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If the diagonal width is `n`, the cells at position `(x, y)`</span>
     <span class="doccomment">/// where `abs(x - y) &gt;= n` are assumed to be dead.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">diagonal_width</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// Whether to skip patterns whose fundamental period are smaller than the given period.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>(<span class="ident">value</span> <span class="op">=</span> <span class="string">&quot;true&quot;</span>))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;default_skip_subperiod&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="bool-val">true</span>)]</span>
     <span class="kw">pub</span> <span class="ident">skip_subperiod</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Whether to skip patterns which are invariant under more transformations than</span>
@@ -513,11 +473,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// In another word, whether to skip patterns whose symmetry group properly contains</span>
     <span class="doccomment">/// the given symmetry group.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>,
 
     <span class="doccomment">/// Cells whose states are known before the search.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">known_cells</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">KnownCell</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// __(Experimental)__ Whether to enable [backjumping](https://en.wikipedia.org/wiki/Backjumping).</span>
@@ -528,23 +486,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Currently it is only supported for non-generations rules. Generations rules</span>
     <span class="doccomment">/// will ignore this option.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
     <span class="kw">pub</span> <span class="ident">backjump</span>: <span class="ident">bool</span>,
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">fn</span> <span class="ident">default_period</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
-    <span class="number">1</span>
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">fn</span> <span class="ident">default_rule_string</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
-    <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;B3/S23&quot;</span>)
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">fn</span> <span class="ident">default_skip_subperiod</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    <span class="bool-val">true</span>
 }
 
 <span class="kw">impl</span> <span class="ident">Config</span> {

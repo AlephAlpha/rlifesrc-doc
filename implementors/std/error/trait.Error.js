@@ -11,6 +11,7 @@ implementors["futures_executor"] = [{"text":"impl Error for EnterError","synthet
 implementors["futures_task"] = [{"text":"impl Error for SpawnError","synthetic":false,"types":[]}];
 implementors["futures_util"] = [{"text":"impl Error for Aborted","synthetic":false,"types":[]},{"text":"impl&lt;T:&nbsp;Any, Item&gt; Error for ReuniteError&lt;T, Item&gt;","synthetic":false,"types":[]},{"text":"impl&lt;T:&nbsp;Any&gt; Error for ReuniteError&lt;T&gt;","synthetic":false,"types":[]}];
 implementors["getrandom"] = [{"text":"impl Error for Error","synthetic":false,"types":[]}];
+implementors["num_bigint"] = [{"text":"impl Error for ParseBigIntError","synthetic":false,"types":[]},{"text":"impl&lt;T&gt; Error for TryFromBigIntError&lt;T&gt; <span class=\"where fmt-newline\">where<br>&nbsp;&nbsp;&nbsp;&nbsp;T: Debug,&nbsp;</span>","synthetic":false,"types":[]}];
 implementors["proc_macro2"] = [{"text":"impl Error for LexError","synthetic":false,"types":[]}];
 implementors["rand"] = [{"text":"impl Error for BernoulliError","synthetic":false,"types":[]},{"text":"impl Error for WeightedError","synthetic":false,"types":[]},{"text":"impl Error for ReadError","synthetic":false,"types":[]}];
 implementors["rand_core"] = [{"text":"impl Error for Error","synthetic":false,"types":[]}];

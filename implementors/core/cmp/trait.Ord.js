@@ -6,6 +6,7 @@ implementors["futures_util"] = [{"text":"impl&lt;T:&nbsp;Ord&gt; Ord for AllowSt
 implementors["linked_hash_map"] = [{"text":"impl&lt;K:&nbsp;Hash + Eq + Ord, V:&nbsp;Ord, S:&nbsp;BuildHasher&gt; Ord for LinkedHashMap&lt;K, V, S&gt;","synthetic":false,"types":[]}];
 implementors["log"] = [{"text":"impl&lt;'k&gt; Ord for Key&lt;'k&gt;","synthetic":false,"types":[]},{"text":"impl Ord for Level","synthetic":false,"types":[]},{"text":"impl Ord for LevelFilter","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; Ord for Metadata&lt;'a&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; Ord for MetadataBuilder&lt;'a&gt;","synthetic":false,"types":[]}];
 implementors["mio"] = [{"text":"impl Ord for Interest","synthetic":false,"types":[]},{"text":"impl Ord for Token","synthetic":false,"types":[]}];
+implementors["num_bigint"] = [{"text":"impl Ord for Sign","synthetic":false,"types":[]},{"text":"impl Ord for BigInt","synthetic":false,"types":[]},{"text":"impl Ord for BigUint","synthetic":false,"types":[]}];
 implementors["proc_macro2"] = [{"text":"impl Ord for Ident","synthetic":false,"types":[]}];
 implementors["rlifesrc_lib"] = [{"text":"impl Ord for ImplFlags","synthetic":false,"types":[]},{"text":"impl Ord for ImplFlags","synthetic":false,"types":[]}];
 implementors["signal_hook_registry"] = [{"text":"impl Ord for SigId","synthetic":false,"types":[]}];

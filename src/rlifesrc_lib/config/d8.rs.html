@@ -760,7 +760,7 @@
 <span class="doccomment">//! 10 different symmetries correspond to 10 subgroups of _D_&lt;sub&gt;8&lt;/sub&gt;.</span>
 
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Config</span>, <span class="ident">Coord</span>};
-<span class="kw">use</span> <span class="ident">derivative</span>::<span class="ident">Derivative</span>;
+<span class="kw">use</span> <span class="ident">educe</span>::<span class="ident">Educe</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">cmp</span>::<span class="ident">Ordering</span>,
     <span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>, <span class="ident">Formatter</span>},
@@ -793,14 +793,14 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Some of the transformations are only valid when the world is square.</span>
 <span class="doccomment">/// and some are only valid when the world has no diagonal width.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
+<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Transform</span> {
     <span class="doccomment">/// `Id`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Identity transformation.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
     <span class="ident">Id</span>,
     <span class="doccomment">/// `R90`.</span>
     <span class="doccomment">///</span>
@@ -1043,14 +1043,14 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Some of the symmetries are only valid when the world is square,</span>
 <span class="doccomment">/// and some are only valid when the world has no diagonal width.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Derivative</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
+<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Symmetry</span> {
     <span class="doccomment">/// `C1`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// No symmetry at all.</span>
-    <span class="attribute">#[<span class="ident">derivative</span>(<span class="ident">Default</span>)]</span>
+    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
     <span class="ident">C1</span>,
     <span class="doccomment">/// `C2`.</span>
     <span class="doccomment">///</span>

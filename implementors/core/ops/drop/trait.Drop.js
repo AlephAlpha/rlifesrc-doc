@@ -20,5 +20,6 @@ implementors["once_cell"] = [{"text":"impl&lt;T&gt; Drop for OnceBox&lt;T&gt;","
 implementors["rlifesrc"] = [{"text":"impl&lt;'a, W:&nbsp;Write&gt; Drop for App&lt;'a, W&gt;","synthetic":false,"types":[]}];
 implementors["scopeguard"] = [{"text":"impl&lt;T, F, S&gt; Drop for ScopeGuard&lt;T, F, S&gt; <span class=\"where fmt-newline\">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: FnOnce(T),<br>&nbsp;&nbsp;&nbsp;&nbsp;S: Strategy,&nbsp;</span>","synthetic":false,"types":[]}];
 implementors["smallvec"] = [{"text":"impl&lt;'a, T:&nbsp;'a + Array&gt; Drop for Drain&lt;'a, T&gt;","synthetic":false,"types":[]},{"text":"impl&lt;A:&nbsp;Array&gt; Drop for SmallVec&lt;A&gt;","synthetic":false,"types":[]},{"text":"impl&lt;A:&nbsp;Array&gt; Drop for IntoIter&lt;A&gt;","synthetic":false,"types":[]}];
+implementors["socket2"] = [{"text":"impl Drop for Socket","synthetic":false,"types":[]}];
 implementors["syn"] = [{"text":"impl&lt;'a&gt; Drop for ParseBuffer&lt;'a&gt;","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

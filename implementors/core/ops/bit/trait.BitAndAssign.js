@@ -1,4 +1,5 @@
 (function() {var implementors = {};
 implementors["crossterm"] = [{"text":"impl BitAndAssign&lt;KeyModifiers&gt; for KeyModifiers","synthetic":false,"types":[]}];
+implementors["num_bigint"] = [{"text":"impl BitAndAssign&lt;BigInt&gt; for BigInt","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; BitAndAssign&lt;&amp;'a BigInt&gt; for BigInt","synthetic":false,"types":[]},{"text":"impl BitAndAssign&lt;BigUint&gt; for BigUint","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; BitAndAssign&lt;&amp;'a BigUint&gt; for BigUint","synthetic":false,"types":[]}];
 implementors["rlifesrc_lib"] = [{"text":"impl BitAndAssign&lt;ImplFlags&gt; for ImplFlags","synthetic":false,"types":[]},{"text":"impl BitAndAssign&lt;ImplFlags&gt; for ImplFlags","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

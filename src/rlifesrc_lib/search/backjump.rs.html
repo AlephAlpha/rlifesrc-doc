@@ -468,17 +468,6 @@
 <span id="465">465</span>
 <span id="466">466</span>
 <span id="467">467</span>
-<span id="468">468</span>
-<span id="469">469</span>
-<span id="470">470</span>
-<span id="471">471</span>
-<span id="472">472</span>
-<span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The search process, with backjumping.</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -487,7 +476,7 @@
     <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">SetCell</span>},
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
-<span class="kw">use</span> <span class="ident">derivative</span>::<span class="ident">Derivative</span>;
+<span class="kw">use</span> <span class="ident">educe</span>::<span class="ident">Educe</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error</span>::<span class="ident">Error</span>, <span class="ident">save</span>::<span class="ident">ReasonSer</span>};
@@ -496,13 +485,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">cells</span>::<span class="ident">LifeCell</span>;
 
 <span class="doccomment">/// Reasons for setting a cell, with informations for backjumping.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Derivative</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(
-    <span class="ident">Clone</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Debug</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">PartialEq</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Eq</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>)
-)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Educe</span>)]</span>
+<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ReasonBackjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Known before the search starts,</span>
     <span class="ident">Known</span>,
@@ -669,14 +653,8 @@
 }
 
 <span class="doccomment">/// Reasons for a conflict.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Derivative</span>)]</span>
-<span class="attribute">#[<span class="ident">derivative</span>(
-    <span class="ident">Clone</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Copy</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Debug</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">PartialEq</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>),
-    <span class="ident">Eq</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>)
-)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Educe</span>)]</span>
+<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ConflReason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Conflict from the rule when constitifying another cell.</span>
     <span class="ident">Rule</span>(<span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>),
