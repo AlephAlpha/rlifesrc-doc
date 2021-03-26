@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["rlifesrc_lib"] = [{"text":"impl ParseLife for Life","synthetic":false,"types":[]}];
+implementors["rlifesrc_lib"] = [{"text":"impl <a class=\"trait\" href=\"ca_rules/rules/life/trait.ParseLife.html\" title=\"trait ca_rules::rules::life::ParseLife\">ParseLife</a> for <a class=\"struct\" href=\"rlifesrc_lib/rules/life/struct.Life.html\" title=\"struct rlifesrc_lib::rules::life::Life\">Life</a>","synthetic":false,"types":["rlifesrc_lib::rules::life::Life"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
