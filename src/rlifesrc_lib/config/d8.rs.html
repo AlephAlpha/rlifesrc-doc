@@ -872,15 +872,15 @@
 
     <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="prelude-val">Err</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">s</span> {
-            <span class="string">&quot;Id&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">Id</span>),
-            <span class="string">&quot;R90&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">Rotate90</span>),
-            <span class="string">&quot;R180&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">Rotate180</span>),
-            <span class="string">&quot;R270&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">Rotate270</span>),
-            <span class="string">&quot;F-&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">FlipRow</span>),
-            <span class="string">&quot;F|&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">FlipCol</span>),
-            <span class="string">&quot;F\\&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>),
-            <span class="string">&quot;F/&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;invalid Transform&quot;</span>)),
+            <span class="string">&quot;Id&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">Id</span>),
+            <span class="string">&quot;R90&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">Rotate90</span>),
+            <span class="string">&quot;R180&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">Rotate180</span>),
+            <span class="string">&quot;R270&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">Rotate270</span>),
+            <span class="string">&quot;F-&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">FlipRow</span>),
+            <span class="string">&quot;F|&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">FlipCol</span>),
+            <span class="string">&quot;F\\&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">FlipDiag</span>),
+            <span class="string">&quot;F/&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;Invalid Transform&quot;</span>)),
         }
     }
 }
@@ -888,14 +888,14 @@
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Transform</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Transform</span>::<span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Id&quot;</span>,
-            <span class="ident">Transform</span>::<span class="ident">Rotate90</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;R90&quot;</span>,
-            <span class="ident">Transform</span>::<span class="ident">Rotate180</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;R180&quot;</span>,
-            <span class="ident">Transform</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;R270&quot;</span>,
-            <span class="ident">Transform</span>::<span class="ident">FlipRow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F-&quot;</span>,
-            <span class="ident">Transform</span>::<span class="ident">FlipCol</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F|&quot;</span>,
-            <span class="ident">Transform</span>::<span class="ident">FlipDiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F\\&quot;</span>,
-            <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F/&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;Id&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">Rotate90</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;R90&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">Rotate180</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;R180&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;R270&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">FlipRow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F-&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">FlipCol</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F|&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">FlipDiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F\\&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">FlipAntidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;F/&quot;</span>,
         };
         <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -907,70 +907,70 @@
 
     <span class="kw">fn</span> <span class="ident">mul</span>(<span class="self">self</span>, <span class="ident">rhs</span>: <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> (<span class="self">self</span>, <span class="ident">rhs</span>) {
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">Id</span>,
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">Rotate90</span>,
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">Rotate180</span>,
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">Rotate270</span>,
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">FlipRow</span>,
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">FlipCol</span>,
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>,
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Transform</span>::<span class="ident">Rotate90</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Transform</span>::<span class="ident">Rotate270</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>)
-            <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Transform</span>::<span class="ident">Id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">Id</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Id</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">Id</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Rotate90</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">Id</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Rotate180</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">Id</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Rotate270</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">Id</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FlipRow</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">Id</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FlipCol</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">Id</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FlipDiag</span>,
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="self">Self</span>::<span class="ident">FlipCol</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="self">Self</span>::<span class="ident">FlipDiag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="self">Self</span>::<span class="ident">FlipRow</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="self">Self</span>::<span class="ident">Rotate90</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="self">Self</span>::<span class="ident">Rotate270</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="self">Self</span>::<span class="ident">Rotate180</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="self">Self</span>::<span class="ident">Id</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FlipAntidiag</span>,
         }
     }
 }
@@ -979,31 +979,31 @@
     <span class="doccomment">/// Whether this transformation requires the world to be square.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` for `R90`, `R270`, `F\` and `F/`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">is_in</span>(<span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
     }
 
     <span class="doccomment">/// Whether this transformation requires the world to have no diagonal width.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` for `R90`, `R270`, `F-` and `F|`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">is_in</span>(<span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>)
     }
 
     <span class="doccomment">/// The order of this transformation in the symmetry group.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">order</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">order</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Transform</span>::<span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1</span>,
-            <span class="ident">Transform</span>::<span class="ident">Rotate90</span> <span class="op">|</span> <span class="ident">Transform</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">4</span>,
+            <span class="self">Self</span>::<span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1</span>,
+            <span class="self">Self</span>::<span class="ident">Rotate90</span> <span class="op">|</span> <span class="self">Self</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">4</span>,
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">2</span>,
         }
     }
 
     <span class="doccomment">/// The inverse of this transformation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inverse</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">inverse</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Transform</span>::<span class="ident">Rotate90</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">Rotate270</span>,
-            <span class="ident">Transform</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Transform</span>::<span class="ident">Rotate90</span>,
+            <span class="self">Self</span>::<span class="ident">Rotate90</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Rotate270</span>,
+            <span class="self">Self</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Rotate90</span>,
             <span class="ident">x</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">x</span>,
         }
     }
@@ -1011,40 +1011,40 @@
     <span class="doccomment">/// Whether the transformation is a member of the symmetry group,</span>
     <span class="doccomment">/// i.e., whether patterns with this symmetry are invariant under</span>
     <span class="doccomment">/// this transformation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_in</span>(<span class="self">self</span>, <span class="ident">sym</span>: <span class="ident">Symmetry</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_in</span>(<span class="self">self</span>, <span class="ident">sym</span>: <span class="ident">Symmetry</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="macro">matches</span><span class="macro">!</span>(
             (<span class="self">self</span>, <span class="ident">sym</span>),
-            (<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="kw">_</span>)
+            (<span class="self">Self</span>::<span class="ident">Id</span>, <span class="kw">_</span>)
                 <span class="op">|</span> (<span class="kw">_</span>, <span class="ident">Symmetry</span>::<span class="ident">D8</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate90</span>, <span class="ident">Symmetry</span>::<span class="ident">C4</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">C2</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">C4</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">Rotate270</span>, <span class="ident">Symmetry</span>::<span class="ident">C4</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Row</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipRow</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Col</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipCol</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipDiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span>)
-                <span class="op">|</span> (<span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>),
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate90</span>, <span class="ident">Symmetry</span>::<span class="ident">C4</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">C2</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">C4</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate180</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">Rotate270</span>, <span class="ident">Symmetry</span>::<span class="ident">C4</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Row</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipRow</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Col</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipCol</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipDiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span>)
+                <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">FlipAntidiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>),
         )
     }
 
     <span class="doccomment">/// Apply the transformation on a coordinate.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">act_on</span>(<span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>, <span class="ident">width</span>: <span class="ident">i32</span>, <span class="ident">height</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">act_on</span>(<span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>, <span class="ident">width</span>: <span class="ident">i32</span>, <span class="ident">height</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
         <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>) <span class="op">=</span> <span class="ident">coord</span>;
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Transform</span>::<span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident">Transform</span>::<span class="ident">Rotate90</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">y</span>, <span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
-            <span class="ident">Transform</span>::<span class="ident">Rotate180</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident">Transform</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-            <span class="ident">Transform</span>::<span class="ident">FlipRow</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">x</span>, <span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident">Transform</span>::<span class="ident">FlipCol</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident">Transform</span>::<span class="ident">FlipDiag</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-            <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">Rotate90</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">y</span>, <span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">Rotate180</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">Rotate270</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">FlipRow</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">x</span>, <span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">FlipCol</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">FlipDiag</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
+            <span class="self">Self</span>::<span class="ident">FlipAntidiag</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
         }
     }
 }
@@ -1143,17 +1143,17 @@
 
     <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="prelude-val">Err</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">s</span> {
-            <span class="string">&quot;C1&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">C1</span>),
-            <span class="string">&quot;C2&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">C2</span>),
-            <span class="string">&quot;C4&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">C4</span>),
-            <span class="string">&quot;D2-&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">D2Row</span>),
-            <span class="string">&quot;D2|&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">D2Col</span>),
-            <span class="string">&quot;D2\\&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">D2Diag</span>),
-            <span class="string">&quot;D2/&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span>),
-            <span class="string">&quot;D4+&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>),
-            <span class="string">&quot;D4X&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>),
-            <span class="string">&quot;D8&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Symmetry</span>::<span class="ident">D8</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;invalid symmetry&quot;</span>)),
+            <span class="string">&quot;C1&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">C1</span>),
+            <span class="string">&quot;C2&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">C2</span>),
+            <span class="string">&quot;C4&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">C4</span>),
+            <span class="string">&quot;D2-&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">D2Row</span>),
+            <span class="string">&quot;D2|&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">D2Col</span>),
+            <span class="string">&quot;D2\\&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">D2Diag</span>),
+            <span class="string">&quot;D2/&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">D2Antidiag</span>),
+            <span class="string">&quot;D4+&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">D4Ortho</span>),
+            <span class="string">&quot;D4X&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">D4Diag</span>),
+            <span class="string">&quot;D8&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">D8</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;invalid Self&quot;</span>)),
         }
     }
 }
@@ -1161,16 +1161,16 @@
 <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Symmetry</span> {
     <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Symmetry</span>::<span class="ident">C1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;C1&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">C2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;C2&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">C4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;C4&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">D2Row</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2-&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">D2Col</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2|&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2\\&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2/&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D4+&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D4X&quot;</span>,
-            <span class="ident">Symmetry</span>::<span class="ident">D8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D8&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">C1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;C1&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">C2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;C2&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">C4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;C4&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">D2Row</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2-&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">D2Col</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2|&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">D2Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2\\&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">D2Antidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D2/&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">D4Ortho</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D4+&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D4X&quot;</span>,
+            <span class="self">Self</span>::<span class="ident">D8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;D8&quot;</span>,
         };
         <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -1188,24 +1188,24 @@
             <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Equal</span>);
         }
         <span class="kw">match</span> (<span class="self">self</span>, <span class="ident">other</span>) {
-            (<span class="ident">Symmetry</span>::<span class="ident">C1</span>, <span class="kw">_</span>)
-            <span class="op">|</span> (<span class="kw">_</span>, <span class="ident">Symmetry</span>::<span class="ident">D8</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">C2</span>, <span class="ident">Symmetry</span>::<span class="ident">C4</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">C2</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">C2</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D2Row</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D2Col</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D2Diag</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span>, <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Less</span>),
-            (<span class="ident">Symmetry</span>::<span class="ident">D8</span>, <span class="kw">_</span>)
-            <span class="op">|</span> (<span class="kw">_</span>, <span class="ident">Symmetry</span>::<span class="ident">C1</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">C4</span>, <span class="ident">Symmetry</span>::<span class="ident">C2</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>, <span class="ident">Symmetry</span>::<span class="ident">C2</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>, <span class="ident">Symmetry</span>::<span class="ident">C2</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Row</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Col</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span>)
-            <span class="op">|</span> (<span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>, <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Greater</span>),
+            (<span class="self">Self</span>::<span class="ident">C1</span>, <span class="kw">_</span>)
+            <span class="op">|</span> (<span class="kw">_</span>, <span class="self">Self</span>::<span class="ident">D8</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">C2</span>, <span class="self">Self</span>::<span class="ident">C4</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">C2</span>, <span class="self">Self</span>::<span class="ident">D4Ortho</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">C2</span>, <span class="self">Self</span>::<span class="ident">D4Diag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D2Row</span>, <span class="self">Self</span>::<span class="ident">D4Ortho</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D2Col</span>, <span class="self">Self</span>::<span class="ident">D4Ortho</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D2Diag</span>, <span class="self">Self</span>::<span class="ident">D4Diag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D2Antidiag</span>, <span class="self">Self</span>::<span class="ident">D4Diag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Less</span>),
+            (<span class="self">Self</span>::<span class="ident">D8</span>, <span class="kw">_</span>)
+            <span class="op">|</span> (<span class="kw">_</span>, <span class="self">Self</span>::<span class="ident">C1</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">C4</span>, <span class="self">Self</span>::<span class="ident">C2</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D4Ortho</span>, <span class="self">Self</span>::<span class="ident">C2</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D4Diag</span>, <span class="self">Self</span>::<span class="ident">C2</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D4Ortho</span>, <span class="self">Self</span>::<span class="ident">D2Row</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D4Ortho</span>, <span class="self">Self</span>::<span class="ident">D2Col</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D4Diag</span>, <span class="self">Self</span>::<span class="ident">D2Diag</span>)
+            <span class="op">|</span> (<span class="self">Self</span>::<span class="ident">D4Diag</span>, <span class="self">Self</span>::<span class="ident">D2Antidiag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Greater</span>),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
         }
     }
@@ -1217,7 +1217,7 @@
     <span class="doccomment">/// Returns `true` for `C4`, `D2\`, `D2/`, `D4X` and `D8`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="macro">matches</span><span class="macro">!</span>(
-            <span class="self">self</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span>),
+            <span class="self">self</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">D4Ortho</span>),
             <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Greater</span>) <span class="op">|</span> <span class="prelude-val">None</span>
         )
     }
@@ -1227,7 +1227,7 @@
     <span class="doccomment">/// Returns `true` for `C4`, `D2-`, `D2|`, `D4+` and `D8`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="macro">matches</span><span class="macro">!</span>(
-            <span class="self">self</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="ident">Symmetry</span>::<span class="ident">D4Diag</span>),
+            <span class="self">self</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">D4Diag</span>),
             <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Greater</span>) <span class="op">|</span> <span class="prelude-val">None</span>
         )
     }
@@ -1235,31 +1235,31 @@
     <span class="doccomment">/// Transformations contained in the symmetry group.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">members</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Transform</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Symmetry</span>::<span class="ident">C1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">C2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">C4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">C1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>],
+            <span class="self">Self</span>::<span class="ident">C2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">Rotate180</span>],
+            <span class="self">Self</span>::<span class="ident">C4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate90</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate180</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate270</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Row</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Col</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">D2Row</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>],
+            <span class="self">Self</span>::<span class="ident">D2Col</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipCol</span>],
+            <span class="self">Self</span>::<span class="ident">D2Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>],
+            <span class="self">Self</span>::<span class="ident">D2Antidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>],
+            <span class="self">Self</span>::<span class="ident">D4Ortho</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipRow</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipCol</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate180</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate180</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">D8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">D8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate90</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate180</span>,
@@ -1278,7 +1278,7 @@
     <span class="doccomment">/// The first element in the result is always [`Transform::Id`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cosets</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Transform</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Symmetry</span>::<span class="ident">C1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">C1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate90</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate180</span>,
@@ -1288,47 +1288,47 @@
                 <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">C2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">C2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">Rotate90</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipRow</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">C4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Row</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">C4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>],
+            <span class="self">Self</span>::<span class="ident">D2Row</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipCol</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Col</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">D2Col</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipRow</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">D2Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipRow</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipCol</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipAntidiag</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">D2Antidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
+            <span class="self">Self</span>::<span class="ident">D2Antidiag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[
                 <span class="ident">Transform</span>::<span class="ident">Id</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipRow</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipCol</span>,
                 <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>,
             ],
-            <span class="ident">Symmetry</span>::<span class="ident">D4Ortho</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>],
-            <span class="ident">Symmetry</span>::<span class="ident">D8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>],
+            <span class="self">Self</span>::<span class="ident">D4Ortho</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipDiag</span>],
+            <span class="self">Self</span>::<span class="ident">D4Diag</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>, <span class="ident">Transform</span>::<span class="ident">FlipRow</span>],
+            <span class="self">Self</span>::<span class="ident">D8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">Transform</span>::<span class="ident">Id</span>],
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Config</span> {
     <span class="doccomment">/// Applies the transformation and translation to a coord.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">translate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">translate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Coord</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">coord</span> <span class="op">=</span> <span class="ident">coord</span>;
         <span class="kw">while</span> <span class="ident">coord</span>.<span class="number">2</span> <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="ident">coord</span> <span class="op">=</span> <span class="self">self</span>

@@ -492,29 +492,29 @@
 <span class="kw">impl</span> <span class="ident">Config</span> {
     <span class="doccomment">/// Sets up a new configuration with given size.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">width</span>: <span class="ident">i32</span>, <span class="ident">height</span>: <span class="ident">i32</span>, <span class="ident">period</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Config</span> {
+        <span class="self">Self</span> {
             <span class="ident">width</span>,
             <span class="ident">height</span>,
             <span class="ident">period</span>,
-            ..<span class="ident">Config</span>::<span class="ident">default</span>()
+            ..<span class="self">Self</span>::<span class="ident">default</span>()
         }
     }
 
     <span class="doccomment">/// Sets the translations `(dx, dy)`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_translate</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dx</span>: <span class="ident">i32</span>, <span class="ident">dy</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_translate</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dx</span>: <span class="ident">i32</span>, <span class="ident">dy</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">dx</span> <span class="op">=</span> <span class="ident">dx</span>;
         <span class="self">self</span>.<span class="ident">dy</span> <span class="op">=</span> <span class="ident">dy</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Sets the transformation.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_transform</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">transform</span>: <span class="ident">Transform</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_transform</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">transform</span>: <span class="ident">Transform</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">transform</span> <span class="op">=</span> <span class="ident">transform</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Sets the symmetry.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_symmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">symmetry</span>: <span class="ident">Symmetry</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_symmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">symmetry</span>: <span class="ident">Symmetry</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">symmetry</span> <span class="op">=</span> <span class="ident">symmetry</span>;
         <span class="self">self</span>
     }
@@ -526,7 +526,7 @@
     }
 
     <span class="doccomment">/// Sets how to choose a state for an unknown cell.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_new_state</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">new_state</span>: <span class="ident">NewState</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_new_state</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">new_state</span>: <span class="ident">NewState</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">new_state</span> <span class="op">=</span> <span class="ident">new_state</span>;
         <span class="self">self</span>
     }
@@ -539,7 +539,7 @@
 
     <span class="doccomment">/// Sets whether to automatically reduce the `max_cell_count`</span>
     <span class="doccomment">/// when a result is found.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_reduce_max</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reduce_max</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_reduce_max</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reduce_max</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">reduce_max</span> <span class="op">=</span> <span class="ident">reduce_max</span>;
         <span class="self">self</span>
     }
@@ -558,14 +558,14 @@
 
     <span class="doccomment">/// Sets whether to skip patterns whose fundamental period</span>
     <span class="doccomment">/// is smaller than the given period.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_skip_subperiod</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subperiod</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_skip_subperiod</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subperiod</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">skip_subperiod</span> <span class="op">=</span> <span class="ident">skip_subperiod</span>;
         <span class="self">self</span>
     }
 
     <span class="doccomment">/// Sets whether to skip patterns which are invariant under</span>
     <span class="doccomment">/// more transformations than required by the given symmetry.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_skip_subsymmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_skip_subsymmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">skip_subsymmetry</span> <span class="op">=</span> <span class="ident">skip_subsymmetry</span>;
         <span class="self">self</span>
     }
@@ -577,7 +577,7 @@
     }
 
     <span class="doccomment">/// Sets whether to enable backjumping.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_backjump</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">backjump</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_backjump</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">backjump</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">backjump</span> <span class="op">=</span> <span class="ident">backjump</span>;
         <span class="self">self</span>
     }

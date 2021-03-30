@@ -728,7 +728,7 @@
 <span class="doccomment">/// Runs the search with a TUI.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If `reset` is true, the time will be reset when starting a new search.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">tui</span>(<span class="ident">search</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">reset</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tui</span>(<span class="ident">search</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">reset</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">EventStream</span>::<span class="ident">new</span>();
     <span class="kw">let</span> <span class="ident">result</span>;

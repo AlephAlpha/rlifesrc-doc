@@ -464,7 +464,7 @@
 }
 
 <span class="doccomment">/// A struct to store the parse results.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">Args</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Args</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">search</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>,
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">all</span>: <span class="ident">bool</span>,
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tui&quot;</span>)]</span>
@@ -878,7 +878,7 @@
             ));
         }
 
-        <span class="prelude-val">Ok</span>(<span class="ident">Args</span> {
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
             <span class="ident">search</span>,
             <span class="ident">all</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tui&quot;</span>)]</span>
