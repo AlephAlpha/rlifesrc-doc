@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `displaydoc` crate."><meta name="keywords" content="rust, rustlang, rust-lang, displaydoc"><title>displaydoc - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings"></script><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../displaydoc/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><p class="location">Crate displaydoc</p><div class="block version"><p>Version 0.2.1</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all displaydoc's items</p></a><p class="location"></p><div id="sidebar-vars" data-name="displaydoc" data-ty="mod" data-relpath="../"></div></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="">displaydoc</a></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/displaydoc/lib.rs.html#1-103" title="goto source code">[src]</a></span></h1><div class="docblock"><p>This library provides a convenient derive macro for the standard library's
+<a href="https://doc.rust-lang.org/std/fmt/trait.Display.html"><code>core::fmt::Display</code></a> trait.</p>
+<pre><code class="language-toml">[dependencies]
+displaydoc = &quot;0.2&quot;
+</code></pre>
+<p><em>Compiler support: requires rustc 1.31+</em></p>
+<br>
+<h2 id="example" class="section-header"><a href="#example">Example</a></h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
+<span class="kw">use</span> <span class="ident">displaydoc</span>::<span class="ident">Display</span>;
+<span class="kw">use</span> <span class="ident">thiserror</span>::<span class="ident">Error</span>;
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DataStoreError</span> {
+    <span class="doccomment">/// data store disconnected</span>
+    <span class="ident">Disconnect</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">io</span>::<span class="ident">Error</span>),
+    <span class="doccomment">/// the data for key `{0}` is not available</span>
+    <span class="ident">Redaction</span>(<span class="ident">String</span>),
+    <span class="doccomment">/// invalid header (expected {expected:?}, found {found:?})</span>
+    <span class="ident">InvalidHeader</span> {
+        <span class="ident">expected</span>: <span class="ident">String</span>,
+        <span class="ident">found</span>: <span class="ident">String</span>,
+    },
+    <span class="doccomment">/// unknown data store error</span>
+    <span class="ident">Unknown</span>,
+}</pre></div>
+<br>
+<h2 id="details" class="section-header"><a href="#details">Details</a></h2>
+<ul>
+<li>
+<p>A <code>Display</code> impl is generated for your type if you provide doc comment
+messages on the struct or each variant of your enum, as shown above in the
+example.</p>
+<p>The messages support a shorthand for interpolating fields from the error.</p>
+<ul>
+<li><code>/// {var}</code> ⟶ <code>write!(&quot;{}&quot;, self.var)</code></li>
+<li><code>/// {0}</code> ⟶ <code>write!(&quot;{}&quot;, self.0)</code></li>
+<li><code>/// {var:?}</code> ⟶ <code>write!(&quot;{:?}&quot;, self.var)</code></li>
+<li><code>/// {0:?}</code> ⟶ <code>write!(&quot;{:?}&quot;, self.0)</code></li>
+</ul>
+</li>
+</ul>
+<br>
+<h2 id="faq" class="section-header"><a href="#faq">FAQ</a></h2>
+<ol>
+<li>
+<p><strong>Is this crate <code>no_std</code> compatible?</strong></p>
+<ul>
+<li>Yes! This crate implements the <code>core::fmt::Display</code> trait not the <code>std::fmt::Display</code> trait so it should work in <code>std</code> and <code>no_std</code> environments. Just add <code>default-features = false</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Does this crate work with <code>Path</code> and <code>PathBuf</code> via the <code>Display</code> trait?</strong></p>
+<ul>
+<li>Yuuup. This crate uses @dtolnay's <a href="https://github.com/dtolnay/case-studies/blob/master/autoref-specialization/README.md">autoref specialization technique</a> to add a special trait for types to get the display impl, it then specializes for <code>Path</code> and <code>PathBuf</code> and when either of these types are found it calls <code>self.display()</code> to get a <code>std::path::Display&lt;'_&gt;</code> type which can be used with the Display format specifier!</li>
+</ul>
+</li>
+</ol>
+</div><h2 id="derives" class="section-header"><a href="#derives">Derive Macros</a></h2>
+<table><tr class="module-item"><td><a class="derive" href="derive.Display.html" title="displaydoc::Display derive">Display</a></td><td class="docblock-short"><p>Derive macro for implementing <code>Display</code> via doc comment attributes</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="displaydoc"></div>
+    <script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

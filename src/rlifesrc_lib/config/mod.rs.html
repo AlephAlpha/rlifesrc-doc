@@ -322,6 +322,16 @@
 <span id="319">319</span>
 <span id="320">320</span>
 <span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! World configuration.</span>
 
@@ -484,7 +494,7 @@
     <span class="doccomment">/// a much longer time. The current implementation is slower for most search,</span>
     <span class="doccomment">/// only useful for large (e.g., 64x64) still lifes.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Currently it is only supported for non-generations rules. Generations rules</span>
+    <span class="doccomment">/// Currently it is only supported for non-Generations rules. Generations rules</span>
     <span class="doccomment">/// will ignore this option.</span>
     <span class="kw">pub</span> <span class="ident">backjump</span>: <span class="ident">bool</span>,
 }
@@ -598,23 +608,33 @@
     <span class="doccomment">/// Returns an error if the rule string is invalid.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">new_world</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+                <span class="kw">for</span> <span class="ident">known_cell</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">known_cells</span>.<span class="ident">iter</span>() {
+                    <span class="kw">if</span> <span class="ident">known_cell</span>.<span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
+                    }
+                }
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">backjump</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">max_cell_count</span>.<span class="ident">is_none</span>() {
                     <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">World</span>::<span class="ident">new_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 } <span class="kw">else</span> {
                     <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">World</span>::<span class="ident">new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 }
-            };
+            }};
         }
 
         <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">new_world_gen</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
                 <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">gen</span>() <span class="op">&gt;</span> <span class="number">2</span> {
+                    <span class="kw">for</span> <span class="ident">known_cell</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">known_cells</span>.<span class="ident">iter</span>() {
+                        <span class="kw">if</span> <span class="ident">known_cell</span>.<span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">gen</span>() {
+                            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
+                        }
+                    }
                     <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">World</span>::<span class="ident">new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 } <span class="kw">else</span> {
                     <span class="macro">new_world</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">non_gen</span>())
                 }
-            };
+            }};
         }
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">height</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">period</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
