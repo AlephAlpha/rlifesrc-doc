@@ -1,4 +1,5 @@
 var N = null;var sourcesIndex = {};
+sourcesIndex["aho_corasick"] = {"name":"","dirs":[{"name":"packed","dirs":[{"name":"teddy","files":["compile.rs","mod.rs","runtime.rs"]}],"files":["api.rs","mod.rs","pattern.rs","rabinkarp.rs","vector.rs"]}],"files":["ahocorasick.rs","automaton.rs","buffer.rs","byte_frequencies.rs","classes.rs","dfa.rs","error.rs","lib.rs","nfa.rs","prefilter.rs","state_id.rs"]};
 sourcesIndex["ansi_term"] = {"name":"","files":["ansi.rs","debug.rs","difference.rs","display.rs","lib.rs","style.rs","windows.rs","write.rs"]};
 sourcesIndex["async_channel"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["async_executor"] = {"name":"","files":["lib.rs"]};
@@ -16,6 +17,7 @@ sourcesIndex["auto_enums_derive"] = {"name":"","dirs":[{"name":"derive","dirs":[
 sourcesIndex["base64"] = {"name":"","dirs":[{"name":"read","files":["decoder.rs","mod.rs"]},{"name":"write","files":["encoder.rs","mod.rs"]}],"files":["chunked_encoder.rs","decode.rs","display.rs","encode.rs","lib.rs","tables.rs"]};
 sourcesIndex["bitflags"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["blocking"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["ca_formats"] = {"name":"","files":["apgcode.rs","input.rs","lib.rs","macrocell.rs","plaintext.rs","rle.rs"]};
 sourcesIndex["ca_rules"] = {"name":"","dirs":[{"name":"rules","files":["hex.rs","life.rs","mod.rs","neumann.rs","nthex.rs","ntlife.rs","ntneumann.rs"]}],"files":["error.rs","lib.rs","macros.rs"]};
 sourcesIndex["cache_padded"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["cfg_if"] = {"name":"","files":["lib.rs"]};
@@ -72,6 +74,8 @@ sourcesIndex["quote"] = {"name":"","files":["ext.rs","format.rs","ident_fragment
 sourcesIndex["rand"] = {"name":"","dirs":[{"name":"distributions","files":["bernoulli.rs","float.rs","integer.rs","mod.rs","other.rs","uniform.rs","utils.rs","weighted.rs","weighted_index.rs"]},{"name":"rngs","dirs":[{"name":"adapter","files":["mod.rs","read.rs","reseeding.rs"]}],"files":["mock.rs","mod.rs","std.rs","thread.rs"]},{"name":"seq","files":["index.rs","mod.rs"]}],"files":["lib.rs","prelude.rs","rng.rs"]};
 sourcesIndex["rand_chacha"] = {"name":"","files":["chacha.rs","guts.rs","lib.rs"]};
 sourcesIndex["rand_core"] = {"name":"","files":["block.rs","error.rs","impls.rs","le.rs","lib.rs","os.rs"]};
+sourcesIndex["regex"] = {"name":"","dirs":[{"name":"literal","files":["imp.rs","mod.rs"]}],"files":["backtrack.rs","compile.rs","dfa.rs","error.rs","exec.rs","expand.rs","find_byte.rs","freqs.rs","input.rs","lib.rs","pikevm.rs","pool.rs","prog.rs","re_builder.rs","re_bytes.rs","re_set.rs","re_trait.rs","re_unicode.rs","sparse.rs","utf8.rs"]};
+sourcesIndex["regex_syntax"] = {"name":"","dirs":[{"name":"ast","files":["mod.rs","parse.rs","print.rs","visitor.rs"]},{"name":"hir","dirs":[{"name":"literal","files":["mod.rs"]}],"files":["interval.rs","mod.rs","print.rs","translate.rs","visitor.rs"]},{"name":"unicode_tables","files":["age.rs","case_folding_simple.rs","general_category.rs","grapheme_cluster_break.rs","mod.rs","perl_word.rs","property_bool.rs","property_names.rs","property_values.rs","script.rs","script_extension.rs","sentence_break.rs","word_break.rs"]}],"files":["either.rs","error.rs","lib.rs","parser.rs","unicode.rs","utf8.rs"]};
 sourcesIndex["rlifesrc"] = {"name":"","files":["args.rs","main.rs","tui.rs"]};
 sourcesIndex["rlifesrc_lib"] = {"name":"","dirs":[{"name":"config","files":["d8.rs","mod.rs","search_order.rs"]},{"name":"rules","files":["life.rs","mod.rs","ntlife.rs"]},{"name":"search","files":["backjump.rs","mod.rs","no_backjump.rs"]}],"files":["cells.rs","error.rs","lib.rs","save.rs","traits.rs","world.rs"]};
 sourcesIndex["ryu"] = {"name":"","dirs":[{"name":"buffer","files":["mod.rs"]},{"name":"pretty","files":["exponent.rs","mantissa.rs","mod.rs"]}],"files":["common.rs","d2s.rs","d2s_full_table.rs","d2s_intrinsics.rs","digit_table.rs","f2s.rs","f2s_intrinsics.rs","lib.rs"]};

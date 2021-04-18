@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Error","Errors that can be returned when parsing a Plaintext file."]],"struct":[["Plaintext","A parser for Plaintext format."]]});
