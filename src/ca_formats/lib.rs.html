@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/ca-formats-0.2.4/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/ca-formats-0.3.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
 <link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../ca_formats/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1"> 1</span>
@@ -84,60 +84,64 @@
 <span id="81">81</span>
 <span id="82">82</span>
 <span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! Parsing pattern files for Conway&#39;s Game of Life.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The parsers read a string and return an iterator of coordinates of living cells.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Supported formats</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [RLE](https://www.conwaylife.com/wiki/Run_Length_Encoded)</span>
-<span class="doccomment">//! - [Plaintext](https://www.conwaylife.com/wiki/Plaintext)</span>
-<span class="doccomment">//! - [apgcode](https://www.conwaylife.com/wiki/Apgcode)</span>
-<span class="doccomment">//! - [Macrocell](https://www.conwaylife.com/wiki/Macrocell)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Reading from a string:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! use ca_formats::rle::Rle;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! const GLIDER: &amp;str = r&quot;#N Glider</span>
-<span class="doccomment">//! #O Richard K. Guy</span>
-<span class="doccomment">//! #C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.</span>
-<span class="doccomment">//! #C www.conwaylife.com/wiki/index.php?title=Glider</span>
-<span class="doccomment">//! x = 3, y = 3, rule = B3/S23</span>
-<span class="doccomment">//! bob$2bo$3o!&quot;;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! let glider = Rle::new(GLIDER).unwrap();</span>
-<span class="doccomment">//! assert_eq!(glider.header_data().unwrap().x, 3);</span>
-<span class="doccomment">//! assert_eq!(glider.header_data().unwrap().y, 3);</span>
-<span class="doccomment">//! assert_eq!(glider.header_data().unwrap().rule, Some(String::from(&quot;B3/S23&quot;)));</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! let cells = glider.map(|cell| cell.unwrap().position).collect::&lt;Vec&lt;_&gt;&gt;();</span>
-<span class="doccomment">//! assert_eq!(cells, vec![(1, 0), (2, 1), (0, 2), (1, 2), (2, 2)]);</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Reading from a file:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ``` rust</span>
-<span class="doccomment">//! use std::fs::File;</span>
-<span class="doccomment">//! use ca_formats::rle::Rle;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! let file = File::open(&quot;tests/sirrobin.rle&quot;).unwrap();</span>
-<span class="doccomment">//! let sirrobin = Rle::new_from_file(file).unwrap();</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! assert_eq!(sirrobin.count(), 282);</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # See also</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - [ca-rules](https://crates.io/crates/ca-rules) - A parser for rule strings.</span>
-<span class="doccomment">//! - [game-of-life-parsers](https://crates.io/crates/game-of-life-parsers)</span>
-<span class="doccomment">//!     by René Perschon - Parsers for [Life 1.05](https://www.conwaylife.com/wiki/Life_1.05)</span>
-<span class="doccomment">//!     and [Life 1.06](https://www.conwaylife.com/wiki/Life_1.06) formats.</span>
-<span class="doccomment">//!</span>
+<span class="doccomment">/*!
+Parsing pattern files for Conway&#39;s Game of Life.
+
+The parsers read a string and return an iterator of coordinates of living cells.
+
+## Supported formats
+
+- [RLE](https://www.conwaylife.com/wiki/Run_Length_Encoded)
+- [Plaintext](https://www.conwaylife.com/wiki/Plaintext)
+- [apgcode](https://www.conwaylife.com/wiki/Apgcode)
+- [Macrocell](https://www.conwaylife.com/wiki/Macrocell)
+
+## Example
+
+### Reading from a string:
+
+```rust
+use ca_formats::rle::Rle;
+
+const GLIDER: &amp;str = r&quot;#N Glider
+#O Richard K. Guy
+#C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.
+#C www.conwaylife.com/wiki/index.php?title=Glider
+x = 3, y = 3, rule = B3/S23
+bob$2bo$3o!&quot;;
+
+let glider = Rle::new(GLIDER).unwrap();
+assert_eq!(glider.header_data().unwrap().x, 3);
+assert_eq!(glider.header_data().unwrap().y, 3);
+assert_eq!(glider.header_data().unwrap().rule, Some(String::from(&quot;B3/S23&quot;)));
+
+let cells = glider.map(|cell| cell.unwrap().position).collect::&lt;Vec&lt;_&gt;&gt;();
+assert_eq!(cells, vec![(1, 0), (2, 1), (0, 2), (1, 2), (2, 2)]);
+```
+
+### Reading from a file:
+
+```rust
+use std::fs::File;
+use ca_formats::rle::Rle;
+
+let file = File::open(&quot;tests/sirrobin.rle&quot;).unwrap();
+let sirrobin = Rle::new_from_file(file).unwrap();
+
+assert_eq!(sirrobin.count(), 282);
+```
+
+## See also
+
+- [ca-rules](https://crates.io/crates/ca-rules) - A parser for rule strings.
+- [game-of-life-parsers](https://crates.io/crates/game-of-life-parsers)
+    by René Perschon - Parsers for [Life 1.05](https://www.conwaylife.com/wiki/Life_1.05)
+    and [Life 1.06](https://www.conwaylife.com/wiki/Life_1.06) format.
+
+*/</span>
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">apgcode</span>;
 <span class="kw">mod</span> <span class="ident">input</span>;
