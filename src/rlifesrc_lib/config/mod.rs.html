@@ -379,6 +379,25 @@
 <span id="376">376</span>
 <span id="377">377</span>
 <span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! World configuration.</span>
 
@@ -394,7 +413,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">ca_formats</span>::{
     <span class="ident">rle</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">RleError</span>, <span class="ident">Rle</span>},
-    <span class="ident">CellData</span>,
+    <span class="ident">CellData</span>, <span class="ident">Input</span>,
 };
 
 <span class="kw">mod</span> <span class="ident">d8</span>;
@@ -465,21 +484,40 @@
         <span class="ident">KnownCell</span> { <span class="ident">coord</span>, <span class="ident">state</span> }
     }
 
-    <span class="doccomment">/// Get a list [`KnownCell`] from a list of RLE strings.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_rles</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">rles</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">RleError</span><span class="op">&gt;</span>
+    <span class="doccomment">/// Get a list [`KnownCell`] from multiple RLE&#39;s in one string.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_rles</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">RleError</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">S</span><span class="op">&gt;</span>,
-        <span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,
+        <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
+        <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
     {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-        <span class="kw">for</span> (<span class="ident">gen</span>, <span class="ident">rle</span>) <span class="kw">in</span> <span class="ident">rles</span>.<span class="ident">into_iter</span>().<span class="ident">enumerate</span>() {
-            <span class="kw">let</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">Rle</span>::<span class="ident">new</span>(<span class="ident">rle</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>.<span class="ident">with_unknown</span>();
-            <span class="kw">for</span> <span class="ident">data</span> <span class="kw">in</span> <span class="ident">rle</span> {
-                <span class="ident">known_cells</span>.<span class="ident">push</span>(<span class="ident">KnownCell</span>::<span class="ident">from_cell_data</span>(<span class="ident">data</span><span class="question-mark">?</span>, <span class="ident">gen</span> <span class="kw">as</span> <span class="ident">i32</span>));
-            }
-        }
+        <span class="kw">let</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">Rle</span>::<span class="ident">new</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
+
+        <span class="self">Self</span>::<span class="ident">from_rles_iter</span>(<span class="ident">rle</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">known_cells</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="ident">known_cells</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">from_rles_iter</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span>(
+        <span class="ident">rle</span>: <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>,
+        <span class="ident">known_cells</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
+        <span class="ident">gen</span>: <span class="ident">i32</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RleError</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
+        <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
+    {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">with_unknown</span>();
+
+        <span class="kw">for</span> <span class="ident">data</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rle</span> {
+            <span class="ident">known_cells</span>.<span class="ident">push</span>(<span class="ident">KnownCell</span>::<span class="ident">from_cell_data</span>(<span class="ident">data</span><span class="question-mark">?</span>, <span class="ident">gen</span>));
+        }
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">rle</span>) <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">try_remains</span>()<span class="question-mark">?</span> {
+            <span class="self">Self</span>::<span class="ident">from_rles_iter</span>(<span class="ident">rle</span>, <span class="ident">known_cells</span>, <span class="ident">gen</span> <span class="op">+</span> <span class="number">1</span>)<span class="question-mark">?</span>;
+        }
+
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
@@ -671,12 +709,12 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The cells are specified by a list of RLE strings.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_known_cells_from_rles</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">rles</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">RleError</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_known_cells_from_rles</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">input</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">RleError</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">S</span><span class="op">&gt;</span>,
-        <span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,
+        <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
+        <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
     {
-        <span class="self">self</span>.<span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">KnownCell</span>::<span class="ident">from_rles</span>(<span class="ident">rles</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">KnownCell</span>::<span class="ident">from_rles</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 
