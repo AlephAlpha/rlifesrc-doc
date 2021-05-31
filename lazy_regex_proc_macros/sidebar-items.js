@@ -1,0 +1,1 @@
+initSidebarItems({"macro":[["regex","return a lazy static Regex checked at compilation time."],["regex_captures","extract captured groups as a tupple of &str"],["regex_find","extract the leftmost match of the regex in the second argument, as a &str"],["regex_is_match","test whether an expression matches a lazy static regular expression (the regex is checked at compile time)"]]});
