@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/config/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../rlifesrc_lib/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../rlifesrc_lib/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button">?</button>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -398,17 +398,18 @@
 <span id="395">395</span>
 <span id="396">396</span>
 <span id="397">397</span>
-</pre><div class="example-wrap"><pre class="rust ">
+<span id="398">398</span>
+</pre><pre class="rust">
 <span class="doccomment">//! World configuration.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>},
-    <span class="ident">error</span>::<span class="ident">Error</span>,
+    <span class="ident">error::Error</span>,
     <span class="ident">rules</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>, <span class="ident">NtLife</span>, <span class="ident">NtLifeGen</span>, <span class="ident">Rule</span>},
-    <span class="ident">traits</span>::<span class="ident">Search</span>,
-    <span class="ident">world</span>::<span class="ident">World</span>,
+    <span class="ident">traits::Search</span>,
+    <span class="ident">world::World</span>,
 };
-<span class="kw">use</span> <span class="ident">educe</span>::<span class="ident">Educe</span>;
+<span class="kw">use</span> <span class="ident">educe::Educe</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">ca_formats</span>::{
@@ -420,11 +421,12 @@
 <span class="kw">mod</span> <span class="ident">search_order</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">d8</span>::{<span class="ident">Symmetry</span>, <span class="ident">Transform</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">search_order</span>::<span class="ident">SearchOrder</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">search_order::SearchOrder</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">cells</span>::{<span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cells</span>::{<span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">doc_cfg</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="doccomment">/// How to choose a state for an unknown cell.</span>
@@ -490,10 +492,10 @@
         <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
         <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
-        <span class="kw">let</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">Rle</span>::<span class="ident">new</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+        <span class="kw">let</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
 
-        <span class="self">Self</span>::<span class="ident">from_rles_iter</span>(<span class="ident">rle</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">known_cells</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
+        <span class="self">Self</span><span class="ident">::from_rles_iter</span>(<span class="ident">rle</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">known_cells</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="ident">known_cells</span>)
     }
@@ -510,11 +512,11 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">with_unknown</span>();
 
         <span class="kw">for</span> <span class="ident">data</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">rle</span> {
-            <span class="ident">known_cells</span>.<span class="ident">push</span>(<span class="ident">KnownCell</span>::<span class="ident">from_cell_data</span>(<span class="ident">data</span><span class="question-mark">?</span>, <span class="ident">gen</span>));
+            <span class="ident">known_cells</span>.<span class="ident">push</span>(<span class="ident">KnownCell::from_cell_data</span>(<span class="ident">data</span><span class="question-mark">?</span>, <span class="ident">gen</span>));
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">rle</span>) <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">try_remains</span>()<span class="question-mark">?</span> {
-            <span class="self">Self</span>::<span class="ident">from_rles_iter</span>(<span class="ident">rle</span>, <span class="ident">known_cells</span>, <span class="ident">gen</span> <span class="op">+</span> <span class="number">1</span>)<span class="question-mark">?</span>;
+            <span class="self">Self</span><span class="ident">::from_rles_iter</span>(<span class="ident">rle</span>, <span class="ident">known_cells</span>, <span class="ident">gen</span> <span class="op">+</span> <span class="number">1</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -625,7 +627,7 @@
             <span class="ident">width</span>,
             <span class="ident">height</span>,
             <span class="ident">period</span>,
-            ..<span class="self">Self</span>::<span class="ident">default</span>()
+            ..<span class="self">Self</span><span class="ident">::default</span>()
         }
     }
 
@@ -714,7 +716,7 @@
         <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
         <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
     {
-        <span class="self">self</span>.<span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">KnownCell</span>::<span class="ident">from_rles</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">KnownCell::from_rles</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 
@@ -728,7 +730,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">symmetry</span>.<span class="ident">require_square_world</span>()
             <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">require_square_world</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">search_order</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder</span>::<span class="ident">Diagonal</span>)
+            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">search_order</span> <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">SearchOrder::Diagonal</span>)
     }
 
     <span class="doccomment">/// Whether the configuration requires the world to have no diagonal width.</span>
@@ -739,63 +741,62 @@
     <span class="doccomment">/// Creates a new world from the configuration.</span>
     <span class="doccomment">/// Returns an error if the rule string is invalid.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">new_world</span> {
+        <span class="macro">macro_rules!</span> <span class="ident">new_world</span> {
             (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
                 <span class="kw">for</span> <span class="ident">known_cell</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">known_cells</span>.<span class="ident">iter</span>() {
                     <span class="kw">if</span> <span class="ident">known_cell</span>.<span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
                     }
                 }
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">backjump</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">max_cell_count</span>.<span class="ident">is_none</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">World</span>::<span class="ident">new_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 } <span class="kw">else</span> {
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">World</span>::<span class="ident">new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 }
             }};
         }
 
-        <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">new_world_gen</span> {
+        <span class="macro">macro_rules!</span> <span class="ident">new_world_gen</span> {
             (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
                 <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">gen</span>() <span class="op">&gt;</span> <span class="number">2</span> {
                     <span class="kw">for</span> <span class="ident">known_cell</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">known_cells</span>.<span class="ident">iter</span>() {
                         <span class="kw">if</span> <span class="ident">known_cell</span>.<span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">gen</span>() {
-                            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
+                            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
                         }
                     }
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">World</span>::<span class="ident">new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 } <span class="kw">else</span> {
-                    <span class="macro">new_world</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">non_gen</span>())
+                    <span class="macro">new_world!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">non_gen</span>())
                 }
             }};
         }
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">height</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">period</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">NonPositiveError</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::NonPositiveError</span>);
         }
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">diagonal_width</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">diagonal_width</span> {
             <span class="kw">if</span> <span class="ident">diagonal_width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">NonPositiveError</span>);
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::NonPositiveError</span>);
             }
         }
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">require_square_world</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">SquareWorldError</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::SquareWorldError</span>);
         }
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">require_no_diagonal_width</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_some</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">DiagonalWidthError</span>);
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::DiagonalWidthError</span>);
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">Life</span><span class="op">&gt;</span>() {
-            <span class="macro">new_world</span><span class="macro">!</span>(<span class="ident">rule</span>)
+            <span class="macro">new_world!</span>(<span class="ident">rule</span>)
         } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">NtLife</span><span class="op">&gt;</span>() {
-            <span class="macro">new_world</span><span class="macro">!</span>(<span class="ident">rule</span>)
+            <span class="macro">new_world!</span>(<span class="ident">rule</span>)
         } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">LifeGen</span><span class="op">&gt;</span>() {
-            <span class="macro">new_world_gen</span><span class="macro">!</span>(<span class="ident">rule</span>)
+            <span class="macro">new_world_gen!</span>(<span class="ident">rule</span>)
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">rule</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">NtLifeGen</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-            <span class="macro">new_world_gen</span><span class="macro">!</span>(<span class="ident">rule</span>)
+            <span class="macro">new_world_gen!</span>(<span class="ident">rule</span>)
         }
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-search-js="../../../search-index.js"></div>
-    <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>
