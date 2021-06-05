@@ -552,14 +552,6 @@
 <span id="549">549</span>
 <span id="550">550</span>
 <span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The world.</span>
 
@@ -567,12 +559,12 @@
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">Coord</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>, <span class="ident">DEAD</span>},
     <span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">KnownCell</span>, <span class="ident">SearchOrder</span>},
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
-    <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">ReasonBackjump</span>, <span class="ident">ReasonNoBackjump</span>, <span class="ident">SetCell</span>},
+    <span class="ident">search</span>::{<span class="ident">Algorithm</span>, <span class="ident">Backjump</span>, <span class="ident">LifeSrc</span>, <span class="ident">Reason</span>, <span class="ident">SetCell</span>},
 };
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">ptr</span>};
 
 <span class="doccomment">/// The world.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="doccomment">/// World configuration.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">config</span>: <span class="ident">Config</span>,
 
@@ -602,7 +594,7 @@
     <span class="doccomment">/// The cells in this stack always have known states.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It is used in the backtracking.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">set_stack</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">set_stack</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// The position of the next cell to be examined in the [`set_stack`](#structfield.set_stack).</span>
     <span class="doccomment">///</span>
@@ -622,25 +614,16 @@
     <span class="doccomment">/// * the first row plus the first column, when the search order is diagonal.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">non_empty_front</span>: <span class="ident">bool</span>,
 
-    <span class="doccomment">/// The global decision level for assigning the cell state.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Only used when backjumping is enabled.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">level</span>: <span class="ident">u32</span>,
-
     <span class="doccomment">/// All cells in the front.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Only used when backjumping is enabled.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">front</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
-    <span class="doccomment">/// A learnt clause.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Only used when backjumping is enabled.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">learnt</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Other data used by the algorithm.</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">algo_data</span>: <span class="ident">A</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">ReasonNoBackjump</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Creates a new world from the configuration and the rule.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with_rule</span><span class="op">&lt;</span><span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_with_rule</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">search_order</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">auto_search_order</span>();
 
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> ((<span class="ident">config</span>.<span class="ident">width</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">*</span> (<span class="ident">config</span>.<span class="ident">height</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">*</span> <span class="ident">config</span>.<span class="ident">period</span>) <span class="kw">as</span> <span class="ident">usize</span>;
@@ -682,6 +665,8 @@
             }
         }
 
+        <span class="kw">let</span> <span class="ident">algo_data</span> <span class="op">=</span> <span class="ident">A</span>::<span class="ident">new</span>();
+
         <span class="ident">World</span> {
             <span class="ident">config</span>: <span class="ident">config</span>.<span class="ident">clone</span>(),
             <span class="ident">rule</span>,
@@ -693,9 +678,8 @@
             <span class="ident">check_index</span>: <span class="number">0</span>,
             <span class="ident">next_unknown</span>: <span class="prelude-val">None</span>,
             <span class="ident">non_empty_front</span>: <span class="ident">is_front</span>.<span class="ident">is_some</span>(),
-            <span class="ident">level</span>: <span class="number">0</span>,
             <span class="ident">front</span>,
-            <span class="ident">learnt</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
+            <span class="ident">algo_data</span>,
         }
         .<span class="ident">init_front</span>()
         .<span class="ident">init_border</span>()
@@ -713,16 +697,16 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">ReasonBackjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_backjump</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">World</span>::<span class="ident">new_with_rule</span>(<span class="ident">config</span>, <span class="ident">rule</span>)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Initialize the list of cells in the front.</span>
     <span class="kw">fn</span> <span class="ident">init_front</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">RE</span>::<span class="ident">init_front</span>(<span class="self">self</span>)
+        <span class="ident">A</span>::<span class="ident">init_front</span>(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Initialize the cells at the borders.</span>
@@ -735,7 +719,7 @@
                         <span class="kw">if</span> <span class="ident">abs</span> <span class="op">=</span><span class="op">=</span> <span class="ident">d</span> <span class="op">|</span><span class="op">|</span> <span class="ident">abs</span> <span class="op">=</span><span class="op">=</span> <span class="ident">d</span> <span class="op">+</span> <span class="number">1</span> {
                             <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
                                 <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
-                                <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">RE</span>::<span class="ident">KNOWN</span>));
+                                <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">KNOWN</span>));
                             }
                         }
                         <span class="kw">continue</span>;
@@ -744,7 +728,7 @@
                 <span class="kw">for</span> <span class="ident">t</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">config</span>.<span class="ident">period</span> {
                     <span class="kw">if</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span> <span class="op">|</span><span class="op">|</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">width</span> <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span> <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">height</span> {
                         <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)).<span class="ident">unwrap</span>();
-                        <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">RE</span>::<span class="ident">KNOWN</span>));
+                        <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">KNOWN</span>));
                     }
                 }
             }
@@ -827,7 +811,7 @@
                                 <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>())
                             <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">cell</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>)
                         {
-                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">RE</span>::<span class="ident">KNOWN</span>));
+                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">KNOWN</span>));
                         }
                     }
 
@@ -886,7 +870,7 @@
                                 <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>())
                             <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">cell</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cell</span>)
                         {
-                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">RE</span>::<span class="ident">KNOWN</span>));
+                            <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">push</span>(<span class="ident">SetCell</span>::<span class="ident">new</span>(<span class="ident">cell</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">KNOWN</span>));
                         }
                     }
                 }
@@ -924,7 +908,7 @@
         <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">KnownCell</span> { <span class="ident">coord</span>, <span class="ident">state</span> } <span class="kw">in</span> <span class="ident">known_cells</span>.<span class="ident">iter</span>() {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cell</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>(<span class="ident">coord</span>) {
                 <span class="kw">if</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">state</span>.<span class="number">0</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>() {
-                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">KNOWN</span>);
+                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">KNOWN</span>);
                 }
             }
         }
@@ -1000,9 +984,9 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>,
         <span class="ident">state</span>: <span class="ident">State</span>,
-        <span class="ident">reason</span>: <span class="ident">RE</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RE</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
-        <span class="ident">reason</span>.<span class="ident">set_cell</span>(<span class="self">self</span>, <span class="ident">cell</span>, <span class="ident">state</span>)
+        <span class="ident">reason</span>: <span class="ident">A</span>::<span class="ident">Reason</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
+        <span class="ident">A</span>::<span class="ident">set_cell</span>(<span class="self">self</span>, <span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">reason</span>)
     }
 
     <span class="doccomment">/// Clears the [`state`](LifeCell#structfield.state) of a cell,</span>

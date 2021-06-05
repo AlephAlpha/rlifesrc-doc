@@ -99,7 +99,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">State</span>},
-    <span class="ident">search</span>::<span class="ident">Reason</span>,
+    <span class="ident">search</span>::<span class="ident">Algorithm</span>,
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">life</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>};
@@ -167,10 +167,10 @@
     <span class="doccomment">/// Returns `false` if there is a conflict,</span>
     <span class="doccomment">/// `true` if the cells are consistent.</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">RE</span><span class="op">&gt;</span>,
+    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
         <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RE</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span>;
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">mod</span> <span class="ident">private</span> {

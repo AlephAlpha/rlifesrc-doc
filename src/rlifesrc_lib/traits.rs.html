@@ -204,7 +204,7 @@
     <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>},
     <span class="ident">config</span>::<span class="ident">Config</span>,
     <span class="ident">rules</span>::<span class="ident">Rule</span>,
-    <span class="ident">search</span>::{<span class="ident">Reason</span>, <span class="ident">Status</span>},
+    <span class="ident">search</span>::{<span class="ident">Algorithm</span>, <span class="ident">Status</span>},
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Write</span>;
@@ -338,7 +338,7 @@
 }
 
 <span class="doccomment">/// The [`Search`] trait is implemented for every [`World`].</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Search</span> <span class="kw">for</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Search</span> <span class="kw">for</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">search</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_step</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Status</span> {
         <span class="self">self</span>.<span class="ident">search</span>(<span class="ident">max_step</span>)

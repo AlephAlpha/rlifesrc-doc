@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["ReasonNoBackjump","Reasons for setting a cell."]]});

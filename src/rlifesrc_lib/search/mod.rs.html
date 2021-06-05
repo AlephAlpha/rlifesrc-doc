@@ -287,6 +287,23 @@
 <span id="284">284</span>
 <span id="285">285</span>
 <span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The searching algorithms.</span>
 
@@ -299,10 +316,10 @@
 <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">thread_rng</span>, <span class="ident">Rng</span>};
 
 <span class="kw">mod</span> <span class="ident">backjump</span>;
-<span class="kw">mod</span> <span class="ident">no_backjump</span>;
+<span class="kw">mod</span> <span class="ident">lifesrc</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">backjump</span>::<span class="ident">ReasonBackjump</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">no_backjump</span>::<span class="ident">ReasonNoBackjump</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">backjump</span>::<span class="ident">Backjump</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">lifesrc</span>::<span class="ident">LifeSrc</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -326,33 +343,24 @@
     <span class="ident">Searching</span>,
 }
 
-<span class="doccomment">/// Reasons for setting a cell.</span>
+<span class="doccomment">/// The search algorithms.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Different choices of reason set will result in</span>
-<span class="doccomment">/// different choices of algorithm.</span>
+<span class="doccomment">/// Currently only two algorithms are supported:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Some details of this trait is hidden in the doc.</span>
-<span class="doccomment">/// Please use the following structs instead of implementing by yourself:</span>
-<span class="doccomment">/// - [`ReasonBackjump`]</span>
-<span class="doccomment">/// - [`ReasonNoBackjump`]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span>: <span class="ident">private</span>::<span class="ident">Sealed</span> {
-    <span class="doccomment">/// Reasons for a conflict.</span>
+<span class="doccomment">/// - [`LifeSrc`]: The default algorithm based on David Bell&#39;s</span>
+<span class="doccomment">///   [lifesrc](https://github.com/DavidKinder/Xlife/tree/master/Xlife35/source/lifesearch).</span>
+<span class="doccomment">/// - [`Backjump`]: __(Experimental)__ Adding [Backjumping](https://en.wikipedia.org/wiki/Backjumping)</span>
+<span class="doccomment">///   to the original lifesrc algorithm. Very slow. Do not use it.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span>: <span class="ident">private</span>::<span class="ident">Sealed</span> {
+    <span class="doccomment">/// Reasons for setting a cell.</span>
+    <span class="kw">type</span> <span class="ident">Reason</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>;
+
+    <span class="doccomment">/// Reasons for a conflict. Ignored in [`LifeSrc`] algorithm.</span>
+    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">type</span> <span class="ident">ConflReason</span>;
 
-    <span class="doccomment">/// Known before the search starts,</span>
-    <span class="kw">const</span> <span class="ident">KNOWN</span>: <span class="self">Self</span>;
-
-    <span class="doccomment">/// Decides the state of a cell by choice.</span>
-    <span class="kw">const</span> <span class="ident">DECIDED</span>: <span class="self">Self</span>;
-
-    <span class="doccomment">/// Deduced from the rule when constitifying another cell.</span>
-    <span class="kw">fn</span> <span class="ident">from_cell</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
-
-    <span class="doccomment">/// Deduced from symmetry.</span>
-    <span class="kw">fn</span> <span class="ident">from_sym</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
-
-    <span class="doccomment">/// Decided or trying another state for generations rules.</span>
-    <span class="kw">fn</span> <span class="ident">is_decided</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="doccomment">/// Generate new algorithm data.</span>
+    <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
 
     <span class="doccomment">/// Conflict when constitifying a cell.</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
@@ -373,10 +381,10 @@
     <span class="doccomment">/// The original state of the cell must be unknown.</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">fn</span> <span class="ident">set_cell</span>(
-        <span class="self">self</span>,
         <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>,
         <span class="ident">state</span>: <span class="ident">State</span>,
+        <span class="ident">reason</span>: <span class="self">Self</span>::<span class="ident">Reason</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Keeps proceeding and backtracking,</span>
@@ -398,12 +406,38 @@
     <span class="kw">fn</span> <span class="ident">retreat</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="doccomment">/// Saves the reason as a [`ReasonSer`].</span>
-    <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ReasonSer</span>;
+    <span class="doccomment">/// Restore the reason from a [`ReasonSer`].</span>
+    <span class="kw">fn</span> <span class="ident">deser_reason</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ser</span>: <span class="kw-2">&amp;</span><span class="ident">ReasonSer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Reason</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+}
+
+<span class="doccomment">/// Reasons for setting a cell.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Different choices of reason set will result in</span>
+<span class="doccomment">/// different choices of algorithm.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Some details of this trait is hidden in the doc.</span>
+<span class="doccomment">/// Please use the following structs instead of implementing by yourself:</span>
+<span class="doccomment">/// - [`ReasonBackjump`]</span>
+<span class="doccomment">/// - [`ReasonNoBackjump`]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Known before the search starts,</span>
+    <span class="kw">const</span> <span class="ident">KNOWN</span>: <span class="self">Self</span>;
+
+    <span class="doccomment">/// Decides the state of a cell by choice.</span>
+    <span class="kw">const</span> <span class="ident">DECIDED</span>: <span class="self">Self</span>;
+
+    <span class="doccomment">/// Deduced from the rule when constitifying another cell.</span>
+    <span class="kw">fn</span> <span class="ident">from_cell</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
+
+    <span class="doccomment">/// Deduced from symmetry.</span>
+    <span class="kw">fn</span> <span class="ident">from_sym</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
+
+    <span class="doccomment">/// Decided or trying another state for generations rules.</span>
+    <span class="kw">fn</span> <span class="ident">is_decided</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="doccomment">/// Restore the reason from a [`ReasonSer`].</span>
-    <span class="kw">fn</span> <span class="ident">deser</span>(<span class="ident">ser</span>: <span class="kw-2">&amp;</span><span class="ident">ReasonSer</span>, <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="doccomment">/// Saves the reason as a [`ReasonSer`].</span>
+    <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ReasonSer</span>;
 }
 
 <span class="kw">mod</span> <span class="ident">private</span> {
@@ -412,17 +446,17 @@
 
 <span class="doccomment">/// Records the cells whose values are set and their reasons.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="doccomment">/// The set cell.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// The reason for setting a cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">reason</span>: <span class="ident">RE</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">reason</span>: <span class="ident">A</span>::<span class="ident">Reason</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Get a reference to the set cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">reason</span>: <span class="ident">RE</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">reason</span>: <span class="ident">A</span>::<span class="ident">Reason</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">SetCell</span> { <span class="ident">cell</span>, <span class="ident">reason</span> }
     }
 
@@ -437,7 +471,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">RE</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Consistifies a cell.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Examines the state and the neighborhood descriptor of the cell,</span>
@@ -446,14 +480,14 @@
     <span class="doccomment">/// cells involved.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is a conflict, returns its reason.</span>
-    <span class="kw">fn</span> <span class="ident">consistify</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RE</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">consistify</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
         <span class="ident">Rule</span>::<span class="ident">consistify</span>(<span class="self">self</span>, <span class="ident">cell</span>)
     }
 
     <span class="doccomment">/// Consistifies a cell, its neighbors, and its predecessor.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is a conflict, returns its reason.</span>
-    <span class="kw">fn</span> <span class="ident">consistify10</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RE</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">consistify10</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">consistify</span>(<span class="ident">cell</span>)<span class="question-mark">?</span>;
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pred</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">pred</span> {
@@ -470,7 +504,7 @@
     <span class="doccomment">/// Deduces all the consequences by [`consistify`](Self::consistify) and symmetry.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is a conflict, returns its reason.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">proceed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RE</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">proceed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
         <span class="kw">while</span> <span class="self">self</span>.<span class="ident">check_index</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u32</span> {
             <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_stack</span>[<span class="self">self</span>.<span class="ident">check_index</span> <span class="kw">as</span> <span class="ident">usize</span>].<span class="ident">cell</span>;
             <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>();
@@ -479,10 +513,10 @@
             <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">sym</span> <span class="kw">in</span> <span class="ident">cell</span>.<span class="ident">sym</span>.<span class="ident">iter</span>() {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">old_state</span>) <span class="op">=</span> <span class="ident">sym</span>.<span class="ident">state</span>.<span class="ident">get</span>() {
                     <span class="kw">if</span> <span class="ident">state</span> <span class="op">!</span><span class="op">=</span> <span class="ident">old_state</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RE</span>::<span class="ident">confl_from_sym</span>(<span class="ident">cell</span>, <span class="ident">sym</span>));
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A</span>::<span class="ident">confl_from_sym</span>(<span class="ident">cell</span>, <span class="ident">sym</span>));
                     }
                 } <span class="kw">else</span> {
-                    <span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">sym</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">from_sym</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+                    <span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">sym</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_sym</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
                 }
             }
 
@@ -500,7 +534,7 @@
     <span class="doccomment">/// Returns `true` if successes,</span>
     <span class="doccomment">/// `false` if it goes back to the time before the first cell is set.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">retreat</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="ident">RE</span>::<span class="ident">retreat</span>(<span class="self">self</span>)
+        <span class="ident">A</span>::<span class="ident">retreat</span>(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Makes a decision.</span>
@@ -518,7 +552,7 @@
                 <span class="ident">NewState</span>::<span class="ident">ChooseAlive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="op">!</span><span class="ident">cell</span>.<span class="ident">background</span>,
                 <span class="ident">NewState</span>::<span class="ident">Random</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">State</span>(<span class="ident">thread_rng</span>().<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>())),
             };
-            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">DECIDED</span>).<span class="ident">is_ok</span>())
+            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">DECIDED</span>).<span class="ident">is_ok</span>())
         } <span class="kw">else</span> {
             <span class="prelude-val">None</span>
         }
@@ -551,7 +585,7 @@
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">next_unknown</span>.<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">retreat</span>() {
             <span class="kw">return</span> <span class="ident">Status</span>::<span class="prelude-val">None</span>;
         }
-        <span class="kw">while</span> <span class="ident">RE</span>::<span class="ident">go</span>(<span class="self">self</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">step_count</span>) {
+        <span class="kw">while</span> <span class="ident">A</span>::<span class="ident">go</span>(<span class="self">self</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">step_count</span>) {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">result</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">decide</span>() {
                 <span class="kw">if</span> <span class="op">!</span><span class="ident">result</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">retreat</span>() {
                     <span class="kw">return</span> <span class="ident">Status</span>::<span class="prelude-val">None</span>;

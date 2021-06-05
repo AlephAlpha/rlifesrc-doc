@@ -591,7 +591,7 @@
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">State</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>},
     <span class="ident">error</span>::<span class="ident">Error</span>,
     <span class="ident">rules</span>::{<span class="ident">private</span>::<span class="ident">Sealed</span>, <span class="ident">Rule</span>},
-    <span class="ident">search</span>::<span class="ident">Reason</span>,
+    <span class="ident">search</span>::{<span class="ident">Algorithm</span>, <span class="ident">Reason</span>},
     <span class="ident">world</span>::<span class="ident">World</span>,
 };
 <span class="kw">use</span> <span class="ident">bitflags</span>::<span class="ident">bitflags</span>;
@@ -894,10 +894,10 @@
         <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">RE</span><span class="op">&gt;</span>,
+    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
         <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RE</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">impl_table</span>[<span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>().<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>];
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">is_empty</span>() {
@@ -905,7 +905,7 @@
         }
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags</span>::<span class="ident">CONFLICT</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RE</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
         }
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags</span>::<span class="ident">SUCC</span>) {
@@ -915,7 +915,7 @@
                 <span class="ident">ALIVE</span>
             };
             <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
-            <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
+            <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
         }
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags</span>::<span class="ident">SELF</span>) {
@@ -924,7 +924,7 @@
             } <span class="kw">else</span> {
                 <span class="ident">ALIVE</span>
             };
-            <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+            <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
         }
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags</span>::<span class="ident">NBHD</span>) {
@@ -939,7 +939,7 @@
                             } <span class="kw">else</span> {
                                 <span class="ident">ALIVE</span>
                             };
-                            <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">neigh</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+                            <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">neigh</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
                         }
                     }
                 }
@@ -1068,10 +1068,10 @@
         <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">RE</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">RE</span><span class="op">&gt;</span>,
+    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
         <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RE</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A</span>::<span class="ident">ConflReason</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>];
         <span class="kw">let</span> <span class="ident">gen</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">gen</span>;
@@ -1080,7 +1080,7 @@
             <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">j</span>)) <span class="op">=</span> <span class="ident">desc</span>.<span class="number">1</span> {
                     <span class="kw">if</span> <span class="ident">j</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RE</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
                     }
                 }
 
@@ -1091,13 +1091,13 @@
                         <span class="ident">ALIVE</span>
                     };
                     <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
+                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
                 }
             }
             <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">j</span>)) <span class="op">=</span> <span class="ident">desc</span>.<span class="number">1</span> {
                     <span class="kw">if</span> <span class="ident">j</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">j</span> <span class="op">&gt;</span> <span class="number">2</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RE</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
                     }
                 }
                 <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags</span>::<span class="ident">SUCC</span>) {
@@ -1107,7 +1107,7 @@
                         <span class="ident">ALIVE</span>
                     };
                     <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
+                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
                 }
             }
             <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">i</span>)) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1115,17 +1115,17 @@
                     <span class="kw">if</span> <span class="ident">j</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">gen</span> {
                         <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
                     } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RE</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
                     }
                 } <span class="kw">else</span> {
                     <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">State</span>((<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">gen</span>), <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
+                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">State</span>((<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">gen</span>), <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
                 }
             }
             <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">desc</span>.<span class="number">1</span> {
                 <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags</span>::<span class="ident">SELF_ALIVE</span>) {
-                        <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">State</span>(<span class="ident">gen</span> <span class="op">-</span> <span class="number">1</span>), <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
+                        <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">State</span>(<span class="ident">gen</span> <span class="op">-</span> <span class="number">1</span>), <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
                     } <span class="kw">else</span> {
                         <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
                     }
@@ -1137,11 +1137,11 @@
                         } <span class="kw">else</span> {
                             <span class="ident">ALIVE</span>
                         };
-                        <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+                        <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
                     }
                 }
                 <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">j</span>)) <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">State</span>(<span class="ident">j</span> <span class="op">-</span> <span class="number">1</span>), <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
+                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">State</span>(<span class="ident">j</span> <span class="op">-</span> <span class="number">1</span>), <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>));
                 }
                 <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(()),
             },
@@ -1152,14 +1152,14 @@
         }
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags</span>::<span class="ident">CONFLICT</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">RE</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A</span>::<span class="ident">confl_from_cell</span>(<span class="ident">cell</span>));
         }
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags</span>::<span class="ident">NBHD</span>) {
             <span class="kw">for</span> (<span class="ident">i</span>, <span class="kw-2">&amp;</span><span class="ident">neigh</span>) <span class="kw">in</span> <span class="ident">cell</span>.<span class="ident">nbhd</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
                 <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags</span>::<span class="ident">from_bits</span>(<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="number">2</span> <span class="op">*</span> <span class="ident">i</span> <span class="op">+</span> <span class="number">6</span>)).<span class="ident">unwrap</span>()) {
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">neigh</span>) <span class="op">=</span> <span class="ident">neigh</span> {
-                        <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">neigh</span>, <span class="ident">ALIVE</span>, <span class="ident">RE</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+                        <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">neigh</span>, <span class="ident">ALIVE</span>, <span class="ident">A</span>::<span class="ident">Reason</span>::<span class="ident">from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
                     }
                 }
             }

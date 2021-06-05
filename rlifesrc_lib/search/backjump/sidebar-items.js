@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["ConflReason","Reasons for a conflict."],["ReasonBackjump","Reasons for setting a cell, with informations for backjumping."]]});
+initSidebarItems({"enum":[["ConflReason","Reasons for a conflict."],["Reason","Reasons for setting a cell, with informations for backjumping."]],"struct":[["Backjump","(Experimental) Adding Backjumping to the original lifesrc algorithm."]]});
