@@ -88,6 +88,10 @@
 <span id="85">85</span>
 <span id="86">86</span>
 <span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Cellular automata rules.</span>
 <span class="doccomment">//!</span>
@@ -146,7 +150,7 @@
 
     <span class="doccomment">/// Generates a neighborhood descriptor which says that all neighboring</span>
     <span class="doccomment">/// cells have states `state`, and the successor has state `succ_state`.</span>
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
     <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Desc</span>;
 
     <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor</span>
@@ -154,7 +158,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The `state` is the new state of the cell when `new` is true,</span>
     <span class="doccomment">/// the old state when `new` is false.</span>
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
     <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>, <span class="ident">new</span>: <span class="ident">bool</span>);
 
     <span class="doccomment">/// Consistifies a cell.</span>
@@ -166,14 +170,18 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `false` if there is a conflict,</span>
     <span class="doccomment">/// `true` if the cells are consistent.</span>
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
     <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
         <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span>;
 }
 
+<span class="doccomment">/// A helper mod for [sealing](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)</span>
+<span class="doccomment">/// the [`Rule`] trait.</span>
 <span class="kw">mod</span> <span class="ident">private</span> {
+    <span class="doccomment">/// A helper trait for [sealing](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)</span>
+    <span class="doccomment">/// the [`Rule`](super::Rule) trait.</span>
     <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Sealed</span>: <span class="ident">Sized</span> {}
 }
 </pre></div>

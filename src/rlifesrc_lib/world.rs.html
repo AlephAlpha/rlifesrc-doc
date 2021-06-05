@@ -552,6 +552,11 @@
 <span id="549">549</span>
 <span id="550">550</span>
 <span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
 </pre><pre class="rust">
 <span class="doccomment">//! The world.</span>
 
@@ -692,12 +697,16 @@
         .<span class="ident">presearch</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_no_backjump</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="doccomment">/// Creates a new world from the configuration and the rule,</span>
+    <span class="doccomment">/// using the [`LifeSrc`] algorithm.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_lifesrc</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">World::new_with_rule</span>(<span class="ident">config</span>, <span class="ident">rule</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Creates a new world from the configuration and the rule,</span>
+    <span class="doccomment">/// using the [`Backjump`] algorithm.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_backjump</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">World::new_with_rule</span>(<span class="ident">config</span>, <span class="ident">rule</span>)
     }
@@ -741,6 +750,7 @@
     <span class="doccomment">/// Note that for cells on the edges of the search range,</span>
     <span class="doccomment">/// some neighbors might point to `None`.</span>
     <span class="kw">fn</span> <span class="ident">init_nbhd</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="doccomment">/// Relative positions of the neighbors.</span>
         <span class="kw">const</span> <span class="ident">NBHD</span>: [(<span class="ident">i32</span>, <span class="ident">i32</span>); <span class="number">8</span>] <span class="op">=</span> [
             (<span class="op">-</span><span class="number">1</span>, <span class="op">-</span><span class="number">1</span>),
             (<span class="op">-</span><span class="number">1</span>, <span class="number">0</span>),
@@ -908,7 +918,7 @@
         <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">KnownCell</span> { <span class="ident">coord</span>, <span class="ident">state</span> } <span class="kw">in</span> <span class="ident">known_cells</span>.<span class="ident">iter</span>() {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cell</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">find_cell</span>(<span class="ident">coord</span>) {
                 <span class="kw">if</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() <span class="op">&amp;&amp;</span> <span class="ident">state</span>.<span class="number">0</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>() {
-                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A::Reason::KNOWN</span>);
+                    <span class="self">self</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A::Reason::KNOWN</span>).<span class="ident">ok</span>();
                 }
             }
         }

@@ -145,7 +145,7 @@
     <span class="ident">config::Config</span>,
     <span class="ident">error::Error</span>,
     <span class="ident">rules::Rule</span>,
-    <span class="ident">search::Algorithm</span>,
+    <span class="ident">search</span>::{<span class="ident">Algorithm</span>, <span class="ident">SetCell</span>},
     <span class="ident">traits::Search</span>,
     <span class="ident">world::World</span>,
 };
@@ -233,7 +233,7 @@
             <span class="ident">coord</span>,
             <span class="ident">state</span>,
             <span class="kw-2">ref</span> <span class="ident">reason</span>,
-        } <span class="kw">in</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>()
+        } <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">set_stack</span>
         {
             <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">find_cell</span>(<span class="ident">coord</span>).<span class="ident">ok_or</span>(<span class="ident">Error::SetCellError</span>(<span class="ident">coord</span>))<span class="question-mark">?</span>;
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">old_state</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>() {
@@ -244,7 +244,7 @@
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">coord</span>, <span class="ident">state</span>));
             } <span class="kw">else</span> {
                 <span class="kw">let</span> <span class="ident">reason</span> <span class="op">=</span> <span class="ident">A::deser_reason</span>(<span class="ident">world</span>, <span class="ident">reason</span>)<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">reason</span>);
+                <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">reason</span>).<span class="ident">ok</span>();
             }
         }
         <span class="ident">world</span>.<span class="ident">conflicts</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">conflicts</span>;
@@ -268,7 +268,7 @@
         <span class="ident">WorldSer</span> {
             <span class="ident">config</span>: <span class="self">self</span>.<span class="ident">config</span>.<span class="ident">clone</span>(),
             <span class="ident">conflicts</span>: <span class="self">self</span>.<span class="ident">conflicts</span>,
-            <span class="ident">set_stack</span>: <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">ser</span>()).<span class="ident">collect</span>(),
+            <span class="ident">set_stack</span>: <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">SetCell::ser</span>).<span class="ident">collect</span>(),
             <span class="ident">check_index</span>: <span class="self">self</span>.<span class="ident">check_index</span>,
             <span class="ident">timing</span>: <span class="prelude-val">None</span>,
         }

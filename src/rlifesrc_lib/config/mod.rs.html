@@ -426,7 +426,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cells</span>::{<span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">doc_cfg</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="doccomment">/// How to choose a state for an unknown cell.</span>
@@ -751,7 +751,7 @@
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">backjump</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">max_cell_count</span>.<span class="ident">is_none</span>() {
                     <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 } <span class="kw">else</span> {
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 }
             }};
         }
@@ -764,7 +764,7 @@
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
                         }
                     }
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_no_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
                 } <span class="kw">else</span> {
                     <span class="macro">new_world!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">non_gen</span>())
                 }

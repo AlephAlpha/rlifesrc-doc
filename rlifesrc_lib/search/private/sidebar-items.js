@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["Sealed",""]]});
+initSidebarItems({"trait":[["Sealed","A helper trait for sealing the `Algorithm` trait."]]});

@@ -197,6 +197,7 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
+<span id="197">197</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Cells in the cellular automaton.</span>
 
@@ -211,7 +212,7 @@
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">doc_cfg</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="doccomment">/// Possible states of a known cell.</span>
@@ -319,11 +320,11 @@
             <span class="ident">background</span>,
             <span class="ident">state</span>: <span class="ident">Cell::new</span>(<span class="prelude-val">Some</span>(<span class="ident">background</span>)),
             <span class="ident">desc</span>: <span class="ident">Cell::new</span>(<span class="ident">R::new_desc</span>(<span class="ident">background</span>, <span class="ident">succ_state</span>)),
-            <span class="ident">pred</span>: <span class="ident">Default::default</span>(),
-            <span class="ident">succ</span>: <span class="ident">Default::default</span>(),
-            <span class="ident">nbhd</span>: <span class="ident">Default::default</span>(),
-            <span class="ident">sym</span>: <span class="ident">Default::default</span>(),
-            <span class="ident">next</span>: <span class="ident">Default::default</span>(),
+            <span class="ident">pred</span>: <span class="prelude-val">None</span>,
+            <span class="ident">succ</span>: <span class="prelude-val">None</span>,
+            <span class="ident">nbhd</span>: [<span class="prelude-val">None</span>; <span class="number">8</span>],
+            <span class="ident">sym</span>: <span class="ident">Vec::new</span>(),
+            <span class="ident">next</span>: <span class="prelude-val">None</span>,
             <span class="ident">is_front</span>: <span class="bool-val">false</span>,
             <span class="ident">level</span>: <span class="ident">Cell::new</span>(<span class="number">0</span>),
             <span class="ident">seen</span>: <span class="ident">Cell::new</span>(<span class="bool-val">false</span>),
@@ -353,6 +354,7 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Educe</span>)]</span>
 <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// The [`LifeCell`] it refers to.</span>
     <span class="ident">cell</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>,
 }
 
