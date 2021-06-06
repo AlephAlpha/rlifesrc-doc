@@ -203,6 +203,7 @@
 <span id="200">200</span>
 <span id="201">201</span>
 <span id="202">202</span>
+<span id="203">203</span>
 </pre><pre class="rust">
 <span class="doccomment">//! A trait for [`World`].</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -213,6 +214,7 @@
     <span class="ident">world::World</span>,
 };
 <span class="kw">use</span> <span class="ident">std::fmt::Write</span>;
+<span class="kw">use</span> <span class="ident">typebool::Bool</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
@@ -364,7 +366,7 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">is_gen_rule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="ident">R::IS_GEN</span>
+        <span class="ident">R::IsGen::VALUE</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>

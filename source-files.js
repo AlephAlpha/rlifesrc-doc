@@ -96,6 +96,7 @@ sourcesIndex["textwrap"] = {"name":"","files":["indentation.rs","lib.rs","splitt
 sourcesIndex["thiserror"] = {"name":"","files":["aserror.rs","display.rs","lib.rs"]};
 sourcesIndex["thiserror_impl"] = {"name":"","files":["ast.rs","attr.rs","expand.rs","fmt.rs","lib.rs","prop.rs","valid.rs"]};
 sourcesIndex["toml"] = {"name":"","files":["datetime.rs","de.rs","lib.rs","macros.rs","map.rs","ser.rs","spanned.rs","tokens.rs","value.rs"]};
+sourcesIndex["typebool"] = {"name":"","files":["comp.rs","lib.rs","ops.rs"]};
 sourcesIndex["unicode_width"] = {"name":"","files":["lib.rs","tables.rs"]};
 sourcesIndex["unicode_xid"] = {"name":"","files":["lib.rs","tables.rs"]};
 sourcesIndex["value_bag"] = {"name":"","dirs":[{"name":"internal","dirs":[{"name":"cast","files":["mod.rs","primitive.rs"]}],"files":["fmt.rs","mod.rs"]}],"files":["error.rs","fill.rs","impls.rs","lib.rs","visit.rs"]};

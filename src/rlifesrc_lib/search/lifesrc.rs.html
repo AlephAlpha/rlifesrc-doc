@@ -242,6 +242,7 @@
 <span id="239">239</span>
 <span id="240">240</span>
 <span id="241">241</span>
+<span id="242">242</span>
 </pre><pre class="rust">
 <span class="doccomment">//! The search process, without backjumping.</span>
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -250,6 +251,7 @@
     <span class="ident">search</span>::{<span class="ident">private::Sealed</span>, <span class="ident">Algorithm</span>, <span class="ident">Reason</span> <span class="kw">as</span> <span class="ident">TraitReason</span>, <span class="ident">SetCell</span>},
     <span class="ident">world::World</span>,
 };
+<span class="kw">use</span> <span class="ident">typebool::Bool</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
@@ -416,7 +418,7 @@
         <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">SetCell</span> { <span class="ident">cell</span>, <span class="ident">reason</span> }) <span class="op">=</span> <span class="self">self</span>.<span class="ident">set_stack</span>.<span class="ident">pop</span>() {
             <span class="kw">match</span> <span class="ident">reason</span> {
                 <span class="ident">Reason::Decide</span> <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">reason</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">R::IS_GEN</span> {
+                    <span class="kw">let</span> (<span class="ident">state</span>, <span class="ident">reason</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">R::IsGen::VALUE</span> {
                         <span class="kw">let</span> <span class="ident">State</span>(<span class="ident">j</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">unwrap</span>();
                         (
                             <span class="ident">State</span>((<span class="ident">j</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">rule</span>.<span class="ident">gen</span>()),

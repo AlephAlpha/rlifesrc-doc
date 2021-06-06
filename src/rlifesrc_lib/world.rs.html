@@ -552,11 +552,6 @@
 <span id="549">549</span>
 <span id="550">550</span>
 <span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
 </pre><pre class="rust">
 <span class="doccomment">//! The world.</span>
 
@@ -567,6 +562,7 @@
     <span class="ident">search</span>::{<span class="ident">Algorithm</span>, <span class="ident">Backjump</span>, <span class="ident">LifeSrc</span>, <span class="ident">Reason</span>, <span class="ident">SetCell</span>},
 };
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">mem</span>, <span class="ident">ptr</span>};
+<span class="kw">use</span> <span class="ident">typebool::False</span>;
 
 <span class="doccomment">/// The world.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
@@ -619,9 +615,6 @@
     <span class="doccomment">/// * the first row plus the first column, when the search order is diagonal.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">non_empty_front</span>: <span class="ident">bool</span>,
 
-    <span class="doccomment">/// All cells in the front.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">front</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-
     <span class="doccomment">/// Other data used by the algorithm.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">algo_data</span>: <span class="ident">A</span>,
 }
@@ -633,7 +626,7 @@
 
         <span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> ((<span class="ident">config</span>.<span class="ident">width</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">*</span> (<span class="ident">config</span>.<span class="ident">height</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">*</span> <span class="ident">config</span>.<span class="ident">period</span>) <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">size</span>);
-        <span class="kw">let</span> <span class="ident">front</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>((<span class="ident">config</span>.<span class="ident">width</span> <span class="op">+</span> <span class="ident">config</span>.<span class="ident">height</span>) <span class="kw">as</span> <span class="ident">usize</span>);
+        <span class="kw">let</span> <span class="ident">algo_data</span> <span class="op">=</span> <span class="ident">A::new</span>();
 
         <span class="kw">let</span> <span class="ident">is_front</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">is_front_fn</span>(<span class="ident">rule</span>.<span class="ident">has_b0</span>(), <span class="kw-2">&amp;</span><span class="ident">search_order</span>);
 
@@ -670,8 +663,6 @@
             }
         }
 
-        <span class="kw">let</span> <span class="ident">algo_data</span> <span class="op">=</span> <span class="ident">A::new</span>();
-
         <span class="ident">World</span> {
             <span class="ident">config</span>: <span class="ident">config</span>.<span class="ident">clone</span>(),
             <span class="ident">rule</span>,
@@ -683,7 +674,6 @@
             <span class="ident">check_index</span>: <span class="number">0</span>,
             <span class="ident">next_unknown</span>: <span class="prelude-val">None</span>,
             <span class="ident">non_empty_front</span>: <span class="ident">is_front</span>.<span class="ident">is_some</span>(),
-            <span class="ident">front</span>,
             <span class="ident">algo_data</span>,
         }
         .<span class="ident">init_front</span>()
@@ -704,7 +694,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&lt;</span><span class="ident">IsGen</span> <span class="op">=</span> <span class="ident">False</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Creates a new world from the configuration and the rule,</span>
     <span class="doccomment">/// using the [`Backjump`] algorithm.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_backjump</span>(<span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">Config</span>, <span class="ident">rule</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {

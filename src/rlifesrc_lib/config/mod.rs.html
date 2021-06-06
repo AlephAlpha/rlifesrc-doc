@@ -399,6 +399,9 @@
 <span id="396">396</span>
 <span id="397">397</span>
 <span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
 </pre><pre class="rust">
 <span class="doccomment">//! World configuration.</span>
 
@@ -412,6 +415,7 @@
 <span class="kw">use</span> <span class="ident">educe::Educe</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)))]</span>
 <span class="kw">use</span> <span class="ident">ca_formats</span>::{
     <span class="ident">rle</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">RleError</span>, <span class="ident">Rle</span>},
     <span class="ident">CellData</span>, <span class="ident">Input</span>,
@@ -477,6 +481,7 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)))]</span>
 <span class="kw">impl</span> <span class="ident">KnownCell</span> {
     <span class="doccomment">/// Convert a [`CellData`] to a [`KnownCell`].</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_cell_data</span>(<span class="ident">data</span>: <span class="ident">CellData</span>, <span class="ident">gen</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
@@ -711,6 +716,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// The cells are specified by a list of RLE strings.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_known_cells_from_rles</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">input</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">RleError</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,

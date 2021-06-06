@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["comp","Boolean operations expressed as composed concrete types."],["ops","Boolean operations expressed as traits."]],"struct":[["False","`false` as a dedicated type."],["True","`true` as a dedicated type."]],"trait":[["Bool","A type that expresses a boolean value."]]});
