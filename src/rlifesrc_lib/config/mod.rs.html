@@ -400,15 +400,14 @@
 <span id="398">398</span>
 <span id="399">399</span>
 <span id="400">400</span>
-<span id="401">401</span>
 </pre><pre class="rust">
 <span class="doccomment">//! World configuration.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>},
     <span class="ident">error::Error</span>,
+    <span class="ident">poly_world::PolyWorld</span>,
     <span class="ident">rules</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>, <span class="ident">NtLife</span>, <span class="ident">NtLifeGen</span>, <span class="ident">Rule</span>},
-    <span class="ident">traits::Search</span>,
     <span class="ident">world::World</span>,
 };
 <span class="kw">use</span> <span class="ident">educe::Educe</span>;
@@ -429,7 +428,6 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cells</span>::{<span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="doccomment">/// How to choose a state for an unknown cell.</span>
@@ -745,7 +743,7 @@
 
     <span class="doccomment">/// Creates a new world from the configuration.</span>
     <span class="doccomment">/// Returns an error if the rule string is invalid.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PolyWorld</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="macro">macro_rules!</span> <span class="ident">new_world</span> {
             (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
                 <span class="kw">for</span> <span class="ident">known_cell</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">known_cells</span>.<span class="ident">iter</span>() {
@@ -754,9 +752,9 @@
                     }
                 }
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">backjump</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">max_cell_count</span>.<span class="ident">is_none</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">World::new_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>).<span class="ident">into</span>())
                 } <span class="kw">else</span> {
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>).<span class="ident">into</span>())
                 }
             }};
         }
@@ -769,7 +767,7 @@
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
                         }
                     }
-                    <span class="prelude-val">Ok</span>(<span class="ident">Box::new</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>)))
+                    <span class="prelude-val">Ok</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>).<span class="ident">into</span>())
                 } <span class="kw">else</span> {
                     <span class="macro">new_world!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">non_gen</span>())
                 }

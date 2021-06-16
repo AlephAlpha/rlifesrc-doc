@@ -368,7 +368,6 @@
 <span id="366">366</span>
 <span id="367">367</span>
 <span id="368">368</span>
-<span id="369">369</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="ident">async_std::task</span>;
 <span class="kw">use</span> <span class="ident">crossterm</span>::{
@@ -379,7 +378,7 @@
     <span class="ident">ExecutableCommand</span>, <span class="ident">QueueableCommand</span>, <span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">CrosstermResult</span>,
 };
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">select</span>, <span class="ident">FutureExt</span>, <span class="ident">TryStreamExt</span>};
-<span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{<span class="ident">Search</span>, <span class="ident">State</span>, <span class="ident">Status</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
+<span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{<span class="ident">PolyWorld</span>, <span class="ident">State</span>, <span class="ident">Status</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>},
     <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">Instant</span>},
@@ -402,7 +401,7 @@
 <span class="kw">struct</span> <span class="ident">App</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span> {
     <span class="ident">gen</span>: <span class="ident">i32</span>,
     <span class="ident">period</span>: <span class="ident">i32</span>,
-    <span class="ident">search</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>,
+    <span class="ident">world</span>: <span class="ident">PolyWorld</span>,
     <span class="ident">status</span>: <span class="ident">Status</span>,
     <span class="ident">paused</span>: <span class="ident">bool</span>,
     <span class="ident">start_time</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Instant</span><span class="op">&gt;</span>,
@@ -415,12 +414,12 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span> <span class="ident">App</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">search</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">reset</span>: <span class="ident">bool</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">W</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">period</span>;
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">W</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">period</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span> {
             <span class="ident">gen</span>: <span class="number">0</span>,
             <span class="ident">period</span>,
-            <span class="ident">search</span>,
+            <span class="ident">world</span>,
             <span class="ident">status</span>: <span class="ident">Status::Initial</span>,
             <span class="ident">paused</span>: <span class="bool-val">true</span>,
             <span class="ident">start_time</span>: <span class="prelude-val">None</span>,
@@ -443,8 +442,8 @@
             .<span class="ident">execute</span>(<span class="ident">SetTitle</span>(<span class="string">&quot;rlifesrc&quot;</span>))<span class="question-mark">?</span>;
         <span class="ident">terminal::enable_raw_mode</span>()<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">term_size</span> <span class="op">=</span> <span class="ident">terminal::size</span>()<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">width</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
-        <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">height</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
+        <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">width</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
+        <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
         <span class="self">self</span>.<span class="ident">update</span>()
     }
 
@@ -469,8 +468,8 @@
                 <span class="macro">format!</span>(
                     <span class="string">&quot;Gen: {}  Cells: {}  Confl: {}{}&quot;</span>,
                     <span class="self">self</span>.<span class="ident">gen</span>,
-                    <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">cell_count_gen</span>(<span class="self">self</span>.<span class="ident">gen</span>),
-                    <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">conflicts</span>(),
+                    <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">cell_count_gen</span>(<span class="self">self</span>.<span class="ident">gen</span>),
+                    <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">conflicts</span>(),
                     <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                         <span class="ident">String::new</span>()
                     } <span class="kw">else</span> {
@@ -492,19 +491,19 @@
             .<span class="ident">queue</span>(<span class="ident">ResetColor</span>)<span class="question-mark">?</span>
             .<span class="ident">queue</span>(<span class="ident">Print</span>(<span class="macro">format!</span>(
                 <span class="string">&quot;x = {}, y = {}, rule = {}&quot;</span>,
-                <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">width</span>,
-                <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">height</span>,
-                <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">rule_string</span>
+                <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">width</span>,
+                <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span>,
+                <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">rule_string</span>
             )))<span class="question-mark">?</span>
             .<span class="ident">queue</span>(<span class="ident">MoveToNextLine</span>(<span class="number">1</span>))<span class="question-mark">?</span>;
         <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">line</span> <span class="op">=</span> <span class="ident">String::new</span>();
             <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> {
-                <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">get_cell_state</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">gen</span>));
+                <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">get_cell_state</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">gen</span>));
                 <span class="kw">match</span> <span class="ident">state</span> {
                     <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;.&#39;</span>),
                     <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">is_gen_rule</span>() {
+                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">is_gen_rule</span>() {
                             <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;A&#39;</span>)
                         } <span class="kw">else</span> {
                             <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;o&#39;</span>)
@@ -514,7 +513,7 @@
                     <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;?&#39;</span>),
                 };
             }
-            <span class="kw">if</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> {
                 <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;!&#39;</span>)
             } <span class="kw">else</span> {
                 <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;$&#39;</span>)
@@ -579,7 +578,7 @@
 
     <span class="doccomment">/// Searches for one step.</span>
     <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">step</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">search</span>(<span class="prelude-val">Some</span>(<span class="ident">VIEW_FREQ</span>)) {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">search</span>(<span class="prelude-val">Some</span>(<span class="ident">VIEW_FREQ</span>)) {
             <span class="ident">Status::Searching</span> <span class="op">=</span><span class="op">&gt;</span> (),
             <span class="ident">s</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="ident">status</span> <span class="op">=</span> <span class="ident">s</span>;
@@ -653,9 +652,8 @@
                 }
                 <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="self">self</span>.<span class="ident">term_size</span> <span class="op">=</span> (<span class="ident">width</span>, <span class="ident">height</span>);
-                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">width</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
-                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span>
-                        <span class="self">self</span>.<span class="ident">search</span>.<span class="ident">config</span>().<span class="ident">height</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
+                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">width</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
+                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
                     <span class="self">self</span>.<span class="ident">output</span>
                         .<span class="ident">queue</span>(<span class="ident">ResetColor</span>)<span class="question-mark">?</span>
                         .<span class="ident">queue</span>(<span class="ident">Clear</span>(<span class="ident">ClearType::All</span>))<span class="question-mark">?</span>;
@@ -727,14 +725,14 @@
 <span class="doccomment">/// Runs the search with a TUI.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If `reset` is true, the time will be reset when starting a new search.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tui</span>(<span class="ident">search</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Search</span><span class="op">&gt;</span>, <span class="ident">reset</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tui</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">EventStream::new</span>();
     <span class="kw">let</span> <span class="ident">result</span>;
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>(<span class="ident">search</span>, <span class="ident">reset</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdout</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>(<span class="ident">world</span>, <span class="ident">reset</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdout</span>)<span class="question-mark">?</span>;
         <span class="ident">task::block_on</span>(<span class="ident">app</span>.<span class="ident">main_loop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">reader</span>))<span class="question-mark">?</span>;
-        <span class="ident">result</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">search</span>.<span class="ident">rle_gen</span>(<span class="ident">app</span>.<span class="ident">gen</span>);
+        <span class="ident">result</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">world</span>.<span class="ident">rle_gen</span>(<span class="ident">app</span>.<span class="ident">gen</span>);
     }
     <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">result</span>);
     <span class="prelude-val">Ok</span>(())

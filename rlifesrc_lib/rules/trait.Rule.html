@@ -10,13 +10,14 @@
 <div class="item-spacer"></div>    fn <a href="#tymethod.update_desc" class="fnname">update_desc</a>(cell: <a class="struct" href="../cells/struct.CellRef.html" title="struct rlifesrc_lib::cells::CellRef">CellRef</a>&lt;'_, Self&gt;, state: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../cells/struct.State.html" title="struct rlifesrc_lib::cells::State">State</a>&gt;, new: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>);
 <div class="item-spacer"></div>    fn <a href="#tymethod.consistify" class="fnname">consistify</a>&lt;'a, A:&nbsp;<a class="trait" href="../search/trait.Algorithm.html" title="trait rlifesrc_lib::search::Algorithm">Algorithm</a>&lt;'a, Self&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;world: &amp;mut <a class="struct" href="../world/struct.World.html" title="struct rlifesrc_lib::world::World">World</a>&lt;'a, Self, A&gt;, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cell: <a class="struct" href="../cells/struct.CellRef.html" title="struct rlifesrc_lib::cells::CellRef">CellRef</a>&lt;'a, Self&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, A::<a class="type" href="../search/trait.Algorithm.html#associatedtype.ConflReason" title="type rlifesrc_lib::search::Algorithm::ConflReason">ConflReason</a>&gt;;
 }</pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A cellular automaton rule.</p>
-<p>Please use the following structs instead of implementing by yourself:</p>
+<p>The following rules are supported:</p>
 <ul>
 <li><a href="life/struct.Life.html" title="Life"><code>Life</code></a></li>
 <li><a href="life/struct.LifeGen.html" title="LifeGen"><code>LifeGen</code></a></li>
 <li><a href="ntlife/struct.NtLife.html" title="NtLife"><code>NtLife</code></a></li>
 <li><a href="ntlife/struct.NtLifeGen.html" title="NtLifeGen"><code>NtLifeGen</code></a></li>
 </ul>
+<p>This trait is sealed and cannot be implemented outside of this crate.</p>
 </div></details><h2 id="associated-types" class="small-section-header">Associated Types<a href="#associated-types" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="associatedtype.Desc" class="method has-srclink"><code>type <a href="#associatedtype.Desc" class="type">Desc</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a></code><a class="srclink" href="../../src/rlifesrc_lib/rules/mod.rs.html#37" title="goto source code">[src]</a></div></summary><div class="docblock"><p>The type of neighborhood descriptor of the rule.</p>
 <p>It describes the states of the successor and neighbors of a cell,
 and is used to determine the state of the cell in the next generation.</p>
