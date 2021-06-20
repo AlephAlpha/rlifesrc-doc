@@ -161,17 +161,17 @@
     <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
     <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PolyWorld</span> {
         <span class="doccomment">/// A [`World`] with [`Life`] rule and [`LifeSrc`] algorithm.</span>
-        <span class="ident">Life</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">Life</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
+        <span class="ident">Life</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">Life</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
         <span class="doccomment">/// A [`World`] with [`LifeGen`] rule and [`LifeSrc`] algorithm.</span>
-        <span class="ident">LifeGen</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">LifeGen</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
+        <span class="ident">LifeGen</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">LifeGen</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
         <span class="doccomment">/// A [`World`] with [`NtLife`] rule and [`LifeSrc`] algorithm.</span>
-        <span class="ident">NtLife</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">NtLife</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
+        <span class="ident">NtLife</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">NtLife</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
         <span class="doccomment">/// A [`World`] with [`NtLifeGen`] rule and [`LifeSrc`] algorithm.</span>
-        <span class="ident">NtLifeGen</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">NtLifeGen</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
+        <span class="ident">NtLifeGen</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">NtLifeGen</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
         <span class="doccomment">/// A [`World`] with [`Life`] rule and [`Backjump`] algorithm.</span>
-        <span class="ident">LifeBackjump</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">Life</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">Life</span><span class="op">&gt;</span><span class="op">&gt;</span>),
+        <span class="ident">LifeBackjump</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">Life</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="ident">Life</span><span class="op">&gt;</span><span class="op">&gt;</span>),
         <span class="doccomment">/// A [`World`] with [`NtLife`] rule and [`Backjump`] algorithm.</span>
-        <span class="ident">NtLifeBackjump</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">NtLife</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">NtLife</span><span class="op">&gt;</span><span class="op">&gt;</span>),
+        <span class="ident">NtLifeBackjump</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">NtLife</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="ident">NtLife</span><span class="op">&gt;</span><span class="op">&gt;</span>),
     }
 
     <span class="kw">impl</span> <span class="ident">PolyWorld</span> {

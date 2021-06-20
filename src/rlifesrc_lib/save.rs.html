@@ -141,8 +141,6 @@
 <span id="139">139</span>
 <span id="140">140</span>
 <span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Saves the world.</span>
 
@@ -231,10 +229,7 @@
 
 <span class="kw">impl</span> <span class="ident">WorldSer</span> {
     <span class="doccomment">/// Restores the world from the [`WorldSer`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deser</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deser</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">SetCellSer</span> {
             <span class="ident">coord</span>,
             <span class="ident">state</span>,
@@ -250,6 +245,7 @@
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">coord</span>, <span class="ident">state</span>));
             } <span class="kw">else</span> {
                 <span class="kw">let</span> <span class="ident">reason</span> <span class="op">=</span> <span class="ident">A::deser_reason</span>(<span class="ident">world</span>, <span class="ident">reason</span>)<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">borrow</span>();
                 <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">reason</span>).<span class="ident">ok</span>();
             }
         }
@@ -268,7 +264,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Saves the world as a [`WorldSer`].</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">WorldSer</span> {

@@ -588,7 +588,7 @@
 <span class="doccomment">//! Non-totalistic Life-like rules.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">State</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>},
+    <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>},
     <span class="ident">error::Error</span>,
     <span class="ident">rules</span>::{<span class="ident">private::Sealed</span>, <span class="ident">Rule</span>},
     <span class="ident">search</span>::{<span class="ident">Algorithm</span>, <span class="ident">Reason</span>},
@@ -867,7 +867,7 @@
         <span class="ident">NbhdDesc</span>(<span class="ident">nbhd_state</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span> <span class="op">|</span> <span class="ident">succ_state</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span> <span class="op">|</span> <span class="ident">state</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>, <span class="ident">_new</span>: <span class="ident">bool</span>) {
+    <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="kw-2">&amp;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>, <span class="ident">_new</span>: <span class="ident">bool</span>) {
         <span class="kw">let</span> <span class="ident">nbhd_change_num</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
             <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="number">0x0001</span>,
             <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="number">0x0100</span>,
@@ -895,9 +895,9 @@
         <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>,
+    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
+        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">impl_table</span>[<span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>().<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>];
 
@@ -1040,7 +1040,7 @@
         <span class="ident">NbhdDescGen</span>(<span class="ident">desc</span>.<span class="number">0</span>, <span class="prelude-val">Some</span>(<span class="ident">succ_state</span>))
     }
 
-    <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>, <span class="ident">new</span>: <span class="ident">bool</span>) {
+    <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="kw-2">&amp;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>, <span class="ident">new</span>: <span class="ident">bool</span>) {
         <span class="kw">let</span> <span class="ident">nbhd_change_num</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
             <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="number">0x0001</span>,
             <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="number">0x0100</span>,
@@ -1069,9 +1069,9 @@
         <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
     }
 
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span>,
+    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
+        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>];

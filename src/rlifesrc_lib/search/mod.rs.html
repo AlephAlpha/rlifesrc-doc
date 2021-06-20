@@ -362,9 +362,9 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This trait is sealed and cannot be implemented outside of this crate.</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Some details of it is hidden in the doc.&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span>: <span class="ident">private::Sealed</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span>: <span class="ident">private::Sealed</span> {
     <span class="doccomment">/// Reasons for setting a cell.</span>
-    <span class="kw">type</span> <span class="ident">Reason</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Reason</span>: <span class="ident">Reason</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Reasons for a conflict. Ignored in [`LifeSrc`] algorithm.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
@@ -375,15 +375,15 @@
 
     <span class="doccomment">/// Conflict when constitifying a cell.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">confl_from_cell</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::ConflReason</span>;
+    <span class="kw">fn</span> <span class="ident">confl_from_cell</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::ConflReason</span>;
 
     <span class="doccomment">/// Conflict from symmetry.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">confl_from_sym</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">sym</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::ConflReason</span>;
+    <span class="kw">fn</span> <span class="ident">confl_from_sym</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">sym</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::ConflReason</span>;
 
     <span class="doccomment">/// Conflict when constitifying a cell.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">init_front</span>(<span class="ident">world</span>: <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">init_front</span>(<span class="ident">world</span>: <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Sets the [`state`](LifeCell#structfield.state) of a cell,</span>
     <span class="doccomment">/// push it to the [`set_stack`](World#structfield.set_stack),</span>
@@ -393,8 +393,8 @@
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">github_io</span>, <span class="ident">allow</span>(<span class="ident">rustdoc::private_intra_doc_links</span>))]</span>
     <span class="kw">fn</span> <span class="ident">set_cell</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>,
-        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>,
+        <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>,
+        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>,
         <span class="ident">state</span>: <span class="ident">State</span>,
         <span class="ident">reason</span>: <span class="self">Self</span><span class="ident">::Reason</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span><span class="ident">::ConflReason</span><span class="op">&gt;</span>;
@@ -407,7 +407,7 @@
     <span class="doccomment">/// It also records the number of steps it has walked in the parameter</span>
     <span class="doccomment">/// `step`.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">go</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">step</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">go</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">step</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 
     <span class="doccomment">/// Retreats to the last time when a unknown cell is decided by choice,</span>
     <span class="doccomment">/// and switch that cell to the other state.</span>
@@ -415,16 +415,16 @@
     <span class="doccomment">/// Returns `true` if successes,</span>
     <span class="doccomment">/// `false` if it goes back to the time before the first cell is set.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">retreat</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">retreat</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
     <span class="doccomment">/// Restore the reason from a [`ReasonSer`].</span>
-    <span class="kw">fn</span> <span class="ident">deser_reason</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ser</span>: <span class="kw-2">&amp;</span><span class="ident">ReasonSer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Reason</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">deser_reason</span>(<span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ser</span>: <span class="kw-2">&amp;</span><span class="ident">ReasonSer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Reason</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// Reasons for setting a cell.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Reason</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Reason</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Known before the search starts,</span>
     <span class="kw">const</span> <span class="ident">KNOWN</span>: <span class="self">Self</span>;
 
@@ -432,10 +432,10 @@
     <span class="kw">const</span> <span class="ident">DECIDED</span>: <span class="self">Self</span>;
 
     <span class="doccomment">/// Deduced from the rule when constitifying another cell.</span>
-    <span class="kw">fn</span> <span class="ident">from_cell</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
+    <span class="kw">fn</span> <span class="ident">from_cell</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
 
     <span class="doccomment">/// Deduced from symmetry.</span>
-    <span class="kw">fn</span> <span class="ident">from_sym</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
+    <span class="kw">fn</span> <span class="ident">from_sym</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
 
     <span class="doccomment">/// Decided or trying another state for generations rules.</span>
     <span class="kw">fn</span> <span class="ident">is_decided</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
@@ -456,17 +456,17 @@
 
 <span class="doccomment">/// Records the cells whose values are set and their reasons.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="doccomment">/// The set cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>,
 
     <span class="doccomment">/// The reason for setting a cell.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">reason</span>: <span class="ident">A::Reason</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">SetCell</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Get a reference to the set cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">reason</span>: <span class="ident">A::Reason</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>, <span class="ident">reason</span>: <span class="ident">A::Reason</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">SetCell</span> { <span class="ident">cell</span>, <span class="ident">reason</span> }
     }
 
@@ -482,7 +482,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span>, <span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">World</span><span class="op">&lt;</span><span class="ident">R</span>, <span class="ident">A</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Consistifies a cell.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Examines the state and the neighborhood descriptor of the cell,</span>
@@ -491,14 +491,14 @@
     <span class="doccomment">/// cells involved.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is a conflict, returns its reason.</span>
-    <span class="kw">fn</span> <span class="ident">consistify</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">consistify</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
         <span class="ident">Rule::consistify</span>(<span class="self">self</span>, <span class="ident">cell</span>)
     }
 
     <span class="doccomment">/// Consistifies a cell, its neighbors, and its predecessor.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is a conflict, returns its reason.</span>
-    <span class="kw">fn</span> <span class="ident">consistify10</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">consistify10</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">consistify</span>(<span class="ident">cell</span>)<span class="question-mark">?</span>;
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pred</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">pred</span> {
