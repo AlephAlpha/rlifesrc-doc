@@ -189,6 +189,9 @@
 <span id="187">187</span>
 <span id="188">188</span>
 <span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Cells in the cellular automaton.</span>
 
@@ -320,13 +323,6 @@
         }
     }
 
-    <span class="doccomment">/// Returns a [`CellRef`] from a [`LifeCell`].</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">borrow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span>
-            <span class="kw">unsafe</span> { <span class="ident">NonNull::new_unchecked</span>(<span class="self">self</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) };
-        <span class="ident">CellRef</span> { <span class="ident">cell</span> }
-    }
-
     <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor</span>
     <span class="doccomment">/// when the state of one cell is changed.</span>
     <span class="doccomment">///</span>
@@ -357,11 +353,21 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Furthermore, a [`CellRef`] referring to a cell in one world should never be</span>
 <span class="doccomment">/// used in any function or method involving another world.</span>
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Educe</span>)]</span>
 <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
     <span class="doccomment">/// The [`LifeCell`] it refers to.</span>
     <span class="ident">cell</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Creates a new [`CellRef`] from a mut pointer to a [`LifeCell`].</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">CellRef</span> {
+            <span class="ident">cell</span>: <span class="ident">NonNull::new_unchecked</span>(<span class="ident">ptr</span>),
+        }
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {

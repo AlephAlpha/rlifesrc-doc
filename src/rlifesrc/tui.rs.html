@@ -366,10 +366,7 @@
 <span id="364">364</span>
 <span id="365">365</span>
 <span id="366">366</span>
-<span id="367">367</span>
-<span id="368">368</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="ident">async_std::task</span>;
 <span class="kw">use</span> <span class="ident">crossterm</span>::{
     <span class="ident">cursor</span>::{<span class="ident">Hide</span>, <span class="ident">MoveTo</span>, <span class="ident">MoveToNextLine</span>, <span class="ident">Show</span>},
     <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">EventStream</span>, <span class="ident">KeyCode</span>, <span class="ident">KeyEvent</span>},
@@ -377,7 +374,7 @@
     <span class="ident">terminal</span>::{<span class="self">self</span>, <span class="ident">Clear</span>, <span class="ident">ClearType</span>, <span class="ident">EnterAlternateScreen</span>, <span class="ident">LeaveAlternateScreen</span>, <span class="ident">SetTitle</span>},
     <span class="ident">ExecutableCommand</span>, <span class="ident">QueueableCommand</span>, <span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">CrosstermResult</span>,
 };
-<span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">select</span>, <span class="ident">FutureExt</span>, <span class="ident">TryStreamExt</span>};
+<span class="kw">use</span> <span class="ident">futures_util</span>::{<span class="ident">select</span>, <span class="ident">FutureExt</span>, <span class="ident">TryStreamExt</span>};
 <span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{<span class="ident">PolyWorld</span>, <span class="ident">State</span>, <span class="ident">Status</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
 <span class="kw">use</span> <span class="ident">std</span>::{
     <span class="ident">io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>},
@@ -609,21 +606,20 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Handles a key event. Return `true` to quit the program.</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unreachable_patterns</span>)]</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
-        <span class="doccomment">/// A macro to generate constant key events patterns.</span>
+    <span class="doccomment">/// Handles a key event. Returns `true` to quit the program.</span>
+    <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+        <span class="doccomment">/// A macro to generate key event patterns.</span>
         <span class="macro">macro_rules!</span> <span class="ident">key_event</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>:<span class="ident">pat</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> { <span class="ident">code</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>, .. }))
+            ($( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>:<span class="ident">pat</span> )<span class="op">|</span><span class="op">+</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                $(
+                    <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> { <span class="ident">code</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span> , .. }))
+                )<span class="op">|</span><span class="op">+</span>
             };
         }
 
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">mode</span> {
             <span class="ident">Mode::Main</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">event</span> {
-                <span class="macro">key_event!</span>(<span class="ident">KeyCode::Char</span>(<span class="string">&#39;q&#39;</span>))
-                <span class="op">|</span> <span class="macro">key_event!</span>(<span class="ident">KeyCode::Char</span>(<span class="string">&#39;Q&#39;</span>))
-                <span class="op">|</span> <span class="macro">key_event!</span>(<span class="ident">KeyCode::Esc</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="macro">key_event!</span>(<span class="ident">KeyCode::Char</span>(<span class="string">&#39;q&#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Char</span>(<span class="string">&#39;Q&#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Esc</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                         <span class="self">self</span>.<span class="ident">pause</span>();
                     }
@@ -642,7 +638,7 @@
                     <span class="self">self</span>.<span class="ident">gen</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">gen</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">period</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">period</span>;
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                 }
-                <span class="macro">key_event!</span>(<span class="ident">KeyCode::Char</span>(<span class="string">&#39; &#39;</span>)) <span class="op">|</span> <span class="macro">key_event!</span>(<span class="ident">KeyCode::Enter</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="macro">key_event!</span>(<span class="ident">KeyCode::Char</span>(<span class="string">&#39; &#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Enter</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                         <span class="self">self</span>.<span class="ident">pause</span>();
                     } <span class="kw">else</span> {
@@ -700,7 +696,7 @@
             <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                 <span class="macro">select!</span> {
                     <span class="ident">event</span> <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">try_next</span>().<span class="ident">fuse</span>() <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">event</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span> {
+                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">event</span><span class="question-mark">?</span>)<span class="question-mark">?</span> {
                             <span class="kw">break</span>;
                         }
                     },
@@ -708,7 +704,7 @@
                         <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                     },
                 };
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">reader</span>.<span class="ident">try_next</span>().<span class="kw">await</span><span class="question-mark">?</span>).<span class="kw">await</span><span class="question-mark">?</span> {
+            } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">reader</span>.<span class="ident">try_next</span>().<span class="kw">await</span><span class="question-mark">?</span>)<span class="question-mark">?</span> {
                 <span class="kw">break</span>;
             }
         }
@@ -731,7 +727,7 @@
     <span class="kw">let</span> <span class="ident">result</span>;
     {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>(<span class="ident">world</span>, <span class="ident">reset</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stdout</span>)<span class="question-mark">?</span>;
-        <span class="ident">task::block_on</span>(<span class="ident">app</span>.<span class="ident">main_loop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">reader</span>))<span class="question-mark">?</span>;
+        <span class="ident">futures_executor::block_on</span>(<span class="ident">app</span>.<span class="ident">main_loop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">reader</span>))<span class="question-mark">?</span>;
         <span class="ident">result</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">world</span>.<span class="ident">rle_gen</span>(<span class="ident">app</span>.<span class="ident">gen</span>);
     }
     <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">result</span>);

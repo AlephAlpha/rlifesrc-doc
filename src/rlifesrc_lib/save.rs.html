@@ -245,7 +245,7 @@
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">coord</span>, <span class="ident">state</span>));
             } <span class="kw">else</span> {
                 <span class="kw">let</span> <span class="ident">reason</span> <span class="op">=</span> <span class="ident">A::deser_reason</span>(<span class="ident">world</span>, <span class="ident">reason</span>)<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">borrow</span>();
+                <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">cell</span>;
                 <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">reason</span>).<span class="ident">ok</span>();
             }
         }
