@@ -6,7 +6,7 @@ infinite iterator.</p>
 <h1 id="multiple-threads" class="section-header"><a href="#multiple-threads">Multiple threads</a></h1>
 <p>Instances of this struct can be <a href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="std::marker::Send">sent</a> to other threads. In a multithreaded
 application this can be used to dedicate a separate thread for signal handling. In this case
-you should get a <a href="backend/struct.Handle.html" title="Handle"><code>Handle</code></a> using the [<code>handle</code>][Signals::handle] method before sending the
+you should get a <a href="backend/struct.Handle.html" title="Handle"><code>Handle</code></a> using the <a href="struct.SignalsInfo.html#method.handle" title="Signals::handle"><code>handle</code></a> method before sending the
 <code>Signals</code> instance to a background thread. With the handle you will be able to shut down the
 background thread later, or to operatively add more signals.</p>
 <p>The controller handle can be shared between as many threads as you like using its
@@ -50,7 +50,7 @@ received multiple times.</p>
 <p>This method returns immediately (does not block) and may produce an empty iterator if there
 are no signals ready.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.wait" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/signal_hook/iterator/mod.rs.html#209-220" title="goto source code">[src]</a></div><a href="#method.wait" class="anchor"></a><code>pub fn <a href="#method.wait" class="fnname">wait</a>(&amp;mut self) -&gt; <a class="struct" href="backend/struct.Pending.html" title="struct signal_hook::iterator::backend::Pending">Pending</a>&lt;E&gt;<span class="notable-traits"><span class="notable-traits-tooltip">ⓘ<div class="notable-traits-tooltiptext"><span class="docblock"><h3 class="notable">Notable traits for <a class="struct" href="backend/struct.Pending.html" title="struct signal_hook::iterator::backend::Pending">Pending</a>&lt;E&gt;</h3><code class="content"><span class="where fmt-newline">impl&lt;E:&nbsp;<a class="trait" href="exfiltrator/trait.Exfiltrator.html" title="trait signal_hook::iterator::exfiltrator::Exfiltrator">Exfiltrator</a>&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a> for <a class="struct" href="backend/struct.Pending.html" title="struct signal_hook::iterator::backend::Pending">Pending</a>&lt;E&gt;</span><span class="where fmt-newline">    type <a href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html#associatedtype.Item" class="type">Item</a> = E::Output;</span></code></span></div></span></span></code></div></summary><div class="docblock"><p>Waits for some signals to be available and returns an iterator.</p>
-<p>This is similar to [<code>pending</code>][Signals::pending]. If there are no signals available, it
+<p>This is similar to <a href="struct.SignalsInfo.html#method.pending" title="Signals::pending"><code>pending</code></a>. If there are no signals available, it
 tries to wait for some to arrive. However, due to implementation details, this still can
 produce an empty iterator.</p>
 <p>This can block for arbitrary long time. If the <a href="backend/struct.Handle.html#method.close" title="Handle::close"><code>Handle::close</code></a> method is used in
