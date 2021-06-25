@@ -757,6 +757,13 @@
 <span id="757">757</span>
 <span id="758">758</span>
 <span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Configurations related to the</span>
 <span class="doccomment">//! [dihedral group _D_&lt;sub&gt;8&lt;/sub&gt;](https://en.wikipedia.org/wiki/Examples_of_groups#dihedral_group_of_order_8).</span>
@@ -1182,51 +1189,58 @@
     <span class="doccomment">/// For example, `Symmetry::C1` is smaller than all other symmetries.</span>
     <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span> <span class="op">=</span><span class="op">=</span> <span class="ident">other</span> {
-            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering::Equal</span>);
-        }
-        <span class="kw">match</span> (<span class="self">self</span>, <span class="ident">other</span>) {
-            (<span class="self">Self</span><span class="ident">::C1</span>, <span class="kw">_</span>)
-            <span class="op">|</span> (<span class="kw">_</span>, <span class="self">Self</span><span class="ident">::D8</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C2</span>, <span class="self">Self</span><span class="ident">::C4</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C2</span>, <span class="self">Self</span><span class="ident">::D4Ortho</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C2</span>, <span class="self">Self</span><span class="ident">::D4Diag</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Row</span>, <span class="self">Self</span><span class="ident">::D4Ortho</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Col</span>, <span class="self">Self</span><span class="ident">::D4Ortho</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Diag</span>, <span class="self">Self</span><span class="ident">::D4Diag</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Antidiag</span>, <span class="self">Self</span><span class="ident">::D4Diag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering::Less</span>),
-            (<span class="self">Self</span><span class="ident">::D8</span>, <span class="kw">_</span>)
-            <span class="op">|</span> (<span class="kw">_</span>, <span class="self">Self</span><span class="ident">::C1</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C4</span>, <span class="self">Self</span><span class="ident">::C2</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Ortho</span>, <span class="self">Self</span><span class="ident">::C2</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Diag</span>, <span class="self">Self</span><span class="ident">::C2</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Ortho</span>, <span class="self">Self</span><span class="ident">::D2Row</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Ortho</span>, <span class="self">Self</span><span class="ident">::D2Col</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Diag</span>, <span class="self">Self</span><span class="ident">::D2Diag</span>)
-            <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Diag</span>, <span class="self">Self</span><span class="ident">::D2Antidiag</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Ordering::Greater</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Equal</span>)
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="kw-2">*</span><span class="ident">other</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Less</span>)
+        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">other</span>.<span class="ident">is_subgroup_of</span>(<span class="kw-2">*</span><span class="self">self</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Greater</span>)
+        } <span class="kw">else</span> {
+            <span class="prelude-val">None</span>
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Symmetry</span> {
+    <span class="doccomment">/// Whether the symmetry group of `self` is a subgroup of that of `other`,</span>
+    <span class="doccomment">/// i.e., all patterns with symmetry `other` also have symmetry `self`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// For example, the symmetry group of `Symmetry::C1` is a subgroup of</span>
+    <span class="doccomment">/// that of all other symmetries.</span>
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_subgroup_of</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="macro">matches!</span>(
+            (<span class="self">self</span>, <span class="ident">other</span>),
+            (<span class="self">Self</span><span class="ident">::C1</span>, <span class="kw">_</span>)
+                <span class="op">|</span> (<span class="kw">_</span>, <span class="self">Self</span><span class="ident">::D8</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C2</span>, <span class="self">Self</span><span class="ident">::C2</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C2</span>, <span class="self">Self</span><span class="ident">::C4</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C2</span>, <span class="self">Self</span><span class="ident">::D4Ortho</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C2</span>, <span class="self">Self</span><span class="ident">::D4Diag</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::C4</span>, <span class="self">Self</span><span class="ident">::C4</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Row</span>, <span class="self">Self</span><span class="ident">::D2Row</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Row</span>, <span class="self">Self</span><span class="ident">::D4Ortho</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Col</span>, <span class="self">Self</span><span class="ident">::D2Col</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Col</span>, <span class="self">Self</span><span class="ident">::D4Ortho</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Diag</span>, <span class="self">Self</span><span class="ident">::D2Diag</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Diag</span>, <span class="self">Self</span><span class="ident">::D4Diag</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Antidiag</span>, <span class="self">Self</span><span class="ident">::D2Antidiag</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D2Antidiag</span>, <span class="self">Self</span><span class="ident">::D4Diag</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Ortho</span>, <span class="self">Self</span><span class="ident">::D4Ortho</span>)
+                <span class="op">|</span> (<span class="self">Self</span><span class="ident">::D4Diag</span>, <span class="self">Self</span><span class="ident">::D4Diag</span>)
+        )
+    }
+
     <span class="doccomment">/// Whether this symmetry requires the world to be square.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` for `C4`, `D2\`, `D2/`, `D4X` and `D8`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="macro">matches!</span>(
-            <span class="self">self</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::D4Ortho</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Greater</span>) <span class="op">|</span> <span class="prelude-val">None</span>
-        )
+        <span class="op">!</span><span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="self">Self</span><span class="ident">::D4Ortho</span>)
     }
 
     <span class="doccomment">/// Whether this transformation requires the world to have no diagonal width.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` for `C4`, `D2-`, `D2|`, `D4+` and `D8`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="macro">matches!</span>(
-            <span class="self">self</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::D4Diag</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Greater</span>) <span class="op">|</span> <span class="prelude-val">None</span>
-        )
+        <span class="op">!</span><span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="self">Self</span><span class="ident">::D4Diag</span>)
     }
 
     <span class="doccomment">/// Transformations contained in the symmetry group.</span>
