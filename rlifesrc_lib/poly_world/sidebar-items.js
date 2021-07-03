@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["proxy","A polymorphic world."]]});
+initSidebarItems({"enum":[["PolyWorld","A polymorphic [`World`]."]]});

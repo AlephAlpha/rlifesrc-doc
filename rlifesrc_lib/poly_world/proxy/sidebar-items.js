@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["PolyWorld","A polymorphic [`World`]."]]});
