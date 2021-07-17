@@ -3,12 +3,10 @@
 <h2 id="features" class="section-header"><a href="#features">Features</a></h2>
 <p>By default, every trait this crate supports will be enabled. You can disable all of them by disabling the default features and enable only the traits that you want to use by adding them to <code>features</code> explictly.</p>
 <p>For example,</p>
-<pre><code class="language-toml">[dependencies.educe]
+<div class="example-wrap"><pre class="language-toml">[dependencies.educe]
 version = &quot;*&quot;
 features = [&quot;Debug&quot;, &quot;Default&quot;, &quot;Hash&quot;, &quot;Clone&quot;, &quot;Copy&quot;]
-default-features = false
-</code></pre>
-<h2 id="debug" class="section-header"><a href="#debug">Debug</a></h2>
+default-features = false</pre></div><h2 id="debug" class="section-header"><a href="#debug">Debug</a></h2>
 <p>Use <code>#[derive(Educe)]</code> and <code>#[educe(Debug)]</code> to implement the <code>Debug</code> trait for a struct, an enum, or a union. It supports to change the name of your types, variants and fields. You can also ignore some fields, or set a trait and/or a method to replace the <code>Debug</code> trait used by default. Also, you can even format a struct to a tuple, and vice versa.</p>
 <h4 id="basic-usage" class="section-header"><a href="#basic-usage">Basic Usage</a></h4>
 <div class="example-wrap"><pre class="rust rust-example-rendered">

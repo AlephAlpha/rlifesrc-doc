@@ -1232,14 +1232,14 @@
     <span class="doccomment">/// Whether this symmetry requires the world to be square.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` for `C4`, `D2\`, `D2/`, `D4X` and `D8`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="self">Self</span><span class="ident">::D4Ortho</span>)
     }
 
     <span class="doccomment">/// Whether this transformation requires the world to have no diagonal width.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns `true` for `C4`, `D2-`, `D2|`, `D4+` and `D8`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="self">Self</span><span class="ident">::D4Diag</span>)
     }
 

@@ -52,15 +52,12 @@ procedural macro from the implementation crate. The re-export also carries a
 <span class="attribute">#[<span class="ident">proc_macro_hack</span>]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">demo_hack_impl::add_one</span>;</pre></div>
 <p>Both crates depend on <code>proc-macro-hack</code>:</p>
-<pre><code class="language-toml">[dependencies]
-proc-macro-hack = &quot;0.5&quot;
-</code></pre>
+<div class="example-wrap"><pre class="language-toml">[dependencies]
+proc-macro-hack = &quot;0.5&quot;</pre></div>
 <p>Additionally, your implementation crate (but not your declaration crate) is
 a proc macro crate:</p>
-<pre><code class="language-toml">[lib]
-proc-macro = true
-</code></pre>
-<h1 id="using-procedural-macros" class="section-header"><a href="#using-procedural-macros">Using procedural macros</a></h1>
+<div class="example-wrap"><pre class="language-toml">[lib]
+proc-macro = true</pre></div><h1 id="using-procedural-macros" class="section-header"><a href="#using-procedural-macros">Using procedural macros</a></h1>
 <p>Users of your crate depend on your declaration crate (not your
 implementation crate), then use your procedural macros as usual.</p>
 <p><a href="https://github.com/dtolnay/proc-macro-hack/tree/master/example">» example of a downstream crate</a></p>

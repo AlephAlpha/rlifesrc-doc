@@ -21,34 +21,28 @@ have a trailing comma. See <code>Serializer::pretty_array</code></li>
 one or more newlines will use triple quotes (i.e.: <code>'''</code> or <code>&quot;&quot;&quot;</code>)</p>
 <h1 id="examples" class="section-header"><a href="#examples">Examples</a></h1>
 <p>Instead of:</p>
-<pre><code class="language-toml,ignore">single = &quot;no newlines&quot;
-text = &quot;\nfoo\nbar\n&quot;
-</code></pre>
+<div class="example-wrap"><pre class="language-toml,ignore">single = &quot;no newlines&quot;
+text = &quot;\nfoo\nbar\n&quot;</pre></div>
 <p>You will have:</p>
-<pre><code class="language-toml,ignore">single = 'no newlines'
-text = '''
+<div class="example-wrap"><pre class="language-toml,ignore">single = &#39;no newlines&#39;
+text = &#39;&#39;&#39;
 foo
 bar
-'''
-</code></pre>
-</div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pretty_string_literal" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/toml/ser.rs.html#336-350" title="goto source code">[src]</a></div><a href="#method.pretty_string_literal" class="anchor"></a><code>pub fn <a href="#method.pretty_string_literal" class="fnname">pretty_string_literal</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></div></summary><div class="docblock"><p>Enable or Disable Literal strings for pretty strings</p>
+&#39;&#39;&#39;</pre></div></div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pretty_string_literal" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/toml/ser.rs.html#336-350" title="goto source code">[src]</a></div><a href="#method.pretty_string_literal" class="anchor"></a><code>pub fn <a href="#method.pretty_string_literal" class="fnname">pretty_string_literal</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></div></summary><div class="docblock"><p>Enable or Disable Literal strings for pretty strings</p>
 <p>If enabled, literal strings will be used when possible and strings with
 one or more newlines will use triple quotes (i.e.: <code>'''</code> or <code>&quot;&quot;&quot;</code>)</p>
 <p>If disabled, literal strings will NEVER be used and strings with one or
 more newlines will use <code>&quot;&quot;&quot;</code></p>
 <h1 id="examples-1" class="section-header"><a href="#examples-1">Examples</a></h1>
 <p>Instead of:</p>
-<pre><code class="language-toml,ignore">single = &quot;no newlines&quot;
-text = &quot;\nfoo\nbar\n&quot;
-</code></pre>
+<div class="example-wrap"><pre class="language-toml,ignore">single = &quot;no newlines&quot;
+text = &quot;\nfoo\nbar\n&quot;</pre></div>
 <p>You will have:</p>
-<pre><code class="language-toml,ignore">single = &quot;no newlines&quot;
+<div class="example-wrap"><pre class="language-toml,ignore">single = &quot;no newlines&quot;
 text = &quot;&quot;&quot;
 foo
 bar
-&quot;&quot;&quot;
-</code></pre>
-</div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pretty_array" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/toml/ser.rs.html#379-386" title="goto source code">[src]</a></div><a href="#method.pretty_array" class="anchor"></a><code>pub fn <a href="#method.pretty_array" class="fnname">pretty_array</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></div></summary><div class="docblock"><p>Enable or Disable pretty arrays</p>
+&quot;&quot;&quot;</pre></div></div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pretty_array" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/toml/ser.rs.html#379-386" title="goto source code">[src]</a></div><a href="#method.pretty_array" class="anchor"></a><code>pub fn <a href="#method.pretty_array" class="fnname">pretty_array</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></div></summary><div class="docblock"><p>Enable or Disable pretty arrays</p>
 <p>If enabled, arrays will always have each item on their own line.</p>
 <p>Some specific features can be controlled via other builder methods:</p>
 <ul>
@@ -59,15 +53,12 @@ comma on the last item.</li>
 </ul>
 <h1 id="examples-2" class="section-header"><a href="#examples-2">Examples</a></h1>
 <p>Instead of:</p>
-<pre><code class="language-toml,ignore">array = [&quot;foo&quot;, &quot;bar&quot;]
-</code></pre>
+<div class="example-wrap"><pre class="language-toml,ignore">array = [&quot;foo&quot;, &quot;bar&quot;]</pre></div>
 <p>You will have:</p>
-<pre><code class="language-toml,ignore">array = [
+<div class="example-wrap"><pre class="language-toml,ignore">array = [
     &quot;foo&quot;,
     &quot;bar&quot;,
-]
-</code></pre>
-</div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pretty_array_indent" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/toml/ser.rs.html#391-405" title="goto source code">[src]</a></div><a href="#method.pretty_array_indent" class="anchor"></a><code>pub fn <a href="#method.pretty_array_indent" class="fnname">pretty_array_indent</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></div></summary><div class="docblock"><p>Set the indent for pretty arrays</p>
+]</pre></div></div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pretty_array_indent" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/toml/ser.rs.html#391-405" title="goto source code">[src]</a></div><a href="#method.pretty_array_indent" class="anchor"></a><code>pub fn <a href="#method.pretty_array_indent" class="fnname">pretty_array_indent</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></div></summary><div class="docblock"><p>Set the indent for pretty arrays</p>
 <p>See <code>Serializer::pretty_array</code> for more details.</p>
 </div></details><details class="rustdoc-toggle method-toggle" open><summary><div id="method.pretty_array_trailing_comma" class="method has-srclink"><div class="rightside"><a class="srclink" href="../../src/toml/ser.rs.html#410-424" title="goto source code">[src]</a></div><a href="#method.pretty_array_trailing_comma" class="anchor"></a><code>pub fn <a href="#method.pretty_array_trailing_comma" class="fnname">pretty_array_trailing_comma</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>Self</code></div></summary><div class="docblock"><p>Specify whether to use a trailing comma when serializing pretty arrays</p>
 <p>See <code>Serializer::pretty_array</code> for more details.</p>

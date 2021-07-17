@@ -149,6 +149,19 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
 </pre><pre class="rust">
 <span class="doccomment">//! A polymorphic world.</span>
 
@@ -205,21 +218,25 @@
     <span class="doccomment">/// [`Status::None`] if such pattern does not exist,</span>
     <span class="doccomment">/// [`Status::Searching`] if the number of steps exceeds `max_step`</span>
     <span class="doccomment">/// and no results are found.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">search</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_step</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Status</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">search</span>(<span class="ident">max_step</span>))
     }
 
     <span class="doccomment">/// Gets the state of a cell. Returns `Err(())` if there is no such cell.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_cell_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">get_cell_state</span>(<span class="ident">coord</span>))
     }
 
     <span class="doccomment">/// World configuration.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Config</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">config</span>())
     }
 
     <span class="doccomment">/// Whether the rule is a Generations rule.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_gen_rule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">is_gen_rule</span>())
     }
@@ -228,6 +245,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// In other words, whether a cell would become [`ALIVE`] in the next</span>
     <span class="doccomment">/// generation, if all its neighbors in this generation are dead.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_b0_rule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">is_b0_rule</span>())
     }
@@ -235,6 +253,7 @@
     <span class="doccomment">/// Number of known living cells in some generation.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// For Generations rules, dying cells are not counted.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cell_count_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">cell_count_gen</span>(<span class="ident">t</span>))
     }
@@ -242,11 +261,13 @@
     <span class="doccomment">/// Minimum number of known living cells in all generation.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// For Generations rules, dying cells are not counted.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cell_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">cell_count</span>())
     }
 
     <span class="doccomment">/// Number of conflicts during the search.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">conflicts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">conflicts</span>())
     }
@@ -255,6 +276,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Currently this is the only parameter that you can change</span>
     <span class="doccomment">/// during the search.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_max_cell_count</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_cell_count</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>) {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">set_max_cell_count</span>(<span class="ident">max_cell_count</span>))
     }
@@ -270,6 +292,7 @@
     <span class="doccomment">/// * **Unknown** cells are represented by `?`;</span>
     <span class="doccomment">/// * Each line is ended with `$`;</span>
     <span class="doccomment">/// * The whole pattern is ended with `!`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rle_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">rle_gen</span>(<span class="ident">t</span>))
     }
@@ -282,6 +305,7 @@
     <span class="doccomment">/// * **Dead** cells are represented by `.`;</span>
     <span class="doccomment">/// * **Living** and **Dying** cells are represented by `o`;</span>
     <span class="doccomment">/// * **Unknown** cells are represented by `?`.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">plaintext_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">plaintext_gen</span>(<span class="ident">t</span>))
     }
@@ -290,6 +314,7 @@
     <span class="doccomment">/// which can be easily serialized.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">WorldSer</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">ser</span>())
     }
@@ -297,6 +322,7 @@
     <span class="doccomment">/// Restores the world from the [`WorldSer`].</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deser</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ser</span>: <span class="kw-2">&amp;</span><span class="ident">WorldSer</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">world</span>.<span class="ident">deser</span>(<span class="ident">ser</span>))
     }
