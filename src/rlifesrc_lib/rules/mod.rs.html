@@ -93,6 +93,10 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 </pre><pre class="rust">
 <span class="doccomment">//! Cellular automata rules.</span>
 <span class="doccomment">//!</span>
@@ -104,6 +108,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>},
+    <span class="ident">config::Symmetry</span>,
     <span class="ident">search::Algorithm</span>,
     <span class="ident">world::World</span>,
 };
@@ -152,6 +157,9 @@
 
     <span class="doccomment">/// The number of states.</span>
     <span class="kw">fn</span> <span class="ident">gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
+
+    <span class="doccomment">/// The symmetry of the rule.</span>
+    <span class="kw">fn</span> <span class="ident">symmetry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Symmetry</span>;
 
     <span class="doccomment">/// Generates a neighborhood descriptor which says that all neighboring</span>
     <span class="doccomment">/// cells have states `state`, and the successor has state `succ_state`.</span>
