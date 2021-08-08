@@ -445,7 +445,7 @@
 
 <span class="kw">impl</span> <span class="ident">ParseBigIntError</span> {
     <span class="kw">fn</span> <span class="ident">__description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
-        <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::BigIntErrorKind</span>::<span class="kw-2">*</span>;
+        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::BigIntErrorKind</span>::<span class="kw-2">*</span>;
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span> {
             <span class="ident">Empty</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;cannot parse integer from empty string&quot;</span>,
             <span class="ident">InvalidDigit</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;invalid digit found in string&quot;</span>,
@@ -522,17 +522,17 @@
     }
 }
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::biguint::BigUint</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::biguint::ToBigUint</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::biguint::U32Digits</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::biguint::U64Digits</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::biguint::BigUint</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::biguint::ToBigUint</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::biguint::U32Digits</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::biguint::U64Digits</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::bigint::BigInt</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::bigint::Sign</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::bigint::ToBigInt</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::bigint::BigInt</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::bigint::Sign</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::bigint::ToBigInt</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rand&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::bigrand</span>::{<span class="ident">RandBigInt</span>, <span class="ident">RandomBits</span>, <span class="ident">UniformBigInt</span>, <span class="ident">UniformBigUint</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::bigrand</span>::{<span class="ident">RandBigInt</span>, <span class="ident">RandomBits</span>, <span class="ident">UniformBigInt</span>, <span class="ident">UniformBigUint</span>};
 
 <span class="kw">mod</span> <span class="ident">big_digit</span> {
     <span class="doccomment">/// A `BigDigit` is a `BigUint`&#39;s composing element.</span>

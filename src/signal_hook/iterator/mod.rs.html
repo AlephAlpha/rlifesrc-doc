@@ -391,9 +391,9 @@
 
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="self">self</span>, <span class="ident">c_int</span>};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span><span class="ident">::backend</span>::{<span class="ident">Handle</span>, <span class="ident">Pending</span>};
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::backend</span>::{<span class="ident">PollResult</span>, <span class="ident">RefSignalIterator</span>, <span class="ident">SignalDelivery</span>};
-<span class="kw">use</span> <span class="self">self</span><span class="ident">::exfiltrator</span>::{<span class="ident">Exfiltrator</span>, <span class="ident">SignalOnly</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::backend</span>::{<span class="ident">Handle</span>, <span class="ident">Pending</span>};
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::backend</span>::{<span class="ident">PollResult</span>, <span class="ident">RefSignalIterator</span>, <span class="ident">SignalDelivery</span>};
+<span class="kw">use</span> <span class="ident"><span class="self">self</span>::exfiltrator</span>::{<span class="ident">Exfiltrator</span>, <span class="ident">SignalOnly</span>};
 
 <span class="doccomment">/// The main structure of the module, representing interest in some signals.</span>
 <span class="doccomment">///</span>
@@ -463,7 +463,7 @@
         <span class="ident">S</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span>,
         <span class="ident">E</span>: <span class="ident">Default</span>,
     {
-        <span class="self">Self</span><span class="ident">::with_exfiltrator</span>(<span class="ident">signals</span>, <span class="ident">E::default</span>())
+        <span class="ident"><span class="self">Self</span>::with_exfiltrator</span>(<span class="ident">signals</span>, <span class="ident">E::default</span>())
     }
 
     <span class="doccomment">/// An advanced constructor with explicit [`Exfiltrator`].</span>
@@ -531,7 +531,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Note that the blocking is done in this method, not in the iterator.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">wait</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Pending</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">poll_pending</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="ident">::has_signals</span>) {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">poll_pending</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="self">Self</span>::has_signals</span>) {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">pending</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">pending</span>,
             <span class="comment">// Because of the blocking has_signals method the poll_pending method</span>
             <span class="comment">// only returns None if the instance is closed. But we want to return</span>
@@ -614,7 +614,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">E</span>: <span class="ident">Exfiltrator</span><span class="op">&gt;</span> <span class="ident">IntoIterator</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">SignalsInfo</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">E::Output</span>;
     <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">Forever</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">E</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::IntoIter</span> {
+    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::IntoIter</span> {
         <span class="self">self</span>.<span class="ident">forever</span>()
     }
 }

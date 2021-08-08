@@ -173,7 +173,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span><span class="ident">::SetAttribute</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::SetAttribute</span>;
 
 <span class="comment">// This macro generates the Attribute enum, its iterator</span>
 <span class="comment">// function, and the static array containing the sgr code</span>
@@ -251,7 +251,7 @@
         <span class="kw">impl</span> <span class="ident">Attribute</span> {
             <span class="doccomment">/// Iterates over all the variants of the Attribute enum.</span>
             <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Attribute</span><span class="op">&gt;</span> {
-                <span class="kw">use</span> <span class="self">self</span><span class="ident">::Attribute</span>::<span class="kw-2">*</span>;
+                <span class="kw">use</span> <span class="ident"><span class="self">self</span>::Attribute</span>::<span class="kw-2">*</span>;
                 [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>,)<span class="op">*</span> ].<span class="ident">iter</span>().<span class="ident">copied</span>()
             }
         }

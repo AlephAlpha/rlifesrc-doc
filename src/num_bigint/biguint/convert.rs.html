@@ -757,15 +757,15 @@
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">biguint_from_vec</span>, <span class="ident">BigUint</span>, <span class="ident">ToBigUint</span>};
 
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::addition::add2</span>;
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::division::div_rem_digit</span>;
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::multiplication::mac_with_carry</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::addition::add2</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::division::div_rem_digit</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::multiplication::mac_with_carry</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::big_digit</span>::{<span class="self">self</span>, <span class="ident">BigDigit</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::std_alloc::Vec</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ParseBigIntError</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::big_digit</span>::{<span class="self">self</span>, <span class="ident">BigDigit</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::std_alloc::Vec</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ParseBigIntError</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">has_try_from</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::TryFromBigIntError</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::TryFromBigIntError</span>;
 
 <span class="kw">use</span> <span class="ident">core::cmp::Ordering</span>::{<span class="ident">Equal</span>, <span class="ident">Greater</span>, <span class="ident">Less</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">has_try_from</span>)]</span>

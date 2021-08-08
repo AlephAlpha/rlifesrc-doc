@@ -506,14 +506,14 @@
 <span id="506">506</span>
 <span id="507">507</span>
 </pre><pre class="rust">
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::addition</span>::{<span class="ident">__add2</span>, <span class="ident">add2</span>};
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::subtraction::sub2</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::addition</span>::{<span class="ident">__add2</span>, <span class="ident">add2</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::subtraction::sub2</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">u64_digit</span>))]</span>
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::u32_from_u128</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::u32_from_u128</span>;
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">biguint_from_vec</span>, <span class="ident">cmp_slice</span>, <span class="ident">BigUint</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::big_digit</span>::{<span class="self">self</span>, <span class="ident">BigDigit</span>, <span class="ident">DoubleBigDigit</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::Sign</span>::{<span class="self">self</span>, <span class="ident">Minus</span>, <span class="ident">NoSign</span>, <span class="ident">Plus</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::big_digit</span>::{<span class="self">self</span>, <span class="ident">BigDigit</span>, <span class="ident">DoubleBigDigit</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Sign</span>::{<span class="self">self</span>, <span class="ident">Minus</span>, <span class="ident">NoSign</span>, <span class="ident">Plus</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">BigInt</span>, <span class="ident">UsizePromotion</span>};
 
 <span class="kw">use</span> <span class="ident">core::cmp::Ordering</span>;
@@ -997,7 +997,7 @@
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_sub_sign</span>() {
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::BigInt</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::BigInt</span>;
     <span class="kw">use</span> <span class="ident">num_traits::Num</span>;
 
     <span class="kw">fn</span> <span class="ident">sub_sign_i</span>(<span class="ident">a</span>: <span class="kw-2">&amp;</span>[<span class="ident">BigDigit</span>], <span class="ident">b</span>: <span class="kw-2">&amp;</span>[<span class="ident">BigDigit</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BigInt</span> {

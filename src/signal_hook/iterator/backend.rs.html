@@ -519,9 +519,9 @@
 
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="self">self</span>, <span class="ident">c_int</span>};
 
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::exfiltrator::Exfiltrator</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::low_level::pipe</span>::{<span class="self">self</span>, <span class="ident">WakeMethod</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::SigId</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::exfiltrator::Exfiltrator</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::low_level::pipe</span>::{<span class="self">self</span>, <span class="ident">WakeMethod</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::SigId</span>;
 
 <span class="doccomment">/// Maximal signal number we support.</span>
 <span class="kw">const</span> <span class="ident">MAX_SIGNUM</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">128</span>;
@@ -556,7 +556,7 @@
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="kw">let</span> <span class="ident">lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">registered_signal_ids</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
         <span class="kw">for</span> <span class="ident">id</span> <span class="kw">in</span> <span class="ident">lock</span>.<span class="ident">iter</span>().<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">s</span>) {
-            <span class="kw">crate</span><span class="ident">::low_level::unregister</span>(<span class="ident">id</span>);
+            <span class="ident"><span class="kw">crate</span>::low_level::unregister</span>(<span class="ident">id</span>);
         }
     }
 }

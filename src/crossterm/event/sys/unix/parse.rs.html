@@ -785,7 +785,7 @@
     <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>,
 };
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span><span class="ident">::InternalEvent</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::InternalEvent</span>;
 
 <span class="comment">// Event parsing</span>
 <span class="comment">//</span>
@@ -855,7 +855,7 @@
         <span class="comment">// newlines as input is because the terminal converts \r into \n for us. When we</span>
         <span class="comment">// enter raw mode, we disable that, so \n no longer has any meaning - it&#39;s better to</span>
         <span class="comment">// use Ctrl+J. Waiting to handle it here means it gets picked up later</span>
-        <span class="string">b&#39;\n&#39;</span> <span class="kw">if</span> <span class="op">!</span><span class="kw">crate</span><span class="ident">::terminal::sys::is_raw_mode_enabled</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(
+        <span class="string">b&#39;\n&#39;</span> <span class="kw">if</span> <span class="op">!</span><span class="ident"><span class="kw">crate</span>::terminal::sys::is_raw_mode_enabled</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(
             <span class="ident">Event::Key</span>(<span class="ident">KeyCode::Enter</span>.<span class="ident">into</span>()),
         ))),
         <span class="string">b&#39;\t&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyCode::Tab</span>.<span class="ident">into</span>())))),
@@ -1246,7 +1246,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::event</span>::{<span class="ident">KeyModifiers</span>, <span class="ident">MouseButton</span>, <span class="ident">MouseEvent</span>};
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::event</span>::{<span class="ident">KeyModifiers</span>, <span class="ident">MouseButton</span>, <span class="ident">MouseEvent</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 

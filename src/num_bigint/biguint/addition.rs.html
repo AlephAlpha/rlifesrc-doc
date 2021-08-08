@@ -254,11 +254,11 @@
 <span id="254">254</span>
 </pre><pre class="rust">
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">u64_digit</span>))]</span>
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::u32_from_u128</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::u32_from_u128</span>;
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">BigUint</span>, <span class="ident">IntDigits</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::big_digit</span>::{<span class="self">self</span>, <span class="ident">BigDigit</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::UsizePromotion</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::big_digit</span>::{<span class="self">self</span>, <span class="ident">BigDigit</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::UsizePromotion</span>;
 
 <span class="kw">use</span> <span class="ident">core::iter::Sum</span>;
 <span class="kw">use</span> <span class="ident">core::ops</span>::{<span class="ident">Add</span>, <span class="ident">AddAssign</span>};
@@ -291,7 +291,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">use_addcarry</span>))]</span>
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="kw">fn</span> <span class="ident">adc</span>(<span class="ident">carry</span>: <span class="ident">u8</span>, <span class="ident">a</span>: <span class="ident">BigDigit</span>, <span class="ident">b</span>: <span class="ident">BigDigit</span>, <span class="ident">out</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">BigDigit</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u8</span> {
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::big_digit::DoubleBigDigit</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::big_digit::DoubleBigDigit</span>;
 
     <span class="kw">let</span> <span class="ident">sum</span> <span class="op">=</span> <span class="ident">DoubleBigDigit::from</span>(<span class="ident">a</span>) <span class="op">+</span> <span class="ident">DoubleBigDigit::from</span>(<span class="ident">b</span>) <span class="op">+</span> <span class="ident">DoubleBigDigit::from</span>(<span class="ident">carry</span>);
     <span class="kw-2">*</span><span class="ident">out</span> <span class="op">=</span> <span class="ident">sum</span> <span class="kw">as</span> <span class="ident">BigDigit</span>;

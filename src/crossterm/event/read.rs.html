@@ -447,11 +447,11 @@
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::vec_deque::VecDeque</span>, <span class="ident">io</span>, <span class="ident">time::Duration</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::source::unix::UnixInternalEventSource</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::source::unix::UnixInternalEventSource</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::source::windows::WindowsEventSource</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::source::windows::WindowsEventSource</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::sys::Waker</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::sys::Waker</span>;
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">filter::Filter</span>, <span class="ident">source::EventSource</span>, <span class="ident">timeout::PollTimeout</span>, <span class="ident">InternalEvent</span>, <span class="prelude-ty">Result</span>};
 <span class="doccomment">/// Can be used to read `InternalEvent`s.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">InternalEventReader</span> {
@@ -575,10 +575,10 @@
     <span class="kw">use</span> <span class="ident">std::io</span>;
     <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::VecDeque</span>, <span class="ident">time::Duration</span>};
 
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::ErrorKind</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ErrorKind</span>;
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span><span class="ident">::filter::CursorPositionFilter</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::filter::CursorPositionFilter</span>;
     <span class="kw">use</span> <span class="kw">super</span>::{
         <span class="kw">super</span>::{<span class="ident">filter::InternalEventFilter</span>, <span class="ident">Event</span>},
         <span class="ident">EventSource</span>, <span class="ident">InternalEvent</span>, <span class="ident">InternalEventReader</span>,
@@ -884,7 +884,7 @@
         }
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
-        <span class="kw">fn</span> <span class="ident">waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">super</span>::<span class="kw">super</span><span class="ident">::sys::Waker</span> {
+        <span class="kw">fn</span> <span class="ident">waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::sys::Waker</span> {
             <span class="macro">unimplemented!</span>();
         }
     }

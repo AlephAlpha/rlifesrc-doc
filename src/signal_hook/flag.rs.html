@@ -518,14 +518,14 @@
     <span class="kw">use</span> <span class="ident">std::time</span>::{<span class="ident">Duration</span>, <span class="ident">Instant</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::consts::signal</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::consts::signal</span>::<span class="kw-2">*</span>;
 
     <span class="kw">fn</span> <span class="ident">self_signal</span>() {
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
         <span class="kw">const</span> <span class="ident">SIG</span>: <span class="ident">c_int</span> <span class="op">=</span> <span class="ident">SIGUSR1</span>;
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
         <span class="kw">const</span> <span class="ident">SIG</span>: <span class="ident">c_int</span> <span class="op">=</span> <span class="ident">SIGTERM</span>;
-        <span class="kw">crate</span><span class="ident">::low_level::raise</span>(<span class="ident">SIG</span>).<span class="ident">unwrap</span>();
+        <span class="ident"><span class="kw">crate</span>::low_level::raise</span>(<span class="ident">SIG</span>).<span class="ident">unwrap</span>();
     }
 
     <span class="kw">fn</span> <span class="ident">wait_flag</span>(<span class="ident">flag</span>: <span class="kw-2">&amp;</span><span class="ident">AtomicBool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
@@ -551,11 +551,11 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
         <span class="kw">let</span> <span class="ident">signal</span> <span class="op">=</span> <span class="ident">register</span>(<span class="ident">SIGUSR1</span>, <span class="ident">Arc::clone</span>(<span class="kw-2">&amp;</span><span class="ident">flag</span>)).<span class="ident">unwrap</span>();
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-        <span class="kw">let</span> <span class="ident">signal</span> <span class="op">=</span> <span class="ident">register</span>(<span class="kw">crate</span><span class="ident">::SIGTERM</span>, <span class="ident">Arc::clone</span>(<span class="kw-2">&amp;</span><span class="ident">flag</span>)).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">signal</span> <span class="op">=</span> <span class="ident">register</span>(<span class="ident"><span class="kw">crate</span>::SIGTERM</span>, <span class="ident">Arc::clone</span>(<span class="kw-2">&amp;</span><span class="ident">flag</span>)).<span class="ident">unwrap</span>();
         <span class="ident">self_signal</span>();
         <span class="macro">assert!</span>(<span class="ident">wait_flag</span>(<span class="kw-2">&amp;</span><span class="ident">flag</span>));
         <span class="comment">// But stops working after it is unregistered.</span>
-        <span class="macro">assert!</span>(<span class="kw">crate</span><span class="ident">::low_level::unregister</span>(<span class="ident">signal</span>));
+        <span class="macro">assert!</span>(<span class="ident"><span class="kw">crate</span>::low_level::unregister</span>(<span class="ident">signal</span>));
         <span class="ident">flag</span>.<span class="ident">store</span>(<span class="bool-val">false</span>, <span class="ident">Ordering::Relaxed</span>);
         <span class="ident">self_signal</span>();
         <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">wait_flag</span>(<span class="kw-2">&amp;</span><span class="ident">flag</span>));

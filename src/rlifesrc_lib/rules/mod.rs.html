@@ -117,7 +117,7 @@
 <span class="kw">use</span> <span class="ident">typebool::Bool</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cells::ALIVE</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cells::ALIVE</span>;
 
 <span class="doccomment">/// A cellular automaton rule.</span>
 <span class="doccomment">///</span>
@@ -164,7 +164,7 @@
     <span class="doccomment">/// Generates a neighborhood descriptor which says that all neighboring</span>
     <span class="doccomment">/// cells have states `state`, and the successor has state `succ_state`.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Desc</span>;
+    <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Desc</span>;
 
     <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor</span>
     <span class="doccomment">/// when the state of one cell is changed.</span>

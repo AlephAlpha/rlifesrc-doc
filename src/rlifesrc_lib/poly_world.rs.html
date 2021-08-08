@@ -178,7 +178,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::Error</span>, <span class="ident">save::WorldSer</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::cells::ALIVE</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cells::ALIVE</span>;
 
 <span class="doccomment">/// A polymorphic [`World`].</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
@@ -199,9 +199,9 @@
 }
 
 <span class="macro">macro_rules!</span> <span class="ident">dispatch</span> {
-    (<span class="macro-nonterminal">$</span><span class="self">self</span>: <span class="macro-nonterminal">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>: <span class="ident">ident</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>: <span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="self">self</span> {
-            <span class="macro-nonterminal">PolyWorld::Life</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>: <span class="ident">ident</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>: <span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span> {
+            <span class="ident">PolyWorld::Life</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
             <span class="ident">PolyWorld::LifeGen</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
             <span class="ident">PolyWorld::NtLife</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
             <span class="ident">PolyWorld::NtLifeGen</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,

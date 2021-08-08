@@ -339,7 +339,7 @@
 
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="self">self</span>, <span class="ident">c_int</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::SigId</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::SigId</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">WakeMethod</span> {
@@ -446,7 +446,7 @@
         }
     };
     <span class="kw">let</span> <span class="ident">action</span> <span class="op">=</span> <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="ident">fd</span>.<span class="ident">wake</span>();
-    <span class="kw">unsafe</span> { <span class="kw">super</span><span class="ident">::register</span>(<span class="ident">signal</span>, <span class="ident">action</span>) }
+    <span class="kw">unsafe</span> { <span class="ident"><span class="kw">super</span>::register</span>(<span class="ident">signal</span>, <span class="ident">action</span>) }
 }
 
 <span class="doccomment">/// Registers a write to a self-pipe whenever there&#39;s the signal.</span>
@@ -474,7 +474,7 @@
     <span class="comment">// Note: multiple tests share the SIGUSR1 signal. This is fine, we only need to know the signal</span>
     <span class="comment">// arrives. It&#39;s OK to arrive multiple times, from multiple tests.</span>
     <span class="kw">fn</span> <span class="ident">wakeup</span>() {
-        <span class="kw">crate</span><span class="ident">::low_level::raise</span>(<span class="ident">libc::SIGUSR1</span>).<span class="ident">unwrap</span>();
+        <span class="ident"><span class="kw">crate</span>::low_level::raise</span>(<span class="ident">libc::SIGUSR1</span>).<span class="ident">unwrap</span>();
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

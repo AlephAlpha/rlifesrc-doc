@@ -197,13 +197,13 @@
 <span class="kw">use</span> <span class="ident">std::fmt::Write</span>;
 <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span><span class="ident">::TraitHandler</span>;
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::models</span>::{<span class="ident">FieldAttributeBuilder</span>, <span class="ident">TypeAttributeBuilder</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::TraitHandler</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::models</span>::{<span class="ident">FieldAttributeBuilder</span>, <span class="ident">TypeAttributeBuilder</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::panic</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::syn</span>::{<span class="ident">Data</span>, <span class="ident">DeriveInput</span>, <span class="ident">Fields</span>, <span class="ident">Meta</span>};
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::Trait</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::panic</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::proc_macro2::TokenStream</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::syn</span>::{<span class="ident">Data</span>, <span class="ident">DeriveInput</span>, <span class="ident">Fields</span>, <span class="ident">Meta</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Trait</span>;
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DerefMutEnumHandler</span>;
 
@@ -380,7 +380,7 @@
         <span class="kw">let</span> <span class="ident">deref_mut_impl</span> <span class="op">=</span> <span class="macro">quote!</span> {
             <span class="kw">impl</span> #<span class="ident">impl_generics</span> <span class="ident">core::ops::DerefMut</span> <span class="kw">for</span> #<span class="ident">ident</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
                 <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="ident">::Target</span> {
+                <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
                     #<span class="ident">deref_mut_tokens</span>
                 }
             }

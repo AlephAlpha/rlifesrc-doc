@@ -232,7 +232,7 @@
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
 
-<span class="kw">use</span> <span class="kw">super</span><span class="ident">::error::Result</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::error::Result</span>;
 
 <span class="doccomment">/// An interface for a command that performs an action on the terminal.</span>
 <span class="doccomment">///</span>
@@ -263,7 +263,7 @@
     <span class="doccomment">/// can be found [here](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
     <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="kw">super</span><span class="ident">::ansi_support::supports_ansi</span>()
+        <span class="ident"><span class="kw">super</span>::ansi_support::supports_ansi</span>()
     }
 }
 
