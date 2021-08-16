@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["And","The logical conjunction (intersection) of two `Bool`s."],["Not","The negation of a `Bool`."],["Or","The logical disjunction (union) of two `Bool`s."],["Xor","The exclusive disjunction of two `Bool`s."]]});
