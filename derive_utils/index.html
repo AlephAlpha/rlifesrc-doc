@@ -3,8 +3,7 @@
 <p><a href="macro.quick_derive.html" title="quick_derive!"><code>quick_derive!</code></a> macro make easy to write <a href="https://doc.rust-lang.org/reference/procedural-macros.html#derive-macros"><code>proc_macro_derive</code></a>
 like deriving trait to enum so long as all variants are implemented that trait.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">derive_utils::quick_derive</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">derive_utils::quick_derive</span>;
 <span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
 
 <span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">Iterator</span>)]</span>
@@ -52,20 +51,18 @@ like deriving trait to enum so long as all variants are implemented that trait.<
             ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">std::task::Poll</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span><span class="op">&gt;</span>;
         }
     }
-}</pre></div>
+}</code></pre></div>
 <h3 id="generated-code" class="section-header"><a href="#generated-code">Generated code</a></h3>
 <p>When deriving for enum like the following:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Iterator</span>, <span class="ident">ExactSizeIterator</span>, <span class="ident">Future</span>)]</span>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Iterator</span>, <span class="ident">ExactSizeIterator</span>, <span class="ident">Future</span>)]</span>
 <span class="kw">enum</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> {
     <span class="ident">A</span>(<span class="ident">A</span>),
     <span class="ident">B</span>(<span class="ident">B</span>),
-}</pre></div>
+}</code></pre></div>
 <p>Code like this will be generated:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">enum</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> {
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">enum</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> {
     <span class="ident">A</span>(<span class="ident">A</span>),
     <span class="ident">B</span>(<span class="ident">B</span>),
 }
@@ -120,7 +117,7 @@ like deriving trait to enum so long as all variants are implemented that trait.<
             }
         }
     }
-}</pre></div>
+}</code></pre></div>
 </div></details><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
 <div class="item-table"><div class="item-left module-item"><a class="macro" href="macro.quick_derive.html" title="derive_utils::quick_derive macro">quick_derive</a></div><div class="item-right docblock-short"><p>A macro for making easy to write <code>proc_macro_derive</code> like deriving trait to
 enum so long as all variants are implemented that trait.</p>

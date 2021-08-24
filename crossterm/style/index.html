@@ -19,8 +19,7 @@ platform-specific notes of the following types:</p>
 <p>Command API:</p>
 <p>Using the Command API to color text.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
 
 <span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">execute</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">use</span> <span class="ident">crossterm::style</span>::{<span class="ident">Print</span>, <span class="ident">SetForegroundColor</span>, <span class="ident">SetBackgroundColor</span>, <span class="ident">ResetColor</span>, <span class="ident">Color</span>, <span class="ident">Attribute</span>};
@@ -37,22 +36,20 @@ platform-specific notes of the following types:</p>
         <span class="comment">// Reset to default colors</span>
         <span class="ident">ResetColor</span>
     )
-}</pre></div>
+}</code></pre></div>
 <p>Functions:</p>
 <p>Using functions from <a href="trait.Stylize.html"><code>Stylize</code></a> on a <code>String</code> or <code>&amp;'static str</code> to color
 it.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">crossterm::style::Stylize</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">crossterm::style::Stylize</span>;
 
-<span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="string">&quot;Red foreground color &amp; blue background.&quot;</span>.<span class="ident">red</span>().<span class="ident">on_blue</span>());</pre></div>
+<span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="string">&quot;Red foreground color &amp; blue background.&quot;</span>.<span class="ident">red</span>().<span class="ident">on_blue</span>());</code></pre></div>
 <h3 id="attributes" class="section-header"><a href="#attributes">Attributes</a></h3>
 <p>How to appy terminal attributes to text.</p>
 <p>Command API:</p>
 <p>Using the Command API to set attributes.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
 
 <span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">execute</span>, <span class="prelude-ty">Result</span>, <span class="ident">style::Print</span>};
 <span class="kw">use</span> <span class="ident">crossterm::style</span>::{<span class="ident">SetAttribute</span>, <span class="ident">Attribute</span>};
@@ -66,28 +63,26 @@ it.</p>
         <span class="comment">// Reset all attributes</span>
         <span class="ident">SetAttribute</span>(<span class="ident">Attribute::Reset</span>)
     )
-}</pre></div>
+}</code></pre></div>
 <p>Functions:</p>
 <p>Using <a href="trait.Stylize.html"><code>Stylize</code></a> functions on a <code>String</code> or <code>&amp;'static str</code> to set
 attributes to it.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">crossterm::style::Stylize</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">crossterm::style::Stylize</span>;
 
 <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="string">&quot;Bold&quot;</span>.<span class="ident">bold</span>());
 <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="string">&quot;Underlined&quot;</span>.<span class="ident">underlined</span>());
-<span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="string">&quot;Negative&quot;</span>.<span class="ident">negative</span>());</pre></div>
+<span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="string">&quot;Negative&quot;</span>.<span class="ident">negative</span>());</code></pre></div>
 <p>Displayable:</p>
 <p><a href="enum.Attribute.html"><code>Attribute</code></a> implements <a href="https://doc.rust-lang.org/beta/std/fmt/trait.Display.html">Display</a> and therefore it can be formatted like:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">crossterm::style::Attribute</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">crossterm::style::Attribute</span>;
 
 <span class="macro">println!</span>(
     <span class="string">&quot;{} Underlined {} No Underline&quot;</span>,
     <span class="ident">Attribute::Underlined</span>,
     <span class="ident">Attribute::NoUnderline</span>
-);</pre></div>
+);</code></pre></div>
 </div></details><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
 <div class="item-table"><div class="item-left module-item"><a class="struct" href="struct.Attributes.html" title="crossterm::style::Attributes struct">Attributes</a></div><div class="item-right docblock-short"><p>a bitset for all possible attributes</p>
 </div><div class="item-left module-item"><a class="struct" href="struct.Colors.html" title="crossterm::style::Colors struct">Colors</a></div><div class="item-right docblock-short"><p>Represents, optionally, a foreground and/or a background color.</p>
