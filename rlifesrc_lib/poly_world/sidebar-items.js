@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["PolyWorld","A polymorphic [`World`]."]]});
+initSidebarItems({"enum":[["PolyWorld","A polymorphic [`World`]."]],"macro":[["dispatch",""]]});
