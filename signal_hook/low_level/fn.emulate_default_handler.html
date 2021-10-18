@@ -6,7 +6,7 @@ async-signal-safe.</p>
 your system has a signal that is not known to this function. In such case an error is returned
 (equivalent of <code>EINVAL</code>).</p>
 <p>See also the <a href="../flag/fn.register_conditional_default.html" title="crate::flag::register_conditional_default"><code>register_conditional_default</code></a>.</p>
-<h1 id="warning" class="section-header"><a href="#warning">Warning</a></h1>
+<h2 id="warning" class="section-header"><a href="#warning">Warning</a></h2>
 <p>There’s a short race condition in case of signals that terminate (either with or without a core
 dump). The emulation first resets the signal handler back to default (as the application is
 going to end, it’s not a problem) and invokes it. But if some other thread installs a signal

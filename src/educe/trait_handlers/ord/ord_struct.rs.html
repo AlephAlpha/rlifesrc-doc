@@ -197,21 +197,21 @@
                 <span class="kw">let</span> <span class="ident">compare_method</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">compare_method</span>;
 
                 <span class="kw">match</span> <span class="ident">compare_trait</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">compare_trait</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">compare_trait</span>) =&gt; {
                         <span class="kw">let</span> <span class="ident">compare_method</span> <span class="op">=</span> <span class="ident">compare_method</span>.<span class="ident">unwrap</span>();
 
                         <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;match {compare_trait}::{compare_method}(&amp;self.{field_name}, &amp;other.{field_name}) {{ core::cmp::Ordering::Equal =&gt; (), core::cmp::Ordering::Greater =&gt; {{ return core::cmp::Ordering::Greater; }}, core::cmp::Ordering::Less =&gt; {{ return core::cmp::Ordering::Less; }} }}&quot;</span>, <span class="ident">compare_trait</span> <span class="op">=</span> <span class="ident">compare_trait</span>, <span class="ident">compare_method</span> <span class="op">=</span> <span class="ident">compare_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>);
 
                         <span class="ident">comparer_tokens</span>.<span class="ident">extend</span>(<span class="ident">TokenStream::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>).<span class="ident">unwrap</span>());
                     }
-                    <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">None</span> =&gt; {
                         <span class="kw">match</span> <span class="ident">compare_method</span> {
-                            <span class="prelude-val">Some</span>(<span class="ident">compare_method</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="prelude-val">Some</span>(<span class="ident">compare_method</span>) =&gt; {
                                 <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;match {compare_method}(&amp;self.{field_name}, &amp;other.{field_name}) {{ core::cmp::Ordering::Equal =&gt; (), core::cmp::Ordering::Greater =&gt; {{ return core::cmp::Ordering::Greater; }}, core::cmp::Ordering::Less =&gt; {{ return core::cmp::Ordering::Less; }} }}&quot;</span>, <span class="ident">compare_method</span> <span class="op">=</span> <span class="ident">compare_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>);
 
                                 <span class="ident">comparer_tokens</span>.<span class="ident">extend</span>(<span class="ident">TokenStream::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>).<span class="ident">unwrap</span>());
                             }
-                            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                            <span class="prelude-val">None</span> =&gt; {
                                 <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;match core::cmp::Ord::cmp(&amp;self.{field_name}, &amp;other.{field_name}) {{ core::cmp::Ordering::Equal =&gt; (), core::cmp::Ordering::Greater =&gt; {{ return core::cmp::Ordering::Greater; }}, core::cmp::Ordering::Less =&gt; {{ return core::cmp::Ordering::Less; }} }}&quot;</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>);
 
                                 <span class="ident">comparer_tokens</span>.<span class="ident">extend</span>(<span class="ident">TokenStream::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>).<span class="ident">unwrap</span>());
@@ -237,7 +237,7 @@
         <span class="kw">let</span> <span class="ident">compare_impl</span> <span class="op">=</span> <span class="macro">quote!</span> {
             <span class="kw">impl</span> #<span class="ident">impl_generics</span> <span class="ident">core::cmp::Ord</span> <span class="kw">for</span> #<span class="ident">ident</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
                 <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="kw">fn</span> <span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">core::cmp::Ordering</span> {
+                <span class="kw">fn</span> <span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="ident">core::cmp::Ordering</span> {
                     #<span class="ident">comparer_tokens</span>
 
                     <span class="ident">core::cmp::Ordering::Equal</span>

@@ -3233,20 +3233,20 @@ There is a lot of work to be done. Unimplemented traits are listed below:
 <span class="kw">use</span> <span class="ident">support_traits::Trait</span>;
 <span class="kw">use</span> <span class="ident">trait_handlers::TraitHandler</span>;
 
-<span class="kw">fn</span> <span class="ident">derive_input_handler</span>(<span class="ident">ast</span>: <span class="ident">DeriveInput</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
+<span class="kw">fn</span> <span class="ident">derive_input_handler</span>(<span class="ident">ast</span>: <span class="ident">DeriveInput</span>) -&gt; <span class="ident">TokenStream</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tokens</span> <span class="op">=</span> <span class="ident">TokenStream::new</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">trait_meta_map</span>: <span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">Trait</span>, <span class="ident">Meta</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">BTreeMap::new</span>();
 
     <span class="kw">for</span> <span class="ident">attr</span> <span class="kw">in</span> <span class="ident">ast</span>.<span class="ident">attrs</span>.<span class="ident">iter</span>() {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attr_meta_name</span>) <span class="op">=</span> <span class="ident">attr</span>.<span class="ident">path</span>.<span class="ident">get_ident</span>() {
-            <span class="kw">if</span> <span class="ident">attr_meta_name</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;educe&quot;</span> {
+            <span class="kw">if</span> <span class="ident">attr_meta_name</span> <span class="op">==</span> <span class="string">&quot;educe&quot;</span> {
                 <span class="kw">let</span> <span class="ident">attr_meta</span> <span class="op">=</span> <span class="ident">attr</span>.<span class="ident">parse_meta</span>().<span class="ident">unwrap</span>();
 
                 <span class="kw">match</span> <span class="ident">attr_meta</span> {
-                    <span class="ident">Meta::List</span>(<span class="ident">list</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
                         <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span> {
                             <span class="kw">match</span> <span class="ident">p</span> {
-                                <span class="ident">NestedMeta::Meta</span>(<span class="ident">meta</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="ident">NestedMeta::Meta</span>(<span class="ident">meta</span>) =&gt; {
                                     <span class="kw">let</span> <span class="ident">meta_name</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">path</span>().<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>();
 
                                     <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Trait::from_str</span>(<span class="ident">meta_name</span>);
@@ -3257,13 +3257,13 @@ There is a lot of work to be done. Unimplemented traits are listed below:
 
                                     <span class="ident">trait_meta_map</span>.<span class="ident">insert</span>(<span class="ident">t</span>, <span class="ident">meta</span>);
                                 }
-                                <span class="ident">NestedMeta::Lit</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="ident">NestedMeta::Lit</span>(<span class="kw">_</span>) =&gt; {
                                     <span class="ident">panic::educe_format_incorrect</span>();
                                 }
                             }
                         }
                     }
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">_</span> =&gt; {
                         <span class="ident">panic::educe_format_incorrect</span>();
                     }
                 }
@@ -3393,7 +3393,7 @@ There is a lot of work to be done. Unimplemented traits are listed below:
 }
 
 <span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">Educe</span>, <span class="ident">attributes</span>(<span class="ident">educe</span>))]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">educe_derive</span>(<span class="ident">input</span>: <span class="ident">proc_macro::TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">proc_macro::TokenStream</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">educe_derive</span>(<span class="ident">input</span>: <span class="ident">proc_macro::TokenStream</span>) -&gt; <span class="ident">proc_macro::TokenStream</span> {
     <span class="ident">derive_input_handler</span>(<span class="ident">syn::parse</span>(<span class="ident">input</span>).<span class="ident">unwrap</span>()).<span class="ident">into</span>()
 }
 </code></pre></div>

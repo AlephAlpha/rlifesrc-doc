@@ -68,7 +68,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">RegexCode</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">lit_str</span>: <span class="ident">LitStr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">lit_str</span>: <span class="ident">LitStr</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">regex_string</span> <span class="op">=</span> <span class="ident">lit_str</span>.<span class="ident">value</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">case_insensitive</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">multi_line</span> <span class="op">=</span> <span class="bool-val">false</span>;
@@ -77,12 +77,12 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">swap_greed</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="kw">for</span> <span class="ident">ch</span> <span class="kw">in</span> <span class="ident">lit_str</span>.<span class="ident">suffix</span>().<span class="ident">chars</span>() {
             <span class="kw">match</span> <span class="ident">ch</span> {
-                <span class="string">&#39;i&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">case_insensitive</span> <span class="op">=</span> <span class="bool-val">true</span>,
-                <span class="string">&#39;m&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">multi_line</span> <span class="op">=</span> <span class="bool-val">true</span>,
-                <span class="string">&#39;s&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">dot_matches_new_line</span> <span class="op">=</span> <span class="bool-val">true</span>,
-                <span class="string">&#39;x&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ignore_whitespace</span> <span class="op">=</span> <span class="bool-val">true</span>,
-                <span class="string">&#39;U&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">swap_greed</span> <span class="op">=</span> <span class="bool-val">true</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="string">&#39;i&#39;</span> =&gt; <span class="ident">case_insensitive</span> <span class="op">=</span> <span class="bool-val">true</span>,
+                <span class="string">&#39;m&#39;</span> =&gt; <span class="ident">multi_line</span> <span class="op">=</span> <span class="bool-val">true</span>,
+                <span class="string">&#39;s&#39;</span> =&gt; <span class="ident">dot_matches_new_line</span> <span class="op">=</span> <span class="bool-val">true</span>,
+                <span class="string">&#39;x&#39;</span> =&gt; <span class="ident">ignore_whitespace</span> <span class="op">=</span> <span class="bool-val">true</span>,
+                <span class="string">&#39;U&#39;</span> =&gt; <span class="ident">swap_greed</span> <span class="op">=</span> <span class="bool-val">true</span>,
+                <span class="kw">_</span> =&gt; {
                     <span class="macro">panic!</span>(<span class="string">&quot;unrecognized regex flag {:?}&quot;</span>, <span class="ident">ch</span>);
                 }
             };

@@ -561,7 +561,7 @@
     <span class="doccomment">/// Currently, 3/4 bit color values aren&#39;t supported so return `None`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// See also: [`Colored::parse_ansi`](crate::style::Colored::parse_ansi).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_ansi</span>(<span class="ident">ansi</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_ansi</span>(<span class="ident">ansi</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident"><span class="self">Self</span>::parse_ansi_iter</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ansi</span>.<span class="ident">split</span>(<span class="string">&#39;;&#39;</span>))
     }
 
@@ -569,10 +569,10 @@
     <span class="doccomment">/// &#39;;&#39;). It&#39;s a separate function so it can be used by both Color::parse_ansi and</span>
     <span class="doccomment">/// colored::parse_ansi.</span>
     <span class="doccomment">/// Tested in Colored tests.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_ansi_iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_ansi_iter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">color</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">parse_next_u8</span>(<span class="ident">values</span>)<span class="question-mark">?</span> {
             <span class="comment">// 8 bit colors: `5;&lt;n&gt;`</span>
-            <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="number">5</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">parse_next_u8</span>(<span class="ident">values</span>)<span class="question-mark">?</span>;
 
                 <span class="kw">use</span> <span class="ident">Color</span>::<span class="kw-2">*</span>;
@@ -600,13 +600,13 @@
             }
 
             <span class="comment">// 24 bit colors: `2;&lt;r&gt;;&lt;g&gt;;&lt;b&gt;`</span>
-            <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Color::Rgb</span> {
+            <span class="number">2</span> =&gt; <span class="ident">Color::Rgb</span> {
                 <span class="ident">r</span>: <span class="ident">parse_next_u8</span>(<span class="ident">values</span>)<span class="question-mark">?</span>,
                 <span class="ident">g</span>: <span class="ident">parse_next_u8</span>(<span class="ident">values</span>)<span class="question-mark">?</span>,
                 <span class="ident">b</span>: <span class="ident">parse_next_u8</span>(<span class="ident">values</span>)<span class="question-mark">?</span>,
             },
 
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>,
+            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
         };
         <span class="comment">// If there&#39;s another value, it&#39;s unexpected so return None.</span>
         <span class="kw">if</span> <span class="ident">values</span>.<span class="ident">next</span>().<span class="ident">is_some</span>() {
@@ -620,27 +620,27 @@
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> ();
 
     <span class="doccomment">/// Try to create a `Color` from the string representation. This returns an error if the string does not match.</span>
-    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">src</span> <span class="op">=</span> <span class="ident">src</span>.<span class="ident">to_lowercase</span>();
 
         <span class="kw">match</span> <span class="ident">src</span>.<span class="ident">as_ref</span>() {
-            <span class="string">&quot;black&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Black</span>),
-            <span class="string">&quot;dark_grey&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkGrey</span>),
-            <span class="string">&quot;red&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Red</span>),
-            <span class="string">&quot;dark_red&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkRed</span>),
-            <span class="string">&quot;green&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Green</span>),
-            <span class="string">&quot;dark_green&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkGreen</span>),
-            <span class="string">&quot;yellow&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Yellow</span>),
-            <span class="string">&quot;dark_yellow&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkYellow</span>),
-            <span class="string">&quot;blue&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Blue</span>),
-            <span class="string">&quot;dark_blue&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkBlue</span>),
-            <span class="string">&quot;magenta&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Magenta</span>),
-            <span class="string">&quot;dark_magenta&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkMagenta</span>),
-            <span class="string">&quot;cyan&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Cyan</span>),
-            <span class="string">&quot;dark_cyan&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkCyan</span>),
-            <span class="string">&quot;white&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::White</span>),
-            <span class="string">&quot;grey&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Color::Grey</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(()),
+            <span class="string">&quot;black&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Black</span>),
+            <span class="string">&quot;dark_grey&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkGrey</span>),
+            <span class="string">&quot;red&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Red</span>),
+            <span class="string">&quot;dark_red&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkRed</span>),
+            <span class="string">&quot;green&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Green</span>),
+            <span class="string">&quot;dark_green&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkGreen</span>),
+            <span class="string">&quot;yellow&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Yellow</span>),
+            <span class="string">&quot;dark_yellow&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkYellow</span>),
+            <span class="string">&quot;blue&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Blue</span>),
+            <span class="string">&quot;dark_blue&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkBlue</span>),
+            <span class="string">&quot;magenta&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Magenta</span>),
+            <span class="string">&quot;dark_magenta&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkMagenta</span>),
+            <span class="string">&quot;cyan&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Cyan</span>),
+            <span class="string">&quot;dark_cyan&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::DarkCyan</span>),
+            <span class="string">&quot;white&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::White</span>),
+            <span class="string">&quot;grey&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">Color::Grey</span>),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(()),
         }
     }
 }
@@ -654,14 +654,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * Returns `Color::White` in case of an unknown color.</span>
     <span class="doccomment">/// * Does not return `Err` and you can safely unwrap.</span>
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Color::try_from</span>(<span class="ident">src</span>).<span class="ident">unwrap_or</span>(<span class="ident">Color::White</span>))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">u8</span>, <span class="ident">u8</span>)<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
     <span class="doccomment">/// Creates a &#39;Color&#39; from the tuple representation.</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: (<span class="ident">u8</span>, <span class="ident">u8</span>, <span class="ident">u8</span>)) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: (<span class="ident">u8</span>, <span class="ident">u8</span>, <span class="ident">u8</span>)) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> (<span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span>) <span class="op">=</span> <span class="ident">val</span>;
         <span class="ident"><span class="self">Self</span>::Rgb</span> { <span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span> }
     }
@@ -669,19 +669,19 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">serde::de::Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Color</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">D::Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">D::Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">D</span>: <span class="ident">serde::de::Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
     {
         <span class="kw">struct</span> <span class="ident">ColorVisitor</span>;
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">serde::de::Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ColorVisitor</span> {
             <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">Color</span>;
-            <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+            <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
                 <span class="ident">formatter</span>.<span class="ident">write_str</span>(
                     <span class="string">&quot;`black`, `blue`, `dark_blue`, `cyan`, `dark_cyan`, `green`, `dark_green`, `grey`, `dark_grey`, `magenta`, `dark_magenta`, `red`, `dark_red`, `white`, `yellow`, `dark_yellow`, `u8`, or `3 u8 array`&quot;</span>,
                 )
             }
-            <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">E</span><span class="op">&gt;</span>
+            <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">E</span><span class="op">&gt;</span>
             <span class="kw">where</span>
                 <span class="ident">E</span>: <span class="ident">serde::de::Error</span>,
             {
@@ -692,7 +692,7 @@
                 }
             }
 
-            <span class="kw">fn</span> <span class="ident">visit_u64</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">E</span><span class="op">&gt;</span>
+            <span class="kw">fn</span> <span class="ident">visit_u64</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">E</span><span class="op">&gt;</span>
             <span class="kw">where</span>
                 <span class="ident">E</span>: <span class="ident">serde::de::Error</span>,
             {
@@ -705,7 +705,7 @@
                 <span class="prelude-val">Ok</span>(<span class="ident">Color::AnsiValue</span>(<span class="ident">value</span> <span class="kw">as</span> <span class="ident">u8</span>))
             }
 
-            <span class="kw">fn</span> <span class="ident">visit_seq</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">seq</span>: <span class="ident">M</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">M::Error</span><span class="op">&gt;</span>
+            <span class="kw">fn</span> <span class="ident">visit_seq</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">seq</span>: <span class="ident">M</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Color</span>, <span class="ident">M::Error</span><span class="op">&gt;</span>
             <span class="kw">where</span>
                 <span class="ident">M</span>: <span class="ident">serde::de::SeqAccess</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
             {
@@ -720,11 +720,11 @@
                 }
                 <span class="kw">loop</span> {
                     <span class="kw">match</span> <span class="ident">seq</span>.<span class="ident">next_element</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>() {
-                        <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">x</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">x</span>)) =&gt; {
                             <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">x</span>);
                         }
-                        <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
-                        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) =&gt; <span class="kw">break</span>,
+                        <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>);
                         }
                     }

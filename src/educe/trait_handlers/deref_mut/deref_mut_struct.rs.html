@@ -154,7 +154,7 @@
             }
 
             <span class="kw">if</span> <span class="ident">deref_mut_tokens</span>.<span class="ident">is_empty</span>() {
-                <span class="kw">if</span> <span class="ident">counter</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+                <span class="kw">if</span> <span class="ident">counter</span> <span class="op">==</span> <span class="number">1</span> {
                     <span class="kw">let</span> <span class="ident">field</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">fields</span>.<span class="ident">iter</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>();
 
                     <span class="kw">let</span> <span class="ident">field_name</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ident</span>) <span class="op">=</span> <span class="ident">field</span>.<span class="ident">ident</span>.<span class="ident">as_ref</span>() {
@@ -183,7 +183,7 @@
         <span class="kw">let</span> <span class="ident">deref_mut_impl</span> <span class="op">=</span> <span class="macro">quote!</span> {
             <span class="kw">impl</span> #<span class="ident">impl_generics</span> <span class="ident">core::ops::DerefMut</span> <span class="kw">for</span> #<span class="ident">ident</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
                 <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
+                <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident"><span class="self">Self</span>::Target</span> {
                     #<span class="ident">deref_mut_tokens</span>
                 }
             }

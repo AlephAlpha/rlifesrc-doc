@@ -648,14 +648,14 @@
 <span class="doccomment">/// This needs to be static because there can be one event reader.</span>
 <span class="kw">static</span> <span class="ident">INTERNAL_EVENT_READER</span>: <span class="ident">Mutex</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEventReader</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">parking_lot::const_mutex</span>(<span class="prelude-val">None</span>);
 
-<span class="kw">fn</span> <span class="ident">lock_internal_event_reader</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MappedMutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">InternalEventReader</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">lock_internal_event_reader</span>() -&gt; <span class="ident">MappedMutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">InternalEventReader</span><span class="op">&gt;</span> {
     <span class="ident">MutexGuard::map</span>(<span class="ident">INTERNAL_EVENT_READER</span>.<span class="ident">lock</span>(), <span class="op">|</span><span class="ident">reader</span><span class="op">|</span> {
         <span class="ident">reader</span>.<span class="ident">get_or_insert_with</span>(<span class="ident">InternalEventReader::default</span>)
     })
 }
 <span class="kw">fn</span> <span class="ident">try_lock_internal_event_reader_for</span>(
     <span class="ident">duration</span>: <span class="ident">Duration</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MappedMutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">InternalEventReader</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MappedMutexGuard</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">InternalEventReader</span><span class="op">&gt;</span><span class="op">&gt;</span> {
     <span class="prelude-val">Some</span>(<span class="ident">MutexGuard::map</span>(
         <span class="ident">INTERNAL_EVENT_READER</span>.<span class="ident">try_lock_for</span>(<span class="ident">duration</span>)<span class="question-mark">?</span>,
         <span class="op">|</span><span class="ident">reader</span><span class="op">|</span> <span class="ident">reader</span>.<span class="ident">get_or_insert_with</span>(<span class="ident">InternalEventReader::default</span>),
@@ -702,7 +702,7 @@
 <span class="doccomment">///     poll(Duration::from_millis(100))</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll</span>(<span class="ident">timeout</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">poll</span>(<span class="ident">timeout</span>: <span class="ident">Duration</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
     <span class="ident">poll_internal</span>(<span class="prelude-val">Some</span>(<span class="ident">timeout</span>), <span class="kw-2">&amp;</span><span class="ident">EventFilter</span>)
 }
 
@@ -745,16 +745,16 @@
 <span class="doccomment">///     }</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">read_internal</span>(<span class="kw-2">&amp;</span><span class="ident">EventFilter</span>)<span class="question-mark">?</span> {
-        <span class="ident">InternalEvent::Event</span>(<span class="ident">event</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">event</span>),
+        <span class="ident">InternalEvent::Event</span>(<span class="ident">event</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">event</span>),
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+        <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
     }
 }
 
 <span class="doccomment">/// Polls to check if there are any `InternalEvent`s that can be read within the given duration.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">poll_internal</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>, <span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">poll_internal</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>, <span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Filter</span>,
 {
@@ -772,7 +772,7 @@
 }
 
 <span class="doccomment">/// Reads a single `InternalEvent`.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">read_internal</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">read_internal</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">F</span>: <span class="ident">Filter</span>,
 {
@@ -787,7 +787,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnableMouseCapture</span>;
 
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">EnableMouseCapture</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="macro">concat!</span>(
             <span class="comment">// Normal tracking: Send mouse X &amp; Y on button press and release</span>
             <span class="macro">csi!</span>(<span class="string">&quot;?1000h&quot;</span>),
@@ -803,12 +803,12 @@
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">sys::windows::enable_mouse_capture</span>()
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="bool-val">false</span>
     }
 }
@@ -820,7 +820,7 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DisableMouseCapture</span>;
 
 <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">DisableMouseCapture</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="macro">concat!</span>(
             <span class="comment">// The inverse commands of EnableMouseCapture, in reverse order.</span>
             <span class="macro">csi!</span>(<span class="string">&quot;?1006l&quot;</span>),
@@ -832,12 +832,12 @@
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">sys::windows::disable_mouse_capture</span>()
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="bool-val">false</span>
     }
 }
@@ -943,17 +943,17 @@
 }
 
 <span class="kw">impl</span> <span class="ident">KeyEvent</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">code</span>: <span class="ident">KeyCode</span>, <span class="ident">modifiers</span>: <span class="ident">KeyModifiers</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">KeyEvent</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">code</span>: <span class="ident">KeyCode</span>, <span class="ident">modifiers</span>: <span class="ident">KeyModifiers</span>) -&gt; <span class="ident">KeyEvent</span> {
         <span class="ident">KeyEvent</span> { <span class="ident">code</span>, <span class="ident">modifiers</span> }
     }
 
     <span class="comment">// modifies the KeyEvent,</span>
     <span class="comment">// so that KeyModifiers::SHIFT is present iff</span>
     <span class="comment">// an uppercase char is present.</span>
-    <span class="kw">fn</span> <span class="ident">normalize_case</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">KeyEvent</span> {
+    <span class="kw">fn</span> <span class="ident">normalize_case</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">KeyEvent</span> {
         <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">code</span> {
-            <span class="ident">KeyCode::Char</span>(<span class="ident">c</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">c</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="self">self</span>,
+            <span class="ident">KeyCode::Char</span>(<span class="ident">c</span>) =&gt; <span class="ident">c</span>,
+            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="self">self</span>,
         };
 
         <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_ascii_uppercase</span>() {
@@ -966,7 +966,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">KeyCode</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">KeyEvent</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">code</span>: <span class="ident">KeyCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">code</span>: <span class="ident">KeyCode</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">KeyEvent</span> {
             <span class="ident">code</span>,
             <span class="ident">modifiers</span>: <span class="ident">KeyModifiers::empty</span>(),
@@ -975,7 +975,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">KeyEvent</span> {
-    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">KeyEvent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">KeyEvent</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">KeyEvent</span> {
             <span class="ident">code</span>: <span class="ident">lhs_code</span>,
             <span class="ident">modifiers</span>: <span class="ident">lhs_modifiers</span>,
@@ -984,7 +984,7 @@
             <span class="ident">code</span>: <span class="ident">rhs_code</span>,
             <span class="ident">modifiers</span>: <span class="ident">rhs_modifiers</span>,
         } <span class="op">=</span> <span class="ident">other</span>.<span class="ident">normalize_case</span>();
-        (<span class="ident">lhs_code</span> <span class="op">=</span><span class="op">=</span> <span class="ident">rhs_code</span>) <span class="op">&amp;&amp;</span> (<span class="ident">lhs_modifiers</span> <span class="op">=</span><span class="op">=</span> <span class="ident">rhs_modifiers</span>)
+        (<span class="ident">lhs_code</span> <span class="op">==</span> <span class="ident">rhs_code</span>) <span class="op">&amp;&amp;</span> (<span class="ident">lhs_modifiers</span> <span class="op">==</span> <span class="ident">rhs_modifiers</span>)
     }
 }
 

@@ -195,7 +195,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// In other words, whether a dead cell would become [`ALIVE`] in the next</span>
     <span class="doccomment">/// generation, if all its neighbors in this generation are dead.</span>
-    <span class="kw">fn</span> <span class="ident">has_b0</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">has_b0</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span>;
 
     <span class="doccomment">/// Whether the rule contains both `B0` and `S8`.</span>
     <span class="doccomment">///</span>
@@ -204,18 +204,18 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// In a rule that contains `S8`, a living cell would stay [`ALIVE`] in the next</span>
     <span class="doccomment">/// generation, if all its neighbors in this generation are alive.</span>
-    <span class="kw">fn</span> <span class="ident">has_b0_s8</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">has_b0_s8</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span>;
 
     <span class="doccomment">/// The number of states.</span>
-    <span class="kw">fn</span> <span class="ident">gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
+    <span class="kw">fn</span> <span class="ident">gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span>;
 
     <span class="doccomment">/// The symmetry of the rule.</span>
-    <span class="kw">fn</span> <span class="ident">symmetry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Symmetry</span>;
+    <span class="kw">fn</span> <span class="ident">symmetry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Symmetry</span>;
 
     <span class="doccomment">/// Generates a neighborhood descriptor which says that all neighboring</span>
     <span class="doccomment">/// cells have states `state`, and the successor has state `succ_state`.</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Desc</span>;
+    <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) -&gt; <span class="ident"><span class="self">Self</span>::Desc</span>;
 
     <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor</span>
     <span class="doccomment">/// when the state of one cell is changed.</span>
@@ -238,7 +238,7 @@
     <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
         <span class="ident">world</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
         <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span>;
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// A helper mod for [sealing](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)</span>

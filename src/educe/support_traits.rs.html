@@ -116,33 +116,33 @@
 
 <span class="kw">impl</span> <span class="ident">Trait</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_str</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">s</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Trait</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_str</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">s</span>: <span class="ident">S</span>) -&gt; <span class="ident">Trait</span> {
         <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">as_ref</span>();
 
         <span class="kw">match</span> <span class="ident">s</span> {
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Debug&quot;</span>)]</span>
-            <span class="string">&quot;Debug&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Debug</span>,
+            <span class="string">&quot;Debug&quot;</span> =&gt; <span class="ident">Trait::Debug</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialEq&quot;</span>)]</span>
-            <span class="string">&quot;PartialEq&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::PartialEq</span>,
+            <span class="string">&quot;PartialEq&quot;</span> =&gt; <span class="ident">Trait::PartialEq</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Eq&quot;</span>)]</span>
-            <span class="string">&quot;Eq&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Eq</span>,
+            <span class="string">&quot;Eq&quot;</span> =&gt; <span class="ident">Trait::Eq</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialOrd&quot;</span>)]</span>
-            <span class="string">&quot;PartialOrd&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::PartialOrd</span>,
+            <span class="string">&quot;PartialOrd&quot;</span> =&gt; <span class="ident">Trait::PartialOrd</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Ord&quot;</span>)]</span>
-            <span class="string">&quot;Ord&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Ord</span>,
+            <span class="string">&quot;Ord&quot;</span> =&gt; <span class="ident">Trait::Ord</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Hash&quot;</span>)]</span>
-            <span class="string">&quot;Hash&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Hash</span>,
+            <span class="string">&quot;Hash&quot;</span> =&gt; <span class="ident">Trait::Hash</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Default&quot;</span>)]</span>
-            <span class="string">&quot;Default&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Default</span>,
+            <span class="string">&quot;Default&quot;</span> =&gt; <span class="ident">Trait::Default</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Clone&quot;</span>)]</span>
-            <span class="string">&quot;Clone&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Clone</span>,
+            <span class="string">&quot;Clone&quot;</span> =&gt; <span class="ident">Trait::Clone</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Copy&quot;</span>)]</span>
-            <span class="string">&quot;Copy&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Copy</span>,
+            <span class="string">&quot;Copy&quot;</span> =&gt; <span class="ident">Trait::Copy</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Deref&quot;</span>)]</span>
-            <span class="string">&quot;Deref&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::Deref</span>,
+            <span class="string">&quot;Deref&quot;</span> =&gt; <span class="ident">Trait::Deref</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;DerefMut&quot;</span>)]</span>
-            <span class="string">&quot;DerefMut&quot;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Trait::DerefMut</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;Unsupported trait `{}`. Available traits are {:?}&quot;</span>, <span class="ident">s</span>, <span class="ident">Trait::variants</span>()),
+            <span class="string">&quot;DerefMut&quot;</span> =&gt; <span class="ident">Trait::DerefMut</span>,
+            <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Unsupported trait `{}`. Available traits are {:?}&quot;</span>, <span class="ident">s</span>, <span class="ident">Trait::variants</span>()),
         }
     }
 }

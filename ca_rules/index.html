@@ -39,7 +39,7 @@ for <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_aut
 </ul>
 <p>Please refer to <a href="http://www.conwaylife.com/wiki/Rulestring">Life Wiki</a> for detailed definitions and
 notations of these rule strings.</p>
-<h1 id="example" class="section-header"><a href="#example">Example:</a></h1>
+<h2 id="example" class="section-header"><a href="#example">Example:</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">ca_rules::ParseLife</span>;
 
 <span class="comment">// Define a struct for your rule:</span>
@@ -53,7 +53,7 @@ notations of these rule strings.</p>
 <span class="comment">// The choice of the trait depends on the type of rules you want to parse.</span>
 <span class="kw">impl</span> <span class="ident">ParseLife</span> <span class="kw">for</span> <span class="ident">Rule</span> {
     <span class="comment">// Implement a function to construct the rule from b and s data:</span>
-    <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
         <span class="ident">Rule</span> { <span class="ident">b</span>, <span class="ident">s</span> }
     }
 }
@@ -68,46 +68,46 @@ notations of these rule strings.</p>
     }
 )</code></pre></div>
 </div></details><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="enum" href="enum.ParseRuleError.html" title="ca_rules::ParseRuleError enum">ParseRuleError</a></div><div class="item-right docblock-short"><p>Errors that can be returned when parsing rule strings.</p>
-</div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="trait" href="trait.ParseHex.html" title="ca_rules::ParseHex trait">ParseHex</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">totalistic hexagonal rules</a>.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseHexGen.html" title="ca_rules::ParseHexGen trait">ParseHexGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">totalistic hexagonal</a>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.ParseRuleError.html" title="ca_rules::ParseRuleError enum">ParseRuleError</a></div><div class="item-right docblock-short"><p>Errors that can be returned when parsing rule strings.</p>
+</div></div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseHex.html" title="ca_rules::ParseHex trait">ParseHex</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">totalistic hexagonal rules</a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseHexGen.html" title="ca_rules::ParseHexGen trait">ParseHexGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">totalistic hexagonal</a>
 <a href="http://www.conwaylife.com/wiki/Generations">Generations</a> rules.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseLife.html" title="ca_rules::ParseLife trait">ParseLife</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton">totalistic life-like rules</a>.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseLifeGen.html" title="ca_rules::ParseLifeGen trait">ParseLifeGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton">totalistic life-like</a>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseLife.html" title="ca_rules::ParseLife trait">ParseLife</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton">totalistic life-like rules</a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseLifeGen.html" title="ca_rules::ParseLifeGen trait">ParseLifeGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton">totalistic life-like</a>
 <a href="http://www.conwaylife.com/wiki/Generations">Generations</a> rules.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNeumann.html" title="ca_rules::ParseNeumann trait">ParseNeumann</a></div><div class="item-right docblock-short"><p>A trait for parsing totalistic rules with
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNeumann.html" title="ca_rules::ParseNeumann trait">ParseNeumann</a></div><div class="item-right docblock-short"><p>A trait for parsing totalistic rules with
 <a href="http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood">von Neumann neighborhood</a>.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNeumannGen.html" title="ca_rules::ParseNeumannGen trait">ParseNeumannGen</a></div><div class="item-right docblock-short"><p>A trait for parsing totalistic <a href="http://www.conwaylife.com/wiki/Generations">Generations</a> rules
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNeumannGen.html" title="ca_rules::ParseNeumannGen trait">ParseNeumannGen</a></div><div class="item-right docblock-short"><p>A trait for parsing totalistic <a href="http://www.conwaylife.com/wiki/Generations">Generations</a> rules
 with <a href="http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood">von Neumann neighborhood</a>.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNtHex.html" title="ca_rules::ParseNtHex trait">ParseNtHex</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">non-totalistic hexagonal rules</a>.
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNtHex.html" title="ca_rules::ParseNtHex trait">ParseNtHex</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">non-totalistic hexagonal rules</a>.
 Both <a href="http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton">isotropic</a>
 and <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton">non-isotropic</a>
 rules are supported.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNtHexGen.html" title="ca_rules::ParseNtHexGen trait">ParseNtHexGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">non-totalistic hexagonal</a>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNtHexGen.html" title="ca_rules::ParseNtHexGen trait">ParseNtHexGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Hexagonal_neighbourhood">non-totalistic hexagonal</a>
 <a href="http://www.conwaylife.com/wiki/Generations">Generations</a> rules.
 Both <a href="http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton">isotropic</a>
 and <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton">non-isotropic</a>
 rules are supported.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNtLife.html" title="ca_rules::ParseNtLife trait">ParseNtLife</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton">non-totalistic life-like rules</a>.
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNtLife.html" title="ca_rules::ParseNtLife trait">ParseNtLife</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton">non-totalistic life-like rules</a>.
 Both <a href="http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton">isotropic</a>
 and <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton">non-isotropic</a>
 rules are supported.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNtLifeGen.html" title="ca_rules::ParseNtLifeGen trait">ParseNtLifeGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton">non-totalistic life-like</a>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNtLifeGen.html" title="ca_rules::ParseNtLifeGen trait">ParseNtLifeGen</a></div><div class="item-right docblock-short"><p>A trait for parsing <a href="http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton">non-totalistic life-like</a>
 <a href="http://www.conwaylife.com/wiki/Generations">Generations</a> rules.
 Both <a href="http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton">isotropic</a>
 and <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton">non-isotropic</a>
 rules are supported.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNtNeumann.html" title="ca_rules::ParseNtNeumann trait">ParseNtNeumann</a></div><div class="item-right docblock-short"><p>A trait for parsing non-totalistic rules with
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNtNeumann.html" title="ca_rules::ParseNtNeumann trait">ParseNtNeumann</a></div><div class="item-right docblock-short"><p>A trait for parsing non-totalistic rules with
 <a href="http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood">von Neumann neighborhood</a>.
 Both <a href="http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton">isotropic</a>
 and <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton">non-isotropic</a>
 rules are supported.</p>
-</div><div class="item-left module-item"><a class="trait" href="trait.ParseNtNeumannGen.html" title="ca_rules::ParseNtNeumannGen trait">ParseNtNeumannGen</a></div><div class="item-right docblock-short"><p>A trait for parsing non-totalistic <a href="http://www.conwaylife.com/wiki/Generations">Generations</a>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.ParseNtNeumannGen.html" title="ca_rules::ParseNtNeumannGen trait">ParseNtNeumannGen</a></div><div class="item-right docblock-short"><p>A trait for parsing non-totalistic <a href="http://www.conwaylife.com/wiki/Generations">Generations</a>
 rules with <a href="http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood">von Neumann neighborhood</a>.
 Both <a href="http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton">isotropic</a>
 and <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton">non-isotropic</a>
 rules are supported.</p>
-</div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
     <script src="../main.js"></script>
 </body></html>

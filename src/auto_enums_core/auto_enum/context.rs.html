@@ -459,7 +459,7 @@
         <span class="ident">root</span>: <span class="ident">bool</span>,
         <span class="kw-2">mut</span> <span class="ident">markers</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
         <span class="ident">diagnostic</span>: <span class="ident">Diagnostic</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">Args</span> { <span class="ident">args</span>, <span class="ident">marker</span> } <span class="op">=</span> <span class="ident">syn::parse2</span>(<span class="ident">args</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">marker</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">marker</span>) <span class="op">=</span> <span class="ident">marker</span> {
@@ -497,12 +497,12 @@
     }
 
     <span class="doccomment">/// Make a new `Context` as a root.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">root</span>(<span class="ident">span</span>: <span class="ident">TokenStream</span>, <span class="ident">args</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">root</span>(<span class="ident">span</span>: <span class="ident">TokenStream</span>, <span class="ident">args</span>: <span class="ident">TokenStream</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">span</span>, <span class="ident">args</span>, <span class="bool-val">true</span>, <span class="ident">Vec::new</span>(), <span class="ident">Diagnostic::default</span>())
     }
 
     <span class="doccomment">/// Make a new `Context` as a child based on a parent context `self`.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">make_child</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">span</span>: <span class="ident">TokenStream</span>, <span class="ident">args</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">make_child</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">span</span>: <span class="ident">TokenStream</span>, <span class="ident">args</span>: <span class="ident">TokenStream</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident"><span class="self">Self</span>::new</span>(
             <span class="ident">span</span>,
             <span class="ident">args</span>,
@@ -525,28 +525,28 @@
 
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">error</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">message</span>: <span class="ident">Error</span>) {
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">diagnostic</span>.<span class="ident">message</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">base</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">base</span>.<span class="ident">combine</span>(<span class="ident">message</span>),
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">diagnostic</span>.<span class="ident">message</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">message</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">base</span>) =&gt; <span class="ident">base</span>.<span class="ident">combine</span>(<span class="ident">message</span>),
+            <span class="prelude-val">None</span> =&gt; <span class="self">self</span>.<span class="ident">diagnostic</span>.<span class="ident">message</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">message</span>),
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">compile_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">compile_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">diagnostic</span>.<span class="ident">message</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">Error::to_compile_error</span>)
     }
 
     <span class="doccomment">/// Returns `true` if one or more errors occurred.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">has_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">has_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">diagnostic</span>.<span class="ident">message</span>.<span class="ident">is_some</span>()
     }
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">visit_last</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">visit_last</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">visit_last_mode</span> <span class="op">!</span><span class="op">=</span> <span class="ident">VisitLastMode::Never</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">visit_mode</span> <span class="op">!</span><span class="op">=</span> <span class="ident">VisitMode::Try</span>
     }
 
     <span class="doccomment">/// Even if this is `false`, there are cases where this `auto_enum` attribute is handled as a</span>
     <span class="doccomment">/// dummy. e.g., If `self.other_attr &amp;&amp; self.builder.variants.is_empty()` is true, this</span>
     <span class="doccomment">/// `auto_enum` attribute is handled as a dummy.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_dummy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_dummy</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="comment">// `auto_enum` attribute with no argument is handled as a dummy.</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;type_analysis&quot;</span>))]</span>
         {
@@ -559,20 +559,20 @@
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;type_analysis&quot;</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">variant_is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">variant_is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">variants</span>.<span class="ident">is_empty</span>()
     }
 
     <span class="doccomment">/// Returns `true` if `expr` is the marker macro that may have effects on the current scope.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_marker_expr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="ident">Expr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_marker_expr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="ident">Expr</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="ident">expr</span> {
-            <span class="ident">Expr::Macro</span>(<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">is_marker_macro</span>(<span class="kw-2">&amp;</span><span class="ident">expr</span>.<span class="ident">mac</span>),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
+            <span class="ident">Expr::Macro</span>(<span class="ident">expr</span>) =&gt; <span class="self">self</span>.<span class="ident">is_marker_macro</span>(<span class="kw-2">&amp;</span><span class="ident">expr</span>.<span class="ident">mac</span>),
+            <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
         }
     }
 
     <span class="doccomment">/// Returns `true` if `mac` is the marker macro that may have effects on the current scope.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_marker_macro</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">mac</span>: <span class="kw-2">&amp;</span><span class="ident">Macro</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_marker_macro</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">mac</span>: <span class="kw-2">&amp;</span><span class="ident">Macro</span>) -&gt; <span class="ident">bool</span> {
         <span class="kw">let</span> <span class="ident">exact</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">is_marker_macro_exact</span>(<span class="ident">mac</span>);
         <span class="kw">if</span> <span class="ident">exact</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">root</span> {
             <span class="kw">return</span> <span class="ident">exact</span>;
@@ -582,17 +582,17 @@
     }
 
     <span class="doccomment">/// Returns `true` if `mac` is the marker macro of the current scope.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_marker_macro_exact</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">mac</span>: <span class="kw-2">&amp;</span><span class="ident">Macro</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_marker_macro_exact</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">mac</span>: <span class="kw-2">&amp;</span><span class="ident">Macro</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident">mac</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">marker</span>)
     }
 
     <span class="doccomment">/// from `&lt;expr&gt;` into `Enum::VariantN(&lt;expr&gt;)`</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">next_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">expr</span>: <span class="ident">Expr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">next_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">expr</span>: <span class="ident">Expr</span>) -&gt; <span class="ident">Expr</span> {
         <span class="self">self</span>.<span class="ident">next_expr_with_attrs</span>(<span class="ident">Vec::new</span>(), <span class="ident">expr</span>)
     }
 
     <span class="doccomment">/// from `&lt;expr&gt;` into `&lt;attrs&gt; Enum::VariantN(&lt;expr&gt;)`</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">next_expr_with_attrs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span>, <span class="ident">expr</span>: <span class="ident">Expr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">next_expr_with_attrs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span>, <span class="ident">expr</span>: <span class="ident">Expr</span>) -&gt; <span class="ident">Expr</span> {
         <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">next_expr</span>(<span class="ident">attrs</span>, <span class="ident">expr</span>)
     }
 
@@ -624,13 +624,13 @@
 
     <span class="comment">// build</span>
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="ident">ItemEnum</span>)) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">err</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="ident">ItemEnum</span>)) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">err</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span>) -&gt; <span class="ident">Error</span> {
             <span class="kw">let</span> (<span class="ident">msg1</span>, <span class="ident">msg2</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">cx</span>.<span class="ident">visit_last_mode</span> {
-                <span class="ident">VisitLastMode::Default</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">VisitLastMode::Default</span> =&gt; {
                     (<span class="string">&quot;branches or marker macros in total&quot;</span>, <span class="string">&quot;branch or marker macro&quot;</span>)
                 }
-                <span class="ident">VisitLastMode::Never</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="string">&quot;marker macros&quot;</span>, <span class="string">&quot;marker macro&quot;</span>),
+                <span class="ident">VisitLastMode::Never</span> =&gt; (<span class="string">&quot;marker macros&quot;</span>, <span class="string">&quot;marker macro&quot;</span>),
             };
 
             <span class="macro">error!</span>(
@@ -645,9 +645,9 @@
         <span class="comment">// As we know that an error will occur, it does not matter if there are not enough variants.</span>
         <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">has_error</span>() {
             <span class="kw">match</span> <span class="self">self</span>.<span class="ident">builder</span>.<span class="ident">variants</span>.<span class="ident">len</span>() {
-                <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>(<span class="self">self</span>)),
-                <span class="number">0</span> <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">other_attr</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>(<span class="self">self</span>)),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+                <span class="number">1</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>(<span class="self">self</span>)),
+                <span class="number">0</span> <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">other_attr</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>(<span class="self">self</span>)),
+                <span class="kw">_</span> =&gt; {}
             }
         }
 
@@ -667,7 +667,7 @@
     <span class="comment">// type_analysis feature</span>
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;type_analysis&quot;</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">collect_impl_trait</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ty</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Type</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">collect_impl_trait</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ty</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Type</span>) -&gt; <span class="ident">bool</span> {
         <span class="ident"><span class="kw">super</span>::type_analysis::collect_impl_trait</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">args</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">traits</span>, <span class="ident">ty</span>)
     }
 }
@@ -686,7 +686,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Parse</span> <span class="kw">for</span> <span class="ident">Args</span> {
-    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">input</span>: <span class="ident">ParseStream</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">input</span>: <span class="ident">ParseStream</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">marker</span> <span class="op">=</span> <span class="prelude-val">None</span>;
         <span class="kw">while</span> <span class="op">!</span><span class="ident">input</span>.<span class="ident">is_empty</span>() {
@@ -720,11 +720,11 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Builder</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">TokenStream</span>) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">ident</span>: <span class="macro">format_ident!</span>(<span class="string">&quot;__Enum{}&quot;</span>, <span class="ident">hash</span>(<span class="ident">input</span>)), <span class="ident">variants</span>: <span class="ident">Vec::new</span>() }
     }
 
-    <span class="kw">fn</span> <span class="ident">next_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span>, <span class="ident">expr</span>: <span class="ident">Expr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Expr</span> {
+    <span class="kw">fn</span> <span class="ident">next_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">attrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span>, <span class="ident">expr</span>: <span class="ident">Expr</span>) -&gt; <span class="ident">Expr</span> {
         <span class="kw">let</span> <span class="ident">variant</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;__Variant{}&quot;</span>, <span class="self">self</span>.<span class="ident">variants</span>.<span class="ident">len</span>());
 
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span>
@@ -735,7 +735,7 @@
         <span class="ident">expr_call</span>(<span class="ident">attrs</span>, <span class="ident">path</span>, <span class="ident">expr</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">args</span>: <span class="kw-2">&amp;</span>[<span class="ident">Path</span>], <span class="ident">traits</span>: <span class="kw-2">&amp;</span>[<span class="ident">Path</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ItemEnum</span> {
+    <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">args</span>: <span class="kw-2">&amp;</span>[<span class="ident">Path</span>], <span class="ident">traits</span>: <span class="kw-2">&amp;</span>[<span class="ident">Path</span>]) -&gt; <span class="ident">ItemEnum</span> {
         <span class="kw">let</span> <span class="ident">derive</span> <span class="op">=</span> <span class="ident">args</span>.<span class="ident">iter</span>().<span class="ident">chain</span>(<span class="ident">traits</span>);
         <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ident</span>;
         <span class="kw">let</span> <span class="ident">ty_generics</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">variants</span>;
@@ -753,7 +753,7 @@
 }
 
 <span class="doccomment">/// Returns the hash value of the input AST.</span>
-<span class="kw">fn</span> <span class="ident">hash</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+<span class="kw">fn</span> <span class="ident">hash</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">TokenStream</span>) -&gt; <span class="ident">u64</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">DefaultHasher::new</span>();
     <span class="ident">hasher</span>.<span class="ident">write</span>(<span class="ident">input</span>.<span class="ident">to_string</span>().<span class="ident">as_bytes</span>());
     <span class="ident">hasher</span>.<span class="ident">finish</span>()

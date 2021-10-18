@@ -250,15 +250,15 @@
 <span class="doccomment">/// The annotation for skipping branch.</span>
 <span class="kw">const</span> <span class="ident">NEVER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;never&quot;</span>;
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TokenStream</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cx</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">Context::root</span>(<span class="ident">input</span>.<span class="ident">clone</span>(), <span class="ident">args</span>) {
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">e</span>.<span class="ident">to_compile_error</span>(),
-        <span class="prelude-val">Ok</span>(<span class="ident">cx</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">cx</span>,
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="kw">return</span> <span class="ident">e</span>.<span class="ident">to_compile_error</span>(),
+        <span class="prelude-val">Ok</span>(<span class="ident">cx</span>) =&gt; <span class="ident">cx</span>,
     };
 
     <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">syn::parse2</span>::<span class="op">&lt;</span><span class="ident">Stmt</span><span class="op">&gt;</span>(<span class="ident">input</span>.<span class="ident">clone</span>()) {
-        <span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">stmt</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">expand_parent_stmt</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stmt</span>).<span class="ident">map</span>(<span class="op">|</span>()<span class="op">|</span> <span class="ident">stmt</span>.<span class="ident">into_token_stream</span>()),
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">syn::parse2</span>::<span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>(<span class="ident">input</span>)
+        <span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">stmt</span>) =&gt; <span class="ident">expand_parent_stmt</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">stmt</span>).<span class="ident">map</span>(<span class="op">|</span>()<span class="op">|</span> <span class="ident">stmt</span>.<span class="ident">into_token_stream</span>()),
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="ident">syn::parse2</span>::<span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>(<span class="ident">input</span>)
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">_e</span><span class="op">|</span> {
                 <span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>);
                 <span class="macro">error!</span>(<span class="ident">cx</span>.<span class="ident">span</span>, <span class="string">&quot;may only be used on expression, statement, or function&quot;</span>)
@@ -269,16 +269,16 @@
     };
 
     <span class="kw">match</span> <span class="ident">res</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>),
-        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">has_error</span>() <span class="op">=</span><span class="op">&gt;</span> {}
-        <span class="prelude-val">Ok</span>(<span class="ident">tokens</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">tokens</span>,
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>),
+        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">has_error</span>() =&gt; {}
+        <span class="prelude-val">Ok</span>(<span class="ident">tokens</span>) =&gt; <span class="kw">return</span> <span class="ident">tokens</span>,
     }
     <span class="ident">cx</span>.<span class="ident">compile_error</span>().<span class="ident">unwrap</span>()
 }
 
-<span class="kw">fn</span> <span class="ident">expand_expr</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Expr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">expand_expr</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Expr</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">expr</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">expr</span> {
-        <span class="ident">Expr::Closure</span>(<span class="ident">ExprClosure</span> { <span class="ident">body</span>, .. }) <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">visit_last</span>() <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Expr::Closure</span>(<span class="ident">ExprClosure</span> { <span class="ident">body</span>, .. }) <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">visit_last</span>() =&gt; {
             <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">visitor::visit_fn</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">body</span>);
             <span class="kw">if</span> <span class="ident">count</span>.<span class="ident">try_</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
                 <span class="ident">cx</span>.<span class="ident">visit_mode</span> <span class="op">=</span> <span class="ident">VisitMode::Try</span>;
@@ -287,7 +287,7 @@
             }
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">body</span>
         }
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">expr</span>,
+        <span class="kw">_</span> =&gt; <span class="ident">expr</span>,
     };
 
     <span class="ident">child_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)<span class="question-mark">?</span>;
@@ -314,19 +314,19 @@
 <span class="comment">// =================================================================================================</span>
 <span class="comment">// Expand statement or expression in which `#[auto_enum]` was directly used.</span>
 
-<span class="kw">fn</span> <span class="ident">expand_parent_stmt</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">stmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stmt</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">expand_parent_stmt</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">stmt</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stmt</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">stmt</span> {
-        <span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">expand_parent_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>, <span class="bool-val">false</span>),
-        <span class="ident">Stmt::Semi</span>(<span class="ident">expr</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">expand_parent_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>, <span class="bool-val">true</span>),
-        <span class="ident">Stmt::Local</span>(<span class="ident">local</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">expand_parent_local</span>(<span class="ident">cx</span>, <span class="ident">local</span>),
-        <span class="ident">Stmt::Item</span>(<span class="ident">Item::Fn</span>(<span class="ident">item</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">expand_parent_item_fn</span>(<span class="ident">cx</span>, <span class="ident">item</span>),
-        <span class="ident">Stmt::Item</span>(<span class="ident">item</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>) =&gt; <span class="ident">expand_parent_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>, <span class="bool-val">false</span>),
+        <span class="ident">Stmt::Semi</span>(<span class="ident">expr</span>, <span class="kw">_</span>) =&gt; <span class="ident">expand_parent_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>, <span class="bool-val">true</span>),
+        <span class="ident">Stmt::Local</span>(<span class="ident">local</span>) =&gt; <span class="ident">expand_parent_local</span>(<span class="ident">cx</span>, <span class="ident">local</span>),
+        <span class="ident">Stmt::Item</span>(<span class="ident">Item::Fn</span>(<span class="ident">item</span>)) =&gt; <span class="ident">expand_parent_item_fn</span>(<span class="ident">cx</span>, <span class="ident">item</span>),
+        <span class="ident">Stmt::Item</span>(<span class="ident">item</span>) =&gt; {
             <span class="prelude-val">Err</span>(<span class="macro">error!</span>(<span class="ident">item</span>, <span class="string">&quot;may only be used on expression, statement, or function&quot;</span>))
         }
     }
 }
 
-<span class="kw">fn</span> <span class="ident">expand_parent_expr</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Expr</span>, <span class="ident">has_semi</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">expand_parent_expr</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Expr</span>, <span class="ident">has_semi</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">has_semi</span> {
         <span class="ident">cx</span>.<span class="ident">visit_last_mode</span> <span class="op">=</span> <span class="ident">VisitLastMode::Never</span>;
     }
@@ -341,7 +341,7 @@
     <span class="ident">cx</span>.<span class="ident">build</span>(<span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="ident">build_expr</span>(<span class="ident">expr</span>, <span class="ident">item</span>))
 }
 
-<span class="kw">fn</span> <span class="ident">expand_parent_local</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">local</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Local</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">expand_parent_local</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">local</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Local</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;type_analysis&quot;</span>)]</span>
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Pat::Type</span>(<span class="ident">pat</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">local</span>.<span class="ident">pat</span> {
@@ -370,19 +370,19 @@
     <span class="ident">cx</span>.<span class="ident">build</span>(<span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="ident">build_expr</span>(<span class="ident">expr</span>, <span class="ident">item</span>))
 }
 
-<span class="kw">fn</span> <span class="ident">expand_parent_item_fn</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">item</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ItemFn</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">expand_parent_item_fn</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>, <span class="ident">item</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ItemFn</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">ItemFn</span> { <span class="ident">sig</span>, <span class="ident">block</span>, .. } <span class="op">=</span> <span class="ident">item</span>;
     <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ReturnType::Type</span>(<span class="kw">_</span>, <span class="ident">ty</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">sig</span>.<span class="ident">output</span> {
         <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">ty</span> {
             <span class="comment">// `return`</span>
-            <span class="ident">Type::ImplTrait</span>(<span class="kw">_</span>) <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">visit_last_mode</span> <span class="op">!</span><span class="op">=</span> <span class="ident">VisitLastMode::Never</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Type::ImplTrait</span>(<span class="kw">_</span>) <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">visit_last_mode</span> <span class="op">!</span><span class="op">=</span> <span class="ident">VisitLastMode::Never</span> =&gt; {
                 <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">visitor::visit_fn</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">block</span>);
                 <span class="ident">cx</span>.<span class="ident">visit_mode</span> <span class="op">=</span> <span class="ident">VisitMode::Return</span>(<span class="ident">count</span>.<span class="ident">return_</span>);
             }
 
             <span class="comment">// `?` operator</span>
             <span class="ident">Type::Path</span>(<span class="ident">TypePath</span> { <span class="ident">qself</span>: <span class="prelude-val">None</span>, <span class="ident">path</span> })
-                <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">visit_last_mode</span> <span class="op">!</span><span class="op">=</span> <span class="ident">VisitLastMode::Never</span> <span class="op">=</span><span class="op">&gt;</span>
+                <span class="kw">if</span> <span class="ident">cx</span>.<span class="ident">visit_last_mode</span> <span class="op">!</span><span class="op">=</span> <span class="ident">VisitLastMode::Never</span> =&gt;
             {
                 <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">segments</span>.<span class="ident">last</span>().<span class="ident">unwrap</span>();
                 <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">ty</span>.<span class="ident">arguments</span> {
@@ -391,7 +391,7 @@
                         <span class="ident">colon2_token</span>: <span class="prelude-val">None</span>,
                         <span class="ident">args</span>,
                         ..
-                    }) <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="ident">ty</span>.<span class="ident">ident</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;Result&quot;</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    }) <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="ident">ty</span>.<span class="ident">ident</span> <span class="op">==</span> <span class="string">&quot;Result&quot;</span> =&gt; {
                         <span class="kw">if</span> <span class="kw">let</span> (
                             <span class="ident">GenericArgument::Type</span>(<span class="kw">_</span>),
                             <span class="ident">GenericArgument::Type</span>(<span class="ident">Type::ImplTrait</span>(<span class="kw">_</span>)),
@@ -403,11 +403,11 @@
                             }
                         }
                     }
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+                    <span class="kw">_</span> =&gt; {}
                 }
             }
 
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+            <span class="kw">_</span> =&gt; {}
         }
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;type_analysis&quot;</span>)]</span>
@@ -420,9 +420,9 @@
     }
 
     <span class="kw">match</span> <span class="ident">item</span>.<span class="ident">block</span>.<span class="ident">stmts</span>.<span class="ident">last_mut</span>() {
-        <span class="prelude-val">Some</span>(<span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">child_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)<span class="question-mark">?</span>,
-        <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {}
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>)) =&gt; <span class="ident">child_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)<span class="question-mark">?</span>,
+        <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {}
+        <span class="prelude-val">None</span> =&gt; {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">error!</span>(
                 <span class="ident">item</span>.<span class="ident">block</span>,
                 <span class="string">&quot;the `#[auto_enum]` attribute is not supported empty functions&quot;</span>

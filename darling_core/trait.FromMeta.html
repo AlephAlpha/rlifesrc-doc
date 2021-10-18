@@ -8,44 +8,44 @@
 <div class="item-spacer"></div>    fn <a href="#method.from_string" class="fnname">from_string</a>(value: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="type" href="error/type.Result.html" title="type darling_core::error::Result">Result</a>&lt;Self&gt; { ... }
 <div class="item-spacer"></div>    fn <a href="#method.from_bool" class="fnname">from_bool</a>(value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; <a class="type" href="error/type.Result.html" title="type darling_core::error::Result">Result</a>&lt;Self&gt; { ... }
 }</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Create an instance from an item in an attribute declaration.</p>
-<h1 id="implementing-frommeta" class="section-header"><a href="#implementing-frommeta">Implementing <code>FromMeta</code></a></h1>
+<h2 id="implementing-frommeta" class="section-header"><a href="#implementing-frommeta">Implementing <code>FromMeta</code></a></h2>
 <ul>
 <li>Do not take a dependency on the <code>ident</code> of the passed-in meta item. The ident will be set by the field name of the containing struct.</li>
 <li>Implement only the <code>from_*</code> methods that you intend to support. The default implementations will return useful errors.</li>
 </ul>
-<h1 id="provided-implementations" class="section-header"><a href="#provided-implementations">Provided Implementations</a></h1><h2 id="bool" class="section-header"><a href="#bool">bool</a></h2>
+<h2 id="provided-implementations" class="section-header"><a href="#provided-implementations">Provided Implementations</a></h2><h3 id="bool" class="section-header"><a href="#bool">bool</a></h3>
 <ul>
 <li>Word with no value specified - becomes <code>true</code>.</li>
 <li>As a boolean literal, e.g. <code>foo = true</code>.</li>
 <li>As a string literal, e.g. <code>foo = &quot;true&quot;</code>.</li>
 </ul>
-<h2 id="string" class="section-header"><a href="#string">String</a></h2>
+<h3 id="string" class="section-header"><a href="#string">String</a></h3>
 <ul>
 <li>As a string literal, e.g. <code>foo = &quot;hello&quot;</code>.</li>
 <li>As a raw string literal, e.g. <code>foo = r#&quot;hello &quot;world&quot;&quot;#</code>.</li>
 </ul>
-<h2 id="number" class="section-header"><a href="#number">Number</a></h2>
+<h3 id="number" class="section-header"><a href="#number">Number</a></h3>
 <ul>
 <li>As a string literal, e.g. <code>foo = &quot;-25&quot;</code>.</li>
 <li>As an unquoted positive value, e.g. <code>foo = 404</code>. Negative numbers must be in quotation marks.</li>
 </ul>
-<h2 id="" class="section-header"><a href="#">()</a></h2>
+<h3 id="" class="section-header"><a href="#">()</a></h3>
 <ul>
 <li>Word with no value specified, e.g. <code>foo</code>. This is best used with <code>Option</code>.
 See <code>darling::util::Flag</code> for a more strongly-typed alternative.</li>
 </ul>
-<h2 id="option" class="section-header"><a href="#option">Option</a></h2>
+<h3 id="option" class="section-header"><a href="#option">Option</a></h3>
 <ul>
 <li>Any format produces <code>Some</code>.</li>
 </ul>
-<h2 id="resultt-darlingerror" class="section-header"><a href="#resultt-darlingerror"><code>Result&lt;T, darling::Error&gt;</code></a></h2>
+<h3 id="resultt-darlingerror" class="section-header"><a href="#resultt-darlingerror"><code>Result&lt;T, darling::Error&gt;</code></a></h3>
 <ul>
 <li>Allows for fallible parsing; will populate the target field with the result of the
 parse attempt.</li>
 </ul>
 </div></details><h2 id="provided-methods" class="small-section-header">Provided methods<a href="#provided-methods" class="anchor"></a></h2><div class="methods"><div id="method.from_nested_meta" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/darling_core/from_meta.rs.html#45-51" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#method.from_nested_meta" class="fnname">from_nested_meta</a>(item: &amp;<a class="enum" href="../syn/attr/enum.NestedMeta.html" title="enum syn::attr::NestedMeta">NestedMeta</a>) -&gt; <a class="type" href="error/type.Result.html" title="type darling_core::error::Result">Result</a>&lt;Self&gt;</h4></div><details class="rustdoc-toggle" open><summary><div id="method.from_meta" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/darling_core/from_meta.rs.html#61-74" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#method.from_meta" class="fnname">from_meta</a>(item: &amp;<a class="enum" href="../syn/attr/enum.Meta.html" title="enum syn::attr::Meta">Meta</a>) -&gt; <a class="type" href="error/type.Result.html" title="type darling_core::error::Result">Result</a>&lt;Self&gt;</h4></div></summary><div class="docblock"><p>Create an instance from a <code>syn::Meta</code> by dispatching to the format-appropriate
 trait function. This generally should not be overridden by implementers.</p>
-<h1 id="error-spans" class="section-header"><a href="#error-spans">Error Spans</a></h1>
+<h5 id="error-spans" class="section-header"><a href="#error-spans">Error Spans</a></h5>
 <p>If this method is overridden and can introduce errors that weren’t passed up from
 other <code>from_meta</code> calls, the override must call <code>with_span</code> on the error using the
 <code>item</code> to make sure that the emitted diagnostic points to the correct location in
@@ -56,7 +56,7 @@ additional options specified.</p>
 </div></details><details class="rustdoc-toggle" open><summary><div id="method.from_value" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/darling_core/from_meta.rs.html#95-102" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#method.from_value" class="fnname">from_value</a>(value: &amp;<a class="enum" href="../syn/lit/enum.Lit.html" title="enum syn::lit::Lit">Lit</a>) -&gt; <a class="type" href="error/type.Result.html" title="type darling_core::error::Result">Result</a>&lt;Self&gt;</h4></div></summary><div class="docblock"><p>Create an instance from a literal value of either <code>foo = &quot;bar&quot;</code> or <code>foo(&quot;bar&quot;)</code>.
 This dispatches to the appropriate method based on the type of literal encountered,
 and generally should not be overridden by implementers.</p>
-<h1 id="error-spans-1" class="section-header"><a href="#error-spans-1">Error Spans</a></h1>
+<h5 id="error-spans-1" class="section-header"><a href="#error-spans-1">Error Spans</a></h5>
 <p>If this method is overridden, the override must make sure to add <code>value</code>’s span
 information to the returned error by calling <code>with_span(value)</code> on the <code>Error</code> instance.</p>
 </div></details><details class="rustdoc-toggle" open><summary><div id="method.from_char" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/darling_core/from_meta.rs.html#106-108" title="goto source code">[src]</a></div><h4 class="code-header">fn <a href="#method.from_char" class="fnname">from_char</a>(value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.char.html">char</a>) -&gt; <a class="type" href="error/type.Result.html" title="type darling_core::error::Result">Result</a>&lt;Self&gt;</h4></div></summary><div class="docblock"><p>Create an instance from a char literal in a value position.</p>

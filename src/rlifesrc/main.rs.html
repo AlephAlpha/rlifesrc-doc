@@ -70,12 +70,12 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">found</span> <span class="op">=</span> <span class="bool-val">false</span>;
         <span class="kw">loop</span> {
             <span class="kw">match</span> <span class="ident">world</span>.<span class="ident">search</span>(<span class="prelude-val">None</span>) {
-                <span class="ident">Status::Found</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">Status::Found</span> =&gt; {
                     <span class="ident">found</span> <span class="op">=</span> <span class="bool-val">true</span>;
                     <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">world</span>.<span class="ident">rle_gen</span>(<span class="number">0</span>));
                 }
-                <span class="ident">Status::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                <span class="ident">Status::None</span> =&gt; <span class="kw">break</span>,
+                <span class="kw">_</span> =&gt; (),
             }
         }
         <span class="kw">if</span> <span class="op">!</span><span class="ident">found</span> {

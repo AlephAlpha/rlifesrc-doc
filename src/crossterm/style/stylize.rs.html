@@ -185,7 +185,7 @@
 <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">style</span>, <span class="ident">Attribute</span>, <span class="ident">Color</span>, <span class="ident">ContentStyle</span>, <span class="ident">StyledContent</span>};
 
 <span class="macro">macro_rules!</span> <span class="ident">stylize_method</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name</span>:<span class="ident">ident</span> <span class="ident">Attribute</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name</span>:<span class="ident">ident</span> <span class="ident">Attribute</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>:<span class="ident">ident</span>) =&gt; {
         <span class="macro">calculated_docs!</span> {
             <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(
                 <span class="string">&quot;Applies the [`&quot;</span>,
@@ -194,12 +194,12 @@
                 <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>),
                 <span class="string">&quot;) attribute to the text.&quot;</span>,
             )]</span>
-            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
                 <span class="self">self</span>.<span class="ident">attribute</span>(<span class="ident">Attribute</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>)
             }
         }
     };
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_fg</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_bg</span>:<span class="ident">ident</span> <span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_fg</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_bg</span>:<span class="ident">ident</span> <span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>:<span class="ident">ident</span>) =&gt; {
         <span class="macro">calculated_docs!</span> {
             <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(
                 <span class="string">&quot;Sets the foreground color to [`&quot;</span>,
@@ -208,7 +208,7 @@
                 <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
                 <span class="string">&quot;).&quot;</span>
             )]</span>
-            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_fg</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_fg</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
                 <span class="self">self</span>.<span class="ident">with</span>(<span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>)
             }
 
@@ -219,7 +219,7 @@
                 <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
                 <span class="string">&quot;).&quot;</span>
             )]</span>
-            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_bg</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_bg</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
                 <span class="self">self</span>.<span class="ident">on</span>(<span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>)
             }
         }
@@ -243,24 +243,24 @@
     <span class="kw">type</span> <span class="ident">Styled</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">ContentStyle</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AsMut</span><span class="op">&lt;</span><span class="ident">ContentStyle</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Styles this type.</span>
-    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span>;
+    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span>;
 
     <span class="doccomment">/// Sets the foreground color.</span>
-    <span class="kw">fn</span> <span class="ident">with</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+    <span class="kw">fn</span> <span class="ident">with</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stylize</span>();
         <span class="ident">styled</span>.<span class="ident">as_mut</span>().<span class="ident">foreground_color</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>);
         <span class="ident">styled</span>
     }
 
     <span class="doccomment">/// Sets the background color.</span>
-    <span class="kw">fn</span> <span class="ident">on</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+    <span class="kw">fn</span> <span class="ident">on</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stylize</span>();
         <span class="ident">styled</span>.<span class="ident">as_mut</span>().<span class="ident">background_color</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>);
         <span class="ident">styled</span>
     }
 
     <span class="doccomment">/// Styles the content with the attribute.</span>
-    <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="self">self</span>, <span class="ident">attr</span>: <span class="ident">Attribute</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+    <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="self">self</span>, <span class="ident">attr</span>: <span class="ident">Attribute</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stylize</span>();
         <span class="ident">styled</span>.<span class="ident">as_mut</span>().<span class="ident">attributes</span>.<span class="ident">set</span>(<span class="ident">attr</span>);
         <span class="ident">styled</span>
@@ -297,11 +297,11 @@
 }
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_stylize_for_display</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>),<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> { $(
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>),<span class="kw-2">*</span>) =&gt; { $(
         <span class="kw">impl</span> <span class="ident">Stylize</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> {
             <span class="kw">type</span> <span class="ident">Styled</span> <span class="op">=</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+            <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
                 <span class="ident">style</span>(<span class="self">self</span>)
             }
         }
@@ -312,20 +312,20 @@
 <span class="kw">impl</span> <span class="ident">Stylize</span> <span class="kw">for</span> <span class="ident">ContentStyle</span> {
     <span class="kw">type</span> <span class="ident">Styled</span> <span class="op">=</span> <span class="self">Self</span>;
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
         <span class="self">self</span>
     }
 }
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">Stylize</span> <span class="kw">for</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Styled</span> <span class="op">=</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident"><span class="self">Self</span>::Styled</span> {
+    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
         <span class="self">self</span>
     }
 }
 
 <span class="comment">// Workaround for https://github.com/rust-lang/rust/issues/78835</span>
 <span class="macro">macro_rules!</span> <span class="ident">calculated_docs</span> {
-    ($(<span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>:<span class="ident">expr</span>]</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">item</span>)<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> { $(<span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>]</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>)<span class="op">*</span> };
+    ($(<span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>:<span class="ident">expr</span>]</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">item</span>)<span class="kw-2">*</span>) =&gt; { $(<span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>]</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>)<span class="op">*</span> };
 }
 <span class="comment">// Remove once https://github.com/rust-lang/rust-clippy/issues/7106 stabilizes.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::single_component_path_imports</span>)]</span>

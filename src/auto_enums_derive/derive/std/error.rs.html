@@ -34,13 +34,13 @@
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="ident">NAME</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[<span class="string">&quot;Error&quot;</span>];
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">derive</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">Data</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">derive</span>(<span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">Data</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">data</span>.<span class="ident">ident</span>;
     <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span>
-        <span class="ident">data</span>.<span class="ident">variant_idents</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="macro">quote!</span>(#<span class="ident">ident</span>::#<span class="ident">v</span>(<span class="ident">x</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">::std::option::Option::Some</span>(<span class="ident">x</span>)));
+        <span class="ident">data</span>.<span class="ident">variant_idents</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="macro">quote!</span>(#<span class="ident">ident</span>::#<span class="ident">v</span>(<span class="ident">x</span>) =&gt; <span class="ident">::std::option::Option::Some</span>(<span class="ident">x</span>)));
 
     <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="macro">parse_quote!</span> {
-        <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">::std::option::Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> (<span class="ident">::std::error::Error</span>) <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">::std::option::Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> (<span class="ident">::std::error::Error</span>) <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
             <span class="kw">match</span> <span class="self">self</span> { #(#<span class="ident">source</span>,)<span class="op">*</span> }
         }
     };
@@ -49,7 +49,7 @@
         <span class="ident">EnumImpl::from_trait</span>(<span class="ident">data</span>, <span class="macro">parse_quote!</span>(<span class="ident">::std::error::Error</span>), <span class="prelude-val">None</span>, <span class="macro">parse_quote!</span> {
             <span class="kw">trait</span> <span class="ident">Error</span> {
                 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
-                <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span>;
+                <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span>;
             }
         });
 

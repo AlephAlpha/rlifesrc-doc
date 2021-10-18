@@ -291,19 +291,19 @@
 
 <span class="kw">impl</span> <span class="ident">Config</span> {
     <span class="doccomment">/// Automatically determines the search order if `search_order` is `None`.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">auto_search_order</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">SearchOrder</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">auto_search_order</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">SearchOrder</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">search_order</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">search_order</span> {
             <span class="ident">Cow::Borrowed</span>(<span class="ident">search_order</span>)
         } <span class="kw">else</span> {
             <span class="kw">let</span> (<span class="ident">width</span>, <span class="ident">height</span>) <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">symmetry</span> {
-                <span class="ident">Symmetry::D2Row</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="self">self</span>.<span class="ident">width</span>, (<span class="self">self</span>.<span class="ident">height</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">2</span>),
-                <span class="ident">Symmetry::D2Col</span> <span class="op">=</span><span class="op">&gt;</span> ((<span class="self">self</span>.<span class="ident">width</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">2</span>, <span class="self">self</span>.<span class="ident">height</span>),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="self">self</span>.<span class="ident">width</span>, <span class="self">self</span>.<span class="ident">height</span>),
+                <span class="ident">Symmetry::D2Row</span> =&gt; (<span class="self">self</span>.<span class="ident">width</span>, (<span class="self">self</span>.<span class="ident">height</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">2</span>),
+                <span class="ident">Symmetry::D2Col</span> =&gt; ((<span class="self">self</span>.<span class="ident">width</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">2</span>, <span class="self">self</span>.<span class="ident">height</span>),
+                <span class="kw">_</span> =&gt; (<span class="self">self</span>.<span class="ident">width</span>, <span class="self">self</span>.<span class="ident">height</span>),
             };
             <span class="kw">let</span> <span class="ident">search_order</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">width</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">height</span>) {
-                <span class="ident">Ordering::Greater</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SearchOrder::ColumnFirst</span>,
-                <span class="ident">Ordering::Less</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">SearchOrder::RowFirst</span>,
-                <span class="ident">Ordering::Equal</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">Ordering::Greater</span> =&gt; <span class="ident">SearchOrder::ColumnFirst</span>,
+                <span class="ident">Ordering::Less</span> =&gt; <span class="ident">SearchOrder::RowFirst</span>,
+                <span class="ident">Ordering::Equal</span> =&gt; {
                     <span class="kw">if</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_some</span>()
                         <span class="op">&amp;&amp;</span> <span class="number">2</span> <span class="op">*</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">width</span>
                     {
@@ -324,7 +324,7 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">search_order_iter</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">search_order</span>: <span class="kw-2">&amp;</span><span class="ident">SearchOrder</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Coord</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Coord</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">width</span>;
         <span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span>;
         <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">period</span>;
@@ -339,18 +339,18 @@
             <span class="number">0</span>
         };
         <span class="kw">match</span> <span class="ident">search_order</span> {
-            <span class="ident">SearchOrder::ColumnFirst</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>..<span class="ident">width</span>).<span class="ident">rev</span>().<span class="ident">flat_map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
+            <span class="ident">SearchOrder::ColumnFirst</span> =&gt; (<span class="number">0</span>..<span class="ident">width</span>).<span class="ident">rev</span>().<span class="ident">flat_map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
                 (<span class="ident">y_start</span>..<span class="ident">height</span>)
                     .<span class="ident">rev</span>()
                     .<span class="ident">flat_map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">y</span><span class="op">|</span> (<span class="number">0</span>..<span class="ident">period</span>).<span class="ident">rev</span>().<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">t</span><span class="op">|</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)))
             }),
-            <span class="ident">SearchOrder::RowFirst</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>..<span class="ident">height</span>).<span class="ident">rev</span>().<span class="ident">flat_map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">y</span><span class="op">|</span> {
+            <span class="ident">SearchOrder::RowFirst</span> =&gt; (<span class="number">0</span>..<span class="ident">height</span>).<span class="ident">rev</span>().<span class="ident">flat_map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">y</span><span class="op">|</span> {
                 (<span class="ident">x_start</span>..<span class="ident">width</span>)
                     .<span class="ident">rev</span>()
                     .<span class="ident">flat_map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">x</span><span class="op">|</span> (<span class="number">0</span>..<span class="ident">period</span>).<span class="ident">rev</span>().<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">t</span><span class="op">|</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)))
             }),
             <span class="attribute">#[<span class="ident">nested</span>]</span>
-            <span class="ident">SearchOrder::Diagonal</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">SearchOrder::Diagonal</span> =&gt; {
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Diag</span> {
                     (<span class="number">0</span>..<span class="ident">width</span>)
                         .<span class="ident">rev</span>()
@@ -379,7 +379,7 @@
                         }))
                 }
             }
-            <span class="ident">SearchOrder::FromVec</span>(<span class="ident">vec</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">vec</span>.<span class="ident">clone</span>().<span class="ident">into_iter</span>().<span class="ident">rev</span>(),
+            <span class="ident">SearchOrder::FromVec</span>(<span class="ident">vec</span>) =&gt; <span class="ident">vec</span>.<span class="ident">clone</span>().<span class="ident">into_iter</span>().<span class="ident">rev</span>(),
         }
     }
 
@@ -393,7 +393,7 @@
         <span class="ident">rule_gen</span>: <span class="ident">usize</span>,
         <span class="ident">rule_symmetry</span>: <span class="ident">Symmetry</span>,
         <span class="ident">search_order</span>: <span class="kw-2">&amp;</span><span class="ident">SearchOrder</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="ident">Coord</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="ident">Coord</span>) -&gt; <span class="ident">bool</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">dx</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">dx</span>;
         <span class="kw">let</span> <span class="ident">dy</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">dy</span>;
         <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">width</span>;
@@ -404,73 +404,73 @@
         }
 
         <span class="kw">match</span> <span class="ident">search_order</span> {
-            <span class="ident">SearchOrder::RowFirst</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">SearchOrder::RowFirst</span> =&gt; {
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">symmetry</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Col</span>
                     <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">is_in</span>(<span class="ident">Symmetry::D2Col</span>)
                     <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
                 {
-                    <span class="kw">if</span> <span class="ident">dx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">dy</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> {
+                    <span class="kw">if</span> <span class="ident">dx</span> <span class="op">==</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">dy</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Col</span> {
                             <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)<span class="op">|</span> {
-                                <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">dy</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span> <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">width</span> <span class="op">/</span> <span class="number">2</span>
+                                <span class="ident">y</span> <span class="op">==</span> (<span class="ident">dy</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span> <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">width</span> <span class="op">/</span> <span class="number">2</span>
                             }))
                         } <span class="kw">else</span> {
-                            <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="kw">_</span>, <span class="ident">y</span>, <span class="ident">t</span>)<span class="op">|</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">dy</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>))
+                            <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="kw">_</span>, <span class="ident">y</span>, <span class="ident">t</span>)<span class="op">|</span> <span class="ident">y</span> <span class="op">==</span> (<span class="ident">dy</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>))
                         }
-                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Col</span> <span class="op">&amp;&amp;</span> <span class="ident">dx</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">width</span> <span class="op">/</span> <span class="number">2</span>))
+                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Col</span> <span class="op">&amp;&amp;</span> <span class="ident">dx</span> <span class="op">==</span> <span class="number">0</span> {
+                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">y</span> <span class="op">==</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">width</span> <span class="op">/</span> <span class="number">2</span>))
                     } <span class="kw">else</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>))
+                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">y</span> <span class="op">==</span> <span class="number">0</span>))
                     }
                 } <span class="kw">else</span> {
                     <span class="prelude-val">None</span>
                 }
             }
-            <span class="ident">SearchOrder::ColumnFirst</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">SearchOrder::ColumnFirst</span> =&gt; {
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">symmetry</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Row</span>
                     <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">is_in</span>(<span class="ident">Symmetry::D2Row</span>)
                     <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
                 {
-                    <span class="kw">if</span> <span class="ident">dx</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">dy</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+                    <span class="kw">if</span> <span class="ident">dx</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">dy</span> <span class="op">==</span> <span class="number">0</span> {
                         <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Row</span> {
                             <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)<span class="op">|</span> {
-                                <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span> <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">height</span> <span class="op">/</span> <span class="number">2</span>
+                                <span class="ident">x</span> <span class="op">==</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span> <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">height</span> <span class="op">/</span> <span class="number">2</span>
                             }))
                         } <span class="kw">else</span> {
-                            <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="ident">t</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>))
+                            <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="ident">t</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>))
                         }
-                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Row</span> <span class="op">&amp;&amp;</span> <span class="ident">dy</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">height</span> <span class="op">/</span> <span class="number">2</span>))
+                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Row</span> <span class="op">&amp;&amp;</span> <span class="ident">dy</span> <span class="op">==</span> <span class="number">0</span> {
+                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">height</span> <span class="op">/</span> <span class="number">2</span>))
                     } <span class="kw">else</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>))
+                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0</span>))
                     }
                 } <span class="kw">else</span> {
                     <span class="prelude-val">None</span>
                 }
             }
-            <span class="ident">SearchOrder::Diagonal</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">SearchOrder::Diagonal</span> =&gt; {
                 <span class="kw">if</span> <span class="self">self</span>.<span class="ident">symmetry</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Diag</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">is_in</span>(<span class="ident">Symmetry::D2Diag</span>) {
-                    <span class="kw">if</span> <span class="ident">dx</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">dx</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dy</span> {
-                        <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Diag</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span> {
-                            <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="ident">t</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>))
+                    <span class="kw">if</span> <span class="ident">dx</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="ident">dx</span> <span class="op">==</span> <span class="ident">dy</span> {
+                        <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Diag</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">height</span> {
+                            <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="ident">t</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>))
                         } <span class="kw">else</span> {
                             <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="kw">move</span> <span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>)<span class="op">|</span> {
-                                <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> (<span class="ident">dy</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>
+                                <span class="ident">x</span> <span class="op">==</span> (<span class="ident">dx</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">==</span> (<span class="ident">dy</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">max</span>(<span class="number">0</span>) <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="ident">max_t</span>
                             }))
                         }
                     } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rule_symmetry</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">Symmetry::D2Diag</span>
-                        <span class="op">&amp;&amp;</span> <span class="ident">dx</span> <span class="op">=</span><span class="op">=</span> <span class="ident">dy</span>
-                        <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span>
+                        <span class="op">&amp;&amp;</span> <span class="ident">dx</span> <span class="op">==</span> <span class="ident">dy</span>
+                        <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">height</span>
                     {
-                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>))
+                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="ident">x</span>, <span class="kw">_</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0</span>))
                     } <span class="kw">else</span> {
-                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>))
+                        <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="op">|</span>(<span class="ident">x</span>, <span class="ident">y</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">x</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">==</span> <span class="number">0</span>))
                     }
                 } <span class="kw">else</span> {
                     <span class="prelude-val">None</span>
                 }
             }
-            <span class="ident">SearchOrder::FromVec</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">SearchOrder::FromVec</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
         }
     }
 }

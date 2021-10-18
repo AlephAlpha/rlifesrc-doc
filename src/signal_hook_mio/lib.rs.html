@@ -284,7 +284,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;support-v0_6&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;support-v0_7&quot;</span>))]</span>
 <span class="macro">macro_rules!</span> <span class="ident">implement_signals_with_pipe</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pipe</span>:<span class="ident">path</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">pipe</span>:<span class="ident">path</span>) =&gt; {
         <span class="kw">use</span> <span class="ident">std::borrow::Borrow</span>;
         <span class="kw">use</span> <span class="ident">std::io::Error</span>;
 
@@ -306,7 +306,7 @@
             <span class="doccomment">///</span>
             <span class="doccomment">/// This registers all the signals listed. The same restrictions (panics, errors) apply</span>
             <span class="doccomment">/// as with [`Handle::add_signal`][backend::Handle::add_signal].</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">signals</span>: <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">signals</span>: <span class="ident">I</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>
             <span class="kw">where</span>
                 <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">S</span><span class="op">&gt;</span>,
                 <span class="ident">S</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span>,
@@ -317,7 +317,7 @@
 
             <span class="doccomment">/// A constructor with specifying an exfiltrator to pass information out of the signal</span>
             <span class="doccomment">/// handlers.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_exfiltrator</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">signals</span>: <span class="ident">I</span>, <span class="ident">exfiltrator</span>: <span class="ident">E</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_exfiltrator</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">signals</span>: <span class="ident">I</span>, <span class="ident">exfiltrator</span>: <span class="ident">E</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>
             <span class="kw">where</span>
                 <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">S</span><span class="op">&gt;</span>,
                 <span class="ident">S</span>: <span class="ident">Borrow</span><span class="op">&lt;</span><span class="ident">c_int</span><span class="op">&gt;</span>,
@@ -331,7 +331,7 @@
             <span class="doccomment">///</span>
             <span class="doccomment">/// The same restrictions (panics, errors) apply as with</span>
             <span class="doccomment">/// [`Handle::add_signal`][backend::Handle::add_signal].</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_signal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">signal</span>: <span class="ident">c_int</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_signal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">signal</span>: <span class="ident">c_int</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">handle</span>().<span class="ident">add_signal</span>(<span class="ident">signal</span>)
             }
 
@@ -345,7 +345,7 @@
             <span class="doccomment">/// This method returns immediately (does not block) and may produce an empty iterator if there</span>
             <span class="doccomment">/// are no signals ready. So you should register an instance of this struct at an instance of</span>
             <span class="doccomment">/// [`mio::Poll`] to query for readability of the underlying self pipe.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pending</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Pending</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pending</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Pending</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
                 <span class="self">self</span>.<span class="number">0</span>.<span class="ident">pending</span>()
             }
         }
@@ -431,7 +431,7 @@
             <span class="ident">registry</span>: <span class="kw-2">&amp;</span><span class="ident">Registry</span>,
             <span class="ident">token</span>: <span class="ident">Token</span>,
             <span class="ident">interest</span>: <span class="ident">Interest</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">get_read_mut</span>().<span class="ident">register</span>(<span class="ident">registry</span>, <span class="ident">token</span>, <span class="ident">interest</span>)
         }
 
@@ -440,11 +440,11 @@
             <span class="ident">registry</span>: <span class="kw-2">&amp;</span><span class="ident">Registry</span>,
             <span class="ident">token</span>: <span class="ident">Token</span>,
             <span class="ident">interest</span>: <span class="ident">Interest</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">get_read_mut</span>().<span class="ident">reregister</span>(<span class="ident">registry</span>, <span class="ident">token</span>, <span class="ident">interest</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">deregister</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">registry</span>: <span class="kw-2">&amp;</span><span class="ident">Registry</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">deregister</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">registry</span>: <span class="kw-2">&amp;</span><span class="ident">Registry</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">get_read_mut</span>().<span class="ident">deregister</span>(<span class="ident">registry</span>)
         }
     }
@@ -517,7 +517,7 @@
             <span class="ident">token</span>: <span class="ident">Token</span>,
             <span class="ident">interest</span>: <span class="ident">Ready</span>,
             <span class="ident">opts</span>: <span class="ident">PollOpt</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">get_read</span>().<span class="ident">register</span>(<span class="ident">poll</span>, <span class="ident">token</span>, <span class="ident">interest</span>, <span class="ident">opts</span>)
         }
 
@@ -527,11 +527,11 @@
             <span class="ident">token</span>: <span class="ident">Token</span>,
             <span class="ident">interest</span>: <span class="ident">Ready</span>,
             <span class="ident">opts</span>: <span class="ident">PollOpt</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">get_read</span>().<span class="ident">reregister</span>(<span class="ident">poll</span>, <span class="ident">token</span>, <span class="ident">interest</span>, <span class="ident">opts</span>)
         }
 
-        <span class="kw">fn</span> <span class="ident">deregister</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">poll</span>: <span class="kw-2">&amp;</span><span class="ident">Poll</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">deregister</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">poll</span>: <span class="kw-2">&amp;</span><span class="ident">Poll</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">get_read</span>().<span class="ident">deregister</span>(<span class="ident">poll</span>)
         }
     }

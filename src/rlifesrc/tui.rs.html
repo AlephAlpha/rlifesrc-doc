@@ -412,7 +412,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span> <span class="ident">App</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">W</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">W</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">period</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span> {
             <span class="ident">gen</span>: <span class="number">0</span>,
@@ -433,7 +433,7 @@
     }
 
     <span class="doccomment">/// Initializes the screen.</span>
-    <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">output</span>
             .<span class="ident">execute</span>(<span class="ident">EnterAlternateScreen</span>)<span class="question-mark">?</span>
             .<span class="ident">execute</span>(<span class="ident">Hide</span>)<span class="question-mark">?</span>
@@ -446,7 +446,7 @@
     }
 
     <span class="doccomment">/// Quits the program.</span>
-    <span class="kw">fn</span> <span class="ident">quit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">quit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">terminal::disable_raw_mode</span>()<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">output</span>
             .<span class="ident">execute</span>(<span class="ident">Show</span>)<span class="question-mark">?</span>
@@ -456,7 +456,7 @@
     }
 
     <span class="doccomment">/// Updates the header.</span>
-    <span class="kw">fn</span> <span class="ident">update_header</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">update_header</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">output</span>
             .<span class="ident">queue</span>(<span class="ident">MoveTo</span>(<span class="number">0</span>, <span class="number">0</span>))<span class="question-mark">?</span>
             .<span class="ident">queue</span>(<span class="ident">SetBackgroundColor</span>(<span class="ident">Color::White</span>))<span class="question-mark">?</span>
@@ -483,7 +483,7 @@
     <span class="doccomment">/// Prints the pattern in a mix of</span>
     <span class="doccomment">/// [Plaintext](https://conwaylife.com/wiki/Plaintext) and</span>
     <span class="doccomment">/// [RLE](https://conwaylife.com/wiki/Rle) format.</span>
-    <span class="kw">fn</span> <span class="ident">update_main</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">update_main</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">output</span>
             .<span class="ident">queue</span>(<span class="ident">MoveTo</span>(<span class="number">0</span>, <span class="number">1</span>))<span class="question-mark">?</span>
             .<span class="ident">queue</span>(<span class="ident">ResetColor</span>)<span class="question-mark">?</span>
@@ -499,19 +499,19 @@
             <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> {
                 <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">get_cell_state</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">gen</span>));
                 <span class="kw">match</span> <span class="ident">state</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;.&#39;</span>),
-                    <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) =&gt; <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;.&#39;</span>),
+                    <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) =&gt; {
                         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">is_gen_rule</span>() {
                             <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;A&#39;</span>);
                         } <span class="kw">else</span> {
                             <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;o&#39;</span>);
                         }
                     }
-                    <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">i</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">line</span>.<span class="ident">push</span>((<span class="string">b&#39;A&#39;</span> <span class="op">+</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">char</span>),
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;?&#39;</span>),
+                    <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">i</span>)) =&gt; <span class="ident">line</span>.<span class="ident">push</span>((<span class="string">b&#39;A&#39;</span> <span class="op">+</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">char</span>),
+                    <span class="kw">_</span> =&gt; <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;?&#39;</span>),
                 };
             }
-            <span class="kw">if</span> <span class="ident">y</span> <span class="op">=</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> {
+            <span class="kw">if</span> <span class="ident">y</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> {
                 <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;!&#39;</span>);
             } <span class="kw">else</span> {
                 <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;$&#39;</span>);
@@ -522,7 +522,7 @@
     }
 
     <span class="doccomment">/// Updates the footer.</span>
-    <span class="kw">fn</span> <span class="ident">update_footer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">update_footer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">const</span> <span class="ident">INITIAL</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Press [space] to start.&quot;</span>;
         <span class="kw">const</span> <span class="ident">FOUND</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Found a result. Press [q] to quit or [space] to search for the next.&quot;</span>;
         <span class="kw">const</span> <span class="ident">NONE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;No more result. Press [q] to quit.&quot;</span>;
@@ -536,10 +536,10 @@
             .<span class="ident">queue</span>(<span class="ident">Print</span>(<span class="macro">format!</span>(
                 <span class="string">&quot;{:1$}&quot;</span>,
                 <span class="kw">match</span> <span class="self">self</span>.<span class="ident">status</span> {
-                    <span class="ident">Status::Initial</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">INITIAL</span>,
-                    <span class="ident">Status::Found</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">FOUND</span>,
-                    <span class="ident">Status::None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">NONE</span>,
-                    <span class="ident">Status::Searching</span> <span class="op">=</span><span class="op">&gt;</span>
+                    <span class="ident">Status::Initial</span> =&gt; <span class="ident">INITIAL</span>,
+                    <span class="ident">Status::Found</span> =&gt; <span class="ident">FOUND</span>,
+                    <span class="ident">Status::None</span> =&gt; <span class="ident">NONE</span>,
+                    <span class="ident">Status::Searching</span> =&gt;
                         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">paused</span> {
                             <span class="ident">PAUSED</span>
                         } <span class="kw">else</span> {
@@ -552,7 +552,7 @@
     }
 
     <span class="doccomment">/// Updates the screen.</span>
-    <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">update_header</span>()<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">update_main</span>()<span class="question-mark">?</span>;
         <span class="self">self</span>.<span class="ident">update_footer</span>()<span class="question-mark">?</span>;
@@ -577,8 +577,8 @@
     <span class="doccomment">/// Searches for one step.</span>
     <span class="kw">fn</span> <span class="ident">step</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">search</span>(<span class="prelude-val">Some</span>(<span class="ident">VIEW_FREQ</span>)) {
-            <span class="ident">Status::Searching</span> <span class="op">=</span><span class="op">&gt;</span> (),
-            <span class="ident">s</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Status::Searching</span> =&gt; (),
+            <span class="ident">s</span> =&gt; {
                 <span class="self">self</span>.<span class="ident">status</span> <span class="op">=</span> <span class="ident">s</span>;
                 <span class="self">self</span>.<span class="ident">paused</span> <span class="op">=</span> <span class="bool-val">true</span>;
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">instant</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">start_time</span>.<span class="ident">take</span>() {
@@ -593,7 +593,7 @@
     }
 
     <span class="doccomment">/// Asks whether to quit.</span>
-    <span class="kw">fn</span> <span class="ident">ask_quit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">ask_quit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">const</span> <span class="ident">ASK_QUIT</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Are you sure to quit? [Y/n]&quot;</span>;
 
         <span class="self">self</span>.<span class="ident">output</span>
@@ -608,18 +608,18 @@
     }
 
     <span class="doccomment">/// Handles a key event. Returns `true` to quit the program.</span>
-    <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="ident">Mode::Main</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">event</span> {
+            <span class="ident">Mode::Main</span> =&gt; <span class="kw">match</span> <span class="ident">event</span> {
                 <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
                     <span class="ident">code</span>: <span class="ident">KeyCode::Char</span>(<span class="string">&#39;q&#39;</span> <span class="op">|</span> <span class="string">&#39;Q&#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Esc</span>,
                     ..
-                })) <span class="op">=</span><span class="op">&gt;</span> {
+                })) =&gt; {
                     <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                         <span class="self">self</span>.<span class="ident">pause</span>();
                     }
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">status</span> <span class="op">=</span><span class="op">=</span> <span class="ident">Status::Searching</span> {
+                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">status</span> <span class="op">==</span> <span class="ident">Status::Searching</span> {
                         <span class="self">self</span>.<span class="ident">ask_quit</span>()<span class="question-mark">?</span>;
                     } <span class="kw">else</span> {
                         <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
@@ -628,21 +628,21 @@
                 <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
                     <span class="ident">code</span>: <span class="ident">KeyCode::PageDown</span>,
                     ..
-                })) <span class="op">=</span><span class="op">&gt;</span> {
+                })) =&gt; {
                     <span class="self">self</span>.<span class="ident">gen</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">gen</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">period</span>;
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                 }
                 <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
                     <span class="ident">code</span>: <span class="ident">KeyCode::PageUp</span>,
                     ..
-                })) <span class="op">=</span><span class="op">&gt;</span> {
+                })) =&gt; {
                     <span class="self">self</span>.<span class="ident">gen</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">gen</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">period</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">period</span>;
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                 }
                 <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
                     <span class="ident">code</span>: <span class="ident">KeyCode::Char</span>(<span class="string">&#39; &#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Enter</span>,
                     ..
-                })) <span class="op">=</span><span class="op">&gt;</span> {
+                })) =&gt; {
                     <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                         <span class="self">self</span>.<span class="ident">pause</span>();
                     } <span class="kw">else</span> {
@@ -650,7 +650,7 @@
                     }
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>)) =&gt; {
                     <span class="self">self</span>.<span class="ident">term_size</span> <span class="op">=</span> (<span class="ident">width</span>, <span class="ident">height</span>);
                     <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">width</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
                     <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
@@ -659,20 +659,20 @@
                         .<span class="ident">queue</span>(<span class="ident">Clear</span>(<span class="ident">ClearType::All</span>))<span class="question-mark">?</span>;
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; (),
+                <span class="prelude-val">None</span> =&gt; {
                     <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                         <span class="self">self</span>.<span class="ident">pause</span>();
                     }
                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
                 }
             },
-            <span class="ident">Mode::AskingQuit</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">event</span> {
+            <span class="ident">Mode::AskingQuit</span> =&gt; <span class="kw">match</span> <span class="ident">event</span> {
                 <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
                     <span class="ident">code</span>: <span class="ident">KeyCode::Char</span>(<span class="string">&#39;y&#39;</span> <span class="op">|</span> <span class="string">&#39;Y&#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Enter</span>,
                     ..
-                })) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                })) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
+                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>)) =&gt; {
                     <span class="self">self</span>.<span class="ident">term_size</span> <span class="op">=</span> (<span class="ident">width</span>, <span class="ident">height</span>);
                     <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
                     <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
@@ -682,11 +682,11 @@
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                     <span class="self">self</span>.<span class="ident">ask_quit</span>()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {
                     <span class="self">self</span>.<span class="ident">mode</span> <span class="op">=</span> <span class="ident">Mode::Main</span>;
                     <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">None</span> =&gt; {
                     <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
                 }
             },
@@ -696,16 +696,16 @@
     }
 
     <span class="doccomment">/// The main loop.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main_loop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reader</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventStream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main_loop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reader</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventStream</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">loop</span> {
             <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
                 <span class="macro">select_biased!</span> {
-                    <span class="ident">event</span> <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">try_next</span>().<span class="ident">fuse</span>() <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">event</span> <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">try_next</span>().<span class="ident">fuse</span>() =&gt; {
                         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">event</span><span class="question-mark">?</span>)<span class="question-mark">?</span> {
                             <span class="kw">break</span>;
                         }
                     },
-                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">future::lazy</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">step</span>()) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">future::lazy</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">step</span>()) =&gt; {
                         <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
                     },
                 };
@@ -726,7 +726,7 @@
 <span class="doccomment">/// Runs the search with a TUI.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If `reset` is true, the time will be reset when starting a new search.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tui</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tui</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">EventStream::new</span>();
     <span class="kw">let</span> <span class="ident">result</span>;

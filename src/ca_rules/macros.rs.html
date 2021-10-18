@@ -420,7 +420,7 @@
 
 <span class="doccomment">/// A macro to define a helper struct that represents the rule.</span>
 <span class="macro">macro_rules!</span> <span class="ident">rule_struct</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>) =&gt; {
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
         <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
@@ -429,12 +429,12 @@
 
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="doccomment">/// Construct the struct from `b` / `s` data.</span>
-            <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> { <span class="ident">b</span>, <span class="ident">s</span> }
             }
 
             <span class="doccomment">/// Construct the Generations struct from `b` / `s` data and the number of states.</span>
-            <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
                 <span class="ident">Gen</span> {
                     <span class="ident">rule</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> { <span class="ident">b</span>, <span class="ident">s</span> },
                     <span class="ident">gen</span>,
@@ -442,7 +442,7 @@
             }
 
             <span class="doccomment">/// A parser for numbers.</span>
-            <span class="kw">fn</span> <span class="ident">parse_num</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
+            <span class="kw">fn</span> <span class="ident">parse_num</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
             <span class="kw">where</span>
                 <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">char</span><span class="op">&gt;</span>,
             {
@@ -452,7 +452,7 @@
                 }
                 <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                     <span class="kw">match</span> <span class="ident">c</span> {
-                        <span class="ident">c</span> <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_digit</span>(<span class="number">10</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="ident">c</span> <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_digit</span>(<span class="number">10</span>) =&gt; {
                             <span class="ident">chars</span>.<span class="ident">next</span>();
                             <span class="ident">n</span> <span class="op">=</span> <span class="ident">n</span>
                                 .<span class="ident">checked_mul</span>(<span class="number">10</span>)
@@ -460,7 +460,7 @@
                                 .<span class="ident">checked_add</span>(<span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="number">10</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">usize</span>)
                                 .<span class="ident">ok_or</span>(<span class="ident">ParseRuleError::GenOverflow</span>)<span class="question-mark">?</span>;
                         }
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">n</span>),
+                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">n</span>),
                     }
                 }
                 <span class="prelude-val">Ok</span>(<span class="ident">n</span>)
@@ -471,14 +471,14 @@
 
 <span class="doccomment">/// A macro to define a function to parse the helper struct.</span>
 <span class="macro">macro_rules!</span> <span class="ident">parse_rule</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>: <span class="ident">expr</span>)<span class="question-mark">?</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>: <span class="ident">expr</span>)<span class="question-mark">?</span>) =&gt; {
         <span class="doccomment">/// A parser for the struct.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">parse_rule</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">chars</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">chars</span>().<span class="ident">peekable</span>();
             <span class="kw">let</span> (<span class="ident">b</span>, <span class="ident">s</span>);
 
             <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; {
                     <span class="comment">// Rule strings using B/S notation</span>
                     <span class="ident">chars</span>.<span class="ident">next</span>();
                     <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
@@ -486,17 +486,17 @@
                         <span class="ident">chars</span>.<span class="ident">next</span>();
                     }
                     <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
+                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
                     }
                     <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">_</span> =&gt; {
                     <span class="comment">// Rule strings using S/B notation</span>
                     <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                     <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>)),
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) =&gt; (),
+                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>)),
                     }
                     <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                 }
@@ -514,77 +514,77 @@
             )<span class="question-mark">?</span>
 
             <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bs</span>(<span class="ident">b</span>, <span class="ident">s</span>)),
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::ExtraJunk</span>),
+                <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bs</span>(<span class="ident">b</span>, <span class="ident">s</span>)),
+                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::ExtraJunk</span>),
             }
         }
 
         <span class="doccomment">/// A parser for the Generations struct.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule_gen</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">parse_rule_gen</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">chars</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">chars</span>().<span class="ident">peekable</span>();
             <span class="kw">let</span> (<span class="ident">b</span>, <span class="ident">s</span>);
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gen</span> <span class="op">=</span> <span class="number">2</span>;
 
             <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                 <span class="comment">// Rule strings using B/S/G notation</span>
-                <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; {
                     <span class="ident">chars</span>.<span class="ident">next</span>();
                     <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                         <span class="ident">chars</span>.<span class="ident">next</span>();
                     }
                     <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
+                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
                     }
                     <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                     <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) =&gt; {
                             <span class="ident">chars</span>.<span class="ident">next</span>();
                             <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                                <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
                                     <span class="ident">chars</span>.<span class="ident">next</span>();
                                 }
-                                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                                <span class="kw">_</span> =&gt; (),
                             }
                             <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                         }
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
                             <span class="ident">chars</span>.<span class="ident">next</span>();
                             <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                         }
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
+                        <span class="kw">_</span> =&gt; (),
                     }
                 }
 
                 <span class="comment">// Rule strings using G/B/S notation</span>
-                <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
                     <span class="ident">chars</span>.<span class="ident">next</span>();
                     <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                         <span class="ident">chars</span>.<span class="ident">next</span>();
                     }
                     <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;B&#39;</span>)),
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; (),
+                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;B&#39;</span>)),
                     }
                     <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                         <span class="ident">chars</span>.<span class="ident">next</span>();
                     }
                     <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
+                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
                     }
                     <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                 }
 
                 <span class="comment">// Rule strings using S/B/G notation</span>
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">_</span> =&gt; {
                     <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                     <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>)),
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) =&gt; (),
+                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>)),
                     }
                     <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
                     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
@@ -609,8 +609,8 @@
                 <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::GenLessThan2</span>)
             } <span class="kw">else</span> {
                 <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                    <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bsg</span>(<span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span>)),
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::ExtraJunk</span>),
+                    <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bsg</span>(<span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span>)),
+                    <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::ExtraJunk</span>),
                 }
             }
         }
@@ -619,9 +619,9 @@
 
 <span class="doccomment">/// A macro to define a function to parse `b` / `s` data.</span>
 <span class="macro">macro_rules!</span> <span class="ident">parse_bs</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span>) =&gt; {
         <span class="doccomment">/// A parser for `b` / `s` data.</span>
-        <span class="kw">fn</span> <span class="ident">parse_bs</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
+        <span class="kw">fn</span> <span class="ident">parse_bs</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
         <span class="kw">where</span>
             <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">char</span><span class="op">&gt;</span>,
         {
@@ -629,11 +629,11 @@
 
             <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                 <span class="kw">match</span> <span class="ident">c</span> {
-                    <span class="ident">c</span> <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_digit</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">c</span> <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_digit</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">+</span> <span class="number">1</span>) =&gt; {
                         <span class="ident">chars</span>.<span class="ident">next</span>();
                         <span class="ident">bs</span>.<span class="ident">push</span>(<span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">u8</span>);
                     }
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
+                    <span class="kw">_</span> =&gt; <span class="kw">break</span>,
                 }
             }
 
@@ -642,9 +642,9 @@
         }
     };
 
-    { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>: <span class="ident">expr</span> <span class="op">=</span><span class="op">&gt;</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>: <span class="ident">expr</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>: <span class="ident">expr</span>),<span class="op">*</span> $(,)<span class="question-mark">?</span> }),<span class="op">*</span>  $(,)<span class="question-mark">?</span> } <span class="op">=</span><span class="op">&gt;</span> {
+    { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>: <span class="ident">expr</span> =&gt; { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>: <span class="ident">expr</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>: <span class="ident">expr</span>),<span class="op">*</span> $(,)<span class="question-mark">?</span> }),<span class="op">*</span>  $(,)<span class="question-mark">?</span> } =&gt; {
         <span class="doccomment">/// A parser for `b` / `s` data.</span>
-        <span class="kw">fn</span> <span class="ident">parse_bs</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
+        <span class="kw">fn</span> <span class="ident">parse_bs</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
         <span class="kw">where</span>
             <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">char</span><span class="op">&gt;</span>,
         {
@@ -653,11 +653,11 @@
             <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                 <span class="kw">match</span> <span class="ident">c</span> {
                     $(
-                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span> =&gt; {
                             <span class="ident">chars</span>.<span class="ident">next</span>();
                             <span class="kw">let</span> <span class="ident">all_keys</span> <span class="op">=</span> <span class="macro">vec!</span>[$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>),<span class="kw-2">*</span>];
                             <span class="kw">let</span> <span class="ident">keys</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                                <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) =&gt; {
                                     <span class="ident">chars</span>.<span class="ident">next</span>();
                                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                                     <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
@@ -670,7 +670,7 @@
                                     }
                                     <span class="ident">all_keys</span>.<span class="ident">into_iter</span>().<span class="ident">filter</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="op">!</span><span class="ident">keys</span>.<span class="ident">contains</span>(<span class="ident">c</span>)).<span class="ident">collect</span>()
                                 }
-                                <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="kw">if</span> <span class="ident">all_keys</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="kw">if</span> <span class="ident">all_keys</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) =&gt; {
                                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                                     <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
                                         <span class="kw">if</span> <span class="ident">all_keys</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) {
@@ -682,22 +682,22 @@
                                     }
                                     <span class="ident">keys</span>
                                 }
-                                <span class="prelude-val">Some</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                                <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {
                                     <span class="ident">all_keys</span>
                                 }
-                                <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">all_keys</span>
+                                <span class="prelude-val">None</span> =&gt; <span class="ident">all_keys</span>
                             };
                             <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">c</span> <span class="kw">in</span> <span class="ident">keys</span>.<span class="ident">iter</span>() {
                                 <span class="kw">match</span> <span class="ident">c</span> {
                                     $(
-                                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">bs</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>)),
+                                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span> =&gt; <span class="ident">bs</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>)),
                                     )<span class="op">*</span>
-                                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(),
+                                    <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
                                 }
                             }
                         }
                     ),<span class="op">*</span>
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
+                    <span class="kw">_</span> =&gt; <span class="kw">break</span>,
                 }
             }
 
@@ -709,9 +709,9 @@
 
 <span class="doccomment">/// A macro to define a function to parse MAP strings.</span>
 <span class="macro">macro_rules!</span> <span class="ident">parse_rule_map</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span>) =&gt; {
         <span class="doccomment">/// A parser for the struct that parses MAP strings.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule_map</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">parse_rule_map</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
             <span class="kw">const</span> <span class="ident">CENTER_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span>);
             <span class="kw">const</span> <span class="ident">RIGHT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">CENTER_MARK</span> <span class="op">-</span> <span class="number">1</span>;
             <span class="kw">const</span> <span class="ident">LEFT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">RIGHT_MARK</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>);
@@ -729,7 +729,7 @@
                     <span class="kw">if</span> <span class="ident">x</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">j</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">*</span> <span class="number">8</span> <span class="op">+</span> <span class="ident">j</span>;
                         <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> ((<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">LEFT_MARK</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span> <span class="op">|</span> (<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">RIGHT_MARK</span>)) <span class="kw">as</span> <span class="ident">u8</span>;
-                        <span class="kw">if</span> <span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">CENTER_MARK</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+                        <span class="kw">if</span> <span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">CENTER_MARK</span> <span class="op">==</span> <span class="number">0</span> {
                             <span class="ident">b</span>.<span class="ident">push</span>(<span class="ident">n</span>);
                         } <span class="kw">else</span> {
                             <span class="ident">s</span>.<span class="ident">push</span>(<span class="ident">n</span>);
@@ -741,7 +741,7 @@
         }
 
         <span class="doccomment">/// A parser for the Generations struct that parses MAP strings.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule_gen_map</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">parse_rule_gen_map</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
             <span class="kw">const</span> <span class="ident">CENTER_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span>);
             <span class="kw">const</span> <span class="ident">RIGHT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">CENTER_MARK</span> <span class="op">-</span> <span class="number">1</span>;
             <span class="kw">const</span> <span class="ident">LEFT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">RIGHT_MARK</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>);
@@ -774,7 +774,7 @@
                     <span class="kw">if</span> <span class="ident">x</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">j</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">*</span> <span class="number">8</span> <span class="op">+</span> <span class="ident">j</span>;
                         <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> ((<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">LEFT_MARK</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span> <span class="op">|</span> (<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">RIGHT_MARK</span>)) <span class="kw">as</span> <span class="ident">u8</span>;
-                        <span class="kw">if</span> <span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">CENTER_MARK</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+                        <span class="kw">if</span> <span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">CENTER_MARK</span> <span class="op">==</span> <span class="number">0</span> {
                             <span class="ident">b</span>.<span class="ident">push</span>(<span class="ident">n</span>);
                         } <span class="kw">else</span> {
                             <span class="ident">s</span>.<span class="ident">push</span>(<span class="ident">n</span>);
@@ -796,9 +796,9 @@
         (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name_gen</span>: <span class="ident">ident</span>) <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name</span>: <span class="ident">ident</span>,
         <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>: <span class="ident">expr</span>,
         <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span> $(,)<span class="question-mark">?</span>
-    ) <span class="op">=</span><span class="op">&gt;</span> {
+    ) =&gt; {
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name</span> {
-            <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_b</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_s</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                 <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>;
@@ -816,7 +816,7 @@
         }
 
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name_gen</span> <span class="kw">for</span> <span class="ident">Gen</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+            <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_b</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_s</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                 <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>;
