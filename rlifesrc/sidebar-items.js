@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["PolyWorld","A polymorphic [`World`]."],["Status","Search status."]],"fn":[["exit","Terminates the current process with the specified exit code."],["main",""],["run_search","Runs the search without TUI."]],"mod":[["args","Parsing command-line arguments."],["tui",""]]});
+initSidebarItems({"fn":[["main",""],["run_search","Runs the search without TUI."]],"mod":[["args","Parsing command-line arguments."],["tui",""]]});
