@@ -545,11 +545,11 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)))]</span>
 <span class="kw">impl</span> <span class="ident">KnownCell</span> {
     <span class="doccomment">/// Convert a [`CellData`] to a [`KnownCell`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_cell_data</span>(<span class="ident">data</span>: <span class="ident">CellData</span>, <span class="ident">gen</span>: <span class="ident">i32</span>) -&gt; <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">from_cell_data</span>(<span class="ident">data</span>: <span class="ident">CellData</span>, <span class="ident">gen</span>: <span class="ident">i32</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>) <span class="op">=</span> <span class="ident">data</span>.<span class="ident">position</span>;
         <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span> (<span class="ident">x</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">y</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">gen</span>);
         <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span>(<span class="ident">data</span>.<span class="ident">state</span> <span class="kw">as</span> <span class="ident">usize</span>);
-        <span class="ident">KnownCell</span> { <span class="ident">coord</span>, <span class="ident">state</span> }
+        <span class="self">Self</span> { <span class="ident">coord</span>, <span class="ident">state</span> }
     }
 
     <span class="doccomment">/// Get a list [`KnownCell`] from multiple RLE&#39;s in one string.</span>
@@ -578,7 +578,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">with_unknown</span>();
 
         <span class="kw">for</span> <span class="ident">data</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">rle</span> {
-            <span class="ident">known_cells</span>.<span class="ident">push</span>(<span class="ident">KnownCell::from_cell_data</span>(<span class="ident">data</span><span class="question-mark">?</span>, <span class="ident">gen</span>));
+            <span class="ident">known_cells</span>.<span class="ident">push</span>(<span class="ident"><span class="self">Self</span>::from_cell_data</span>(<span class="ident">data</span><span class="question-mark">?</span>, <span class="ident">gen</span>));
         }
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">rle</span>) <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">try_remains</span>()<span class="question-mark">?</span> {
