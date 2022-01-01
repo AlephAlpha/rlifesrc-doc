@@ -417,41 +417,9 @@
 <span id="415">415</span>
 <span id="416">416</span>
 <span id="417">417</span>
-<span id="418">418</span>
-<span id="419">419</span>
-<span id="420">420</span>
-<span id="421">421</span>
-<span id="422">422</span>
-<span id="423">423</span>
-<span id="424">424</span>
-<span id="425">425</span>
-<span id="426">426</span>
-<span id="427">427</span>
-<span id="428">428</span>
-<span id="429">429</span>
-<span id="430">430</span>
-<span id="431">431</span>
-<span id="432">432</span>
-<span id="433">433</span>
-<span id="434">434</span>
-<span id="435">435</span>
-<span id="436">436</span>
-<span id="437">437</span>
-<span id="438">438</span>
-<span id="439">439</span>
-<span id="440">440</span>
-<span id="441">441</span>
-<span id="442">442</span>
-<span id="443">443</span>
-<span id="444">444</span>
-<span id="445">445</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Parsing command-line arguments.</span>
 
-<span class="kw">use</span> <span class="ident">clap</span>::{
-    <span class="ident">App</span>,
-    <span class="ident">AppSettings</span>::{<span class="ident">AllowNegativeNumbers</span>, <span class="ident">ColoredHelp</span>},
-    <span class="ident">Arg</span>, <span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">ClapResult</span>,
-};
+<span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">app_from_crate</span>, <span class="ident">AppSettings</span>, <span class="ident">Arg</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{
     <span class="ident">rules::NtLifeGen</span>, <span class="ident">Config</span>, <span class="ident">NewState</span>, <span class="ident">PolyWorld</span>, <span class="ident">SearchOrder</span>, <span class="ident">Symmetry</span>, <span class="ident">Transform</span>,
 };
@@ -477,11 +445,8 @@
 
 <span class="kw">impl</span> <span class="ident">Args</span> {
     <span class="doccomment">/// Parses the command-line arguments.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse</span>() -&gt; <span class="ident">ClapResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>(<span class="macro">env!</span>(<span class="string">&quot;CARGO_PKG_NAME&quot;</span>))
-            .<span class="ident">version</span>(<span class="macro">env!</span>(<span class="string">&quot;CARGO_PKG_VERSION&quot;</span>))
-            .<span class="ident">author</span>(<span class="macro">env!</span>(<span class="string">&quot;CARGO_PKG_AUTHORS&quot;</span>))
-            .<span class="ident">about</span>(<span class="macro">env!</span>(<span class="string">&quot;CARGO_PKG_DESCRIPTION&quot;</span>))
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="macro">app_from_crate!</span>()
             .<span class="ident">long_about</span>(
                 <span class="string">&quot;Searching for patterns in Conway&#39;s Game of Life\n\
                  \n\
@@ -492,9 +457,9 @@
                  https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README.md (In Chinese)\n\
                  https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README_en.md (In English)\n&quot;</span>,
             )
-            .<span class="ident">settings</span>(<span class="kw-2">&amp;</span>[<span class="ident">AllowNegativeNumbers</span>, <span class="ident">ColoredHelp</span>])
+            .<span class="ident">global_setting</span>(<span class="ident">AppSettings::AllowNegativeNumbers</span>)
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;CONFIG&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;config&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Read config from a file&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Read config from a file\n\
@@ -502,65 +467,59 @@
                          When a config file is provided, all the other flags and options, \
                          except --all (-a), --reset-time, --no-tui (-n), are ignored.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;C&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;C&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;config&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;X&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;x&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Width of the pattern&quot;</span>)
-                    .<span class="ident">required_unless</span>(<span class="string">&quot;CONFIG&quot;</span>)
+                    .<span class="ident">required_unless_present</span>(<span class="string">&quot;config&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">1</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
-                        <span class="kw">if</span> <span class="ident">is_positive</span>(<span class="kw-2">&amp;</span><span class="ident">x</span>) {
-                            <span class="prelude-val">Ok</span>(())
-                        } <span class="kw">else</span> {
-                            <span class="prelude-val">Err</span>(<span class="ident">String::from</span>(<span class="string">&quot;width must be a positive integer&quot;</span>))
-                        }
+                        <span class="ident">is_positive</span>(<span class="ident">x</span>)
+                            .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> ())
+                            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">String::from</span>(<span class="string">&quot;width must be a positive integer&quot;</span>))
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;Y&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;y&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Height of the pattern&quot;</span>)
-                    .<span class="ident">required_unless</span>(<span class="string">&quot;CONFIG&quot;</span>)
+                    .<span class="ident">required_unless_present</span>(<span class="string">&quot;config&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">2</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">y</span><span class="op">|</span> {
-                        <span class="kw">if</span> <span class="ident">is_positive</span>(<span class="kw-2">&amp;</span><span class="ident">y</span>) {
-                            <span class="prelude-val">Ok</span>(())
-                        } <span class="kw">else</span> {
-                            <span class="prelude-val">Err</span>(<span class="ident">String::from</span>(<span class="string">&quot;height must be a positive integer&quot;</span>))
-                        }
+                        <span class="ident">is_positive</span>(<span class="ident">y</span>)
+                            .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> ())
+                            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">String::from</span>(<span class="string">&quot;height must be a positive integer&quot;</span>))
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;P&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;p&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Period of the pattern&quot;</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;1&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">3</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> {
-                        <span class="kw">if</span> <span class="ident">is_positive</span>(<span class="kw-2">&amp;</span><span class="ident">p</span>) {
-                            <span class="prelude-val">Ok</span>(())
-                        } <span class="kw">else</span> {
-                            <span class="prelude-val">Err</span>(<span class="ident">String::from</span>(<span class="string">&quot;period must be a positive integer&quot;</span>))
-                        }
+                        <span class="ident">is_positive</span>(<span class="ident">p</span>)
+                            .<span class="ident">then</span>(<span class="op">|</span><span class="op">|</span> ())
+                            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">String::from</span>(<span class="string">&quot;period must be a positive integer&quot;</span>))
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;DX&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;dx&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Horizontal translation&quot;</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;0&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">4</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>())),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;DY&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;dy&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Vertical translation&quot;</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;0&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">5</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>())),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;DIAG&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;diag&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Diagonal width&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Diagonal width\n\
@@ -568,12 +527,12 @@
                          where abs(x - y) &gt;= n are assumed to be dead.\n\
                          If this value is set to 0, it would be ignored.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;d&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;d&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;diag&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;0&quot;</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> {
-                        <span class="kw">if</span> <span class="ident">is_positive</span>(<span class="kw-2">&amp;</span><span class="ident">d</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">d</span> <span class="op">==</span> <span class="string">&quot;0&quot;</span> {
+                        <span class="kw">if</span> <span class="ident">is_positive</span>(<span class="ident">d</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">d</span> <span class="op">==</span> <span class="string">&quot;0&quot;</span> {
                             <span class="prelude-val">Ok</span>(())
                         } <span class="kw">else</span> {
                             <span class="prelude-val">Err</span>(<span class="ident">String::from</span>(<span class="string">&quot;diagonal width must be a positive integer&quot;</span>))
@@ -581,7 +540,7 @@
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;TRANSFORM&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;transform&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Transformation of the pattern&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Transformation of the pattern\n\
@@ -593,14 +552,14 @@
                          \&quot;R\&quot; means counterclockwise rotation.\n\
                          \&quot;F\&quot; means flipping (reflection) across an axis.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;t&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;t&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;transform&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">possible_values</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;Id&quot;</span>, <span class="string">&quot;R90&quot;</span>, <span class="string">&quot;R180&quot;</span>, <span class="string">&quot;R270&quot;</span>, <span class="string">&quot;F|&quot;</span>, <span class="string">&quot;F-&quot;</span>, <span class="string">&quot;F\\&quot;</span>, <span class="string">&quot;F/&quot;</span>])
                     .<span class="ident">default_value</span>(<span class="string">&quot;Id&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;SYMMETRY&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;symmetry&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Symmetry of the pattern&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Symmetry of the pattern\n\
@@ -609,7 +568,7 @@
                          Logic Life Search.\n\
                          See [https://conwaylife.com/wiki/Symmetry] \n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;s&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;s&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;symmetry&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">possible_values</span>(<span class="kw-2">&amp;</span>[
@@ -618,14 +577,14 @@
                     .<span class="ident">default_value</span>(<span class="string">&quot;C1&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;RULE&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;rule&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Rule of the cellular automaton&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Rule of the cellular automaton\n\
                          Supports Life-like, isotropic non-totalistic, hexagonal, MAP rules, \
                          and their corresponding Generations rules.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;r&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;r&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;rule&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;B3/S23&quot;</span>)
@@ -636,13 +595,13 @@
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;ORDER&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;order&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Search order&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Search order\n\
                          Row first or column first.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;o&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;o&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;order&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">possible_values</span>(<span class="kw-2">&amp;</span>[
@@ -658,49 +617,49 @@
                     .<span class="ident">default_value</span>(<span class="string">&quot;automatic&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;CHOOSE&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;choose&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;How to choose a state for unknown cells\n&quot;</span>)
-                    .<span class="ident">short</span>(<span class="string">&quot;c&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;c&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;choose&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">possible_values</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;dead&quot;</span>, <span class="string">&quot;alive&quot;</span>, <span class="string">&quot;random&quot;</span>, <span class="string">&quot;d&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;r&quot;</span>])
                     .<span class="ident">default_value</span>(<span class="string">&quot;alive&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;MAX&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;max&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Upper bound of numbers of minimum living cells in all generations&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Upper bound of numbers of minimum living cells in all generations\n\
                          If this value is set to 0, it means there is no limitation.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;m&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;m&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;max&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;0&quot;</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>())),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;REDUCE&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;reduce&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Reduce the max cell count when a result is found&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Reduce the max cell count when a result is found\n\
                          The new max cell count will be set to the cell count of \
                          the current result minus one.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;R&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;R&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;reduce&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;SUBPERIOD&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;subperiod&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Allow patterns with subperiod&quot;</span>)
                     .<span class="ident">long_help</span>(<span class="string">&quot;Allow patterns whose fundamental period are smaller than the given period&quot;</span>)
-                    .<span class="ident">short</span>(<span class="string">&quot;p&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;p&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;subperiod&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;SKIPSUBSYM&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;skipsubsym&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Skip patterns invariant under more transformations than the given symmetry&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Skip patterns which are invariant under more transformations than \
@@ -708,12 +667,12 @@
                          In another word, skip patterns whose symmetry group properly contains \
                          the given symmetry group.\n&quot;</span>,
                     )
-                    .<span class="ident">short</span>(<span class="string">&quot;S&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;S&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;skip-subsym&quot;</span>)
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;BACKJUMP&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;backjump&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;(Experimental) Enable backjumping&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;(Experimental) Enable backjumping\n\
@@ -728,26 +687,26 @@
         {
             <span class="ident">app</span> <span class="op">=</span> <span class="ident">app</span>
                 .<span class="ident">arg</span>(
-                    <span class="ident">Arg::with_name</span>(<span class="string">&quot;ALL&quot;</span>)
+                    <span class="ident">Arg::new</span>(<span class="string">&quot;all&quot;</span>)
                         .<span class="ident">help</span>(<span class="string">&quot;Prints all possible results instead of only the first one&quot;</span>)
                         .<span class="ident">long_help</span>(
                             <span class="string">&quot;Prints all possible results instead of only the first one\n\
                              Only useful when --no-tui is set.\n&quot;</span>,
                         )
-                        .<span class="ident">short</span>(<span class="string">&quot;a&quot;</span>)
+                        .<span class="ident">short</span>(<span class="string">&#39;a&#39;</span>)
                         .<span class="ident">long</span>(<span class="string">&quot;all&quot;</span>)
                         .<span class="ident">requires</span>(<span class="string">&quot;NOTUI&quot;</span>),
                 )
                 .<span class="ident">arg</span>(
-                    <span class="ident">Arg::with_name</span>(<span class="string">&quot;RESET&quot;</span>)
+                    <span class="ident">Arg::new</span>(<span class="string">&quot;reset&quot;</span>)
                         .<span class="ident">help</span>(<span class="string">&quot;Resets the time when starting a new search&quot;</span>)
                         .<span class="ident">long</span>(<span class="string">&quot;reset-time&quot;</span>)
                         .<span class="ident">conflicts_with</span>(<span class="string">&quot;NOTUI&quot;</span>),
                 )
                 .<span class="ident">arg</span>(
-                    <span class="ident">Arg::with_name</span>(<span class="string">&quot;NOTUI&quot;</span>)
+                    <span class="ident">Arg::new</span>(<span class="string">&quot;notui&quot;</span>)
                         .<span class="ident">help</span>(<span class="string">&quot;Starts searching immediately, without entering the TUI&quot;</span>)
-                        .<span class="ident">short</span>(<span class="string">&quot;n&quot;</span>)
+                        .<span class="ident">short</span>(<span class="string">&#39;n&#39;</span>)
                         .<span class="ident">long</span>(<span class="string">&quot;no-tui&quot;</span>),
                 );
         }
@@ -755,58 +714,43 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tui&quot;</span>))]</span>
         {
             <span class="ident">app</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">arg</span>(
-                <span class="ident">Arg::with_name</span>(<span class="string">&quot;ALL&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;all&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Searches for all possible pattern&quot;</span>)
                     .<span class="ident">long_help</span>(<span class="string">&quot;Searches for all possible pattern&quot;</span>)
-                    .<span class="ident">short</span>(<span class="string">&quot;a&quot;</span>)
+                    .<span class="ident">short</span>(<span class="string">&#39;a&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;all&quot;</span>),
             );
         }
 
-        <span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">get_matches_safe</span>()<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">clone</span>().<span class="ident">try_get_matches</span>()<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">config</span>;
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">config_file</span>) <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;CONFIG&quot;</span>) {
             <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path::new</span>(<span class="ident">config_file</span>);
-            <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">File::open</span>(<span class="ident">path</span>)
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">Error::with_description</span>(<span class="kw-2">&amp;</span><span class="ident">e</span>.<span class="ident">to_string</span>(), <span class="ident">ErrorKind::Io</span>))<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">File::open</span>(<span class="ident">path</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">app</span>.<span class="ident">error</span>(<span class="ident">ErrorKind::Io</span>, <span class="ident">e</span>))<span class="question-mark">?</span>;
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">BufReader::new</span>(<span class="ident">file</span>);
             <span class="kw">match</span> <span class="ident">path</span>.<span class="ident">extension</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">to_str</span>()) {
                 <span class="prelude-val">Some</span>(<span class="string">&quot;json&quot;</span>) =&gt; {
                     <span class="ident">config</span> <span class="op">=</span> <span class="ident">serde_json::from_reader</span>(<span class="ident">reader</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                        <span class="ident">Error::with_description</span>(
-                            <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Invalid config file: {}&quot;</span>, <span class="ident">e</span>),
-                            <span class="ident">ErrorKind::Io</span>,
-                        )
+                        <span class="ident">app</span>.<span class="ident">error</span>(<span class="ident">ErrorKind::Io</span>, <span class="macro">format!</span>(<span class="string">&quot;Invalid config file: {}&quot;</span>, <span class="ident">e</span>))
                     })<span class="question-mark">?</span>;
                 }
                 <span class="prelude-val">Some</span>(<span class="string">&quot;yaml&quot;</span> <span class="op">|</span> <span class="string">&quot;yml&quot;</span>) =&gt; {
                     <span class="ident">config</span> <span class="op">=</span> <span class="ident">serde_yaml::from_reader</span>(<span class="ident">reader</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                        <span class="ident">Error::with_description</span>(
-                            <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Invalid config file: {}&quot;</span>, <span class="ident">e</span>),
-                            <span class="ident">ErrorKind::Io</span>,
-                        )
+                        <span class="ident">app</span>.<span class="ident">error</span>(<span class="ident">ErrorKind::Io</span>, <span class="macro">format!</span>(<span class="string">&quot;Invalid config file: {}&quot;</span>, <span class="ident">e</span>))
                     })<span class="question-mark">?</span>;
                 }
                 <span class="prelude-val">Some</span>(<span class="string">&quot;toml&quot;</span>) =&gt; {
                     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
                     <span class="ident">reader</span>
                         .<span class="ident">read_to_end</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buf</span>)
-                        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">Error::with_description</span>(<span class="kw-2">&amp;</span><span class="ident">e</span>.<span class="ident">to_string</span>(), <span class="ident">ErrorKind::Io</span>))<span class="question-mark">?</span>;
+                        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">app</span>.<span class="ident">error</span>(<span class="ident">ErrorKind::Io</span>, <span class="ident">e</span>))<span class="question-mark">?</span>;
                     <span class="ident">config</span> <span class="op">=</span> <span class="ident">toml::from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">buf</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                        <span class="ident">Error::with_description</span>(
-                            <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Invalid config file: {}&quot;</span>, <span class="ident">e</span>),
-                            <span class="ident">ErrorKind::Io</span>,
-                        )
+                        <span class="ident">app</span>.<span class="ident">error</span>(<span class="ident">ErrorKind::Io</span>, <span class="macro">format!</span>(<span class="string">&quot;Invalid config file: {}&quot;</span>, <span class="ident">e</span>))
                     })<span class="question-mark">?</span>;
                 }
-                <span class="kw">_</span> =&gt; {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::with_description</span>(
-                        <span class="string">&quot;Unsupported config file format&quot;</span>,
-                        <span class="ident">ErrorKind::InvalidValue</span>,
-                    ))
-                }
+                <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">app</span>.<span class="ident">error</span>(<span class="ident">ErrorKind::Io</span>, <span class="string">&quot;Unsupported config file format&quot;</span>)),
             }
         } <span class="kw">else</span> {
             <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">value_of</span>(<span class="string">&quot;X&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>();
@@ -869,14 +813,14 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tui&quot;</span>)]</span>
         <span class="kw">let</span> <span class="ident">no_tui</span> <span class="op">=</span> <span class="ident">matches</span>.<span class="ident">is_present</span>(<span class="string">&quot;NOTUI&quot;</span>);
 
-        <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">world</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-            <span class="ident">Error::with_description</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;Invalid config: {}&quot;</span>, <span class="ident">e</span>), <span class="ident">ErrorKind::InvalidValue</span>)
-        })<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">world</span> <span class="op">=</span> <span class="ident">config</span>
+            .<span class="ident">world</span>()
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">app</span>.<span class="ident">error</span>(<span class="ident">ErrorKind::InvalidValue</span>, <span class="macro">format!</span>(<span class="string">&quot;Invalid config: {}&quot;</span>, <span class="ident">e</span>)))<span class="question-mark">?</span>;
 
         <span class="kw">if</span> <span class="ident">world</span>.<span class="ident">is_gen_rule</span>() <span class="op">&amp;&amp;</span> <span class="ident">config</span>.<span class="ident">backjump</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::with_description</span>(
-                <span class="string">&quot;Backjumping is not yet supported for Generations rules.&quot;</span>,
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">app</span>.<span class="ident">error</span>(
                 <span class="ident">ErrorKind::InvalidValue</span>,
+                <span class="string">&quot;Backjumping is not yet supported for Generations rules.&quot;</span>,
             ));
         }
 
@@ -891,5 +835,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (83b15bfe1 2021-12-28)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (cfa3fe5af 2021-12-31)" ></div>
 </body></html>
