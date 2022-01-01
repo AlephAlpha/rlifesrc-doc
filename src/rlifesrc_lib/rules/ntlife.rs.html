@@ -677,6 +677,7 @@
 <span id="675">675</span>
 <span id="676">676</span>
 <span id="677">677</span>
+<span id="678">678</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Non-totalistic Life-like rules.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -693,7 +694,7 @@
 };
 <span class="kw">use</span> <span class="ident">bitflags::bitflags</span>;
 <span class="kw">use</span> <span class="ident">ca_rules</span>::{<span class="ident">ParseNtLife</span>, <span class="ident">ParseNtLifeGen</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">array::IntoIter</span>, <span class="ident">collections::HashSet</span>, <span class="ident">str::FromStr</span>};
+<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::HashSet</span>, <span class="ident">str::FromStr</span>};
 
 <span class="doccomment">/// Permutes the bits of an `u8`.</span>
 <span class="kw">fn</span> <span class="ident">permute_bits</span>(<span class="ident">n</span>: <span class="ident">u8</span>, <span class="ident">perm</span>: [<span class="ident">u32</span>; <span class="number">8</span>]) -&gt; <span class="ident">u8</span> {
@@ -812,7 +813,8 @@
         <span class="kw">let</span> <span class="ident">s_set</span>: <span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">iter</span>().<span class="ident">copied</span>().<span class="ident">collect</span>();
 
         <span class="self">self</span>.<span class="ident">symmetry</span> <span class="op">=</span> <span class="ident">Symmetry::generated_by</span>(
-            <span class="ident">IntoIter::new</span>(<span class="ident">Transform::ALL</span>)
+            <span class="ident">Transform::ALL</span>
+                .<span class="ident">into_iter</span>()
                 .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">transform</span><span class="op">|</span> {
                     <span class="ident">b</span>.<span class="ident">iter</span>()
                         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">data</span><span class="op">|</span> <span class="ident">transform_neigh</span>(<span class="kw-2">*</span><span class="ident">data</span>, <span class="kw-2">*</span><span class="ident">transform</span>))
