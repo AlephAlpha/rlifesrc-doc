@@ -459,7 +459,7 @@
             )
             .<span class="ident">global_setting</span>(<span class="ident">AppSettings::AllowNegativeNumbers</span>)
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;config&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;CONFIG&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Read config from a file&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Read config from a file\n\
@@ -472,9 +472,9 @@
                     .<span class="ident">takes_value</span>(<span class="bool-val">true</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;x&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;X&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Width of the pattern&quot;</span>)
-                    .<span class="ident">required_unless_present</span>(<span class="string">&quot;config&quot;</span>)
+                    .<span class="ident">required_unless_present</span>(<span class="string">&quot;CONFIG&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">1</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> {
                         <span class="ident">is_positive</span>(<span class="ident">x</span>)
@@ -483,9 +483,9 @@
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;y&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;Y&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Height of the pattern&quot;</span>)
-                    .<span class="ident">required_unless_present</span>(<span class="string">&quot;config&quot;</span>)
+                    .<span class="ident">required_unless_present</span>(<span class="string">&quot;CONFIG&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">2</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">y</span><span class="op">|</span> {
                         <span class="ident">is_positive</span>(<span class="ident">y</span>)
@@ -494,7 +494,7 @@
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;p&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;P&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Period of the pattern&quot;</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;1&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">3</span>)
@@ -505,21 +505,21 @@
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;dx&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;DX&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Horizontal translation&quot;</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;0&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">4</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>())),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;dy&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;DY&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Vertical translation&quot;</span>)
                     .<span class="ident">default_value</span>(<span class="string">&quot;0&quot;</span>)
                     .<span class="ident">index</span>(<span class="number">5</span>)
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>())),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;diag&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;DIAG&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Diagonal width&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Diagonal width\n\
@@ -540,7 +540,7 @@
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;transform&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;TRANSFORM&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Transformation of the pattern&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Transformation of the pattern\n\
@@ -559,7 +559,7 @@
                     .<span class="ident">default_value</span>(<span class="string">&quot;Id&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;symmetry&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;SYMMETRY&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Symmetry of the pattern&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Symmetry of the pattern\n\
@@ -577,7 +577,7 @@
                     .<span class="ident">default_value</span>(<span class="string">&quot;C1&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;rule&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;RULE&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Rule of the cellular automaton&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Rule of the cellular automaton\n\
@@ -595,7 +595,7 @@
                     }),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;order&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;ORDER&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Search order&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Search order\n\
@@ -617,7 +617,7 @@
                     .<span class="ident">default_value</span>(<span class="string">&quot;automatic&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;choose&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;CHOOSE&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;How to choose a state for unknown cells\n&quot;</span>)
                     .<span class="ident">short</span>(<span class="string">&#39;c&#39;</span>)
                     .<span class="ident">long</span>(<span class="string">&quot;choose&quot;</span>)
@@ -626,7 +626,7 @@
                     .<span class="ident">default_value</span>(<span class="string">&quot;alive&quot;</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;max&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;MAX&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Upper bound of numbers of minimum living cells in all generations&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Upper bound of numbers of minimum living cells in all generations\n\
@@ -639,7 +639,7 @@
                     .<span class="ident">validator</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>().<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_string</span>())),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;reduce&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;REDUCE&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Reduce the max cell count when a result is found&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Reduce the max cell count when a result is found\n\
@@ -651,7 +651,7 @@
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;subperiod&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;SUBPERIOD&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Allow patterns with subperiod&quot;</span>)
                     .<span class="ident">long_help</span>(<span class="string">&quot;Allow patterns whose fundamental period are smaller than the given period&quot;</span>)
                     .<span class="ident">short</span>(<span class="string">&#39;p&#39;</span>)
@@ -659,7 +659,7 @@
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;skipsubsym&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;SKIPSUBSYM&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Skip patterns invariant under more transformations than the given symmetry&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;Skip patterns which are invariant under more transformations than \
@@ -672,7 +672,7 @@
                     .<span class="ident">takes_value</span>(<span class="bool-val">false</span>),
             )
             .<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;backjump&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;BACKJUMP&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;(Experimental) Enable backjumping&quot;</span>)
                     .<span class="ident">long_help</span>(
                         <span class="string">&quot;(Experimental) Enable backjumping\n\
@@ -687,7 +687,7 @@
         {
             <span class="ident">app</span> <span class="op">=</span> <span class="ident">app</span>
                 .<span class="ident">arg</span>(
-                    <span class="ident">Arg::new</span>(<span class="string">&quot;all&quot;</span>)
+                    <span class="ident">Arg::new</span>(<span class="string">&quot;ALL&quot;</span>)
                         .<span class="ident">help</span>(<span class="string">&quot;Prints all possible results instead of only the first one&quot;</span>)
                         .<span class="ident">long_help</span>(
                             <span class="string">&quot;Prints all possible results instead of only the first one\n\
@@ -698,13 +698,13 @@
                         .<span class="ident">requires</span>(<span class="string">&quot;NOTUI&quot;</span>),
                 )
                 .<span class="ident">arg</span>(
-                    <span class="ident">Arg::new</span>(<span class="string">&quot;reset&quot;</span>)
+                    <span class="ident">Arg::new</span>(<span class="string">&quot;RESET&quot;</span>)
                         .<span class="ident">help</span>(<span class="string">&quot;Resets the time when starting a new search&quot;</span>)
                         .<span class="ident">long</span>(<span class="string">&quot;reset-time&quot;</span>)
                         .<span class="ident">conflicts_with</span>(<span class="string">&quot;NOTUI&quot;</span>),
                 )
                 .<span class="ident">arg</span>(
-                    <span class="ident">Arg::new</span>(<span class="string">&quot;notui&quot;</span>)
+                    <span class="ident">Arg::new</span>(<span class="string">&quot;NOTUI&quot;</span>)
                         .<span class="ident">help</span>(<span class="string">&quot;Starts searching immediately, without entering the TUI&quot;</span>)
                         .<span class="ident">short</span>(<span class="string">&#39;n&#39;</span>)
                         .<span class="ident">long</span>(<span class="string">&quot;no-tui&quot;</span>),
@@ -714,7 +714,7 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tui&quot;</span>))]</span>
         {
             <span class="ident">app</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">arg</span>(
-                <span class="ident">Arg::new</span>(<span class="string">&quot;all&quot;</span>)
+                <span class="ident">Arg::new</span>(<span class="string">&quot;ALL&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Searches for all possible pattern&quot;</span>)
                     .<span class="ident">long_help</span>(<span class="string">&quot;Searches for all possible pattern&quot;</span>)
                     .<span class="ident">short</span>(<span class="string">&#39;a&#39;</span>)
