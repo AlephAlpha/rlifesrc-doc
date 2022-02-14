@@ -18,7 +18,7 @@ good candidate).</p>
 <code>tokio-uds</code> libraries should work.</p>
 <p>If it looks too low-level for your needs, the <a href="../../iterator/index.html" title="crate::iterator"><code>iterator</code></a> module contains some
 higher-lever interface that also uses a self-pipe pattern under the hood.</p>
-<h2 id="correct-order-of-handling" class="section-header"><a href="#correct-order-of-handling">Correct order of handling</a></h2>
+<h2 id="correct-order-of-handling"><a href="#correct-order-of-handling">Correct order of handling</a></h2>
 <p>A care needs to be taken to avoid race conditions, especially when handling the same signal in
 a loop. Specifically, another signal might come when the action for the previous signal is
 being taken. The correct order is first to clear the content of the pipe (read some/all data
@@ -35,7 +35,7 @@ cleaning is the same action), but in case of asynchronous handling it matters.</
 first, then the pipe written. On the read end, first the pipe needs to be cleaned, then the
 flag and then the action taken. This is what the <a href="../../iterator/struct.SignalsInfo.html" title="crate::iterator::SignalsInfo"><code>SignalsInfo</code></a>
 structure does internally.</p>
-<h2 id="write-collating" class="section-header"><a href="#write-collating">Write collating</a></h2>
+<h2 id="write-collating"><a href="#write-collating">Write collating</a></h2>
 <p>While unlikely if handled correctly, it is possible the write end is full when a signal comes.
 In such case the signal handler simply does nothing. If the write end is full, the read end is
 readable and therefore will wake up. On the other hand, blocking in the signal handler would
@@ -43,7 +43,7 @@ definitely be a bad idea.</p>
 <p>However, this also means the number of bytes read from the end might be lower than the number
 of signals that arrived. This should not generally be a problem, since the OS already collates
 signals of the same kind together.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <p>This example waits for at last one <code>SIGUSR1</code> signal to come before continuing (and
 terminating). It sends the signal to itself, so it correctly terminates.</p>
 
@@ -66,5 +66,5 @@ terminating). It sends the signal to itself, so it correctly terminates.</p>
 </div></details><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.register.html" title="signal_hook::low_level::pipe::register fn">register</a></div><div class="item-right docblock-short"><p>Registers a write to a self-pipe whenever there’s the signal.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.register_raw.html" title="signal_hook::low_level::pipe::register_raw fn">register_raw</a></div><div class="item-right docblock-short"><p>Registers a write to a self-pipe whenever there’s the signal.</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (498eeb72f 2022-01-31)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
 </body></html>

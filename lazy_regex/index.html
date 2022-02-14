@@ -21,7 +21,7 @@
 <li><a href="macro.regex_replace_all.html" title="regex_replace_all!">regex_replace_all!</a></li>
 </ul>
 <p>Some structs of the regex crate are reexported to ease dependency managment.</p>
-<h2 id="build-regexes" class="section-header"><a href="#build-regexes">Build Regexes</a></h2>
+<h2 id="build-regexes"><a href="#build-regexes">Build Regexes</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">lazy_regex::regex</span>;
 
 <span class="comment">// build a simple regex</span>
@@ -54,19 +54,19 @@
 </code></pre></div>
 <p>Supported regex flags: <code>i</code>, <code>m</code>, <code>s</code>, <code>x</code>, <code>U</code>.</p>
 <p>See <a href="struct.RegexBuilder.html" title="regex::RegexBuilder">regex::RegexBuilder</a>.</p>
-<h2 id="test-a-match" class="section-header"><a href="#test-a-match">Test a match</a></h2>
+<h2 id="test-a-match"><a href="#test-a-match">Test a match</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">lazy_regex::regex_is_match</span>;
 
 <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="macro">regex_is_match!</span>(<span class="string">&quot;[ab]+&quot;</span>, <span class="string">&quot;car&quot;</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">b</span>, <span class="bool-val">true</span>);</code></pre></div>
 <p>doc: <a href="macro.regex_is_match.html" title="regex_is_match!">regex_is_match!</a></p>
-<h2 id="extract-a-value" class="section-header"><a href="#extract-a-value">Extract a value</a></h2>
+<h2 id="extract-a-value"><a href="#extract-a-value">Extract a value</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">lazy_regex::regex_find</span>;
 
 <span class="kw">let</span> <span class="ident">f_word</span> <span class="op">=</span> <span class="macro">regex_find!</span>(<span class="string">r#&quot;\bf\w+\b&quot;#</span>, <span class="string">&quot;The fox jumps.&quot;</span>);
 <span class="macro">assert_eq!</span>(<span class="ident">f_word</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;fox&quot;</span>));</code></pre></div>
 <p>doc: <a href="macro.regex_find.html" title="regex_find!">regex_find!</a></p>
-<h2 id="capture" class="section-header"><a href="#capture">Capture</a></h2>
+<h2 id="capture"><a href="#capture">Capture</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">lazy_regex::regex_captures</span>;
 
 <span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">letter</span>) <span class="op">=</span> <span class="macro">regex_captures!</span>(<span class="string">&quot;([a-z])[0-9]+&quot;i</span>, <span class="string">&quot;form A42&quot;</span>).<span class="ident">unwrap</span>();
@@ -83,7 +83,7 @@
 It’s checked at compile time to ensure you have the right number of capturing groups.</p>
 <p>You receive <code>&quot;&quot;</code> for optional groups with no value.</p>
 <p>doc: <a href="macro.regex_captures.html" title="regex_captures!">regex_captures!</a></p>
-<h2 id="replace-with-captured-groups" class="section-header"><a href="#replace-with-captured-groups">Replace with captured groups</a></h2>
+<h2 id="replace-with-captured-groups"><a href="#replace-with-captured-groups">Replace with captured groups</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">lazy_regex::regex_replace_all</span>;
 
 <span class="kw">let</span> <span class="ident">text</span> <span class="op">=</span> <span class="string">&quot;Foo8 fuu3&quot;</span>;
@@ -95,7 +95,7 @@ It’s checked at compile time to ensure you have the right number of capturing 
 <span class="macro">assert_eq!</span>(<span class="ident">text</span>, <span class="string">&quot;F&lt;oo&gt;8 F&lt;uu&gt;3&quot;</span>);</code></pre></div>
 <p>The number of arguments given to the closure is checked at compilation time to match the number of groups in the regular expression.</p>
 <p>doc: <a href="macro.regex_replace.html" title="regex_replace!">regex_replace!</a> and <a href="macro.regex_replace_all.html" title="regex_replace_all!">regex_replace_all!</a></p>
-<h2 id="shared-lazy-static" class="section-header"><a href="#shared-lazy-static">Shared lazy static</a></h2>
+<h2 id="shared-lazy-static"><a href="#shared-lazy-static">Shared lazy static</a></h2>
 <p>When a regular expression is used in several functions, you sometimes don’t want
 to repeat it but have a shared static instance.</p>
 <p>The <a href="macro.regex.html" title="regex!">regex!</a> macro, while being backed by a lazy static regex, returns a reference.</p>
@@ -126,5 +126,5 @@ with the value returned by the closure given as third argument.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Lazy.html" title="lazy_regex::Lazy struct">Lazy</a></div><div class="item-right docblock-short"><p>A value which is initialized on the first access.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Regex.html" title="lazy_regex::Regex struct">Regex</a></div><div class="item-right docblock-short"><p>A compiled regular expression for matching Unicode strings.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.RegexBuilder.html" title="lazy_regex::RegexBuilder struct">RegexBuilder</a></div><div class="item-right docblock-short"><p>A configurable builder for a regular expression.</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="lazy_regex" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (498eeb72f 2022-01-31)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="lazy_regex" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
 </body></html>

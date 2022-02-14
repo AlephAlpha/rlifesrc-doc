@@ -11,7 +11,7 @@ larger data.</p>
 <p>This module provides a channel that can be used for that purpose. It is used by certain
 <a href="../../iterator/exfiltrator/index.html" title="crate::iterator::exfiltrator">exfiltrators</a>, but can be used as building block for custom
 actions. In general, this is not a ready-made end-user API.</p>
-<h2 id="how-does-it-work" class="section-header"><a href="#how-does-it-work">How does it work</a></h2>
+<h2 id="how-does-it-work"><a href="#how-does-it-work">How does it work</a></h2>
 <p>Each channel has a fixed number of slots and two queues (one for empty slots, one for full
 slots). A signal handler takes a slot out of the empty one, fills it and passes it into the
 full one. Outside of signal handler, it can take the value out of the full queue and return the
@@ -20,7 +20,7 @@ slot to the empty queue.</p>
 stored in an atomic variable.</p>
 <p>Note that the algorithm allows for a slot to be in neither queue (when it is being emptied or
 filled).</p>
-<h2 id="fallible-allocation-of-a-slot" class="section-header"><a href="#fallible-allocation-of-a-slot">Fallible allocation of a slot</a></h2>
+<h2 id="fallible-allocation-of-a-slot"><a href="#fallible-allocation-of-a-slot">Fallible allocation of a slot</a></h2>
 <p>It is apparent that allocation of a new slot can fail (there’s nothing in the empty slot). In
 such case, there’s no way to send the new value out of the handler (there’s no way to safely
 wait for a slot to appear, because the handler can be blocking the thread that is responsible
@@ -33,5 +33,5 @@ system will yield a signal.</p>
 readers, but already empty, so the above argument would not hold).</p>
 </div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Channel.html" title="signal_hook::low_level::channel::Channel struct">Channel</a></div><div class="item-right docblock-short"><p>A restricted async-signal-safe channel</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (498eeb72f 2022-01-31)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
 </body></html>

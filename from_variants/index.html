@@ -6,7 +6,7 @@
         </a><h2 class="location"><a href="#">Crate from_variants</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.6.0</li><li><a id="all-types" href="all.html">All Items</a></li></div></ul><div id="sidebar-vars" data-name="from_variants" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../from_variants/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
     <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">from_variants</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/from_variants/lib.rs.html#1-51">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Rust macro crate to automatically generate conversions from variant types into the target enum.</p>
 <p>This crate requires Rust 1.45 or above to compile on stable.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">from_variants::FromVariants</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">FromVariants</span>)]</span>
@@ -29,7 +29,7 @@
 }
 
 <span class="macro">assert_eq!</span>(<span class="ident">Ipsum::Hello</span>(<span class="string">&quot;John&quot;</span>.<span class="ident">to_string</span>()), <span class="ident">Ipsum::from</span>(<span class="string">&quot;John&quot;</span>.<span class="ident">to_string</span>()));</code></pre></div>
-<h2 id="features" class="section-header"><a href="#features">Features</a></h2>
+<h2 id="features"><a href="#features">Features</a></h2>
 <ul>
 <li><strong>Variant opt-out</strong>: To skip a variant, add <code>#[from_variants(skip)]</code> to that variant.</li>
 <li><strong>Conversion opt-in</strong>: Use <code>#[from_variants(into)]</code> on an enum or variant to generate conversions
@@ -37,5 +37,5 @@ that will automatically convert - for example, accepting a <code>&amp;str</code>
 This must be used sparingly to avoid generating conflicting impls.</li>
 <li><strong>no_std support</strong>: Generated conversions do not depend on the standard library.</li>
 </ul>
-</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="from_variants" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (498eeb72f 2022-01-31)" ></div>
+</div></details></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="from_variants" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
 </body></html>

@@ -5,7 +5,7 @@
     <nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"><a href="#">Module terminal</a></h2><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li></ul></div><div id="sidebar-vars" data-name="terminal" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
     <h1 class="fqn"><span class="in-band">Module <a href="../index.html">crossterm</a>::<wbr><a class="mod" href="#">terminal</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/crossterm/terminal.rs.html#1-442">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A module to work with the terminal.</p>
-<h2 id="terminal" class="section-header"><a href="#terminal">Terminal</a></h2>
+<h2 id="terminal"><a href="#terminal">Terminal</a></h2>
 <p>The <code>terminal</code> module provides functionality to work with the terminal.</p>
 <p>This documentation does not contain a lot of examples. The reason is that it’s fairly
 obvious how to use this crate. Although, we do provide
@@ -13,7 +13,7 @@ obvious how to use this crate. Although, we do provide
 to demonstrate the capabilities.</p>
 <p>Most terminal actions can be performed with commands.
 Please have a look at <a href="../index.html#command-api">command documentation</a> for a more detailed documentation.</p>
-<h3 id="screen-buffer" class="section-header"><a href="#screen-buffer">Screen Buffer</a></h3>
+<h3 id="screen-buffer"><a href="#screen-buffer">Screen Buffer</a></h3>
 <p>A screen buffer is a two-dimensional array of character
 and color data which is displayed in a terminal screen.</p>
 <p>The terminal has several of those buffers and is able to switch between them.
@@ -22,7 +22,7 @@ The other screens are called the ‘alternative screen’.</p>
 <p>It is important to understand that crossterm does not yet support creating screens,
 or switch between more than two buffers, and only offers the ability to change
 between the ‘alternate’ and ‘main screen’.</p>
-<h4 id="alternate-screen" class="section-header"><a href="#alternate-screen">Alternate Screen</a></h4>
+<h4 id="alternate-screen"><a href="#alternate-screen">Alternate Screen</a></h4>
 <p>By default, you will be working on the main screen.
 There is also another screen called the ‘alternative’ screen.
 This screen is slightly different from the main screen.
@@ -35,7 +35,7 @@ operations on the alternative screen.</p>
 <p>An good example of this is Vim.
 When it is launched from bash, a whole new buffer is used to modify a file.
 Then, when the modification is finished, it closes again and continues on the main screen.</p>
-<h4 id="raw-mode" class="section-header"><a href="#raw-mode">Raw Mode</a></h4>
+<h4 id="raw-mode"><a href="#raw-mode">Raw Mode</a></h4>
 <p>By default, the terminal functions in a certain way.
 For example, it will move the cursor to the beginning of the next line when the input hits the end of a line.
 Or that the backspace is interpreted for character removal.</p>
@@ -51,7 +51,7 @@ This is what happens when you enable raw modes.</p>
 <li>New line character will not be processed therefore <code>println!</code> can’t be used, use <code>write!</code> instead</li>
 </ul>
 <p>Raw mode can be enabled/disabled with the <a href="fn.enable_raw_mode.html">enable_raw_mode</a> and <a href="fn.disable_raw_mode.html">disable_raw_mode</a> functions.</p>
-<h3 id="examples" class="section-header"><a href="#examples">Examples</a></h3>
+<h3 id="examples"><a href="#examples">Examples</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
 <span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">execute</span>, <span class="prelude-ty">Result</span>, <span class="ident">terminal</span>::{<span class="ident">ScrollUp</span>, <span class="ident">SetSize</span>, <span class="ident">size</span>}};
 
@@ -86,5 +86,5 @@ This is what happens when you enable raw modes.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.enable_raw_mode.html" title="crossterm::terminal::enable_raw_mode fn">enable_raw_mode</a></div><div class="item-right docblock-short"><p>Enables raw mode.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.is_raw_mode_enabled.html" title="crossterm::terminal::is_raw_mode_enabled fn">is_raw_mode_enabled</a></div><div class="item-right docblock-short"><p>Tells whether the raw mode is enabled.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.size.html" title="crossterm::terminal::size fn">size</a></div><div class="item-right docblock-short"><p>Returns the terminal size <code>(columns, rows)</code>.</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (498eeb72f 2022-01-31)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
 </body></html>

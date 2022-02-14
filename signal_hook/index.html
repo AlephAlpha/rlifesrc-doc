@@ -16,7 +16,7 @@ interrupt a thread at any time, making most handling race-prone.</li>
 limited to very few of them. To highlight, mutexes (or other locking mechanisms) and memory
 allocation and deallocation is <em>not</em> allowed.</li>
 </ul>
-<h2 id="the-goal-of-the-library" class="section-header"><a href="#the-goal-of-the-library">The goal of the library</a></h2>
+<h2 id="the-goal-of-the-library"><a href="#the-goal-of-the-library">The goal of the library</a></h2>
 <p>The aim is to subscriptions to signals a „structured“ resource, in a similar way memory
 allocation is ‒ parts of the program can independently subscribe and it’s the same part of the
 program that can give them up, independently of what the other parts do. Therefore, it is
@@ -32,7 +32,7 @@ safe Rust, without the application author needing to learn about <em>all</em> th
 <p>Note that despite everything, there are still some quirks around signal handling that are not
 possible to paper over and need to be considered. Also, there are some signal use cases that
 are inherently unsafe and they are not covered by this crate.</p>
-<h2 id="anatomy-of-the-crate" class="section-header"><a href="#anatomy-of-the-crate">Anatomy of the crate</a></h2>
+<h2 id="anatomy-of-the-crate"><a href="#anatomy-of-the-crate">Anatomy of the crate</a></h2>
 <p>The crate is split into several modules.</p>
 <p>The easiest way to handle signals is using the <a href="iterator/type.Signals.html" title="crate::iterator::Signals"><code>Signals</code></a> iterator
 thing. It can register for a set of signals and produce them one by one, in a blocking manner.
@@ -58,7 +58,7 @@ other utilities that are more suited to build other abstractions with than to us
 <li><code>extended-sig-info</code>: Support for providing more information in the iterators or from the
 async adaptor crates. This is off by default.</li>
 </ul>
-<h2 id="limitations" class="section-header"><a href="#limitations">Limitations</a></h2>
+<h2 id="limitations"><a href="#limitations">Limitations</a></h2>
 <ul>
 <li>OS limitations still apply. Certain signals are not possible to override or subscribe to ‒
 <code>SIGKILL</code> or <code>SIGSTOP</code>.</li>
@@ -106,7 +106,7 @@ handler ‒ which still can be done with <a href="low_level/fn.register.html" ti
 due care. Patterns for working safely with realtime signals are not unwanted in the library,
 but nobody contributed them yet.</li>
 </ul>
-<h2 id="signal-masks" class="section-header"><a href="#signal-masks">Signal masks</a></h2>
+<h2 id="signal-masks"><a href="#signal-masks">Signal masks</a></h2>
 <p>As the library uses <code>sigaction</code> under the hood, signal masking works as expected (eg. with
 <code>pthread_sigmask</code>). This means, signals will <em>not</em> be delivered if the signal is masked in all
 program’s threads.</p>
@@ -114,7 +114,7 @@ program’s threads.</p>
 <a href="https://lib.rs/crates/nix">nix</a> crate offers safe interface to many low-level functions,
 including
 <a href="https://docs.rs/nix/0.11.0/nix/sys/signal/fn.pthread_sigmask.html"><code>pthread_sigmask</code></a>.</p>
-<h2 id="portability" class="section-header"><a href="#portability">Portability</a></h2>
+<h2 id="portability"><a href="#portability">Portability</a></h2>
 <p>It should work on any POSIX.1-2001 system, which are all the major big OSes with the notable
 exception of Windows.</p>
 <p>Non-standard signals are also supported. Pass the signal value directly from <code>libc</code> or use
@@ -143,7 +143,7 @@ the default handler, nevertheless you certainly have registered the handler.</li
 <p>Moreover, signals won’t work as you expected. <code>SIGTERM</code> isn’t actually used and
 not all <code>Ctrl-C</code>s are turned into <code>SIGINT</code>.</p>
 <p>Patches to improve Windows support in this library are welcome.</p>
-<h2 id="features" class="section-header"><a href="#features">Features</a></h2>
+<h2 id="features"><a href="#features">Features</a></h2>
 <p>There are several feature flags that control how much is available as part of the crate, some
 enabled by default.</p>
 <ul>
@@ -154,7 +154,7 @@ provides a convenient interface for receiving signals in rust-friendly way.</li>
 <li><code>extended-siginfo</code> adds support for providing extra information as part of the iterator
 interface.</li>
 </ul>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2><h3 id="using-a-flag-to-terminate-a-loop-based-application" class="section-header"><a href="#using-a-flag-to-terminate-a-loop-based-application">Using a flag to terminate a loop-based application</a></h3>
+<h2 id="examples"><a href="#examples">Examples</a></h2><h3 id="using-a-flag-to-terminate-a-loop-based-application"><a href="#using-a-flag-to-terminate-a-loop-based-application">Using a flag to terminate a loop-based application</a></h3>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io::Error</span>;
 <span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
 <span class="kw">use</span> <span class="ident">std::sync::atomic</span>::{<span class="ident">AtomicBool</span>, <span class="ident">Ordering</span>};
@@ -169,7 +169,7 @@ interface.</li>
     }
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
-<h3 id="a-complex-signal-handling-with-a-background-thread" class="section-header"><a href="#a-complex-signal-handling-with-a-background-thread">A complex signal handling with a background thread</a></h3>
+<h3 id="a-complex-signal-handling-with-a-background-thread"><a href="#a-complex-signal-handling-with-a-background-thread">A complex signal handling with a background thread</a></h3>
 <p>This also handles the double CTRL+C situation (eg. the second CTRL+C kills) and resetting the
 terminal on <code>SIGTSTP</code> (CTRL+Z, curses-based applications should do something like this).</p>
 
@@ -262,7 +262,7 @@ terminal on <code>SIGTSTP</code> (CTRL+Z, curses-based applications should do so
 
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
-<h2 id="asynchronous-runtime-support" class="section-header"><a href="#asynchronous-runtime-support">Asynchronous runtime support</a></h2>
+<h2 id="asynchronous-runtime-support"><a href="#asynchronous-runtime-support">Asynchronous runtime support</a></h2>
 <p>If you are looking for integration with an asynchronous runtime take a look at one of the
 following adapter crates:</p>
 <ul>
@@ -271,7 +271,7 @@ following adapter crates:</p>
 <li><a href="https://docs.rs/signal-hook-tokio"><code>signal-hook-tokio</code></a> for Tokio support</li>
 </ul>
 <p>Feel free to open a pull requests if you want to add support for runtimes not mentioned above.</p>
-<h2 id="porting-from-previous-versions" class="section-header"><a href="#porting-from-previous-versions">Porting from previous versions</a></h2>
+<h2 id="porting-from-previous-versions"><a href="#porting-from-previous-versions">Porting from previous versions</a></h2>
 <p>There were some noisy changes when going from 0.2 version to the 0.3 version. In particular:</p>
 <ul>
 <li>A lot of things moved around to make the structure of the crate a bit more understandable.
@@ -297,5 +297,5 @@ needs, refer above for emulating default handlers.</li>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="low_level/index.html" title="signal_hook::low_level mod">low_level</a></div><div class="item-right docblock-short"><p>Some low level utilities</p>
 </div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.SigId.html" title="signal_hook::SigId struct">SigId</a></div><div class="item-right docblock-short"><p>An ID of registered action.</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (498eeb72f 2022-01-31)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
 </body></html>

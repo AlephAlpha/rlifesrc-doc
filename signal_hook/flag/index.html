@@ -9,7 +9,7 @@
 bools or numbers and the library manipulates them with the <code>SeqCst</code> ordering, in case someone
 cares about relative order to some <em>other</em> atomic variables. If you don’t care about the
 relative order, you are free to use <code>Ordering::Relaxed</code> when reading and resetting the flags.</p>
-<h2 id="when-to-use" class="section-header"><a href="#when-to-use">When to use</a></h2>
+<h2 id="when-to-use"><a href="#when-to-use">When to use</a></h2>
 <p>The flags in this module allow for polling if a signal arrived since the previous poll. The do
 not allow blocking until something arrives.</p>
 <p>Therefore, the natural way to use them is in applications that have some kind of iterative work
@@ -18,7 +18,7 @@ arbitrary time, the handling of the signal would be postponed for a long time. I
 didn’t block at all, the checking for the signal would turn into a busy-loop.</p>
 <p>If what you need is blocking until a signal comes, you might find better tools in the
 <a href="../low_level/pipe/index.html" title="crate::low_level::pipe"><code>pipe</code></a> and <a href="../iterator/index.html" title="crate::iterator"><code>iterator</code></a> modules.</p>
-<h2 id="examples" class="section-header"><a href="#examples">Examples</a></h2>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
 <p>Doing something until terminated. This also knows by which signal it was terminated. In case
 multiple termination signals arrive before it is handled, it recognizes the last one.</p>
 
@@ -115,5 +115,5 @@ together with reopening the log file).</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.register_conditional_default.html" title="signal_hook::flag::register_conditional_default fn">register_conditional_default</a></div><div class="item-right docblock-short"><p>Conditionally runs an emulation of the default action on the given signal.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.register_conditional_shutdown.html" title="signal_hook::flag::register_conditional_shutdown fn">register_conditional_shutdown</a></div><div class="item-right docblock-short"><p>Terminate the application on a signal if the given condition is true.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.register_usize.html" title="signal_hook::flag::register_usize fn">register_usize</a></div><div class="item-right docblock-short"><p>Registers an action to set the flag to the given value whenever the signal arrives.</p>
-</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (498eeb72f 2022-01-31)" ></div>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
 </body></html>
