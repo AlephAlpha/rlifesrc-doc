@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/darling_core-0.10.2/src/codegen/variant_data.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>variant_data.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/darling_core-0.13.1/src/codegen/variant_data.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>variant_data.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
     <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../darling_core/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
@@ -94,11 +94,11 @@
 <span id="89">89</span>
 <span id="90">90</span>
 <span id="91">91</span>
+<span id="92">92</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
 
-<span class="kw">use</span> <span class="ident">ast::Fields</span>;
-<span class="kw">use</span> <span class="ident">ast::Style</span>;
-<span class="kw">use</span> <span class="ident">codegen::Field</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ast</span>::{<span class="ident">Fields</span>, <span class="ident">Style</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::codegen::Field</span>;
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FieldsGen</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="ident">fields</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Fields</span><span class="op">&lt;</span><span class="ident">Field</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>,
@@ -114,11 +114,12 @@
     }
 
     <span class="doccomment">/// Create declarations for all the fields in the struct.</span>
-    <span class="kw">pub</span>(<span class="kw">in</span> <span class="ident">codegen</span>) <span class="kw">fn</span> <span class="ident">declarations</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
+    <span class="kw">pub</span>(<span class="kw">in</span> <span class="ident"><span class="kw">crate</span>::codegen</span>) <span class="kw">fn</span> <span class="ident">declarations</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">fields</span> {
             <span class="ident">Fields</span> {
                 <span class="ident">style</span>: <span class="ident">Style::Struct</span>,
                 <span class="kw-2">ref</span> <span class="ident">fields</span>,
+                ..
             } =&gt; {
                 <span class="kw">let</span> <span class="ident">vdr</span> <span class="op">=</span> <span class="ident">fields</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">Field::as_declaration</span>);
                 <span class="macro">quote!</span>(#(#<span class="ident">vdr</span>)<span class="kw-2">*</span>)
@@ -128,7 +129,7 @@
     }
 
     <span class="doccomment">/// Generate the loop which walks meta items looking for property matches.</span>
-    <span class="kw">pub</span>(<span class="kw">in</span> <span class="ident">codegen</span>) <span class="kw">fn</span> <span class="ident">core_loop</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
+    <span class="kw">pub</span>(<span class="kw">in</span> <span class="ident"><span class="kw">crate</span>::codegen</span>) <span class="kw">fn</span> <span class="ident">core_loop</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
         <span class="kw">let</span> <span class="ident">arms</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fields</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">Field::as_match</span>);
 
         <span class="comment">// If we&#39;re allowing unknown fields, then handling one is a no-op.</span>
@@ -170,6 +171,7 @@
             <span class="ident">Fields</span> {
                 <span class="ident">style</span>: <span class="ident">Style::Struct</span>,
                 <span class="kw-2">ref</span> <span class="ident">fields</span>,
+                ..
             } =&gt; {
                 <span class="kw">let</span> <span class="ident">checks</span> <span class="op">=</span> <span class="ident">fields</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">Field::as_presence_check</span>);
                 <span class="macro">quote!</span>(#(#<span class="ident">checks</span>)<span class="kw-2">*</span>)
@@ -178,7 +180,7 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">in</span> <span class="ident">codegen</span>) <span class="kw">fn</span> <span class="ident">initializers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
+    <span class="kw">pub</span>(<span class="kw">in</span> <span class="ident"><span class="kw">crate</span>::codegen</span>) <span class="kw">fn</span> <span class="ident">initializers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
         <span class="kw">let</span> <span class="ident">inits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fields</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="ident">Field::as_initializer</span>);
         <span class="kw">let</span> <span class="ident">inits</span> <span class="op">=</span> <span class="ident">inits</span>.<span class="ident">iter</span>();
 
@@ -186,5 +188,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (6a7055661 2022-02-27)" ></div>
 </body></html>

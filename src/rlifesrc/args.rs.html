@@ -422,7 +422,7 @@
 <span id="417">417</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Parsing command-line arguments.</span>
 
-<span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">app_from_crate</span>, <span class="ident">AppSettings</span>, <span class="ident">Arg</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>};
+<span class="kw">use</span> <span class="ident">clap</span>::{<span class="ident">command</span>, <span class="ident">Arg</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>};
 <span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{
     <span class="ident">rules::NtLifeGen</span>, <span class="ident">Config</span>, <span class="ident">NewState</span>, <span class="ident">PolyWorld</span>, <span class="ident">SearchOrder</span>, <span class="ident">Symmetry</span>, <span class="ident">Transform</span>,
 };
@@ -449,7 +449,7 @@
 <span class="kw">impl</span> <span class="ident">Args</span> {
     <span class="doccomment">/// Parses the command-line arguments.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="macro">app_from_crate!</span>()
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="macro">command!</span>()
             .<span class="ident">long_about</span>(
                 <span class="string">&quot;Searching for patterns in Conway&#39;s Game of Life\n\
                  \n\
@@ -460,7 +460,7 @@
                  https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README.md (In Chinese)\n\
                  https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README_en.md (In English)\n&quot;</span>,
             )
-            .<span class="ident">global_setting</span>(<span class="ident">AppSettings::AllowNegativeNumbers</span>)
+            .<span class="ident">allow_negative_numbers</span>(<span class="bool-val">true</span>)
             .<span class="ident">arg</span>(
                 <span class="ident">Arg::new</span>(<span class="string">&quot;CONFIG&quot;</span>)
                     .<span class="ident">help</span>(<span class="string">&quot;Read config from a file&quot;</span>)
@@ -838,5 +838,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (1e12aef3f 2022-02-13)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (6a7055661 2022-02-27)" ></div>
 </body></html>
