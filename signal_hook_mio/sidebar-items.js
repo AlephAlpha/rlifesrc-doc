@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["v0_7","A module for integrating signal handling with the MIO 0.7 runtime."]]});
+initSidebarItems({"mod":[["v0_8","A module for integrating signal handling with the MIO 0.8 runtime."]]});
