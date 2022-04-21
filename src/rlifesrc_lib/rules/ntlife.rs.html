@@ -701,6 +701,16 @@
 <span id="696">696</span>
 <span id="697">697</span>
 <span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Non-totalistic Life-like rules.</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::{
@@ -1110,8 +1120,11 @@
             } <span class="kw">else</span> {
                 <span class="ident">ALIVE</span>
             };
-            <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
-            <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
+                <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+            } <span class="kw">else</span> {
+                <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+            }
         }
 
         <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::SELF</span>) {
@@ -1304,8 +1317,11 @@
                     } <span class="kw">else</span> {
                         <span class="ident">ALIVE</span>
                     };
-                    <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
+                        <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+                    } <span class="kw">else</span> {
+                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                    }
                 }
             }
             <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) =&gt; {
@@ -1320,8 +1336,11 @@
                     } <span class="kw">else</span> {
                         <span class="ident">ALIVE</span>
                     };
-                    <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
+                        <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+                    } <span class="kw">else</span> {
+                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                    }
                 }
             }
             <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">i</span>)) =&gt; {
@@ -1331,9 +1350,10 @@
                     } <span class="kw">else</span> {
                         <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A::confl_from_cell</span>(<span class="ident">cell</span>));
                     }
-                } <span class="kw">else</span> {
-                    <span class="kw">let</span> <span class="ident">succ</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span>.<span class="ident">unwrap</span>();
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
                     <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">State</span>((<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">gen</span>), <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+                } <span class="kw">else</span> {
+                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
                 }
             }
             <span class="prelude-val">None</span> =&gt; <span class="kw">match</span> <span class="ident">desc</span>.<span class="number">1</span> {
@@ -1400,5 +1420,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (1f7fb6413 2022-04-10)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0-nightly (879aff385 2022-04-20)" ></div>
 </body></html>
