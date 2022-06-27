@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["is_positive",""]],"struct":[["Args","A struct to store the parse results."]]});
+window.SIDEBAR_ITEMS = {"fn":[["is_positive",""]],"struct":[["Args","A struct to store the parse results."]]};

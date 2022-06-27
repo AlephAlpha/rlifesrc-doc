@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["_DERIVE_Display_FOR_Error",""]],"enum":[["Error","All kinds of errors in this crate."]]});
+window.SIDEBAR_ITEMS = {"constant":[["_DERIVE_Display_FOR_Error",""]],"enum":[["Error","All kinds of errors in this crate."]]};

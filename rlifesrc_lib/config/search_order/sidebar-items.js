@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["SearchOrder","The order to find a new unknown cell."]]});
+window.SIDEBAR_ITEMS = {"enum":[["SearchOrder","The order to find a new unknown cell."]]};
