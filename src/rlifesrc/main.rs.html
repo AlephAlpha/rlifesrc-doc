@@ -88,7 +88,7 @@
             <span class="macro">eprintln!</span>(<span class="string">&quot;Not found.&quot;</span>);
             <span class="ident">exit</span>(<span class="number">1</span>);
         }
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Status::Found</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">search</span>(<span class="prelude-val">None</span>) {
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">world</span>.<span class="ident">search</span>(<span class="prelude-val">None</span>) <span class="op">==</span> <span class="ident">Status::Found</span> {
         <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">world</span>.<span class="ident">rle_gen</span>(<span class="number">0</span>));
     } <span class="kw">else</span> {
         <span class="macro">eprintln!</span>(<span class="string">&quot;Not found.&quot;</span>);
