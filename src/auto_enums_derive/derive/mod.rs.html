@@ -10,17 +10,17 @@
 <span id="10">10</span>
 <span id="11">11</span>
 <span id="12">12</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::unnecessary_wraps</span>)]</span>
+</pre><pre class="rust"><code><span class="attribute">#![allow(clippy::unnecessary_wraps)]</span>
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">core</span>;
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">external</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">std</span>;
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">ty_impls</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>core;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>external;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>std;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>ty_impls;
 
-<span class="kw">use</span> <span class="ident">derive_utils</span>::{<span class="ident">derive_trait</span>, <span class="ident">EnumData</span> <span class="kw">as</span> <span class="ident">Data</span>};
-<span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">format_ident</span>, <span class="ident">quote</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">parse_quote</span>, <span class="prelude-ty">Result</span>};
+<span class="kw">use </span>derive_utils::{derive_trait, EnumData <span class="kw">as </span>Data};
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::{format_ident, quote};
+<span class="kw">use </span>syn::{parse_quote, <span class="prelude-ty">Result</span>};
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="auto_enums_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="auto_enums_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

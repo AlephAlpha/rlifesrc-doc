@@ -5,23 +5,23 @@ displaydoc = &quot;0.2&quot;</code></pre></div>
 <p><em>Compiler support: requires rustc 1.31+</em></p>
 <br>
 <h3 id="example"><a href="#example">Example</a></h3>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>;
-<span class="kw">use</span> <span class="ident">displaydoc::Display</span>;
-<span class="kw">use</span> <span class="ident">thiserror::Error</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io;
+<span class="kw">use </span>displaydoc::Display;
+<span class="kw">use </span>thiserror::Error;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Display</span>, <span class="ident">Error</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DataStoreError</span> {
-    <span class="doccomment">/// data store disconnected</span>
-    <span class="ident">Disconnect</span>(<span class="attribute">#[<span class="ident">source</span>]</span> <span class="ident">io::Error</span>),
-    <span class="doccomment">/// the data for key `{0}` is not available</span>
-    <span class="ident">Redaction</span>(<span class="ident">String</span>),
-    <span class="doccomment">/// invalid header (expected {expected:?}, found {found:?})</span>
-    <span class="ident">InvalidHeader</span> {
-        <span class="ident">expected</span>: <span class="ident">String</span>,
-        <span class="ident">found</span>: <span class="ident">String</span>,
+<span class="attribute">#[derive(Display, Error, Debug)]</span>
+<span class="kw">pub enum </span>DataStoreError {
+    <span class="doccomment">/// data store disconnected
+    </span>Disconnect(<span class="attribute">#[source]</span> io::Error),
+    <span class="doccomment">/// the data for key `{0}` is not available
+    </span>Redaction(String),
+    <span class="doccomment">/// invalid header (expected {expected:?}, found {found:?})
+    </span>InvalidHeader {
+        expected: String,
+        found: String,
     },
-    <span class="doccomment">/// unknown data store error</span>
-    <span class="ident">Unknown</span>,
+    <span class="doccomment">/// unknown data store error
+    </span>Unknown,
 }</code></pre></div>
 <br>
 <h3 id="details"><a href="#details">Details</a></h3>
@@ -78,4 +78,4 @@ override it.</p>
 </li>
 </ol>
 </div></details><h2 id="derives" class="small-section-header"><a href="#derives">Derive Macros</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.Display.html" title="displaydoc::Display derive">Display</a></div><div class="item-right docblock-short"><p>Derive macro for implementing <code>Display</code> via doc comment attributes</p>
-</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="displaydoc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="displaydoc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

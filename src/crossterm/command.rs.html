@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/command.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/command.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -228,235 +228,235 @@
 <span id="228">228</span>
 <span id="229">229</span>
 <span id="230">230</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt;
+<span class="kw">use </span>std::io::{<span class="self">self</span>, Write};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::error::Result</span>;
+<span class="kw">use </span><span class="kw">super</span>::error::Result;
 
-<span class="doccomment">/// An interface for a command that performs an action on the terminal.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Crossterm provides a set of commands,</span>
-<span class="doccomment">/// and there is no immediate reason to implement a command yourself.</span>
-<span class="doccomment">/// In order to understand how to use and execute commands,</span>
-<span class="doccomment">/// it is recommended that you take a look at [Command API](./index.html#command-api) chapter.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Command</span> {
-    <span class="doccomment">/// Write an ANSI representation of this command to the given writer.</span>
-    <span class="doccomment">/// An ANSI code can manipulate the terminal by writing it to the terminal buffer.</span>
-    <span class="doccomment">/// However, only Windows 10 and UNIX systems support this.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command API](./index.html#command-api)</span>
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span>;
+<span class="doccomment">/// An interface for a command that performs an action on the terminal.
+///
+/// Crossterm provides a set of commands,
+/// and there is no immediate reason to implement a command yourself.
+/// In order to understand how to use and execute commands,
+/// it is recommended that you take a look at [Command API](./index.html#command-api) chapter.
+</span><span class="kw">pub trait </span>Command {
+    <span class="doccomment">/// Write an ANSI representation of this command to the given writer.
+    /// An ANSI code can manipulate the terminal by writing it to the terminal buffer.
+    /// However, only Windows 10 and UNIX systems support this.
+    ///
+    /// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command API](./index.html#command-api)
+    </span><span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result;
 
-    <span class="doccomment">/// Execute this command.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Windows versions lower than windows 10 do not support ANSI escape codes,</span>
-    <span class="doccomment">/// therefore a direct WinAPI call is made.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command API](./index.html#command-api)</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="doccomment">/// Execute this command.
+    ///
+    /// Windows versions lower than windows 10 do not support ANSI escape codes,
+    /// therefore a direct WinAPI call is made.
+    ///
+    /// This method does not need to be accessed manually, as it is used by the crossterm&#39;s [Command API](./index.html#command-api)
+    </span><span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
 
-    <span class="doccomment">/// Returns whether the ANSI code representation of this command is supported by windows.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// A list of supported ANSI escape codes</span>
-    <span class="doccomment">/// can be found [here](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident"><span class="kw">super</span>::ansi_support::supports_ansi</span>()
+    <span class="doccomment">/// Returns whether the ANSI code representation of this command is supported by windows.
+    ///
+    /// A list of supported ANSI escape codes
+    /// can be found [here](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).
+    </span><span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">super</span>::ansi_support::supports_ansi()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Command</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        (<span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">write_ansi</span>(<span class="ident">f</span>)
+<span class="kw">impl</span>&lt;T: Command + <span class="question-mark">?</span>Sized&gt; Command <span class="kw">for </span><span class="kw-2">&amp;</span>T {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        (<span class="kw-2">**</span><span class="self">self</span>).write_ansi(f)
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">T::execute_winapi</span>(<span class="self">self</span>)
+    <span class="attribute">#[inline]</span>
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        T::execute_winapi(<span class="self">self</span>)
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident">T::is_ansi_code_supported</span>(<span class="self">self</span>)
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        T::is_ansi_code_supported(<span class="self">self</span>)
     }
 }
 
-<span class="doccomment">/// An interface for types that can queue commands for further execution.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">QueueableCommand</span> {
-    <span class="doccomment">/// Queues the given command for further execution.</span>
-    <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
+<span class="doccomment">/// An interface for types that can queue commands for further execution.
+</span><span class="kw">pub trait </span>QueueableCommand {
+    <span class="doccomment">/// Queues the given command for further execution.
+    </span><span class="kw">fn </span>queue(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;;
 }
 
-<span class="doccomment">/// An interface for types that can directly execute commands.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ExecutableCommand</span> {
-    <span class="doccomment">/// Executes the given command directly.</span>
-    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>;
+<span class="doccomment">/// An interface for types that can directly execute commands.
+</span><span class="kw">pub trait </span>ExecutableCommand {
+    <span class="doccomment">/// Executes the given command directly.
+    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Write</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">QueueableCommand</span> <span class="kw">for</span> <span class="ident">T</span> {
-    <span class="doccomment">/// Queues the given command for further execution.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Queued commands will be executed in the following cases:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * When `flush` is called manually on the given type implementing `io::Write`.</span>
-    <span class="doccomment">/// * The terminal will `flush` automatically if the buffer is full.</span>
-    <span class="doccomment">/// * Each line is flushed in case of `stdout`, because it is line buffered.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Arguments</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// - [Command](./trait.Command.html)</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     The command that you want to queue for later execution.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// use std::io::{Write, stdout};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// use crossterm::{Result, QueueableCommand, style::Print};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///  fn main() -&gt; Result&lt;()&gt; {</span>
-    <span class="doccomment">///     let mut stdout = stdout();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // `Print` will executed executed when `flush` is called.</span>
-    <span class="doccomment">///     stdout</span>
-    <span class="doccomment">///         .queue(Print(&quot;foo 1\n&quot;.to_string()))?</span>
-    <span class="doccomment">///         .queue(Print(&quot;foo 2&quot;.to_string()))?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // some other code (no execution happening here) ...</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // when calling `flush` on `stdout`, all commands will be written to the stdout and therefore executed.</span>
-    <span class="doccomment">///     stdout.flush()?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     Ok(())</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     // ==== Output ====</span>
-    <span class="doccomment">///     // foo 1</span>
-    <span class="doccomment">///     // foo 2</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Have a look over at the [Command API](./index.html#command-api) for more details.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Notes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.</span>
-    <span class="doccomment">/// * In case of Windows versions lower than 10, a direct WinAPI call will be made.</span>
-    <span class="doccomment">///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
-    <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
-    <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
-    <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
-    <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">command</span>.<span class="ident">is_ansi_code_supported</span>() {
-            <span class="comment">// There may be queued commands in this writer, but `execute_winapi` will execute the</span>
-            <span class="comment">// command immediately. To prevent commands being executed out of order we flush the</span>
-            <span class="comment">// writer now.</span>
-            <span class="self">self</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
-            <span class="ident">command</span>.<span class="ident">execute_winapi</span>()<span class="question-mark">?</span>;
-            <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="self">self</span>);
+<span class="kw">impl</span>&lt;T: Write + <span class="question-mark">?</span>Sized&gt; QueueableCommand <span class="kw">for </span>T {
+    <span class="doccomment">/// Queues the given command for further execution.
+    ///
+    /// Queued commands will be executed in the following cases:
+    ///
+    /// * When `flush` is called manually on the given type implementing `io::Write`.
+    /// * The terminal will `flush` automatically if the buffer is full.
+    /// * Each line is flushed in case of `stdout`, because it is line buffered.
+    ///
+    /// # Arguments
+    ///
+    /// - [Command](./trait.Command.html)
+    ///
+    ///     The command that you want to queue for later execution.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::io::{Write, stdout};
+    ///
+    /// use crossterm::{Result, QueueableCommand, style::Print};
+    ///
+    ///  fn main() -&gt; Result&lt;()&gt; {
+    ///     let mut stdout = stdout();
+    ///
+    ///     // `Print` will executed executed when `flush` is called.
+    ///     stdout
+    ///         .queue(Print(&quot;foo 1\n&quot;.to_string()))?
+    ///         .queue(Print(&quot;foo 2&quot;.to_string()))?;
+    ///
+    ///     // some other code (no execution happening here) ...
+    ///
+    ///     // when calling `flush` on `stdout`, all commands will be written to the stdout and therefore executed.
+    ///     stdout.flush()?;
+    ///
+    ///     Ok(())
+    ///
+    ///     // ==== Output ====
+    ///     // foo 1
+    ///     // foo 2
+    /// }
+    /// ```
+    ///
+    /// Have a look over at the [Command API](./index.html#command-api) for more details.
+    ///
+    /// # Notes
+    ///
+    /// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.
+    /// * In case of Windows versions lower than 10, a direct WinAPI call will be made.
+    ///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,
+    ///     and can therefore not be written to the given `writer`.
+    ///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)
+    ///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.
+    </span><span class="kw">fn </span>queue(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt; {
+        <span class="attribute">#[cfg(windows)]</span>
+        <span class="kw">if </span>!command.is_ansi_code_supported() {
+            <span class="comment">// There may be queued commands in this writer, but `execute_winapi` will execute the
+            // command immediately. To prevent commands being executed out of order we flush the
+            // writer now.
+            </span><span class="self">self</span>.flush()<span class="question-mark">?</span>;
+            command.execute_winapi()<span class="question-mark">?</span>;
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="self">self</span>);
         }
 
-        <span class="ident">write_command_ansi</span>(<span class="self">self</span>, <span class="ident">command</span>)<span class="question-mark">?</span>;
+        write_command_ansi(<span class="self">self</span>, command)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Write</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">ExecutableCommand</span> <span class="kw">for</span> <span class="ident">T</span> {
-    <span class="doccomment">/// Executes the given command directly.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The given command its ANSI escape code will be written and flushed onto `Self`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Arguments</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// - [Command](./trait.Command.html)</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///     The command that you want to execute directly.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Example</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust</span>
-    <span class="doccomment">/// use std::io::{Write, stdout};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// use crossterm::{Result, ExecutableCommand, style::Print};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///  fn main() -&gt; Result&lt;()&gt; {</span>
-    <span class="doccomment">///      // will be executed directly</span>
-    <span class="doccomment">///       stdout()</span>
-    <span class="doccomment">///         .execute(Print(&quot;sum:\n&quot;.to_string()))?</span>
-    <span class="doccomment">///         .execute(Print(format!(&quot;1 + 1= {} &quot;, 1 + 1)))?;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///       Ok(())</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">///      // ==== Output ====</span>
-    <span class="doccomment">///      // sum:</span>
-    <span class="doccomment">///      // 1 + 1 = 2</span>
-    <span class="doccomment">///  }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Have a look over at the [Command API](./index.html#command-api) for more details.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Notes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.</span>
-    <span class="doccomment">/// * In case of Windows versions lower than 10, a direct WinAPI call will be made.</span>
-    <span class="doccomment">///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
-    <span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
-    <span class="doccomment">///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)</span>
-    <span class="doccomment">///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.</span>
-    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">queue</span>(<span class="ident">command</span>)<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
+<span class="kw">impl</span>&lt;T: Write + <span class="question-mark">?</span>Sized&gt; ExecutableCommand <span class="kw">for </span>T {
+    <span class="doccomment">/// Executes the given command directly.
+    ///
+    /// The given command its ANSI escape code will be written and flushed onto `Self`.
+    ///
+    /// # Arguments
+    ///
+    /// - [Command](./trait.Command.html)
+    ///
+    ///     The command that you want to execute directly.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use std::io::{Write, stdout};
+    ///
+    /// use crossterm::{Result, ExecutableCommand, style::Print};
+    ///
+    ///  fn main() -&gt; Result&lt;()&gt; {
+    ///      // will be executed directly
+    ///       stdout()
+    ///         .execute(Print(&quot;sum:\n&quot;.to_string()))?
+    ///         .execute(Print(format!(&quot;1 + 1= {} &quot;, 1 + 1)))?;
+    ///
+    ///       Ok(())
+    ///
+    ///      // ==== Output ====
+    ///      // sum:
+    ///      // 1 + 1 = 2
+    ///  }
+    /// ```
+    ///
+    /// Have a look over at the [Command API](./index.html#command-api) for more details.
+    ///
+    /// # Notes
+    ///
+    /// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.
+    /// * In case of Windows versions lower than 10, a direct WinAPI call will be made.
+    ///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,
+    ///     and can therefore not be written to the given `writer`.
+    ///     Therefore, there is no difference between [execute](./trait.ExecutableCommand.html)
+    ///     and [queue](./trait.QueueableCommand.html) for those old Windows versions.
+    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;mut </span><span class="self">self</span>, command: <span class="kw">impl </span>Command) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt; {
+        <span class="self">self</span>.queue(command)<span class="question-mark">?</span>;
+        <span class="self">self</span>.flush()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 }
 
-<span class="doccomment">/// Writes the ANSI representation of a command to the given writer.</span>
-<span class="kw">fn</span> <span class="ident">write_command_ansi</span><span class="op">&lt;</span><span class="ident">C</span>: <span class="ident">Command</span><span class="op">&gt;</span>(
-    <span class="ident">io</span>: <span class="kw-2">&amp;mut</span> (<span class="kw">impl</span> <span class="ident">io::Write</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span>),
-    <span class="ident">command</span>: <span class="ident">C</span>,
-) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">struct</span> <span class="ident">Adapter</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="ident">inner</span>: <span class="ident">T</span>,
-        <span class="ident">res</span>: <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
+<span class="doccomment">/// Writes the ANSI representation of a command to the given writer.
+</span><span class="kw">fn </span>write_command_ansi&lt;C: Command&gt;(
+    io: <span class="kw-2">&amp;mut </span>(<span class="kw">impl </span>io::Write + <span class="question-mark">?</span>Sized),
+    command: C,
+) -&gt; io::Result&lt;()&gt; {
+    <span class="kw">struct </span>Adapter&lt;T&gt; {
+        inner: T,
+        res: io::Result&lt;()&gt;,
     }
 
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Write</span><span class="op">&gt;</span> <span class="ident">fmt::Write</span> <span class="kw">for</span> <span class="ident">Adapter</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">write_str</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">fmt::Result</span> {
-            <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">write_all</span>(<span class="ident">s</span>.<span class="ident">as_bytes</span>()).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                <span class="self">self</span>.<span class="ident">res</span> <span class="op">=</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>);
-                <span class="ident">fmt::Error</span>
+    <span class="kw">impl</span>&lt;T: Write&gt; fmt::Write <span class="kw">for </span>Adapter&lt;T&gt; {
+        <span class="kw">fn </span>write_str(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: <span class="kw-2">&amp;</span>str) -&gt; fmt::Result {
+            <span class="self">self</span>.inner.write_all(s.as_bytes()).map_err(|e| {
+                <span class="self">self</span>.res = <span class="prelude-val">Err</span>(e);
+                fmt::Error
             })
         }
     }
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">adapter</span> <span class="op">=</span> <span class="ident">Adapter</span> {
-        <span class="ident">inner</span>: <span class="ident">io</span>,
-        <span class="ident">res</span>: <span class="prelude-val">Ok</span>(()),
+    <span class="kw">let </span><span class="kw-2">mut </span>adapter = Adapter {
+        inner: io,
+        res: <span class="prelude-val">Ok</span>(()),
     };
 
-    <span class="ident">command</span>
-        .<span class="ident">write_ansi</span>(<span class="kw-2">&amp;mut</span> <span class="ident">adapter</span>)
-        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">fmt::Error</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">adapter</span>.<span class="ident">res</span> {
+    command
+        .write_ansi(<span class="kw-2">&amp;mut </span>adapter)
+        .map_err(|fmt::Error| <span class="kw">match </span>adapter.res {
             <span class="prelude-val">Ok</span>(()) =&gt; <span class="macro">panic!</span>(
                 <span class="string">&quot;&lt;{}&gt;::write_ansi incorrectly errored&quot;</span>,
-                <span class="ident">std::any::type_name</span>::<span class="op">&lt;</span><span class="ident">C</span><span class="op">&gt;</span>()
+                std::any::type_name::&lt;C&gt;()
             ),
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; <span class="ident">e</span>,
+            <span class="prelude-val">Err</span>(e) =&gt; e,
         })
 }
 
-<span class="doccomment">/// Executes the ANSI representation of a command, using the given `fmt::Write`.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">execute_fmt</span>(<span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>, <span class="ident">command</span>: <span class="kw">impl</span> <span class="ident">Command</span>) -&gt; <span class="ident">fmt::Result</span> {
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">command</span>.<span class="ident">is_ansi_code_supported</span>() {
-        <span class="kw">return</span> <span class="ident">command</span>.<span class="ident">execute_winapi</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>);
+<span class="doccomment">/// Executes the ANSI representation of a command, using the given `fmt::Write`.
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>execute_fmt(f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write, command: <span class="kw">impl </span>Command) -&gt; fmt::Result {
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">if </span>!command.is_ansi_code_supported() {
+        <span class="kw">return </span>command.execute_winapi().map_err(|<span class="kw">_</span>| fmt::Error);
     }
 
-    <span class="ident">command</span>.<span class="ident">write_ansi</span>(<span class="ident">f</span>)
+    command.write_ansi(f)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

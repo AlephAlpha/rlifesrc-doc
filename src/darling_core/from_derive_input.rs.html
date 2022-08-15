@@ -24,31 +24,31 @@
 <span id="24">24</span>
 <span id="25">25</span>
 <span id="26">26</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">syn::DeriveInput</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>syn::DeriveInput;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Result</span>;
+<span class="kw">use </span><span class="kw">crate</span>::Result;
 
-<span class="doccomment">/// Creates an instance by parsing an entire proc-macro `derive` input,</span>
-<span class="doccomment">/// including the, identity, generics, and visibility of the type.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This trait should either be derived or manually implemented by a type</span>
-<span class="doccomment">/// in the proc macro crate which is directly using `darling`. It is unlikely</span>
-<span class="doccomment">/// that these implementations will be reusable across crates.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">FromDeriveInput</span>: <span class="ident">Sized</span> {
-    <span class="doccomment">/// Create an instance from `syn::DeriveInput`, or return an error.</span>
-    <span class="kw">fn</span> <span class="ident">from_derive_input</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+<span class="doccomment">/// Creates an instance by parsing an entire proc-macro `derive` input,
+/// including the, identity, generics, and visibility of the type.
+///
+/// This trait should either be derived or manually implemented by a type
+/// in the proc macro crate which is directly using `darling`. It is unlikely
+/// that these implementations will be reusable across crates.
+</span><span class="kw">pub trait </span>FromDeriveInput: Sized {
+    <span class="doccomment">/// Create an instance from `syn::DeriveInput`, or return an error.
+    </span><span class="kw">fn </span>from_derive_input(input: <span class="kw-2">&amp;</span>DeriveInput) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;;
 }
 
-<span class="kw">impl</span> <span class="ident">FromDeriveInput</span> <span class="kw">for</span> () {
-    <span class="kw">fn</span> <span class="ident">from_derive_input</span>(<span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+<span class="kw">impl </span>FromDeriveInput <span class="kw">for </span>() {
+    <span class="kw">fn </span>from_derive_input(<span class="kw">_</span>: <span class="kw-2">&amp;</span>DeriveInput) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">FromDeriveInput</span> <span class="kw">for</span> <span class="ident">DeriveInput</span> {
-    <span class="kw">fn</span> <span class="ident">from_derive_input</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">input</span>.<span class="ident">clone</span>())
+<span class="kw">impl </span>FromDeriveInput <span class="kw">for </span>DeriveInput {
+    <span class="kw">fn </span>from_derive_input(input: <span class="kw-2">&amp;</span>DeriveInput) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Ok</span>(input.clone())
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

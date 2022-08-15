@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/style.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>style.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>style.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -463,470 +463,542 @@
 <span id="463">463</span>
 <span id="464">464</span>
 <span id="465">465</span>
-</pre><pre class="rust"><code><span class="doccomment">//! # Style</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The `style` module provides a functionality to apply attributes and colors on your text.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
-<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
-<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
-<span class="doccomment">//! to demonstrate the capabilities.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Platform-specific Notes</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Not all features are supported on all terminals/platforms. You should always consult</span>
-<span class="doccomment">//! platform-specific notes of the following types:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * [Color](enum.Color.html#platform-specific-notes)</span>
-<span class="doccomment">//! * [Attribute](enum.Attribute.html#platform-specific-notes)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! A few examples of how to use the style module.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Colors</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! How to change the terminal text color.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Command API:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using the Command API to color text.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! use crossterm::{execute, Result};</span>
-<span class="doccomment">//! use crossterm::style::{Print, SetForegroundColor, SetBackgroundColor, ResetColor, Color, Attribute};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!     execute!(</span>
-<span class="doccomment">//!         stdout(),</span>
-<span class="doccomment">//!         // Blue foreground</span>
-<span class="doccomment">//!         SetForegroundColor(Color::Blue),</span>
-<span class="doccomment">//!         // Red background</span>
-<span class="doccomment">//!         SetBackgroundColor(Color::Red),</span>
-<span class="doccomment">//!         // Print text</span>
-<span class="doccomment">//!         Print(&quot;Blue text on Red.&quot;.to_string()),</span>
-<span class="doccomment">//!         // Reset to default colors</span>
-<span class="doccomment">//!         ResetColor</span>
-<span class="doccomment">//!     )</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Functions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using functions from [`Stylize`](crate::style::Stylize) on a `String` or `&amp;&#39;static str` to color</span>
-<span class="doccomment">//! it.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use crossterm::style::Stylize;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Red foreground color &amp; blue background.&quot;.red().on_blue());</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Attributes</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! How to apply terminal attributes to text.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Command API:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using the Command API to set attributes.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! use crossterm::{execute, Result, style::Print};</span>
-<span class="doccomment">//! use crossterm::style::{SetAttribute, Attribute};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!     execute!(</span>
-<span class="doccomment">//!         stdout(),</span>
-<span class="doccomment">//!         // Set to bold</span>
-<span class="doccomment">//!         SetAttribute(Attribute::Bold),</span>
-<span class="doccomment">//!         Print(&quot;Bold text here.&quot;.to_string()),</span>
-<span class="doccomment">//!         // Reset all attributes</span>
-<span class="doccomment">//!         SetAttribute(Attribute::Reset)</span>
-<span class="doccomment">//!     )</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Functions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Using [`Stylize`](crate::style::Stylize) functions on a `String` or `&amp;&#39;static str` to set</span>
-<span class="doccomment">//! attributes to it.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use crossterm::style::Stylize;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Bold&quot;.bold());</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Underlined&quot;.underlined());</span>
-<span class="doccomment">//! println!(&quot;{}&quot;, &quot;Negative&quot;.negative());</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Displayable:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [`Attribute`](enum.Attribute.html) implements [Display](https://doc.rust-lang.org/beta/std/fmt/trait.Display.html) and therefore it can be formatted like:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use crossterm::style::Attribute;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! println!(</span>
-<span class="doccomment">//!     &quot;{} Underlined {} No Underline&quot;,</span>
-<span class="doccomment">//!     Attribute::Underlined,</span>
-<span class="doccomment">//!     Attribute::NoUnderline</span>
-<span class="doccomment">//! );</span>
-<span class="doccomment">//! ```</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+</pre><pre class="rust"><code><span class="doccomment">//! # Style
+//!
+//! The `style` module provides a functionality to apply attributes and colors on your text.
+//!
+//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly
+//! obvious how to use this crate. Although, we do provide
+//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository
+//! to demonstrate the capabilities.
+//!
+//! ## Platform-specific Notes
+//!
+//! Not all features are supported on all terminals/platforms. You should always consult
+//! platform-specific notes of the following types:
+//!
+//! * [Color](enum.Color.html#platform-specific-notes)
+//! * [Attribute](enum.Attribute.html#platform-specific-notes)
+//!
+//! ## Examples
+//!
+//! A few examples of how to use the style module.
+//!
+//! ### Colors
+//!
+//! How to change the terminal text color.
+//!
+//! Command API:
+//!
+//! Using the Command API to color text.
+//!
+//! ```no_run
+//! use std::io::{stdout, Write};
+//!
+//! use crossterm::{execute, Result};
+//! use crossterm::style::{Print, SetForegroundColor, SetBackgroundColor, ResetColor, Color, Attribute};
+//!
+//! fn main() -&gt; Result&lt;()&gt; {
+//!     execute!(
+//!         stdout(),
+//!         // Blue foreground
+//!         SetForegroundColor(Color::Blue),
+//!         // Red background
+//!         SetBackgroundColor(Color::Red),
+//!         // Print text
+//!         Print(&quot;Blue text on Red.&quot;.to_string()),
+//!         // Reset to default colors
+//!         ResetColor
+//!     )
+//! }
+//! ```
+//!
+//! Functions:
+//!
+//! Using functions from [`Stylize`](crate::style::Stylize) on a `String` or `&amp;&#39;static str` to color
+//! it.
+//!
+//! ```no_run
+//! use crossterm::style::Stylize;
+//!
+//! println!(&quot;{}&quot;, &quot;Red foreground color &amp; blue background.&quot;.red().on_blue());
+//! ```
+//!
+//! ### Attributes
+//!
+//! How to apply terminal attributes to text.
+//!
+//! Command API:
+//!
+//! Using the Command API to set attributes.
+//!
+//! ```no_run
+//! use std::io::{stdout, Write};
+//!
+//! use crossterm::{execute, Result, style::Print};
+//! use crossterm::style::{SetAttribute, Attribute};
+//!
+//! fn main() -&gt; Result&lt;()&gt; {
+//!     execute!(
+//!         stdout(),
+//!         // Set to bold
+//!         SetAttribute(Attribute::Bold),
+//!         Print(&quot;Bold text here.&quot;.to_string()),
+//!         // Reset all attributes
+//!         SetAttribute(Attribute::Reset)
+//!     )
+//! }
+//! ```
+//!
+//! Functions:
+//!
+//! Using [`Stylize`](crate::style::Stylize) functions on a `String` or `&amp;&#39;static str` to set
+//! attributes to it.
+//!
+//! ```no_run
+//! use crossterm::style::Stylize;
+//!
+//! println!(&quot;{}&quot;, &quot;Bold&quot;.bold());
+//! println!(&quot;{}&quot;, &quot;Underlined&quot;.underlined());
+//! println!(&quot;{}&quot;, &quot;Negative&quot;.negative());
+//! ```
+//!
+//! Displayable:
+//!
+//! [`Attribute`](enum.Attribute.html) implements [Display](https://doc.rust-lang.org/beta/std/fmt/trait.Display.html) and therefore it can be formatted like:
+//!
+//! ```no_run
+//! use crossterm::style::Attribute;
+//!
+//! println!(
+//!     &quot;{} Underlined {} No Underline&quot;,
+//!     Attribute::Underlined,
+//!     Attribute::NoUnderline
+//! );
+//! ```
 
-<span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">env</span>,
-    <span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>},
+</span><span class="kw">use </span>std::{
+    env,
+    fmt::{<span class="self">self</span>, Display},
 };
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::command::execute_fmt</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Result</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">csi</span>, <span class="ident">impl_display</span>, <span class="ident">Command</span>};
+<span class="kw">use </span><span class="kw">crate</span>::command::execute_fmt;
+<span class="attribute">#[cfg(windows)]</span>
+<span class="kw">use </span><span class="kw">crate</span>::Result;
+<span class="kw">use crate</span>::{csi, impl_display, Command};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
-    <span class="ident">attributes::Attributes</span>,
-    <span class="ident">content_style::ContentStyle</span>,
-    <span class="ident">styled_content::StyledContent</span>,
-    <span class="ident">stylize::Stylize</span>,
-    <span class="ident">types</span>::{<span class="ident">Attribute</span>, <span class="ident">Color</span>, <span class="ident">Colored</span>, <span class="ident">Colors</span>},
+<span class="kw">pub use </span><span class="self">self</span>::{
+    attributes::Attributes,
+    content_style::ContentStyle,
+    styled_content::StyledContent,
+    stylize::Stylize,
+    types::{Attribute, Color, Colored, Colors},
 };
 
-<span class="kw">mod</span> <span class="ident">attributes</span>;
-<span class="kw">mod</span> <span class="ident">content_style</span>;
-<span class="kw">mod</span> <span class="ident">styled_content</span>;
-<span class="kw">mod</span> <span class="ident">stylize</span>;
-<span class="kw">mod</span> <span class="ident">sys</span>;
-<span class="kw">mod</span> <span class="ident">types</span>;
+<span class="kw">mod </span>attributes;
+<span class="kw">mod </span>content_style;
+<span class="kw">mod </span>styled_content;
+<span class="kw">mod </span>stylize;
+<span class="kw">mod </span>sys;
+<span class="kw">mod </span>types;
 
-<span class="doccomment">/// Creates a `StyledContent`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This could be used to style any type that implements `Display` with colors and text attributes.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`StyledContent`](struct.StyledContent.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use crossterm::style::{style, Stylize, Color};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let styled_content = style(&quot;Blue colored text on yellow background&quot;)</span>
-<span class="doccomment">///     .with(Color::Blue)</span>
-<span class="doccomment">///     .on(Color::Yellow);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// println!(&quot;{}&quot;, styled_content);</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">style</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span>(<span class="ident">val</span>: <span class="ident">D</span>) -&gt; <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
-    <span class="ident">ContentStyle::new</span>().<span class="ident">apply</span>(<span class="ident">val</span>)
+<span class="doccomment">/// Creates a `StyledContent`.
+///
+/// This could be used to style any type that implements `Display` with colors and text attributes.
+///
+/// See [`StyledContent`](struct.StyledContent.html) for more info.
+///
+/// # Examples
+///
+/// ```no_run
+/// use crossterm::style::{style, Stylize, Color};
+///
+/// let styled_content = style(&quot;Blue colored text on yellow background&quot;)
+///     .with(Color::Blue)
+///     .on(Color::Yellow);
+///
+/// println!(&quot;{}&quot;, styled_content);
+/// ```
+</span><span class="kw">pub fn </span>style&lt;D: Display&gt;(val: D) -&gt; StyledContent&lt;D&gt; {
+    ContentStyle::new().apply(val)
 }
 
-<span class="doccomment">/// Returns available color count.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This does not always provide a good result.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">available_color_count</span>() -&gt; <span class="ident">u16</span> {
-    <span class="ident">env::var</span>(<span class="string">&quot;TERM&quot;</span>)
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="kw">if</span> <span class="ident">x</span>.<span class="ident">contains</span>(<span class="string">&quot;256color&quot;</span>) { <span class="number">256</span> } <span class="kw">else</span> { <span class="number">8</span> })
-        .<span class="ident">unwrap_or</span>(<span class="number">8</span>)
+<span class="doccomment">/// Returns available color count.
+///
+/// # Notes
+///
+/// This does not always provide a good result.
+</span><span class="kw">pub fn </span>available_color_count() -&gt; u16 {
+    env::var(<span class="string">&quot;TERM&quot;</span>)
+        .map(|x| <span class="kw">if </span>x.contains(<span class="string">&quot;256color&quot;</span>) { <span class="number">256 </span>} <span class="kw">else </span>{ <span class="number">8 </span>})
+        .unwrap_or(<span class="number">8</span>)
 }
 
-<span class="doccomment">/// A command that sets the the foreground color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Color`](enum.Color.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background</span>
-<span class="doccomment">/// color in one command.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetForegroundColor</span>(<span class="kw">pub</span> <span class="ident">Color</span>);
+<span class="doccomment">/// A command that sets the the foreground color.
+///
+/// See [`Color`](enum.Color.html) for more info.
+///
+/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background
+/// color in one command.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetForegroundColor(<span class="kw">pub </span>Color);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetForegroundColor</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), <span class="ident">Colored::ForegroundColor</span>(<span class="self">self</span>.<span class="number">0</span>))
+<span class="kw">impl </span>Command <span class="kw">for </span>SetForegroundColor {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), Colored::ForegroundColor(<span class="self">self</span>.<span class="number">0</span>))
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::windows::set_foreground_color</span>(<span class="self">self</span>.<span class="number">0</span>)
-    }
-}
-
-<span class="doccomment">/// A command that sets the the background color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Color`](enum.Color.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background</span>
-<span class="doccomment">/// color with one command.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetBackgroundColor</span>(<span class="kw">pub</span> <span class="ident">Color</span>);
-
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetBackgroundColor</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), <span class="ident">Colored::BackgroundColor</span>(<span class="self">self</span>.<span class="number">0</span>))
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::windows::set_background_color</span>(<span class="self">self</span>.<span class="number">0</span>)
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::windows::set_foreground_color(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
-<span class="doccomment">/// A command that sets the the underline color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Color`](enum.Color.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background</span>
-<span class="doccomment">/// color with one command.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetUnderlineColor</span>(<span class="kw">pub</span> <span class="ident">Color</span>);
+<span class="doccomment">/// A command that sets the the background color.
+///
+/// See [`Color`](enum.Color.html) for more info.
+///
+/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background
+/// color with one command.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetBackgroundColor(<span class="kw">pub </span>Color);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetUnderlineColor</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), <span class="ident">Colored::UnderlineColor</span>(<span class="self">self</span>.<span class="number">0</span>))
+<span class="kw">impl </span>Command <span class="kw">for </span>SetBackgroundColor {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), Colored::BackgroundColor(<span class="self">self</span>.<span class="number">0</span>))
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">std::io::Error::new</span>(
-            <span class="ident">std::io::ErrorKind::Other</span>,
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::windows::set_background_color(<span class="self">self</span>.<span class="number">0</span>)
+    }
+}
+
+<span class="doccomment">/// A command that sets the the underline color.
+///
+/// See [`Color`](enum.Color.html) for more info.
+///
+/// [`SetColors`](struct.SetColors.html) can also be used to set both the foreground and background
+/// color with one command.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetUnderlineColor(<span class="kw">pub </span>Color);
+
+<span class="kw">impl </span>Command <span class="kw">for </span>SetUnderlineColor {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), Colored::UnderlineColor(<span class="self">self</span>.<span class="number">0</span>))
+    }
+
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="prelude-val">Err</span>(std::io::Error::new(
+            std::io::ErrorKind::Other,
             <span class="string">&quot;SetUnderlineColor not supported by winapi.&quot;</span>,
         ))
     }
 }
 
-<span class="doccomment">/// A command that optionally sets the foreground and/or background color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For example:</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::io::{stdout, Write};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// use crossterm::execute;</span>
-<span class="doccomment">/// use crossterm::style::{Color::{Green, Black}, Colors, Print, SetColors};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// execute!(</span>
-<span class="doccomment">///     stdout(),</span>
-<span class="doccomment">///     SetColors(Colors::new(Green, Black)),</span>
-<span class="doccomment">///     Print(&quot;Hello, world!&quot;.to_string()),</span>
-<span class="doccomment">/// ).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Colors`](struct.Colors.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetColors</span>(<span class="kw">pub</span> <span class="ident">Colors</span>);
+<span class="doccomment">/// A command that optionally sets the foreground and/or background color.
+///
+/// For example:
+/// ```no_run
+/// use std::io::{stdout, Write};
+///
+/// use crossterm::execute;
+/// use crossterm::style::{Color::{Green, Black}, Colors, Print, SetColors};
+///
+/// execute!(
+///     stdout(),
+///     SetColors(Colors::new(Green, Black)),
+///     Print(&quot;Hello, world!&quot;.to_string()),
+/// ).unwrap();
+/// ```
+///
+/// See [`Colors`](struct.Colors.html) for more info.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetColors(<span class="kw">pub </span>Colors);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetColors</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">foreground</span> {
-            <span class="ident">SetForegroundColor</span>(<span class="ident">color</span>).<span class="ident">write_ansi</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
+<span class="kw">impl </span>Command <span class="kw">for </span>SetColors {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(color) = <span class="self">self</span>.<span class="number">0</span>.foreground {
+            SetForegroundColor(color).write_ansi(f)<span class="question-mark">?</span>;
         }
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">background</span> {
-            <span class="ident">SetBackgroundColor</span>(<span class="ident">color</span>).<span class="ident">write_ansi</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
-        }
-        <span class="prelude-val">Ok</span>(())
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">foreground</span> {
-            <span class="ident">sys::windows::set_foreground_color</span>(<span class="ident">color</span>)<span class="question-mark">?</span>;
-        }
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">background</span> {
-            <span class="ident">sys::windows::set_background_color</span>(<span class="ident">color</span>)<span class="question-mark">?</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(color) = <span class="self">self</span>.<span class="number">0</span>.background {
+            SetBackgroundColor(color).write_ansi(f)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
-}
 
-<span class="doccomment">/// A command that sets an attribute.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Attribute`](enum.Attribute.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetAttribute</span>(<span class="kw">pub</span> <span class="ident">Attribute</span>);
-
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetAttribute</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), <span class="self">self</span>.<span class="number">0</span>.<span class="ident">sgr</span>())
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// attributes are not supported by WinAPI.</span>
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(color) = <span class="self">self</span>.<span class="number">0</span>.foreground {
+            sys::windows::set_foreground_color(color)<span class="question-mark">?</span>;
+        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(color) = <span class="self">self</span>.<span class="number">0</span>.background {
+            sys::windows::set_background_color(color)<span class="question-mark">?</span>;
+        }
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// A command that sets several attributes.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`Attributes`](struct.Attributes.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetAttributes</span>(<span class="kw">pub</span> <span class="ident">Attributes</span>);
+<span class="doccomment">/// A command that sets an attribute.
+///
+/// See [`Attribute`](enum.Attribute.html) for more info.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetAttribute(<span class="kw">pub </span>Attribute);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetAttributes</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">for</span> <span class="ident">attr</span> <span class="kw">in</span> <span class="ident">Attribute::iterator</span>() {
-            <span class="kw">if</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">has</span>(<span class="ident">attr</span>) {
-                <span class="ident">SetAttribute</span>(<span class="ident">attr</span>).<span class="ident">write_ansi</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
+<span class="kw">impl </span>Command <span class="kw">for </span>SetAttribute {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), <span class="self">self</span>.<span class="number">0</span>.sgr())
+    }
+
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="comment">// attributes are not supported by WinAPI.
+        </span><span class="prelude-val">Ok</span>(())
+    }
+}
+
+<span class="doccomment">/// A command that sets several attributes.
+///
+/// See [`Attributes`](struct.Attributes.html) for more info.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetAttributes(<span class="kw">pub </span>Attributes);
+
+<span class="kw">impl </span>Command <span class="kw">for </span>SetAttributes {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="kw">for </span>attr <span class="kw">in </span>Attribute::iterator() {
+            <span class="kw">if </span><span class="self">self</span>.<span class="number">0</span>.has(attr) {
+                SetAttribute(attr).write_ansi(f)<span class="question-mark">?</span>;
             }
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="comment">// attributes are not supported by WinAPI.</span>
-        <span class="prelude-val">Ok</span>(())
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="comment">// attributes are not supported by WinAPI.
+        </span><span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// A command that prints styled content.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See [`StyledContent`](struct.StyledContent.html) for more info.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>);
+<span class="doccomment">/// A command that sets a style (colors and attributes).
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetStyle(<span class="kw">pub </span>ContentStyle);
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">let</span> <span class="ident">style</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">style</span>();
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reset_background</span> <span class="op">=</span> <span class="bool-val">false</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reset_foreground</span> <span class="op">=</span> <span class="bool-val">false</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reset</span> <span class="op">=</span> <span class="bool-val">false</span>;
-
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">bg</span>) <span class="op">=</span> <span class="ident">style</span>.<span class="ident">background_color</span> {
-            <span class="ident">execute_fmt</span>(<span class="ident">f</span>, <span class="ident">SetBackgroundColor</span>(<span class="ident">bg</span>)).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>)<span class="question-mark">?</span>;
-            <span class="ident">reset_background</span> <span class="op">=</span> <span class="bool-val">true</span>;
+<span class="kw">impl </span>Command <span class="kw">for </span>SetStyle {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(bg) = <span class="self">self</span>.<span class="number">0</span>.background_color {
+            execute_fmt(f, SetBackgroundColor(bg)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
         }
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">fg</span>) <span class="op">=</span> <span class="ident">style</span>.<span class="ident">foreground_color</span> {
-            <span class="ident">execute_fmt</span>(<span class="ident">f</span>, <span class="ident">SetForegroundColor</span>(<span class="ident">fg</span>)).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>)<span class="question-mark">?</span>;
-            <span class="ident">reset_foreground</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(fg) = <span class="self">self</span>.<span class="number">0</span>.foreground_color {
+            execute_fmt(f, SetForegroundColor(fg)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
+        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(ul) = <span class="self">self</span>.<span class="number">0</span>.underline_color {
+            execute_fmt(f, SetUnderlineColor(ul)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
+        }
+        <span class="kw">if </span>!<span class="self">self</span>.<span class="number">0</span>.attributes.is_empty() {
+            execute_fmt(f, SetAttributes(<span class="self">self</span>.<span class="number">0</span>.attributes)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ul</span>) <span class="op">=</span> <span class="ident">style</span>.<span class="ident">underline_color</span> {
-            <span class="ident">execute_fmt</span>(<span class="ident">f</span>, <span class="ident">SetUnderlineColor</span>(<span class="ident">ul</span>)).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>)<span class="question-mark">?</span>;
-            <span class="ident">reset_foreground</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="macro">panic!</span>(<span class="string">&quot;tried to execute SetStyle command using WinAPI, use ANSI instead&quot;</span>);
+    }
+
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="bool-val">true
+    </span>}
+}
+
+<span class="doccomment">/// A command that prints styled content.
+///
+/// See [`StyledContent`](struct.StyledContent.html) for more info.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Copy, Clone)]</span>
+<span class="kw">pub struct </span>PrintStyledContent&lt;D: Display&gt;(<span class="kw">pub </span>StyledContent&lt;D&gt;);
+
+<span class="kw">impl</span>&lt;D: Display&gt; Command <span class="kw">for </span>PrintStyledContent&lt;D&gt; {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="kw">let </span>style = <span class="self">self</span>.<span class="number">0</span>.style();
+
+        <span class="kw">let </span><span class="kw-2">mut </span>reset_background = <span class="bool-val">false</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>reset_foreground = <span class="bool-val">false</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>reset = <span class="bool-val">false</span>;
+
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(bg) = style.background_color {
+            execute_fmt(f, SetBackgroundColor(bg)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
+            reset_background = <span class="bool-val">true</span>;
+        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(fg) = style.foreground_color {
+            execute_fmt(f, SetForegroundColor(fg)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
+            reset_foreground = <span class="bool-val">true</span>;
+        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(ul) = style.underline_color {
+            execute_fmt(f, SetUnderlineColor(ul)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
+            reset_foreground = <span class="bool-val">true</span>;
         }
 
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">style</span>.<span class="ident">attributes</span>.<span class="ident">is_empty</span>() {
-            <span class="ident">execute_fmt</span>(<span class="ident">f</span>, <span class="ident">SetAttributes</span>(<span class="ident">style</span>.<span class="ident">attributes</span>)).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>)<span class="question-mark">?</span>;
-            <span class="ident">reset</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="kw">if </span>!style.attributes.is_empty() {
+            execute_fmt(f, SetAttributes(style.attributes)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
+            reset = <span class="bool-val">true</span>;
         }
 
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>.<span class="ident">content</span>())<span class="question-mark">?</span>;
+        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>.content())<span class="question-mark">?</span>;
 
-        <span class="kw">if</span> <span class="ident">reset</span> {
-            <span class="comment">// NOTE: This will reset colors even though self has no colors, hence produce unexpected</span>
-            <span class="comment">// resets.</span>
-            <span class="comment">// TODO: reset the set attributes only.</span>
-            <span class="ident">execute_fmt</span>(<span class="ident">f</span>, <span class="ident">ResetColor</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>)<span class="question-mark">?</span>;
-        } <span class="kw">else</span> {
-            <span class="comment">// NOTE: Since the above bug, we do not need to reset colors when we reset attributes.</span>
-            <span class="kw">if</span> <span class="ident">reset_background</span> {
-                <span class="ident">execute_fmt</span>(<span class="ident">f</span>, <span class="ident">SetBackgroundColor</span>(<span class="ident">Color::Reset</span>)).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>)<span class="question-mark">?</span>;
+        <span class="kw">if </span>reset {
+            <span class="comment">// NOTE: This will reset colors even though self has no colors, hence produce unexpected
+            // resets.
+            // TODO: reset the set attributes only.
+            </span>execute_fmt(f, ResetColor).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
+        } <span class="kw">else </span>{
+            <span class="comment">// NOTE: Since the above bug, we do not need to reset colors when we reset attributes.
+            </span><span class="kw">if </span>reset_background {
+                execute_fmt(f, SetBackgroundColor(Color::Reset)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
             }
-            <span class="kw">if</span> <span class="ident">reset_foreground</span> {
-                <span class="ident">execute_fmt</span>(<span class="ident">f</span>, <span class="ident">SetForegroundColor</span>(<span class="ident">Color::Reset</span>)).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">fmt::Error</span>)<span class="question-mark">?</span>;
+            <span class="kw">if </span>reset_foreground {
+                execute_fmt(f, SetForegroundColor(Color::Reset)).map_err(|<span class="kw">_</span>| fmt::Error)<span class="question-mark">?</span>;
             }
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// A command that resets the colors back to default.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ResetColor</span>;
+<span class="doccomment">/// A command that resets the colors back to default.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>ResetColor;
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">ResetColor</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="macro">csi!</span>(<span class="string">&quot;0m&quot;</span>))
+<span class="kw">impl </span>Command <span class="kw">for </span>ResetColor {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;0m&quot;</span>))
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::windows::reset</span>()
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::windows::reset()
     }
 }
 
-<span class="doccomment">/// A command that prints the given displayable type.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Print</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">T</span>);
+<span class="doccomment">/// A command that prints the given displayable type.
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>Print&lt;T: Display&gt;(<span class="kw">pub </span>T);
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">Print</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>)
+<span class="kw">impl</span>&lt;T: Display&gt; Command <span class="kw">for </span>Print&lt;T&gt; {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>)
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="macro">panic!</span>(<span class="string">&quot;tried to execute Print command using WinAPI, use ANSI instead&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">is_ansi_code_supported</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="bool-val">true</span>
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="bool-val">true
+    </span>}
+}
+
+<span class="kw">impl</span>&lt;T: Display&gt; Display <span class="kw">for </span>Print&lt;T&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        <span class="self">self</span>.<span class="number">0</span>.fmt(f)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Print</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)
-    }
-}
+<span class="macro">impl_display!</span>(<span class="kw">for </span>SetForegroundColor);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>SetBackgroundColor);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>SetColors);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>SetAttribute);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>PrintStyledContent&lt;String&gt;);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>PrintStyledContent&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>ResetColor);
 
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetForegroundColor</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetBackgroundColor</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetColors</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetAttribute</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">PrintStyledContent</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">ResetColor</span>);
-
-<span class="doccomment">/// Utility function for ANSI parsing in Color and Colored.</span>
-<span class="doccomment">/// Gets the next element of `iter` and tries to parse it as a `u8`.</span>
-<span class="kw">fn</span> <span class="ident">parse_next_u8</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="ident">iter</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-    <span class="ident">iter</span>.<span class="ident">next</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">parse</span>().<span class="ident">ok</span>())
+<span class="doccomment">/// Utility function for ANSI parsing in Color and Colored.
+/// Gets the next element of `iter` and tries to parse it as a `u8`.
+</span><span class="kw">fn </span>parse_next_u8&lt;<span class="lifetime">&#39;a</span>&gt;(iter: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;u8&gt; {
+    iter.next().and_then(|s| s.parse().ok())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

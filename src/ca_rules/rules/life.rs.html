@@ -194,201 +194,201 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Totalistic life-like rules.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Totalistic life-like rules.
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::Gen</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ParseRuleError</span>;
+</span><span class="kw">use </span><span class="kw">super</span>::Gen;
+<span class="kw">use </span><span class="kw">crate</span>::ParseRuleError;
 
-<span class="macro">rule_struct!</span>(<span class="ident">Life</span>);
+<span class="macro">rule_struct!</span>(Life);
 
-<span class="kw">impl</span> <span class="ident">Life</span> {
+<span class="kw">impl </span>Life {
     <span class="macro">parse_bs!</span>(<span class="number">8</span>);
     <span class="macro">parse_rule!</span>();
 }
 
-<span class="doccomment">/// A trait for parsing [totalistic life-like rules](http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The `b` / `s` data of this type of rules consists of numbers of live neighbors</span>
-<span class="doccomment">/// that cause a cell to be born / survive.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use ca_rules::ParseLife;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Eq, PartialEq)]</span>
-<span class="doccomment">/// struct Rule {</span>
-<span class="doccomment">///     b: Vec&lt;u8&gt;,</span>
-<span class="doccomment">///     s: Vec&lt;u8&gt;,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl ParseLife for Rule {</span>
-<span class="doccomment">///     fn from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; Self {</span>
-<span class="doccomment">///         Rule { b, s }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let life = Rule::parse_rule(&quot;B3/S23&quot;).unwrap();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// assert_eq!(</span>
-<span class="doccomment">///     life,</span>
-<span class="doccomment">///     Rule {</span>
-<span class="doccomment">///         b: vec![3],</span>
-<span class="doccomment">///         s: vec![2, 3],</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// )</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ParseLife</span> {
-    <span class="doccomment">/// Construct the rule from `b` / `s` data.</span>
-    <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span>;
+<span class="doccomment">/// A trait for parsing [totalistic life-like rules](http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton).
+///
+/// The `b` / `s` data of this type of rules consists of numbers of live neighbors
+/// that cause a cell to be born / survive.
+///
+/// # Examples
+///
+/// ```
+/// use ca_rules::ParseLife;
+///
+/// #[derive(Debug, Eq, PartialEq)]
+/// struct Rule {
+///     b: Vec&lt;u8&gt;,
+///     s: Vec&lt;u8&gt;,
+/// }
+///
+/// impl ParseLife for Rule {
+///     fn from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; Self {
+///         Rule { b, s }
+///     }
+/// }
+///
+/// let life = Rule::parse_rule(&quot;B3/S23&quot;).unwrap();
+///
+/// assert_eq!(
+///     life,
+///     Rule {
+///         b: vec![3],
+///         s: vec![2, 3],
+///     }
+/// )
+/// ```
+</span><span class="kw">pub trait </span>ParseLife {
+    <span class="doccomment">/// Construct the rule from `b` / `s` data.
+    </span><span class="kw">fn </span>from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; <span class="self">Self</span>;
 
-    <span class="doccomment">/// The parser.</span>
-    <span class="kw">fn</span> <span class="ident">parse_rule</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
+    <span class="doccomment">/// The parser.
+    </span><span class="kw">fn </span>parse_rule(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParseRuleError&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized,
     {
-        <span class="kw">let</span> <span class="ident">Life</span> { <span class="ident">b</span>, <span class="ident">s</span> } <span class="op">=</span> <span class="ident">Life::parse_rule</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bs</span>(<span class="ident">b</span>, <span class="ident">s</span>))
+        <span class="kw">let </span>Life { b, s } = Life::parse_rule(input)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bs(b, s))
     }
 }
 
-<span class="doccomment">/// A trait for parsing [totalistic life-like](http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton)</span>
-<span class="doccomment">/// [Generations](http://www.conwaylife.com/wiki/Generations) rules.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The `b` / `s` data of this type of rules consists of numbers of live neighbors</span>
-<span class="doccomment">/// that cause a cell to be born / survive.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use ca_rules::ParseLifeGen;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Eq, PartialEq)]</span>
-<span class="doccomment">/// struct Rule {</span>
-<span class="doccomment">///     b: Vec&lt;u8&gt;,</span>
-<span class="doccomment">///     s: Vec&lt;u8&gt;,</span>
-<span class="doccomment">///     gen: usize,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl ParseLifeGen for Rule {</span>
-<span class="doccomment">///     fn from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; Self {</span>
-<span class="doccomment">///         Rule { b, s, gen }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let life = Rule::parse_rule(&quot;3457/357/5&quot;).unwrap();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// assert_eq!(</span>
-<span class="doccomment">///     life,</span>
-<span class="doccomment">///     Rule {</span>
-<span class="doccomment">///         b: vec![3, 5, 7],</span>
-<span class="doccomment">///         s: vec![3, 4, 5, 7],</span>
-<span class="doccomment">///         gen: 5,</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// )</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ParseLifeGen</span> {
-    <span class="doccomment">/// Construct the rule from `b` / `s` data and the number of states.</span>
-    <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span>;
+<span class="doccomment">/// A trait for parsing [totalistic life-like](http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton)
+/// [Generations](http://www.conwaylife.com/wiki/Generations) rules.
+///
+/// The `b` / `s` data of this type of rules consists of numbers of live neighbors
+/// that cause a cell to be born / survive.
+///
+/// # Examples
+///
+/// ```
+/// use ca_rules::ParseLifeGen;
+///
+/// #[derive(Debug, Eq, PartialEq)]
+/// struct Rule {
+///     b: Vec&lt;u8&gt;,
+///     s: Vec&lt;u8&gt;,
+///     gen: usize,
+/// }
+///
+/// impl ParseLifeGen for Rule {
+///     fn from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; Self {
+///         Rule { b, s, gen }
+///     }
+/// }
+///
+/// let life = Rule::parse_rule(&quot;3457/357/5&quot;).unwrap();
+///
+/// assert_eq!(
+///     life,
+///     Rule {
+///         b: vec![3, 5, 7],
+///         s: vec![3, 4, 5, 7],
+///         gen: 5,
+///     }
+/// )
+/// ```
+</span><span class="kw">pub trait </span>ParseLifeGen {
+    <span class="doccomment">/// Construct the rule from `b` / `s` data and the number of states.
+    </span><span class="kw">fn </span>from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; <span class="self">Self</span>;
 
-    <span class="doccomment">/// The parser.</span>
-    <span class="kw">fn</span> <span class="ident">parse_rule</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
+    <span class="doccomment">/// The parser.
+    </span><span class="kw">fn </span>parse_rule(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParseRuleError&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized,
     {
-        <span class="kw">let</span> <span class="ident">Gen</span> {
-            <span class="ident">rule</span>: <span class="ident">Life</span> { <span class="ident">b</span>, <span class="ident">s</span> },
-            <span class="ident">gen</span>,
-        } <span class="op">=</span> <span class="ident">Life::parse_rule_gen</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bsg</span>(<span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span>))
+        <span class="kw">let </span>Gen {
+            rule: Life { b, s },
+            gen,
+        } = Life::parse_rule_gen(input)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bsg(b, s, gen))
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="kw">struct</span> <span class="ident">Rule</span>;
+    <span class="kw">struct </span>Rule;
 
-    <span class="kw">impl</span> <span class="ident">ParseLife</span> <span class="kw">for</span> <span class="ident">Rule</span> {
-        <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">_b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">_s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-            <span class="ident">Rule</span>
+    <span class="kw">impl </span>ParseLife <span class="kw">for </span>Rule {
+        <span class="kw">fn </span>from_bs(_b: Vec&lt;u8&gt;, _s: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+            Rule
         }
     }
 
-    <span class="kw">struct</span> <span class="ident">GenRule</span>;
+    <span class="kw">struct </span>GenRule;
 
-    <span class="kw">impl</span> <span class="ident">ParseLifeGen</span> <span class="kw">for</span> <span class="ident">GenRule</span> {
-        <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">_b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">_s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">_gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-            <span class="ident">GenRule</span>
+    <span class="kw">impl </span>ParseLifeGen <span class="kw">for </span>GenRule {
+        <span class="kw">fn </span>from_bsg(_b: Vec&lt;u8&gt;, _s: Vec&lt;u8&gt;, _gen: usize) -&gt; <span class="self">Self </span>{
+            GenRule
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">valid_rules</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3S23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;b3s23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;23/3&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;23/&quot;</span>)<span class="question-mark">?</span>;
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>valid_rules() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        Rule::parse_rule(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;B3S23&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;b3s23&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;23/3&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;23/&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">invalid_rules</span>() {
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>invalid_rules() {
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3/S23h&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::ExtraJunk</span>)
+            Rule::parse_rule(<span class="string">&quot;B3/S23h&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::ExtraJunk)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3/23&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>))
+            Rule::parse_rule(<span class="string">&quot;B3/23&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>))
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B2e3-anq/S12-a3&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>))
+            Rule::parse_rule(<span class="string">&quot;B2e3-anq/S12-a3&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>))
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;233&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>))
+            Rule::parse_rule(<span class="string">&quot;233&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Missing(<span class="string">&#39;/&#39;</span>))
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">valid_rules_gen</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;B3/S23/C3&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;B3S23G3&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;g3b3s23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;23/3/3&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;23//3&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;23/3&quot;</span>)<span class="question-mark">?</span>;
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>valid_rules_gen() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        GenRule::parse_rule(<span class="string">&quot;B3/S23/C3&quot;</span>)<span class="question-mark">?</span>;
+        GenRule::parse_rule(<span class="string">&quot;B3S23G3&quot;</span>)<span class="question-mark">?</span>;
+        GenRule::parse_rule(<span class="string">&quot;g3b3s23&quot;</span>)<span class="question-mark">?</span>;
+        GenRule::parse_rule(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
+        GenRule::parse_rule(<span class="string">&quot;23/3/3&quot;</span>)<span class="question-mark">?</span>;
+        GenRule::parse_rule(<span class="string">&quot;23//3&quot;</span>)<span class="question-mark">?</span>;
+        GenRule::parse_rule(<span class="string">&quot;23/3&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">invalid_rules_gen</span>() {
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>invalid_rules_gen() {
         <span class="macro">assert_eq!</span>(
-            <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;B3/S23h&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::ExtraJunk</span>)
+            GenRule::parse_rule(<span class="string">&quot;B3/S23h&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::ExtraJunk)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;B3/S23/&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::MissingNumber</span>)
+            GenRule::parse_rule(<span class="string">&quot;B3/S23/&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::MissingNumber)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;g1b3s23&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::GenLessThan2</span>)
+            GenRule::parse_rule(<span class="string">&quot;g1b3s23&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::GenLessThan2)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;2333&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>))
+            GenRule::parse_rule(<span class="string">&quot;2333&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Missing(<span class="string">&#39;/&#39;</span>))
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">GenRule::parse_rule</span>(<span class="string">&quot;23/3/18446744073709551617&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::GenOverflow</span>)
+            GenRule::parse_rule(<span class="string">&quot;23/3/18446744073709551617&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::GenOverflow)
         );
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

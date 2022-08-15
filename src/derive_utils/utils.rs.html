@@ -6,13 +6,13 @@
 <span id="6">6</span>
 <span id="7">7</span>
 <span id="8">8</span>
-</pre><pre class="rust"><code><span class="macro">macro_rules!</span> <span class="ident">error</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">msg</span>:<span class="ident">expr</span>) =&gt; {
-        <span class="ident">syn::Error::new_spanned</span>(<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">msg</span>)
+</pre><pre class="rust"><code><span class="macro">macro_rules!</span> error {
+    (<span class="macro-nonterminal">$span</span>:expr, <span class="macro-nonterminal">$msg</span>:expr) =&gt; {
+        syn::Error::new_spanned(<span class="kw-2">&amp;</span><span class="macro-nonterminal">$span</span>, <span class="macro-nonterminal">$msg</span>)
     };
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>:<span class="ident">expr</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) =&gt; {
-        <span class="macro">error!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>, <span class="macro">format!</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>)<span class="kw-2">*</span>))
+    (<span class="macro-nonterminal">$span</span>:expr, $(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {
+        <span class="macro">error!</span>(<span class="macro-nonterminal">$span</span>, <span class="macro">format!</span>($(<span class="macro-nonterminal">$tt</span>)<span class="kw-2">*</span>))
     };
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

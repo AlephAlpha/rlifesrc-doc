@@ -108,115 +108,115 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote::ToTokens</span>;
-<span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
-<span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">parse</span>::{<span class="ident">Parse</span>, <span class="ident">ParseStream</span>},
-    <span class="ident">Error</span>, <span class="ident">Fields</span>, <span class="ident">Ident</span>, <span class="ident">ItemEnum</span>, <span class="prelude-ty">Result</span>, <span class="ident">Type</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::ToTokens;
+<span class="kw">use </span>std::ops::Deref;
+<span class="kw">use </span>syn::{
+    parse::{Parse, ParseStream},
+    Error, Fields, Ident, ItemEnum, <span class="prelude-ty">Result</span>, Type,
 };
 
-<span class="doccomment">/// A structure to make trait implementation to enums more efficient.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnumData</span> {
-    <span class="ident">repr</span>: <span class="ident">ItemEnum</span>,
-    <span class="ident">field_types</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A structure to make trait implementation to enums more efficient.
+</span><span class="kw">pub struct </span>EnumData {
+    repr: ItemEnum,
+    field_types: Vec&lt;Type&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">EnumData</span> {
-    <span class="doccomment">/// Returns an iterator over field types.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```text</span>
-    <span class="doccomment">/// enum Enum&lt;TypeA, TypeB&gt; {</span>
-    <span class="doccomment">///     VariantA(TypeA),</span>
-    <span class="doccomment">///              ^^^^^</span>
-    <span class="doccomment">///     VariantB(TypeB),</span>
-    <span class="doccomment">///              ^^^^^</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">field_types</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">ExactSizeIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">Type</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span> {
-        <span class="self">self</span>.<span class="ident">field_types</span>.<span class="ident">iter</span>()
+<span class="kw">impl </span>EnumData {
+    <span class="doccomment">/// Returns an iterator over field types.
+    ///
+    /// ```text
+    /// enum Enum&lt;TypeA, TypeB&gt; {
+    ///     VariantA(TypeA),
+    ///              ^^^^^
+    ///     VariantB(TypeB),
+    ///              ^^^^^
+    /// }
+    /// ```
+    </span><span class="kw">pub fn </span>field_types(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span>Type&gt; + Clone {
+        <span class="self">self</span>.field_types.iter()
     }
 
-    <span class="doccomment">/// Returns an iterator over variant names.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```text</span>
-    <span class="doccomment">/// enum Enum&lt;TypeA, TypeB&gt; {</span>
-    <span class="doccomment">///     VariantA(TypeA),</span>
-    <span class="doccomment">///     ^^^^^^^^</span>
-    <span class="doccomment">///     VariantB(TypeB),</span>
-    <span class="doccomment">///     ^^^^^^^^</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">variant_idents</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl</span> <span class="ident">ExactSizeIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">Ident</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span> {
-        <span class="self">self</span>.<span class="ident">variants</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">v</span>.<span class="ident">ident</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">EnumData</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">ItemEnum</span>;
-
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">repr</span>
+    <span class="doccomment">/// Returns an iterator over variant names.
+    ///
+    /// ```text
+    /// enum Enum&lt;TypeA, TypeB&gt; {
+    ///     VariantA(TypeA),
+    ///     ^^^^^^^^
+    ///     VariantB(TypeB),
+    ///     ^^^^^^^^
+    /// }
+    /// ```
+    </span><span class="kw">pub fn </span>variant_idents(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>ExactSizeIterator&lt;Item = <span class="kw-2">&amp;</span>Ident&gt; + Clone {
+        <span class="self">self</span>.variants.iter().map(|v| <span class="kw-2">&amp;</span>v.ident)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">EnumData</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ItemEnum</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">other</span>: <span class="ident">EnumData</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">other</span>.<span class="ident">repr</span>
+<span class="kw">impl </span>Deref <span class="kw">for </span>EnumData {
+    <span class="kw">type </span>Target = ItemEnum;
+
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.repr
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Parse</span> <span class="kw">for</span> <span class="ident">EnumData</span> {
-    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">input</span>: <span class="ident">ParseStream</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">item</span>: <span class="ident">ItemEnum</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>()<span class="question-mark">?</span>;
+<span class="kw">impl </span>From&lt;EnumData&gt; <span class="kw">for </span>ItemEnum {
+    <span class="kw">fn </span>from(other: EnumData) -&gt; <span class="self">Self </span>{
+        other.repr
+    }
+}
 
-        <span class="kw">if</span> <span class="ident">item</span>.<span class="ident">variants</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::new</span>(
-                <span class="ident">item</span>.<span class="ident">brace_token</span>.<span class="ident">span</span>,
+<span class="kw">impl </span>Parse <span class="kw">for </span>EnumData {
+    <span class="kw">fn </span>parse(input: ParseStream&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>item: ItemEnum = input.parse()<span class="question-mark">?</span>;
+
+        <span class="kw">if </span>item.variants.is_empty() {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::new(
+                item.brace_token.span,
                 <span class="string">&quot;may not be used on enums without variants&quot;</span>,
             ));
         }
 
-        <span class="kw">let</span> <span class="ident">field_types</span> <span class="op">=</span> <span class="ident">item</span>.<span class="ident">variants</span>.<span class="ident">iter</span>().<span class="ident">try_fold</span>(
-            <span class="ident">Vec::with_capacity</span>(<span class="ident">item</span>.<span class="ident">variants</span>.<span class="ident">len</span>()),
-            <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">field_types</span>, <span class="ident">v</span><span class="op">|</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="kw">_</span>, <span class="ident">e</span>)) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">v</span>.<span class="ident">discriminant</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">error!</span>(<span class="ident">e</span>, <span class="string">&quot;may not be used on enums with discriminants&quot;</span>));
+        <span class="kw">let </span>field_types = item.variants.iter().try_fold(
+            Vec::with_capacity(item.variants.len()),
+            |<span class="kw-2">mut </span>field_types, v| {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, e)) = <span class="kw-2">&amp;</span>v.discriminant {
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">error!</span>(e, <span class="string">&quot;may not be used on enums with discriminants&quot;</span>));
                 }
 
-                <span class="kw">if</span> <span class="ident">v</span>.<span class="ident">fields</span>.<span class="ident">is_empty</span>() {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">error!</span>(
-                        <span class="ident">v</span>,
-                        <span class="string">&quot;may not be used on enums with variants with zero fields&quot;</span>
-                    ));
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">v</span>.<span class="ident">fields</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="number">1</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">error!</span>(
-                        <span class="ident">v</span>,
-                        <span class="string">&quot;may not be used on enums with variants with multiple fields&quot;</span>
-                    ));
+                <span class="kw">if </span>v.fields.is_empty() {
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">error!</span>(
+                        v,
+                        <span class="string">&quot;may not be used on enums with variants with zero fields&quot;
+                    </span>));
+                } <span class="kw">else if </span>v.fields.len() != <span class="number">1 </span>{
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">error!</span>(
+                        v,
+                        <span class="string">&quot;may not be used on enums with variants with multiple fields&quot;
+                    </span>));
                 }
 
-                <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">v</span>.<span class="ident">fields</span> {
-                    <span class="ident">Fields::Unnamed</span>(<span class="ident">f</span>) =&gt; {
-                        <span class="ident">field_types</span>.<span class="ident">push</span>(<span class="ident">f</span>.<span class="ident">unnamed</span>.<span class="ident">iter</span>().<span class="ident">next</span>().<span class="ident">unwrap</span>().<span class="ident">ty</span>.<span class="ident">clone</span>());
-                        <span class="prelude-val">Ok</span>(<span class="ident">field_types</span>)
+                <span class="kw">match </span><span class="kw-2">&amp;</span>v.fields {
+                    Fields::Unnamed(f) =&gt; {
+                        field_types.push(f.unnamed.iter().next().unwrap().ty.clone());
+                        <span class="prelude-val">Ok</span>(field_types)
                     }
-                    <span class="ident">Fields::Named</span>(<span class="kw">_</span>) =&gt; {
-                        <span class="prelude-val">Err</span>(<span class="macro">error!</span>(<span class="ident">v</span>, <span class="string">&quot;may not be used on enums with variants with named fields&quot;</span>))
+                    Fields::Named(<span class="kw">_</span>) =&gt; {
+                        <span class="prelude-val">Err</span>(<span class="macro">error!</span>(v, <span class="string">&quot;may not be used on enums with variants with named fields&quot;</span>))
                     }
-                    <span class="ident">Fields::Unit</span> =&gt; <span class="macro">unreachable!</span>(),
+                    Fields::Unit =&gt; <span class="macro">unreachable!</span>(),
                 }
             },
         )<span class="question-mark">?</span>;
 
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> { <span class="ident">repr</span>: <span class="ident">item</span>, <span class="ident">field_types</span> })
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{ repr: item, field_types })
     }
 }
 
-<span class="kw">impl</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">EnumData</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tokens</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream</span>) {
-        <span class="self">self</span>.<span class="ident">repr</span>.<span class="ident">to_tokens</span>(<span class="ident">tokens</span>)
+<span class="kw">impl </span>ToTokens <span class="kw">for </span>EnumData {
+    <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
+        <span class="self">self</span>.repr.to_tokens(tokens)
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

@@ -8,31 +8,31 @@ with <a href="http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood">von Neum
 <p>The <code>b</code> / <code>s</code> data of this type of rules consists of numbers of live neighbors
 that cause a cell to be born / survive.</p>
 <h2 id="examples"><a href="#examples">Examples</a></h2>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">ca_rules::ParseNeumannGen</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>ca_rules::ParseNeumannGen;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Rule</span> {
-    <span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">gen</span>: <span class="ident">usize</span>,
+<span class="attribute">#[derive(Debug, Eq, PartialEq)]</span>
+<span class="kw">struct </span>Rule {
+    b: Vec&lt;u8&gt;,
+    s: Vec&lt;u8&gt;,
+    gen: usize,
 }
 
-<span class="kw">impl</span> <span class="ident">ParseNeumannGen</span> <span class="kw">for</span> <span class="ident">Rule</span> {
-    <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Rule</span> { <span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span> }
+<span class="kw">impl </span>ParseNeumannGen <span class="kw">for </span>Rule {
+    <span class="kw">fn </span>from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; <span class="self">Self </span>{
+        Rule { b, s, gen }
     }
 }
 
-<span class="kw">let</span> <span class="ident">life</span> <span class="op">=</span> <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B2/S013/3V&quot;</span>).<span class="ident">unwrap</span>();
+<span class="kw">let </span>life = Rule::parse_rule(<span class="string">&quot;B2/S013/3V&quot;</span>).unwrap();
 
 <span class="macro">assert_eq!</span>(
-    <span class="ident">life</span>,
-    <span class="ident">Rule</span> {
-        <span class="ident">b</span>: <span class="macro">vec!</span>[<span class="number">2</span>],
-        <span class="ident">s</span>: <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>],
-        <span class="ident">gen</span>: <span class="number">3</span>,
+    life,
+    Rule {
+        b: <span class="macro">vec!</span>[<span class="number">2</span>],
+        s: <span class="macro">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>],
+        gen: <span class="number">3</span>,
     }
 )</code></pre></div>
 </div></details><h2 id="required-methods" class="small-section-header">Required Methods<a href="#required-methods" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="tymethod.from_bsg" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/ca_rules/rules/neumann.rs.html#97">source</a></div><h4 class="code-header">fn <a href="#tymethod.from_bsg" class="fnname">from_bsg</a>(b: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;, s: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;, gen: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>) -&gt; Self</h4></div></summary><div class="docblock"><p>Construct the rule from <code>b</code> / <code>s</code> data and the number of states.</p>
 </div></details></div><h2 id="provided-methods" class="small-section-header">Provided Methods<a href="#provided-methods" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="method.parse_rule" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/ca_rules/rules/neumann.rs.html#100-109">source</a></div><h4 class="code-header">fn <a href="#method.parse_rule" class="fnname">parse_rule</a>(input: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, <a class="enum" href="enum.ParseRuleError.html" title="enum ca_rules::ParseRuleError">ParseRuleError</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,&nbsp;</span></h4></div></summary><div class="docblock"><p>The parser.</p>
-</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"></div><script type="text/javascript" src="../implementors/ca_rules/rules/neumann/trait.ParseNeumannGen.js" data-ignore-extern-crates="" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"></div><script type="text/javascript" src="../implementors/ca_rules/rules/neumann/trait.ParseNeumannGen.js" data-ignore-extern-crates="" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

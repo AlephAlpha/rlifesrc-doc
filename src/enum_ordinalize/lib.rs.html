@@ -642,45 +642,45 @@ assert_eq!(MyEnum::Four, unsafe { MyEnum::from_ordinal_unsafe(4i8) });
 assert_eq!(MyEnum::Nine, unsafe { MyEnum::from_ordinal_unsafe(9i8) });
 assert_eq!(MyEnum::NegativeNine, unsafe { MyEnum::from_ordinal_unsafe(-9i8) });
 ```
-*/</span>
+*/
 
-<span class="attribute">#![<span class="ident">no_std</span>]</span>
+</span><span class="attribute">#![no_std]</span>
 
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">alloc</span>;
+<span class="kw">extern crate </span>alloc;
 
-<span class="kw">mod</span> <span class="ident">big_int_wrapper</span>;
-<span class="kw">mod</span> <span class="ident">panic</span>;
-<span class="kw">mod</span> <span class="ident">variant_type</span>;
+<span class="kw">mod </span>big_int_wrapper;
+<span class="kw">mod </span>panic;
+<span class="kw">mod </span>variant_type;
 
-<span class="kw">use</span> <span class="ident">core::str::FromStr</span>;
+<span class="kw">use </span>core::str::FromStr;
 
-<span class="kw">use</span> <span class="ident">alloc::string::ToString</span>;
-<span class="kw">use</span> <span class="ident">alloc::vec::Vec</span>;
+<span class="kw">use </span>alloc::string::ToString;
+<span class="kw">use </span>alloc::vec::Vec;
 
-<span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">quote</span>, <span class="ident">ToTokens</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">Data</span>, <span class="ident">DeriveInput</span>, <span class="ident">Expr</span>, <span class="ident">Fields</span>, <span class="ident">Ident</span>, <span class="ident">Lit</span>, <span class="ident">Meta</span>, <span class="ident">NestedMeta</span>, <span class="ident">UnOp</span>};
+<span class="kw">use </span>proc_macro::TokenStream;
+<span class="kw">use </span>quote::{quote, ToTokens};
+<span class="kw">use </span>syn::{Data, DeriveInput, Expr, Fields, Ident, Lit, Meta, NestedMeta, UnOp};
 
-<span class="kw">use</span> <span class="ident">num_bigint::BigInt</span>;
+<span class="kw">use </span>num_bigint::BigInt;
 
-<span class="kw">use</span> <span class="ident">big_int_wrapper::BigIntWrapper</span>;
-<span class="kw">use</span> <span class="ident">variant_type::VariantType</span>;
+<span class="kw">use </span>big_int_wrapper::BigIntWrapper;
+<span class="kw">use </span>variant_type::VariantType;
 
-<span class="kw">fn</span> <span class="ident">derive_input_handler</span>(<span class="ident">ast</span>: <span class="ident">DeriveInput</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">variant_type</span> <span class="op">=</span> <span class="ident">VariantType::default</span>();
+<span class="kw">fn </span>derive_input_handler(ast: DeriveInput) -&gt; TokenStream {
+    <span class="kw">let </span><span class="kw-2">mut </span>variant_type = VariantType::default();
 
-    <span class="kw">for</span> <span class="ident">attr</span> <span class="kw">in</span> <span class="ident">ast</span>.<span class="ident">attrs</span>.<span class="ident">iter</span>() {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attr_meta_name</span>) <span class="op">=</span> <span class="ident">attr</span>.<span class="ident">path</span>.<span class="ident">get_ident</span>() {
-            <span class="kw">if</span> <span class="ident">attr_meta_name</span> <span class="op">==</span> <span class="string">&quot;repr&quot;</span> {
-                <span class="comment">// #[repr(u8)], #[repr(u16)], ..., etc.</span>
-                <span class="kw">let</span> <span class="ident">attr_meta</span> <span class="op">=</span> <span class="ident">attr</span>.<span class="ident">parse_meta</span>().<span class="ident">unwrap</span>();
+    <span class="kw">for </span>attr <span class="kw">in </span>ast.attrs.iter() {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(attr_meta_name) = attr.path.get_ident() {
+            <span class="kw">if </span>attr_meta_name == <span class="string">&quot;repr&quot; </span>{
+                <span class="comment">// #[repr(u8)], #[repr(u16)], ..., etc.
+                </span><span class="kw">let </span>attr_meta = attr.parse_meta().unwrap();
 
-                <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Meta::List</span>(<span class="ident">list</span>) <span class="op">=</span> <span class="ident">attr_meta</span> {
-                    <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">list</span>.<span class="ident">nested</span> {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">NestedMeta::Meta</span>(<span class="ident">Meta::Path</span>(<span class="ident">path</span>)) <span class="op">=</span> <span class="ident">p</span> {
-                            <span class="kw">let</span> <span class="ident">meta_name</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>();
+                <span class="kw">if let </span>Meta::List(list) = attr_meta {
+                    <span class="kw">for </span>p <span class="kw">in </span><span class="kw-2">&amp;</span>list.nested {
+                        <span class="kw">if let </span>NestedMeta::Meta(Meta::Path(path)) = p {
+                            <span class="kw">let </span>meta_name = path.into_token_stream().to_string();
 
-                            <span class="ident">variant_type</span> <span class="op">=</span> <span class="ident">VariantType::from_str</span>(<span class="ident">meta_name</span>);
+                            variant_type = VariantType::from_str(meta_name);
 
                             <span class="kw">break</span>;
                         }
@@ -690,323 +690,323 @@ assert_eq!(MyEnum::NegativeNine, unsafe { MyEnum::from_ordinal_unsafe(-9i8) });
         }
     }
 
-    <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">ast</span>.<span class="ident">ident</span>;
+    <span class="kw">let </span>name = <span class="kw-2">&amp;</span>ast.ident;
 
-    <span class="kw">match</span> <span class="ident">ast</span>.<span class="ident">data</span> {
-        <span class="ident">Data::Enum</span>(<span class="ident">data</span>) =&gt; {
-            <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">variants</span>.<span class="ident">is_empty</span>() {
-                <span class="ident">panic::no_variant</span>();
+    <span class="kw">match </span>ast.data {
+        Data::Enum(data) =&gt; {
+            <span class="kw">if </span>data.variants.is_empty() {
+                panic::no_variant();
             }
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">values</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">BigIntWrapper</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">data</span>.<span class="ident">variants</span>.<span class="ident">len</span>());
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">variant_idents</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Ident</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">data</span>.<span class="ident">variants</span>.<span class="ident">len</span>());
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">use_constant_counter</span> <span class="op">=</span> <span class="bool-val">false</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>values: Vec&lt;BigIntWrapper&gt; = Vec::with_capacity(data.variants.len());
+            <span class="kw">let </span><span class="kw-2">mut </span>variant_idents: Vec&lt;<span class="kw-2">&amp;</span>Ident&gt; = Vec::with_capacity(data.variants.len());
+            <span class="kw">let </span><span class="kw-2">mut </span>use_constant_counter = <span class="bool-val">false</span>;
 
-            <span class="kw">if</span> <span class="ident">VariantType::Nondetermined</span> <span class="op">==</span> <span class="ident">variant_type</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">min</span> <span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">u128::max_value</span>());
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i128::min_value</span>());
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">counter</span> <span class="op">=</span> <span class="ident">BigInt::default</span>();
+            <span class="kw">if </span>VariantType::Nondetermined == variant_type {
+                <span class="kw">let </span><span class="kw-2">mut </span>min = BigInt::from(u128::max_value());
+                <span class="kw">let </span><span class="kw-2">mut </span>max = BigInt::from(i128::min_value());
+                <span class="kw">let </span><span class="kw-2">mut </span>counter = BigInt::default();
 
-                <span class="kw">for</span> <span class="ident">variant</span> <span class="kw">in</span> <span class="ident">data</span>.<span class="ident">variants</span>.<span class="ident">iter</span>() {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Fields::Unit</span> <span class="op">=</span> <span class="ident">variant</span>.<span class="ident">fields</span> {
-                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="kw">_</span>, <span class="ident">exp</span>)) <span class="op">=</span> <span class="ident">variant</span>.<span class="ident">discriminant</span>.<span class="ident">as_ref</span>() {
-                            <span class="kw">match</span> <span class="ident">exp</span> {
-                                <span class="ident">Expr::Lit</span>(<span class="ident">lit</span>) =&gt; {
-                                    <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">lit</span>.<span class="ident">lit</span>;
+                <span class="kw">for </span>variant <span class="kw">in </span>data.variants.iter() {
+                    <span class="kw">if let </span>Fields::Unit = variant.fields {
+                        <span class="kw">let </span>value = <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, exp)) = variant.discriminant.as_ref() {
+                            <span class="kw">match </span>exp {
+                                Expr::Lit(lit) =&gt; {
+                                    <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>lit.lit;
 
-                                    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">lit</span> {
-                                        <span class="ident">Lit::Int</span>(<span class="ident">value</span>) =&gt; {
-                                            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">base10_digits</span>();
-                                            <span class="ident">BigInt::from_str</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>()
+                                    <span class="kw">let </span>value = <span class="kw">match </span>lit {
+                                        Lit::Int(value) =&gt; {
+                                            <span class="kw">let </span>value = value.base10_digits();
+                                            BigInt::from_str(value).unwrap()
                                         }
-                                        <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                        <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                     };
 
-                                    <span class="ident">counter</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">clone</span>();
+                                    counter = value.clone();
 
-                                    <span class="ident">value</span>
+                                    value
                                 }
-                                <span class="ident">Expr::Unary</span>(<span class="ident">unary</span>) =&gt; {
-                                    <span class="kw">match</span> <span class="ident">unary</span>.<span class="ident">op</span> {
-                                        <span class="ident">UnOp::Neg</span>(<span class="kw">_</span>) =&gt; <span class="kw">match</span> <span class="ident">unary</span>.<span class="ident">expr</span>.<span class="ident">as_ref</span>() {
-                                            <span class="ident">Expr::Lit</span>(<span class="ident">lit</span>) =&gt; {
-                                                <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">lit</span>.<span class="ident">lit</span>;
+                                Expr::Unary(unary) =&gt; {
+                                    <span class="kw">match </span>unary.op {
+                                        UnOp::Neg(<span class="kw">_</span>) =&gt; <span class="kw">match </span>unary.expr.as_ref() {
+                                            Expr::Lit(lit) =&gt; {
+                                                <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>lit.lit;
 
-                                                <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">lit</span> {
-                                                    <span class="ident">Lit::Int</span>(<span class="ident">value</span>) =&gt; {
-                                                        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">base10_digits</span>();
+                                                <span class="kw">let </span>value = <span class="kw">match </span>lit {
+                                                    Lit::Int(value) =&gt; {
+                                                        <span class="kw">let </span>value = value.base10_digits();
 
-                                                        <span class="op">-</span><span class="ident">BigInt::from_str</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>()
+                                                        -BigInt::from_str(value).unwrap()
                                                     }
-                                                    <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                                    <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                                 };
 
-                                                <span class="ident">counter</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">clone</span>();
+                                                counter = value.clone();
 
-                                                <span class="ident">value</span>
+                                                value
                                             }
-                                            <span class="ident">Expr::Path</span>(<span class="kw">_</span>)
-                                            <span class="op">|</span> <span class="ident">Expr::Cast</span>(<span class="kw">_</span>)
-                                            <span class="op">|</span> <span class="ident">Expr::Binary</span>(<span class="kw">_</span>)
-                                            <span class="op">|</span> <span class="ident">Expr::Call</span>(<span class="kw">_</span>) =&gt; {
-                                                <span class="ident">panic::constant_variable_on_non_determined_size_enum</span>(
+                                            Expr::Path(<span class="kw">_</span>)
+                                            | Expr::Cast(<span class="kw">_</span>)
+                                            | Expr::Binary(<span class="kw">_</span>)
+                                            | Expr::Call(<span class="kw">_</span>) =&gt; {
+                                                panic::constant_variable_on_non_determined_size_enum(
                                                 )
                                             }
-                                            <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                            <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                         },
-                                        <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                        <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                     }
                                 }
-                                <span class="ident">Expr::Path</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Cast</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Binary</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Call</span>(<span class="kw">_</span>) =&gt; {
-                                    <span class="ident">panic::constant_variable_on_non_determined_size_enum</span>()
+                                Expr::Path(<span class="kw">_</span>) | Expr::Cast(<span class="kw">_</span>) | Expr::Binary(<span class="kw">_</span>) | Expr::Call(<span class="kw">_</span>) =&gt; {
+                                    panic::constant_variable_on_non_determined_size_enum()
                                 }
-                                <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                             }
-                        } <span class="kw">else</span> {
-                            <span class="ident">counter</span>.<span class="ident">clone</span>()
+                        } <span class="kw">else </span>{
+                            counter.clone()
                         };
 
-                        <span class="kw">if</span> <span class="ident">min</span> <span class="op">&gt;</span> <span class="ident">value</span> {
-                            <span class="ident">min</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">clone</span>();
+                        <span class="kw">if </span>min &gt; value {
+                            min = value.clone();
                         }
 
-                        <span class="kw">if</span> <span class="ident">max</span> <span class="op">&lt;</span> <span class="ident">value</span> {
-                            <span class="ident">max</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">clone</span>();
+                        <span class="kw">if </span>max &lt; value {
+                            max = value.clone();
                         }
 
-                        <span class="ident">variant_idents</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">ident</span>);
+                        variant_idents.push(<span class="kw-2">&amp;</span>variant.ident);
 
-                        <span class="ident">counter</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                        counter += <span class="number">1</span>;
 
-                        <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>(<span class="ident">value</span>));
-                    } <span class="kw">else</span> {
-                        <span class="ident">panic::not_unit_variant</span>();
+                        values.push(BigIntWrapper::from(value));
+                    } <span class="kw">else </span>{
+                        panic::not_unit_variant();
                     }
                 }
 
-                <span class="kw">if</span> <span class="ident">min</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i8::min_value</span>()) <span class="op">&amp;&amp;</span> <span class="ident">max</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i8::max_value</span>()) {
-                    <span class="ident">variant_type</span> <span class="op">=</span> <span class="ident">VariantType::I8</span>;
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">min</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i16::min_value</span>())
-                    <span class="op">&amp;&amp;</span> <span class="ident">max</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i16::max_value</span>())
+                <span class="kw">if </span>min &gt;= BigInt::from(i8::min_value()) &amp;&amp; max &lt;= BigInt::from(i8::max_value()) {
+                    variant_type = VariantType::I8;
+                } <span class="kw">else if </span>min &gt;= BigInt::from(i16::min_value())
+                    &amp;&amp; max &lt;= BigInt::from(i16::max_value())
                 {
-                    <span class="ident">variant_type</span> <span class="op">=</span> <span class="ident">VariantType::I16</span>;
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">min</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i32::min_value</span>())
-                    <span class="op">&amp;&amp;</span> <span class="ident">max</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i32::max_value</span>())
+                    variant_type = VariantType::I16;
+                } <span class="kw">else if </span>min &gt;= BigInt::from(i32::min_value())
+                    &amp;&amp; max &lt;= BigInt::from(i32::max_value())
                 {
-                    <span class="ident">variant_type</span> <span class="op">=</span> <span class="ident">VariantType::I32</span>;
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">min</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i64::min_value</span>())
-                    <span class="op">&amp;&amp;</span> <span class="ident">max</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i64::max_value</span>())
+                    variant_type = VariantType::I32;
+                } <span class="kw">else if </span>min &gt;= BigInt::from(i64::min_value())
+                    &amp;&amp; max &lt;= BigInt::from(i64::max_value())
                 {
-                    <span class="ident">variant_type</span> <span class="op">=</span> <span class="ident">VariantType::I64</span>;
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">min</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i128::min_value</span>())
-                    <span class="op">&amp;&amp;</span> <span class="ident">max</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">BigInt::from</span>(<span class="ident">i128::max_value</span>())
+                    variant_type = VariantType::I64;
+                } <span class="kw">else if </span>min &gt;= BigInt::from(i128::min_value())
+                    &amp;&amp; max &lt;= BigInt::from(i128::max_value())
                 {
-                    <span class="ident">variant_type</span> <span class="op">=</span> <span class="ident">VariantType::I128</span>;
-                } <span class="kw">else</span> {
-                    <span class="ident">panic::unsupported_discriminant</span>()
+                    variant_type = VariantType::I128;
+                } <span class="kw">else </span>{
+                    panic::unsupported_discriminant()
                 }
-            } <span class="kw">else</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">counter</span> <span class="op">=</span> <span class="ident">BigInt::default</span>();
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">constant_counter</span> <span class="op">=</span> <span class="number">0</span>;
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_exp</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Expr</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+            } <span class="kw">else </span>{
+                <span class="kw">let </span><span class="kw-2">mut </span>counter = BigInt::default();
+                <span class="kw">let </span><span class="kw-2">mut </span>constant_counter = <span class="number">0</span>;
+                <span class="kw">let </span><span class="kw-2">mut </span>last_exp: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Expr&gt; = <span class="prelude-val">None</span>;
 
-                <span class="kw">for</span> <span class="ident">variant</span> <span class="kw">in</span> <span class="ident">data</span>.<span class="ident">variants</span>.<span class="ident">iter</span>() {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Fields::Unit</span> <span class="op">=</span> <span class="ident">variant</span>.<span class="ident">fields</span> {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="kw">_</span>, <span class="ident">exp</span>)) <span class="op">=</span> <span class="ident">variant</span>.<span class="ident">discriminant</span>.<span class="ident">as_ref</span>() {
-                            <span class="kw">match</span> <span class="ident">exp</span> {
-                                <span class="ident">Expr::Lit</span>(<span class="ident">lit</span>) =&gt; {
-                                    <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">lit</span>.<span class="ident">lit</span>;
+                <span class="kw">for </span>variant <span class="kw">in </span>data.variants.iter() {
+                    <span class="kw">if let </span>Fields::Unit = variant.fields {
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, exp)) = variant.discriminant.as_ref() {
+                            <span class="kw">match </span>exp {
+                                Expr::Lit(lit) =&gt; {
+                                    <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>lit.lit;
 
-                                    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">lit</span> {
-                                        <span class="ident">Lit::Int</span>(<span class="ident">value</span>) =&gt; {
-                                            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">base10_digits</span>();
-                                            <span class="ident">BigInt::from_str</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>()
+                                    <span class="kw">let </span>value = <span class="kw">match </span>lit {
+                                        Lit::Int(value) =&gt; {
+                                            <span class="kw">let </span>value = value.base10_digits();
+                                            BigInt::from_str(value).unwrap()
                                         }
-                                        <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                        <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                     };
 
-                                    <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>(<span class="ident">value</span>.<span class="ident">clone</span>()));
+                                    values.push(BigIntWrapper::from(value.clone()));
 
-                                    <span class="ident">counter</span> <span class="op">=</span> <span class="ident">value</span> <span class="op">+</span> <span class="number">1</span>;
+                                    counter = value + <span class="number">1</span>;
 
-                                    <span class="ident">last_exp</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+                                    last_exp = <span class="prelude-val">None</span>;
                                 }
-                                <span class="ident">Expr::Unary</span>(<span class="ident">unary</span>) =&gt; {
-                                    <span class="kw">match</span> <span class="ident">unary</span>.<span class="ident">op</span> {
-                                        <span class="ident">UnOp::Neg</span>(<span class="kw">_</span>) =&gt; {
-                                            <span class="kw">match</span> <span class="ident">unary</span>.<span class="ident">expr</span>.<span class="ident">as_ref</span>() {
-                                                <span class="ident">Expr::Lit</span>(<span class="ident">lit</span>) =&gt; {
-                                                    <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">lit</span>.<span class="ident">lit</span>;
+                                Expr::Unary(unary) =&gt; {
+                                    <span class="kw">match </span>unary.op {
+                                        UnOp::Neg(<span class="kw">_</span>) =&gt; {
+                                            <span class="kw">match </span>unary.expr.as_ref() {
+                                                Expr::Lit(lit) =&gt; {
+                                                    <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>lit.lit;
 
-                                                    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">lit</span> {
-                                                        <span class="ident">Lit::Int</span>(<span class="ident">value</span>) =&gt; {
-                                                            <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">base10_digits</span>();
+                                                    <span class="kw">let </span>value = <span class="kw">match </span>lit {
+                                                        Lit::Int(value) =&gt; {
+                                                            <span class="kw">let </span>value = value.base10_digits();
 
-                                                            <span class="op">-</span><span class="ident">BigInt::from_str</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>()
+                                                            -BigInt::from_str(value).unwrap()
                                                         }
-                                                        <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                                        <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                                     };
 
-                                                    <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>(<span class="ident">value</span>.<span class="ident">clone</span>()));
+                                                    values.push(BigIntWrapper::from(value.clone()));
 
-                                                    <span class="ident">counter</span> <span class="op">=</span> <span class="ident">value</span> <span class="op">+</span> <span class="number">1</span>;
+                                                    counter = value + <span class="number">1</span>;
 
-                                                    <span class="ident">last_exp</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+                                                    last_exp = <span class="prelude-val">None</span>;
                                                 }
-                                                <span class="ident">Expr::Path</span>(<span class="kw">_</span>) =&gt; {
-                                                    <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>((<span class="ident">exp</span>, <span class="number">0</span>)));
+                                                Expr::Path(<span class="kw">_</span>) =&gt; {
+                                                    values.push(BigIntWrapper::from((exp, <span class="number">0</span>)));
 
-                                                    <span class="ident">last_exp</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">exp</span>);
-                                                    <span class="ident">constant_counter</span> <span class="op">=</span> <span class="number">1</span>;
+                                                    last_exp = <span class="prelude-val">Some</span>(exp);
+                                                    constant_counter = <span class="number">1</span>;
                                                 }
-                                                <span class="ident">Expr::Cast</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Binary</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Call</span>(<span class="kw">_</span>) =&gt; {
-                                                    <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>((<span class="ident">exp</span>, <span class="number">0</span>)));
+                                                Expr::Cast(<span class="kw">_</span>) | Expr::Binary(<span class="kw">_</span>) | Expr::Call(<span class="kw">_</span>) =&gt; {
+                                                    values.push(BigIntWrapper::from((exp, <span class="number">0</span>)));
 
-                                                    <span class="ident">last_exp</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">exp</span>);
-                                                    <span class="ident">constant_counter</span> <span class="op">=</span> <span class="number">1</span>;
+                                                    last_exp = <span class="prelude-val">Some</span>(exp);
+                                                    constant_counter = <span class="number">1</span>;
 
-                                                    <span class="ident">use_constant_counter</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                                    use_constant_counter = <span class="bool-val">true</span>;
                                                 }
-                                                <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                                <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                             }
                                         }
-                                        <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                        <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                                     }
                                 }
-                                <span class="ident">Expr::Path</span>(<span class="kw">_</span>) =&gt; {
-                                    <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>((<span class="ident">exp</span>, <span class="number">0</span>)));
+                                Expr::Path(<span class="kw">_</span>) =&gt; {
+                                    values.push(BigIntWrapper::from((exp, <span class="number">0</span>)));
 
-                                    <span class="ident">last_exp</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">exp</span>);
-                                    <span class="ident">constant_counter</span> <span class="op">=</span> <span class="number">1</span>;
+                                    last_exp = <span class="prelude-val">Some</span>(exp);
+                                    constant_counter = <span class="number">1</span>;
                                 }
-                                <span class="ident">Expr::Cast</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Binary</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Call</span>(<span class="kw">_</span>) =&gt; {
-                                    <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>((<span class="ident">exp</span>, <span class="number">0</span>)));
+                                Expr::Cast(<span class="kw">_</span>) | Expr::Binary(<span class="kw">_</span>) | Expr::Call(<span class="kw">_</span>) =&gt; {
+                                    values.push(BigIntWrapper::from((exp, <span class="number">0</span>)));
 
-                                    <span class="ident">last_exp</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">exp</span>);
-                                    <span class="ident">constant_counter</span> <span class="op">=</span> <span class="number">1</span>;
+                                    last_exp = <span class="prelude-val">Some</span>(exp);
+                                    constant_counter = <span class="number">1</span>;
 
-                                    <span class="ident">use_constant_counter</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                    use_constant_counter = <span class="bool-val">true</span>;
                                 }
-                                <span class="kw">_</span> =&gt; <span class="ident">panic::unsupported_discriminant</span>(),
+                                <span class="kw">_ </span>=&gt; panic::unsupported_discriminant(),
                             }
-                        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">exp</span>) <span class="op">=</span> <span class="ident">last_exp</span>.<span class="ident">as_ref</span>() {
-                            <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>((<span class="kw-2">*</span><span class="ident">exp</span>, <span class="ident">constant_counter</span>)));
+                        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(exp) = last_exp.as_ref() {
+                            values.push(BigIntWrapper::from((<span class="kw-2">*</span>exp, constant_counter)));
 
-                            <span class="ident">constant_counter</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                            constant_counter += <span class="number">1</span>;
 
-                            <span class="ident">use_constant_counter</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                        } <span class="kw">else</span> {
-                            <span class="ident">values</span>.<span class="ident">push</span>(<span class="ident">BigIntWrapper::from</span>(<span class="ident">counter</span>.<span class="ident">clone</span>()));
+                            use_constant_counter = <span class="bool-val">true</span>;
+                        } <span class="kw">else </span>{
+                            values.push(BigIntWrapper::from(counter.clone()));
 
-                            <span class="ident">counter</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                            counter += <span class="number">1</span>;
                         }
 
-                        <span class="ident">variant_idents</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">ident</span>);
-                    } <span class="kw">else</span> {
-                        <span class="ident">panic::not_unit_variant</span>();
+                        variant_idents.push(<span class="kw-2">&amp;</span>variant.ident);
+                    } <span class="kw">else </span>{
+                        panic::not_unit_variant();
                     }
                 }
             }
 
-            <span class="kw">let</span> <span class="ident">ordinal</span> <span class="op">=</span> <span class="macro">quote!</span> {
-                <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ordinal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; #<span class="ident">variant_type</span> {
-                    <span class="kw">match</span> <span class="self">self</span> {
+            <span class="kw">let </span>ordinal = <span class="macro">quote!</span> {
+                <span class="attribute">#[inline]</span>
+                <span class="kw">pub fn </span>ordinal(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; #variant_type {
+                    <span class="kw">match </span><span class="self">self </span>{
                         #(
-                            <span class="self">Self</span>::#<span class="ident">variant_idents</span> =&gt; #<span class="ident">values</span>,
-                        )<span class="op">*</span>
+                            <span class="self">Self</span>::#variant_idents =&gt; #values,
+                        )*
                     }
                 }
             };
 
-            <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="ident">ty_generics</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="ident">ast</span>.<span class="ident">generics</span>.<span class="ident">split_for_impl</span>();
+            <span class="kw">let </span>(impl_generics, ty_generics, where_clause) = ast.generics.split_for_impl();
 
-            <span class="kw">let</span> <span class="ident">from_ordinal_unsafe</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">variants</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> {
-                <span class="kw">let</span> <span class="ident">variant_idents</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">data</span>.<span class="ident">variants</span>[<span class="number">0</span>].<span class="ident">ident</span>;
+            <span class="kw">let </span>from_ordinal_unsafe = <span class="kw">if </span>data.variants.len() == <span class="number">1 </span>{
+                <span class="kw">let </span>variant_idents = <span class="kw-2">&amp;</span>data.variants[<span class="number">0</span>].ident;
 
                 <span class="macro">quote!</span> {
-                    <span class="attribute">#[<span class="ident">inline</span>]</span>
-                    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_ordinal_unsafe</span>(<span class="ident">_number</span>: #<span class="ident">variant_type</span>) -&gt; #<span class="ident">name</span> #<span class="ident">ty_generics</span> {
-                        <span class="self">Self</span>::#<span class="ident">variant_idents</span>
+                    <span class="attribute">#[inline]</span>
+                    <span class="kw">pub unsafe fn </span>from_ordinal_unsafe(_number: #variant_type) -&gt; #name #ty_generics {
+                        <span class="self">Self</span>::#variant_idents
                     }
                 }
-            } <span class="kw">else</span> {
+            } <span class="kw">else </span>{
                 <span class="macro">quote!</span> {
-                    <span class="attribute">#[<span class="ident">inline</span>]</span>
-                    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_ordinal_unsafe</span>(<span class="ident">number</span>: #<span class="ident">variant_type</span>) -&gt; #<span class="ident">name</span> #<span class="ident">ty_generics</span> {
-                        <span class="ident">::core::mem::transmute</span>(<span class="ident">number</span>)
+                    <span class="attribute">#[inline]</span>
+                    <span class="kw">pub unsafe fn </span>from_ordinal_unsafe(number: #variant_type) -&gt; #name #ty_generics {
+                        ::core::mem::transmute(number)
                     }
                 }
             };
 
-            <span class="kw">let</span> <span class="ident">from_ordinal</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">use_constant_counter</span> {
+            <span class="kw">let </span>from_ordinal = <span class="kw">if </span>use_constant_counter {
                 <span class="macro">quote!</span> {
-                    <span class="attribute">#[<span class="ident">inline</span>]</span>
-                    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_ordinal</span>(<span class="ident">number</span>: #<span class="ident">variant_type</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>#<span class="ident">name</span> #<span class="ident">ty_generics</span><span class="op">&gt;</span> {
-                        <span class="kw">if</span> <span class="bool-val">false</span> {
+                    <span class="attribute">#[inline]</span>
+                    <span class="kw">pub fn </span>from_ordinal(number: #variant_type) -&gt; <span class="prelude-ty">Option</span>&lt;#name #ty_generics&gt; {
+                        <span class="kw">if </span><span class="bool-val">false </span>{
                             <span class="macro">unreachable!</span>()
-                        } #( <span class="kw">else</span> <span class="kw">if</span> <span class="ident">number</span> <span class="op">==</span> #<span class="ident">values</span> {
-                            <span class="prelude-val">Some</span>(<span class="self">Self</span>::#<span class="ident">variant_idents</span>)
-                        } )<span class="op">*</span> <span class="kw">else</span> {
-                            <span class="prelude-val">None</span>
-                        }
+                        } #( <span class="kw">else if </span>number == #values {
+                            <span class="prelude-val">Some</span>(<span class="self">Self</span>::#variant_idents)
+                        } )* <span class="kw">else </span>{
+                            <span class="prelude-val">None
+                        </span>}
                     }
                 }
-            } <span class="kw">else</span> {
+            } <span class="kw">else </span>{
                 <span class="macro">quote!</span> {
-                    <span class="attribute">#[<span class="ident">inline</span>]</span>
-                    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_ordinal</span>(<span class="ident">number</span>: #<span class="ident">variant_type</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span>#<span class="ident">name</span> #<span class="ident">ty_generics</span><span class="op">&gt;</span> {
-                        <span class="kw">match</span> <span class="ident">number</span>{
+                    <span class="attribute">#[inline]</span>
+                    <span class="kw">pub fn </span>from_ordinal(number: #variant_type) -&gt; <span class="prelude-ty">Option</span>&lt;#name #ty_generics&gt; {
+                        <span class="kw">match </span>number{
                             #(
-                                #<span class="ident">values</span> =&gt; <span class="prelude-val">Some</span>(<span class="self">Self</span>::#<span class="ident">variant_idents</span>),
-                            )<span class="op">*</span>
-                            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>
-                        }
+                                #values =&gt; <span class="prelude-val">Some</span>(<span class="self">Self</span>::#variant_idents),
+                            )*
+                            <span class="kw">_ </span>=&gt; <span class="prelude-val">None
+                        </span>}
                     }
                 }
             };
 
-            <span class="kw">let</span> <span class="ident">variant_count</span> <span class="op">=</span> <span class="ident">variant_idents</span>.<span class="ident">len</span>();
+            <span class="kw">let </span>variant_count = variant_idents.len();
 
-            <span class="kw">let</span> <span class="ident">variants</span> <span class="op">=</span> <span class="macro">quote!</span> {
-                <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">variants</span>() -&gt; [#<span class="ident">name</span> #<span class="ident">ty_generics</span>; #<span class="ident">variant_count</span>] {
-                    [#( <span class="self">Self</span>::#<span class="ident">variant_idents</span>, )<span class="kw-2">*</span>]
+            <span class="kw">let </span>variants = <span class="macro">quote!</span> {
+                <span class="attribute">#[inline]</span>
+                <span class="kw">pub const fn </span>variants() -&gt; [#name #ty_generics; #variant_count] {
+                    [#( <span class="self">Self</span>::#variant_idents, )<span class="kw-2">*</span>]
                 }
             };
 
-            <span class="kw">let</span> <span class="ident">variant_count</span> <span class="op">=</span> <span class="macro">quote!</span> {
-                <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">variant_count</span>() -&gt; <span class="ident">usize</span> {
-                    #<span class="ident">variant_count</span>
+            <span class="kw">let </span>variant_count = <span class="macro">quote!</span> {
+                <span class="attribute">#[inline]</span>
+                <span class="kw">pub const fn </span>variant_count() -&gt; usize {
+                    #variant_count
                 }
             };
 
-            <span class="kw">let</span> <span class="ident">ordinalize_impl</span> <span class="op">=</span> <span class="macro">quote!</span> {
-                <span class="kw">impl</span> #<span class="ident">impl_generics</span> #<span class="ident">name</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
-                    #<span class="ident">from_ordinal_unsafe</span>
+            <span class="kw">let </span>ordinalize_impl = <span class="macro">quote!</span> {
+                <span class="kw">impl </span>#impl_generics #name #ty_generics #where_clause {
+                    #from_ordinal_unsafe
 
-                    #<span class="ident">from_ordinal</span>
+                    #from_ordinal
 
-                    #<span class="ident">ordinal</span>
+                    #ordinal
 
-                    #<span class="ident">variants</span>
+                    #variants
 
-                    #<span class="ident">variant_count</span>
+                    #variant_count
                 }
             };
 
-            <span class="ident">ordinalize_impl</span>.<span class="ident">into</span>()
+            ordinalize_impl.into()
         }
-        <span class="kw">_</span> =&gt; {
-            <span class="ident">panic::not_enum</span>();
+        <span class="kw">_ </span>=&gt; {
+            panic::not_enum();
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">Ordinalize</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ordinalize_derive</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">derive_input_handler</span>(<span class="ident">syn::parse</span>(<span class="ident">input</span>).<span class="ident">unwrap</span>())
+<span class="attribute">#[proc_macro_derive(Ordinalize)]</span>
+<span class="kw">pub fn </span>ordinalize_derive(input: TokenStream) -&gt; TokenStream {
+    derive_input_handler(syn::parse(input).unwrap())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="enum_ordinalize" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="enum_ordinalize" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

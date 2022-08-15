@@ -742,638 +742,638 @@
 <span id="742">742</span>
 <span id="743">743</span>
 <span id="744">744</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A parser for Golly&#39;s [Extended RLE format](http://golly.sourceforge.net/Help/formats.html#rle).</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! It is basically the same as the original [RLE](https://www.conwaylife.com/wiki/Run_Length_Encoded)</span>
-<span class="doccomment">//! format, except that it supports up to 256 states, and a `#CXRLE` line.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! A parser for Golly&#39;s [Extended RLE format](http://golly.sourceforge.net/Help/formats.html#rle).
+//!
+//! It is basically the same as the original [RLE](https://www.conwaylife.com/wiki/Run_Length_Encoded)
+//! format, except that it supports up to 256 states, and a `#CXRLE` line.
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">CellData</span>, <span class="ident">Coordinates</span>, <span class="ident">Input</span>};
-<span class="kw">use</span> <span class="ident">lazy_regex::regex</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">BufReader</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">IoError</span>, <span class="ident">Read</span>};
-<span class="kw">use</span> <span class="ident">thiserror::Error</span>;
+</span><span class="kw">use crate</span>::{CellData, Coordinates, Input};
+<span class="kw">use </span>lazy_regex::regex;
+<span class="kw">use </span>std::io::{BufReader, Error <span class="kw">as </span>IoError, Read};
+<span class="kw">use </span>thiserror::Error;
 
-<span class="doccomment">/// Errors that can be returned when parsing a RLE file.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Error</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Invalid state: {0}.&quot;</span>)]</span>
-    <span class="ident">InvalidState</span>(<span class="ident">String</span>),
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Invalid \&quot;#CXRLE\&quot; line: {0}.&quot;</span>)]</span>
-    <span class="ident">InvalidCxrleLine</span>(<span class="ident">String</span>),
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Invalid header line: {0}.&quot;</span>)]</span>
-    <span class="ident">InvalidHeaderLine</span>(<span class="ident">String</span>),
-    <span class="attribute">#[<span class="ident">error</span>(<span class="string">&quot;Error when reading from input: {0}.&quot;</span>)]</span>
-    <span class="ident">IoError</span>(<span class="attribute">#[<span class="ident">from</span>]</span> <span class="ident">IoError</span>),
+<span class="doccomment">/// Errors that can be returned when parsing a RLE file.
+</span><span class="attribute">#[derive(Debug, Error)]</span>
+<span class="kw">pub enum </span>Error {
+    <span class="attribute">#[error(<span class="string">&quot;Invalid state: {0}.&quot;</span>)]</span>
+    InvalidState(String),
+    <span class="attribute">#[error(<span class="string">&quot;Invalid \&quot;#CXRLE\&quot; line: {0}.&quot;</span>)]</span>
+    InvalidCxrleLine(String),
+    <span class="attribute">#[error(<span class="string">&quot;Invalid header line: {0}.&quot;</span>)]</span>
+    InvalidHeaderLine(String),
+    <span class="attribute">#[error(<span class="string">&quot;Error when reading from input: {0}.&quot;</span>)]</span>
+    IoError(<span class="attribute">#[from]</span> IoError),
 }
 
-<span class="doccomment">/// Data from the `#CXRLE` line, e.g., `#CXRLE Pos=0,-1377 Gen=3480106827776`.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CxrleData</span> {
-    <span class="doccomment">/// Coordinates of the upper left corner of the pattern.</span>
-    <span class="kw">pub</span> <span class="ident">pos</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Coordinates</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Current generation.</span>
-    <span class="kw">pub</span> <span class="ident">gen</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Data from the `#CXRLE` line, e.g., `#CXRLE Pos=0,-1377 Gen=3480106827776`.
+</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq, Default, Hash)]</span>
+<span class="kw">pub struct </span>CxrleData {
+    <span class="doccomment">/// Coordinates of the upper left corner of the pattern.
+    </span><span class="kw">pub </span>pos: <span class="prelude-ty">Option</span>&lt;Coordinates&gt;,
+    <span class="doccomment">/// Current generation.
+    </span><span class="kw">pub </span>gen: <span class="prelude-ty">Option</span>&lt;u64&gt;,
 }
 
-<span class="doccomment">/// Parse the `#CXRLE` line.</span>
-<span class="kw">fn</span> <span class="ident">parse_cxrle</span>(<span class="ident">line</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CxrleData</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="macro">regex!</span>(<span class="string">r&quot;(?:Pos\s*=\s*(?P&lt;x&gt;-?\d+),\s*(?P&lt;y&gt;-?\d+))|(?:Gen\s*=\s*(?P&lt;gen&gt;\d+))&quot;</span>);
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">CxrleData::default</span>();
-    <span class="kw">for</span> <span class="ident">cap</span> <span class="kw">in</span> <span class="ident">re</span>.<span class="ident">captures_iter</span>(<span class="ident">line</span>) {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">gen</span>) <span class="op">=</span> <span class="ident">cap</span>.<span class="ident">name</span>(<span class="string">&quot;gen&quot;</span>) {
-            <span class="ident">data</span>.<span class="ident">gen</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">gen</span>.<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">ok</span>())<span class="question-mark">?</span>;
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">cap</span>[<span class="string">&quot;x&quot;</span>].<span class="ident">parse</span>().<span class="ident">ok</span>()<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">cap</span>[<span class="string">&quot;y&quot;</span>].<span class="ident">parse</span>().<span class="ident">ok</span>()<span class="question-mark">?</span>;
-            <span class="ident">data</span>.<span class="ident">pos</span> <span class="op">=</span> <span class="prelude-val">Some</span>((<span class="ident">x</span>, <span class="ident">y</span>));
+<span class="doccomment">/// Parse the `#CXRLE` line.
+</span><span class="kw">fn </span>parse_cxrle(line: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;CxrleData&gt; {
+    <span class="kw">let </span>re = <span class="macro">regex!</span>(<span class="string">r&quot;(?:Pos\s*=\s*(?P&lt;x&gt;-?\d+),\s*(?P&lt;y&gt;-?\d+))|(?:Gen\s*=\s*(?P&lt;gen&gt;\d+))&quot;</span>);
+    <span class="kw">let </span><span class="kw-2">mut </span>data = CxrleData::default();
+    <span class="kw">for </span>cap <span class="kw">in </span>re.captures_iter(line) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(gen) = cap.name(<span class="string">&quot;gen&quot;</span>) {
+            data.gen = <span class="prelude-val">Some</span>(gen.as_str().parse().ok())<span class="question-mark">?</span>;
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>x = cap[<span class="string">&quot;x&quot;</span>].parse().ok()<span class="question-mark">?</span>;
+            <span class="kw">let </span>y = cap[<span class="string">&quot;y&quot;</span>].parse().ok()<span class="question-mark">?</span>;
+            data.pos = <span class="prelude-val">Some</span>((x, y));
         }
     }
-    <span class="prelude-val">Some</span>(<span class="ident">data</span>)
+    <span class="prelude-val">Some</span>(data)
 }
 
-<span class="doccomment">/// Data from the header line, e.g., `x = 3, y = 3, rule = B3/S23`.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HeaderData</span> {
-    <span class="doccomment">/// Width of the pattern.</span>
-    <span class="kw">pub</span> <span class="ident">x</span>: <span class="ident">u64</span>,
-    <span class="doccomment">/// Height of the pattern.</span>
-    <span class="kw">pub</span> <span class="ident">y</span>: <span class="ident">u64</span>,
-    <span class="doccomment">/// Rulestring.</span>
-    <span class="kw">pub</span> <span class="ident">rule</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Data from the header line, e.g., `x = 3, y = 3, rule = B3/S23`.
+</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq, Default, Hash)]</span>
+<span class="kw">pub struct </span>HeaderData {
+    <span class="doccomment">/// Width of the pattern.
+    </span><span class="kw">pub </span>x: u64,
+    <span class="doccomment">/// Height of the pattern.
+    </span><span class="kw">pub </span>y: u64,
+    <span class="doccomment">/// Rulestring.
+    </span><span class="kw">pub </span>rule: <span class="prelude-ty">Option</span>&lt;String&gt;,
 }
 
-<span class="doccomment">/// Parse the header line.</span>
-<span class="kw">fn</span> <span class="ident">parse_header</span>(<span class="ident">line</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HeaderData</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span>
+<span class="doccomment">/// Parse the header line.
+</span><span class="kw">fn </span>parse_header(line: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;HeaderData&gt; {
+    <span class="kw">let </span>re =
         <span class="macro">regex!</span>(<span class="string">r&quot;^x\s*=\s*(?P&lt;x&gt;\d+),\s*y\s*=\s*(?P&lt;y&gt;\d+)(?:,\s*rule\s*=\s*(?P&lt;rule&gt;.*\S)\s*)?$&quot;</span>);
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">HeaderData::default</span>();
-    <span class="kw">let</span> <span class="ident">cap</span> <span class="op">=</span> <span class="ident">re</span>.<span class="ident">captures</span>(<span class="ident">line</span>)<span class="question-mark">?</span>;
-    <span class="ident">data</span>.<span class="ident">x</span> <span class="op">=</span> <span class="ident">cap</span>[<span class="string">&quot;x&quot;</span>].<span class="ident">parse</span>().<span class="ident">ok</span>()<span class="question-mark">?</span>;
-    <span class="ident">data</span>.<span class="ident">y</span> <span class="op">=</span> <span class="ident">cap</span>[<span class="string">&quot;y&quot;</span>].<span class="ident">parse</span>().<span class="ident">ok</span>()<span class="question-mark">?</span>;
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="ident">cap</span>.<span class="ident">name</span>(<span class="string">&quot;rule&quot;</span>) {
-        <span class="ident">data</span>.<span class="ident">rule</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">rule</span>.<span class="ident">as_str</span>().<span class="ident">to_owned</span>());
+    <span class="kw">let </span><span class="kw-2">mut </span>data = HeaderData::default();
+    <span class="kw">let </span>cap = re.captures(line)<span class="question-mark">?</span>;
+    data.x = cap[<span class="string">&quot;x&quot;</span>].parse().ok()<span class="question-mark">?</span>;
+    data.y = cap[<span class="string">&quot;y&quot;</span>].parse().ok()<span class="question-mark">?</span>;
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(rule) = cap.name(<span class="string">&quot;rule&quot;</span>) {
+        data.rule = <span class="prelude-val">Some</span>(rule.as_str().to_owned());
     }
-    <span class="prelude-val">Some</span>(<span class="ident">data</span>)
+    <span class="prelude-val">Some</span>(data)
 }
 
-<span class="doccomment">/// A parser for Golly&#39;s [Extended RLE format](http://golly.sourceforge.net/Help/formats.html#rle).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The format is basically the same as the original [RLE](https://www.conwaylife.com/wiki/Run_Length_Encoded)</span>
-<span class="doccomment">/// format, except that it supports up to 256 states, and a `#CXRLE` line.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// As an iterator, it iterates over the living cells.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Reading from a string:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use ca_formats::rle::Rle;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// const GLIDER: &amp;str = r&quot;#N Glider</span>
-<span class="doccomment">/// #O Richard K. Guy</span>
-<span class="doccomment">/// #C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.</span>
-<span class="doccomment">/// #C www.conwaylife.com/wiki/index.php?title=Glider</span>
-<span class="doccomment">/// x = 3, y = 3, rule = B3/S23</span>
-<span class="doccomment">/// bob$2bo$3o!&quot;;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let glider = Rle::new(GLIDER).unwrap();</span>
-<span class="doccomment">/// assert_eq!(glider.header_data().unwrap().x, 3);</span>
-<span class="doccomment">/// assert_eq!(glider.header_data().unwrap().y, 3);</span>
-<span class="doccomment">/// assert_eq!(glider.header_data().unwrap().rule, Some(String::from(&quot;B3/S23&quot;)));</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let cells = glider.map(|cell| cell.unwrap().position).collect::&lt;Vec&lt;_&gt;&gt;();</span>
-<span class="doccomment">/// assert_eq!(cells, vec![(1, 0), (2, 1), (0, 2), (1, 2), (2, 2)]);</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ## Reading from a file:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ``` rust</span>
-<span class="doccomment">/// use std::fs::File;</span>
-<span class="doccomment">/// use ca_formats::rle::Rle;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let file = File::open(&quot;tests/sirrobin.rle&quot;).unwrap();</span>
-<span class="doccomment">/// let sirrobin = Rle::new_from_file(file).unwrap();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// assert_eq!(sirrobin.count(), 282);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Input</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Data from the `#CXRLE` line.</span>
-    <span class="ident">cxrle_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CxrleData</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A parser for Golly&#39;s [Extended RLE format](http://golly.sourceforge.net/Help/formats.html#rle).
+///
+/// The format is basically the same as the original [RLE](https://www.conwaylife.com/wiki/Run_Length_Encoded)
+/// format, except that it supports up to 256 states, and a `#CXRLE` line.
+///
+/// As an iterator, it iterates over the living cells.
+///
+/// # Examples
+///
+/// ## Reading from a string:
+///
+/// ```rust
+/// use ca_formats::rle::Rle;
+///
+/// const GLIDER: &amp;str = r&quot;#N Glider
+/// #O Richard K. Guy
+/// #C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.
+/// #C www.conwaylife.com/wiki/index.php?title=Glider
+/// x = 3, y = 3, rule = B3/S23
+/// bob$2bo$3o!&quot;;
+///
+/// let glider = Rle::new(GLIDER).unwrap();
+/// assert_eq!(glider.header_data().unwrap().x, 3);
+/// assert_eq!(glider.header_data().unwrap().y, 3);
+/// assert_eq!(glider.header_data().unwrap().rule, Some(String::from(&quot;B3/S23&quot;)));
+///
+/// let cells = glider.map(|cell| cell.unwrap().position).collect::&lt;Vec&lt;_&gt;&gt;();
+/// assert_eq!(cells, vec![(1, 0), (2, 1), (0, 2), (1, 2), (2, 2)]);
+/// ```
+///
+/// ## Reading from a file:
+///
+/// ``` rust
+/// use std::fs::File;
+/// use ca_formats::rle::Rle;
+///
+/// let file = File::open(&quot;tests/sirrobin.rle&quot;).unwrap();
+/// let sirrobin = Rle::new_from_file(file).unwrap();
+///
+/// assert_eq!(sirrobin.count(), 282);
+/// ```
+</span><span class="attribute">#[must_use]</span>
+<span class="attribute">#[derive(Debug)]</span>
+<span class="kw">pub struct </span>Rle&lt;I: Input&gt; {
+    <span class="doccomment">/// Data from the `#CXRLE` line.
+    </span>cxrle_data: <span class="prelude-ty">Option</span>&lt;CxrleData&gt;,
 
-    <span class="doccomment">/// Data from the header line.</span>
-    <span class="ident">header_data</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HeaderData</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Data from the header line.
+    </span>header_data: <span class="prelude-ty">Option</span>&lt;HeaderData&gt;,
 
-    <span class="doccomment">/// An iterator over lines of the RLE string.</span>
-    <span class="ident">lines</span>: <span class="ident">I::Lines</span>,
+    <span class="doccomment">/// An iterator over lines of the RLE string.
+    </span>lines: I::Lines,
 
-    <span class="doccomment">/// An iterator over bytes of the current line.</span>
-    <span class="ident">current_line</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">I::Bytes</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// An iterator over bytes of the current line.
+    </span>current_line: <span class="prelude-ty">Option</span>&lt;I::Bytes&gt;,
 
-    <span class="doccomment">/// Coordinates of the current cell.</span>
-    <span class="ident">position</span>: <span class="ident">Coordinates</span>,
+    <span class="doccomment">/// Coordinates of the current cell.
+    </span>position: Coordinates,
 
-    <span class="doccomment">/// X coordinates of the upper left corner of the pattern.</span>
-    <span class="ident">x_start</span>: <span class="ident">i64</span>,
+    <span class="doccomment">/// X coordinates of the upper left corner of the pattern.
+    </span>x_start: i64,
 
-    <span class="doccomment">/// Run count in the RLE string, i.e., the numbers before `b`, `o`, `$` and other tags.</span>
-    <span class="ident">run_count</span>: <span class="ident">i64</span>,
+    <span class="doccomment">/// Run count in the RLE string, i.e., the numbers before `b`, `o`, `$` and other tags.
+    </span>run_count: i64,
 
-    <span class="doccomment">/// Remaining run count for the current cell when iterating over cells.</span>
-    <span class="ident">alive_count</span>: <span class="ident">i64</span>,
+    <span class="doccomment">/// Remaining run count for the current cell when iterating over cells.
+    </span>alive_count: i64,
 
-    <span class="doccomment">/// State of the current cell.</span>
-    <span class="ident">state</span>: <span class="ident">u8</span>,
+    <span class="doccomment">/// State of the current cell.
+    </span>state: u8,
 
-    <span class="doccomment">/// Prefix in a multi-char state, i.e., `p` in `pA`.</span>
-    <span class="ident">state_prefix</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Prefix in a multi-char state, i.e., `p` in `pA`.
+    </span>state_prefix: <span class="prelude-ty">Option</span>&lt;u8&gt;,
 
-    <span class="doccomment">/// Whether this RLE file allows unknown cells.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)]</span>
-    <span class="ident">unknown</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Whether this RLE file allows unknown cells.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;unknown&quot;</span>)]</span>
+    unknown: bool,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Input</span><span class="op">&gt;</span> <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Create a new parser instance from input, and try to read the header and the `#CXRLE` line.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If there are multiple header lines / `CXRLE` lines, only the last one will be taken.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">input</span>: <span class="ident">I</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lines</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">lines</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cxrle_data</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">header_data</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">current_line</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">position</span> <span class="op">=</span> (<span class="number">0</span>, <span class="number">0</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">x_start</span> <span class="op">=</span> <span class="number">0</span>;
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">next</span>() {
-            <span class="kw">let</span> <span class="ident">line</span> <span class="op">=</span> <span class="ident">I::line</span>(<span class="ident">item</span>)<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">starts_with</span>(<span class="string">&quot;#CXRLE&quot;</span>) {
-                <span class="ident">cxrle_data</span>.<span class="ident">replace</span>(
-                    <span class="ident">parse_cxrle</span>(<span class="ident">line</span>.<span class="ident">as_ref</span>())
-                        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Error::InvalidCxrleLine</span>(<span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">to_string</span>()))<span class="question-mark">?</span>,
+<span class="kw">impl</span>&lt;I: Input&gt; Rle&lt;I&gt; {
+    <span class="doccomment">/// Create a new parser instance from input, and try to read the header and the `#CXRLE` line.
+    ///
+    /// If there are multiple header lines / `CXRLE` lines, only the last one will be taken.
+    </span><span class="kw">pub fn </span>new(input: I) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>lines = input.lines();
+        <span class="kw">let </span><span class="kw-2">mut </span>cxrle_data = <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>header_data = <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>current_line = <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>position = (<span class="number">0</span>, <span class="number">0</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>x_start = <span class="number">0</span>;
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(item) = lines.next() {
+            <span class="kw">let </span>line = I::line(item)<span class="question-mark">?</span>;
+            <span class="kw">if </span>line.as_ref().starts_with(<span class="string">&quot;#CXRLE&quot;</span>) {
+                cxrle_data.replace(
+                    parse_cxrle(line.as_ref())
+                        .ok_or_else(|| Error::InvalidCxrleLine(line.as_ref().to_string()))<span class="question-mark">?</span>,
                 );
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">starts_with</span>(<span class="string">&quot;x &quot;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">starts_with</span>(<span class="string">&quot;x=&quot;</span>) {
-                <span class="ident">header_data</span>.<span class="ident">replace</span>(
-                    <span class="ident">parse_header</span>(<span class="ident">line</span>.<span class="ident">as_ref</span>())
-                        .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Error::InvalidHeaderLine</span>(<span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">to_string</span>()))<span class="question-mark">?</span>,
+            } <span class="kw">else if </span>line.as_ref().starts_with(<span class="string">&quot;x &quot;</span>) || line.as_ref().starts_with(<span class="string">&quot;x=&quot;</span>) {
+                header_data.replace(
+                    parse_header(line.as_ref())
+                        .ok_or_else(|| Error::InvalidHeaderLine(line.as_ref().to_string()))<span class="question-mark">?</span>,
                 );
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">starts_with</span>(<span class="string">&#39;#&#39;</span>) {
-                <span class="ident">current_line</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">I::bytes</span>(<span class="ident">line</span>));
+            } <span class="kw">else if </span>!line.as_ref().starts_with(<span class="string">&#39;#&#39;</span>) {
+                current_line = <span class="prelude-val">Some</span>(I::bytes(line));
                 <span class="kw">break</span>;
             }
         }
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">CxrleData</span> { <span class="ident">pos</span>: <span class="prelude-val">Some</span>(<span class="ident">pos</span>), .. }) <span class="op">=</span> <span class="ident">cxrle_data</span> {
-            <span class="ident">position</span> <span class="op">=</span> <span class="ident">pos</span>;
-            <span class="ident">x_start</span> <span class="op">=</span> <span class="ident">pos</span>.<span class="number">0</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(CxrleData { pos: <span class="prelude-val">Some</span>(pos), .. }) = cxrle_data {
+            position = pos;
+            x_start = pos.<span class="number">0</span>;
         }
-        <span class="prelude-val">Ok</span>(<span class="self">Self</span> {
-            <span class="ident">cxrle_data</span>,
-            <span class="ident">header_data</span>,
-            <span class="ident">lines</span>,
-            <span class="ident">current_line</span>,
-            <span class="ident">position</span>,
-            <span class="ident">x_start</span>,
-            <span class="ident">run_count</span>: <span class="number">0</span>,
-            <span class="ident">alive_count</span>: <span class="number">0</span>,
-            <span class="ident">state</span>: <span class="number">1</span>,
-            <span class="ident">state_prefix</span>: <span class="prelude-val">None</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)]</span>
-            <span class="ident">unknown</span>: <span class="bool-val">false</span>,
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            cxrle_data,
+            header_data,
+            lines,
+            current_line,
+            position,
+            x_start,
+            run_count: <span class="number">0</span>,
+            alive_count: <span class="number">0</span>,
+            state: <span class="number">1</span>,
+            state_prefix: <span class="prelude-val">None</span>,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;unknown&quot;</span>)]</span>
+            unknown: <span class="bool-val">false</span>,
         })
     }
 
-    <span class="doccomment">/// Data from the `#CXRLE` line.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cxrle_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">CxrleData</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">cxrle_data</span>.<span class="ident">as_ref</span>()
+    <span class="doccomment">/// Data from the `#CXRLE` line.
+    </span><span class="kw">pub fn </span>cxrle_data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>CxrleData&gt; {
+        <span class="self">self</span>.cxrle_data.as_ref()
     }
 
-    <span class="doccomment">/// Data from the header line.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">header_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">HeaderData</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">header_data</span>.<span class="ident">as_ref</span>()
+    <span class="doccomment">/// Data from the header line.
+    </span><span class="kw">pub fn </span>header_data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>HeaderData&gt; {
+        <span class="self">self</span>.header_data.as_ref()
     }
 
-    <span class="doccomment">/// Allow unknown cells.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In this variant of RLE format, there is another symbol, `?`,</span>
-    <span class="doccomment">/// which represents unknown cells. Now unknown cells are the background.</span>
-    <span class="doccomment">/// Dead cells at the end of each line must not be omitted.</span>
-    <span class="doccomment">/// The iterator will also explicitly output the dead cells.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docs_rs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_unknown</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">unknown</span> <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Allow unknown cells.
+    ///
+    /// In this variant of RLE format, there is another symbol, `?`,
+    /// which represents unknown cells. Now unknown cells are the background.
+    /// Dead cells at the end of each line must not be omitted.
+    /// The iterator will also explicitly output the dead cells.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;unknown&quot;</span>)]</span>
+    <span class="attribute">#[cfg_attr(docs_rs, doc(cfg(feature = <span class="string">&quot;unknown&quot;</span>)))]</span>
+    <span class="kw">pub fn </span>with_unknown(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.unknown = <span class="bool-val">true</span>;
+        <span class="self">self
+    </span>}
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span> <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
-    <span class="ident">L</span>: <span class="ident">Input</span>,
+<span class="kw">impl</span>&lt;I, L&gt; Rle&lt;I&gt;
+<span class="kw">where
+    </span>I: Input&lt;Lines = L&gt;,
+    L: Input,
 {
-    <span class="doccomment">/// Parse the remaining unparsed lines as a new RLE.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remains</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">L</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">Rle::new</span>(<span class="self">self</span>.<span class="ident">lines</span>)
+    <span class="doccomment">/// Parse the remaining unparsed lines as a new RLE.
+    </span><span class="kw">pub fn </span>remains(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Rle&lt;L&gt;, Error&gt; {
+        Rle::new(<span class="self">self</span>.lines)
     }
 
-    <span class="doccomment">/// Try to parse the remaining unparsed lines as a new RLE.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `Ok(None)` if the remaining lines is empty or only</span>
-    <span class="doccomment">/// contains header lines and comments.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_remains</span>(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">L</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="self">self</span>.<span class="ident">lines</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="kw">if</span> <span class="ident">rle</span>.<span class="ident">current_line</span>.<span class="ident">is_some</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">rle</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        })
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Read</span><span class="op">&gt;</span> <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">BufReader</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Creates a new parser instance from something that implements [`Read`] trait,</span>
-    <span class="doccomment">/// e.g., a [`File`](std::fs::File).</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_from_file</span>(<span class="ident">file</span>: <span class="ident">R</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">BufReader::new</span>(<span class="ident">file</span>))
+    <span class="doccomment">/// Try to parse the remaining unparsed lines as a new RLE.
+    ///
+    /// Returns `Ok(None)` if the remaining lines is empty or only
+    /// contains header lines and comments.
+    </span><span class="kw">pub fn </span>try_remains(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Rle&lt;L&gt;&gt;, Error&gt; {
+        <span class="kw">let </span>rle = Rle::new(<span class="self">self</span>.lines)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="kw">if </span>rle.current_line.is_some() {
+            <span class="prelude-val">Some</span>(rle)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>})
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Input</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">I::Lines</span>: <span class="ident">Clone</span>,
-    <span class="ident">I::Bytes</span>: <span class="ident">Clone</span>,
+<span class="kw">impl</span>&lt;R: Read&gt; Rle&lt;BufReader&lt;R&gt;&gt; {
+    <span class="doccomment">/// Creates a new parser instance from something that implements [`Read`] trait,
+    /// e.g., a [`File`](std::fs::File).
+    </span><span class="kw">pub fn </span>new_from_file(file: R) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="self">Self</span>::new(BufReader::new(file))
+    }
+}
+
+<span class="kw">impl</span>&lt;I: Input&gt; Clone <span class="kw">for </span>Rle&lt;I&gt;
+<span class="kw">where
+    </span>I::Lines: Clone,
+    I::Bytes: Clone,
 {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">cxrle_data</span>: <span class="self">self</span>.<span class="ident">cxrle_data</span>.<span class="ident">clone</span>(),
-            <span class="ident">header_data</span>: <span class="self">self</span>.<span class="ident">header_data</span>.<span class="ident">clone</span>(),
-            <span class="ident">lines</span>: <span class="self">self</span>.<span class="ident">lines</span>.<span class="ident">clone</span>(),
-            <span class="ident">current_line</span>: <span class="self">self</span>.<span class="ident">current_line</span>.<span class="ident">clone</span>(),
-            <span class="ident">position</span>: <span class="self">self</span>.<span class="ident">position</span>,
-            <span class="ident">x_start</span>: <span class="self">self</span>.<span class="ident">x_start</span>,
-            <span class="ident">run_count</span>: <span class="self">self</span>.<span class="ident">run_count</span>,
-            <span class="ident">alive_count</span>: <span class="self">self</span>.<span class="ident">alive_count</span>,
-            <span class="ident">state</span>: <span class="self">self</span>.<span class="ident">state</span>,
-            <span class="ident">state_prefix</span>: <span class="self">self</span>.<span class="ident">state_prefix</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)]</span>
-            <span class="ident">unknown</span>: <span class="self">self</span>.<span class="ident">unknown</span>,
+    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            cxrle_data: <span class="self">self</span>.cxrle_data.clone(),
+            header_data: <span class="self">self</span>.header_data.clone(),
+            lines: <span class="self">self</span>.lines.clone(),
+            current_line: <span class="self">self</span>.current_line.clone(),
+            position: <span class="self">self</span>.position,
+            x_start: <span class="self">self</span>.x_start,
+            run_count: <span class="self">self</span>.run_count,
+            alive_count: <span class="self">self</span>.alive_count,
+            state: <span class="self">self</span>.state,
+            state_prefix: <span class="self">self</span>.state_prefix,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;unknown&quot;</span>)]</span>
+            unknown: <span class="self">self</span>.unknown,
         }
     }
 }
 
-<span class="doccomment">/// An iterator over living cells in an RLE file.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Input</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">CellData</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+<span class="doccomment">/// An iterator over living cells in an RLE file.
+</span><span class="kw">impl</span>&lt;I: Input&gt; Iterator <span class="kw">for </span>Rle&lt;I&gt; {
+    <span class="kw">type </span>Item = <span class="prelude-ty">Result</span>&lt;CellData, Error&gt;;
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">alive_count</span> <span class="op">&gt;</span> <span class="number">0</span> {
-            <span class="self">self</span>.<span class="ident">alive_count</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-            <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">CellData</span> {
-                <span class="ident">position</span>: <span class="self">self</span>.<span class="ident">position</span>,
-                <span class="ident">state</span>: <span class="self">self</span>.<span class="ident">state</span>,
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">if </span><span class="self">self</span>.alive_count &gt; <span class="number">0 </span>{
+            <span class="self">self</span>.alive_count -= <span class="number">1</span>;
+            <span class="kw">let </span>cell = CellData {
+                position: <span class="self">self</span>.position,
+                state: <span class="self">self</span>.state,
             };
-            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">cell</span>));
+            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">1</span>;
+            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(cell));
         }
-        <span class="kw">loop</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">current_line</span>.<span class="ident">as_mut</span>().<span class="ident">and_then</span>(<span class="ident">Iterator::next</span>) {
-                <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_ascii_digit</span>() {
-                    <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">=</span> <span class="number">10</span> <span class="op">*</span> <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">+</span> (<span class="ident">c</span> <span class="op">-</span> <span class="string">b&#39;0&#39;</span>) <span class="kw">as</span> <span class="ident">i64</span>
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">c</span>.<span class="ident">is_ascii_whitespace</span>() {
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">==</span> <span class="number">0</span> {
-                        <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">=</span> <span class="number">1</span>;
+        <span class="kw">loop </span>{
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="self">self</span>.current_line.as_mut().and_then(Iterator::next) {
+                <span class="kw">if </span>c.is_ascii_digit() {
+                    <span class="self">self</span>.run_count = <span class="number">10 </span>* <span class="self">self</span>.run_count + (c - <span class="string">b&#39;0&#39;</span>) <span class="kw">as </span>i64
+                } <span class="kw">else if </span>!c.is_ascii_whitespace() {
+                    <span class="kw">if </span><span class="self">self</span>.run_count == <span class="number">0 </span>{
+                        <span class="self">self</span>.run_count = <span class="number">1</span>;
                     }
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">state_prefix</span>.<span class="ident">is_some</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span>(<span class="string">b&#39;A&#39;</span>..<span class="op">=</span><span class="string">b&#39;X&#39;</span>).<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) {
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state_string</span> <span class="op">=</span> <span class="ident">char::from</span>(<span class="self">self</span>.<span class="ident">state_prefix</span>.<span class="ident">unwrap</span>()).<span class="ident">to_string</span>();
-                        <span class="ident">state_string</span>.<span class="ident">push</span>(<span class="ident">char::from</span>(<span class="ident">c</span>));
-                        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">state_string</span>)));
+                    <span class="kw">if </span><span class="self">self</span>.state_prefix.is_some() &amp;&amp; !(<span class="string">b&#39;A&#39;</span>..=<span class="string">b&#39;X&#39;</span>).contains(<span class="kw-2">&amp;</span>c) {
+                        <span class="kw">let </span><span class="kw-2">mut </span>state_string = char::from(<span class="self">self</span>.state_prefix.unwrap()).to_string();
+                        state_string.push(char::from(c));
+                        <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(Error::InvalidState(state_string)));
                     }
-                    <span class="kw">match</span> <span class="ident">c</span> {
-                        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)]</span>
-                        <span class="string">b&#39;?&#39;</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">unknown</span> =&gt; {
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">run_count</span>;
-                            <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">=</span> <span class="number">0</span>;
+                    <span class="kw">match </span>c {
+                        <span class="attribute">#[cfg(feature = <span class="string">&quot;unknown&quot;</span>)]</span>
+                        <span class="string">b&#39;?&#39; </span><span class="kw">if </span><span class="self">self</span>.unknown =&gt; {
+                            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="self">self</span>.run_count;
+                            <span class="self">self</span>.run_count = <span class="number">0</span>;
                         }
-                        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)]</span>
-                        <span class="string">b&#39;b&#39;</span> <span class="op">|</span> <span class="string">b&#39;.&#39;</span> <span class="op">|</span> <span class="string">b&#39;o&#39;</span> <span class="op">|</span> <span class="string">b&#39;A&#39;</span>..<span class="op">=</span><span class="string">b&#39;X&#39;</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">unknown</span> =&gt; {
-                            <span class="kw">match</span> <span class="ident">c</span> {
-                                <span class="string">b&#39;b&#39;</span> <span class="op">|</span> <span class="string">b&#39;.&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="number">0</span>,
-                                <span class="string">b&#39;o&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="number">1</span>,
-                                <span class="kw">_</span> =&gt; {
-                                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span>
-                                        <span class="number">24</span> <span class="op">*</span> (<span class="self">self</span>.<span class="ident">state_prefix</span>.<span class="ident">take</span>().<span class="ident">unwrap_or</span>(<span class="string">b&#39;o&#39;</span>) <span class="op">-</span> <span class="string">b&#39;o&#39;</span>);
-                                    <span class="self">self</span>.<span class="ident">state</span> <span class="op">+</span><span class="op">=</span> <span class="ident">c</span> <span class="op">+</span> <span class="number">1</span> <span class="op">-</span> <span class="string">b&#39;A&#39;</span>;
+                        <span class="attribute">#[cfg(feature = <span class="string">&quot;unknown&quot;</span>)]</span>
+                        <span class="string">b&#39;b&#39; </span>| <span class="string">b&#39;.&#39; </span>| <span class="string">b&#39;o&#39; </span>| <span class="string">b&#39;A&#39;</span>..=<span class="string">b&#39;X&#39; </span><span class="kw">if </span><span class="self">self</span>.unknown =&gt; {
+                            <span class="kw">match </span>c {
+                                <span class="string">b&#39;b&#39; </span>| <span class="string">b&#39;.&#39; </span>=&gt; <span class="self">self</span>.state = <span class="number">0</span>,
+                                <span class="string">b&#39;o&#39; </span>=&gt; <span class="self">self</span>.state = <span class="number">1</span>,
+                                <span class="kw">_ </span>=&gt; {
+                                    <span class="self">self</span>.state =
+                                        <span class="number">24 </span>* (<span class="self">self</span>.state_prefix.take().unwrap_or(<span class="string">b&#39;o&#39;</span>) - <span class="string">b&#39;o&#39;</span>);
+                                    <span class="self">self</span>.state += c + <span class="number">1 </span>- <span class="string">b&#39;A&#39;</span>;
                                 }
                             }
-                            <span class="self">self</span>.<span class="ident">alive_count</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">-</span> <span class="number">1</span>;
-                            <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">=</span> <span class="number">0</span>;
-                            <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">CellData</span> {
-                                <span class="ident">position</span>: <span class="self">self</span>.<span class="ident">position</span>,
-                                <span class="ident">state</span>: <span class="self">self</span>.<span class="ident">state</span>,
+                            <span class="self">self</span>.alive_count = <span class="self">self</span>.run_count - <span class="number">1</span>;
+                            <span class="self">self</span>.run_count = <span class="number">0</span>;
+                            <span class="kw">let </span>cell = CellData {
+                                position: <span class="self">self</span>.position,
+                                state: <span class="self">self</span>.state,
                             };
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">cell</span>));
+                            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">1</span>;
+                            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(cell));
                         }
-                        <span class="string">b&#39;b&#39;</span> <span class="op">|</span> <span class="string">b&#39;.&#39;</span> =&gt; {
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">run_count</span>;
-                            <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">=</span> <span class="number">0</span>;
+                        <span class="string">b&#39;b&#39; </span>| <span class="string">b&#39;.&#39; </span>=&gt; {
+                            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="self">self</span>.run_count;
+                            <span class="self">self</span>.run_count = <span class="number">0</span>;
                         }
-                        <span class="string">b&#39;o&#39;</span> <span class="op">|</span> <span class="string">b&#39;A&#39;</span>..<span class="op">=</span><span class="string">b&#39;X&#39;</span> =&gt; {
-                            <span class="kw">if</span> <span class="ident">c</span> <span class="op">==</span> <span class="string">b&#39;o&#39;</span> {
-                                <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="number">1</span>;
-                            } <span class="kw">else</span> {
-                                <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="number">24</span> <span class="op">*</span> (<span class="self">self</span>.<span class="ident">state_prefix</span>.<span class="ident">take</span>().<span class="ident">unwrap_or</span>(<span class="string">b&#39;o&#39;</span>) <span class="op">-</span> <span class="string">b&#39;o&#39;</span>);
-                                <span class="self">self</span>.<span class="ident">state</span> <span class="op">+</span><span class="op">=</span> <span class="ident">c</span> <span class="op">+</span> <span class="number">1</span> <span class="op">-</span> <span class="string">b&#39;A&#39;</span>;
+                        <span class="string">b&#39;o&#39; </span>| <span class="string">b&#39;A&#39;</span>..=<span class="string">b&#39;X&#39; </span>=&gt; {
+                            <span class="kw">if </span>c == <span class="string">b&#39;o&#39; </span>{
+                                <span class="self">self</span>.state = <span class="number">1</span>;
+                            } <span class="kw">else </span>{
+                                <span class="self">self</span>.state = <span class="number">24 </span>* (<span class="self">self</span>.state_prefix.take().unwrap_or(<span class="string">b&#39;o&#39;</span>) - <span class="string">b&#39;o&#39;</span>);
+                                <span class="self">self</span>.state += c + <span class="number">1 </span>- <span class="string">b&#39;A&#39;</span>;
                             }
-                            <span class="self">self</span>.<span class="ident">alive_count</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">-</span> <span class="number">1</span>;
-                            <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">=</span> <span class="number">0</span>;
-                            <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> <span class="ident">CellData</span> {
-                                <span class="ident">position</span>: <span class="self">self</span>.<span class="ident">position</span>,
-                                <span class="ident">state</span>: <span class="self">self</span>.<span class="ident">state</span>,
+                            <span class="self">self</span>.alive_count = <span class="self">self</span>.run_count - <span class="number">1</span>;
+                            <span class="self">self</span>.run_count = <span class="number">0</span>;
+                            <span class="kw">let </span>cell = CellData {
+                                position: <span class="self">self</span>.position,
+                                state: <span class="self">self</span>.state,
                             };
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">cell</span>));
+                            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">1</span>;
+                            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(cell));
                         }
-                        <span class="string">b&#39;p&#39;</span>..<span class="op">=</span><span class="string">b&#39;y&#39;</span> =&gt; {
-                            <span class="self">self</span>.<span class="ident">state_prefix</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>);
+                        <span class="string">b&#39;p&#39;</span>..=<span class="string">b&#39;y&#39; </span>=&gt; {
+                            <span class="self">self</span>.state_prefix = <span class="prelude-val">Some</span>(c);
                         }
-                        <span class="string">b&#39;$&#39;</span> =&gt; {
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">x_start</span>;
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">1</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">run_count</span>;
-                            <span class="self">self</span>.<span class="ident">run_count</span> <span class="op">=</span> <span class="number">0</span>;
+                        <span class="string">b&#39;$&#39; </span>=&gt; {
+                            <span class="self">self</span>.position.<span class="number">0 </span>= <span class="self">self</span>.x_start;
+                            <span class="self">self</span>.position.<span class="number">1 </span>+= <span class="self">self</span>.run_count;
+                            <span class="self">self</span>.run_count = <span class="number">0</span>;
                         }
-                        <span class="string">b&#39;!&#39;</span> =&gt; {
-                            <span class="self">self</span>.<span class="ident">current_line</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-                            <span class="kw">return</span> <span class="prelude-val">None</span>;
+                        <span class="string">b&#39;!&#39; </span>=&gt; {
+                            <span class="self">self</span>.current_line = <span class="prelude-val">None</span>;
+                            <span class="kw">return </span><span class="prelude-val">None</span>;
                         }
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">char::from</span>(<span class="ident">c</span>).<span class="ident">to_string</span>()))),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(Error::InvalidState(char::from(c).to_string()))),
                     }
                 }
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">lines</span>.<span class="ident">next</span>() {
-                <span class="kw">match</span> <span class="ident">I::line</span>(<span class="ident">item</span>) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">line</span>) =&gt; {
-                        <span class="kw">if</span> <span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">starts_with</span>(<span class="string">&#39;#&#39;</span>)
-                            <span class="op">|</span> <span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">starts_with</span>(<span class="string">&quot;x &quot;</span>)
-                            <span class="op">|</span> <span class="ident">line</span>.<span class="ident">as_ref</span>().<span class="ident">starts_with</span>(<span class="string">&quot;x=&quot;</span>)
+            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(item) = <span class="self">self</span>.lines.next() {
+                <span class="kw">match </span>I::line(item) {
+                    <span class="prelude-val">Ok</span>(line) =&gt; {
+                        <span class="kw">if </span>line.as_ref().starts_with(<span class="string">&#39;#&#39;</span>)
+                            | line.as_ref().starts_with(<span class="string">&quot;x &quot;</span>)
+                            | line.as_ref().starts_with(<span class="string">&quot;x=&quot;</span>)
                         {
                             <span class="kw">continue</span>;
-                        } <span class="kw">else</span> {
-                            <span class="self">self</span>.<span class="ident">current_line</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">I::bytes</span>(<span class="ident">line</span>));
+                        } <span class="kw">else </span>{
+                            <span class="self">self</span>.current_line = <span class="prelude-val">Some</span>(I::bytes(line));
                         }
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
-                        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">Error::IoError</span>(<span class="ident">e</span>)));
+                    <span class="prelude-val">Err</span>(e) =&gt; {
+                        <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(Error::IoError(e)));
                     }
                 }
-            } <span class="kw">else</span> {
-                <span class="kw">return</span> <span class="prelude-val">None</span>;
+            } <span class="kw">else </span>{
+                <span class="kw">return </span><span class="prelude-val">None</span>;
             }
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rle_parse_cxrle</span>() {
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>rle_parse_cxrle() {
         <span class="macro">assert_eq!</span>(
-            <span class="ident">parse_cxrle</span>(<span class="string">&quot;#CXRLE&quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">CxrleData</span> {
-                <span class="ident">pos</span>: <span class="prelude-val">None</span>,
-                <span class="ident">gen</span>: <span class="prelude-val">None</span>
+            parse_cxrle(<span class="string">&quot;#CXRLE&quot;</span>),
+            <span class="prelude-val">Some</span>(CxrleData {
+                pos: <span class="prelude-val">None</span>,
+                gen: <span class="prelude-val">None
+            </span>})
+        );
+        <span class="macro">assert_eq!</span>(
+            parse_cxrle(<span class="string">&quot;#CXRLE Pos=0,-1377 Gen=3480106827776&quot;</span>),
+            <span class="prelude-val">Some</span>(CxrleData {
+                pos: <span class="prelude-val">Some</span>((<span class="number">0</span>, -<span class="number">1377</span>)),
+                gen: <span class="prelude-val">Some</span>(<span class="number">3480106827776</span>)
             })
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">parse_cxrle</span>(<span class="string">&quot;#CXRLE Pos=0,-1377 Gen=3480106827776&quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">CxrleData</span> {
-                <span class="ident">pos</span>: <span class="prelude-val">Some</span>((<span class="number">0</span>, <span class="op">-</span><span class="number">1377</span>)),
-                <span class="ident">gen</span>: <span class="prelude-val">Some</span>(<span class="number">3480106827776</span>)
+            parse_cxrle(<span class="string">&quot;#CXRLE Gen = 3480106827776 Pos = 0, -1377&quot;</span>),
+            <span class="prelude-val">Some</span>(CxrleData {
+                pos: <span class="prelude-val">Some</span>((<span class="number">0</span>, -<span class="number">1377</span>)),
+                gen: <span class="prelude-val">Some</span>(<span class="number">3480106827776</span>)
             })
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">parse_cxrle</span>(<span class="string">&quot;#CXRLE Gen = 3480106827776 Pos = 0, -1377&quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">CxrleData</span> {
-                <span class="ident">pos</span>: <span class="prelude-val">Some</span>((<span class="number">0</span>, <span class="op">-</span><span class="number">1377</span>)),
-                <span class="ident">gen</span>: <span class="prelude-val">Some</span>(<span class="number">3480106827776</span>)
-            })
-        );
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">parse_cxrle</span>(<span class="string">&quot;#CXRLE211Pos=0,-9dcdcs2,[a ccGen=348sss1068cscPos= -333,-1a6&quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">CxrleData</span> {
-                <span class="ident">pos</span>: <span class="prelude-val">Some</span>((<span class="op">-</span><span class="number">333</span>, <span class="op">-</span><span class="number">1</span>)),
-                <span class="ident">gen</span>: <span class="prelude-val">Some</span>(<span class="number">348</span>)
+            parse_cxrle(<span class="string">&quot;#CXRLE211Pos=0,-9dcdcs2,[a ccGen=348sss1068cscPos= -333,-1a6&quot;</span>),
+            <span class="prelude-val">Some</span>(CxrleData {
+                pos: <span class="prelude-val">Some</span>((-<span class="number">333</span>, -<span class="number">1</span>)),
+                gen: <span class="prelude-val">Some</span>(<span class="number">348</span>)
             })
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rle_parse_header</span>() {
-        <span class="macro">assert_eq!</span>(<span class="ident">parse_header</span>(<span class="string">&quot;xxx&quot;</span>), <span class="prelude-val">None</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>rle_parse_header() {
+        <span class="macro">assert_eq!</span>(parse_header(<span class="string">&quot;xxx&quot;</span>), <span class="prelude-val">None</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">parse_header</span>(<span class="string">&quot;x = 3, y = 3, rule = B3/S23&quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;B3/S23&quot;</span>))
+            parse_header(<span class="string">&quot;x = 3, y = 3, rule = B3/S23&quot;</span>),
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;B3/S23&quot;</span>))
             })
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">parse_header</span>(<span class="string">&quot;x = 3, y = 3&quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">None</span>
-            })
+            parse_header(<span class="string">&quot;x = 3, y = 3&quot;</span>),
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">None
+            </span>})
         );
-        <span class="macro">assert_eq!</span>(<span class="ident">parse_header</span>(<span class="string">&quot;x = 3, y = -3&quot;</span>), <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(parse_header(<span class="string">&quot;x = 3, y = -3&quot;</span>), <span class="prelude-val">None</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">parse_header</span>(<span class="string">&quot;x = 3, y = 3, rule = Conway&#39;s Game of Life  &quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;Conway&#39;s Game of Life&quot;</span>))
+            parse_header(<span class="string">&quot;x = 3, y = 3, rule = Conway&#39;s Game of Life  &quot;</span>),
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;Conway&#39;s Game of Life&quot;</span>))
             })
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rle_glider</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">GLIDER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r&quot;#N Glider
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>rle_glider() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>GLIDER: <span class="kw-2">&amp;</span>str = <span class="string">r&quot;#N Glider
 #O Richard K. Guy
 #C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.
 #C www.conwaylife.com/wiki/index.php?title=Glider
 x = 3, y = 3, rule = B3/S23
 bob$2bo$3o!&quot;</span>;
 
-        <span class="kw">let</span> <span class="ident">glider</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">GLIDER</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>glider = Rle::new(GLIDER)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">glider</span>.<span class="ident">clone</span>();
+        <span class="kw">let _ </span>= glider.clone();
 
-        <span class="macro">assert_eq!</span>(<span class="ident">glider</span>.<span class="ident">cxrle_data</span>, <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(glider.cxrle_data, <span class="prelude-val">None</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">glider</span>.<span class="ident">header_data</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;B3/S23&quot;</span>))
+            glider.header_data,
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;B3/S23&quot;</span>))
             })
         );
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">glider</span>
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">position</span>))
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">cells</span>, <span class="macro">vec!</span>[(<span class="number">1</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">2</span>)]);
+        <span class="kw">let </span>cells = glider
+            .map(|res| res.map(|c| c.position))
+            .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
+        <span class="macro">assert_eq!</span>(cells, <span class="macro">vec!</span>[(<span class="number">1</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">2</span>)]);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rle_glider_cxrle</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">GLIDER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r&quot;#CXRLE Pos=-1,-1
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>rle_glider_cxrle() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>GLIDER: <span class="kw-2">&amp;</span>str = <span class="string">r&quot;#CXRLE Pos=-1,-1
 x = 3, y = 3, rule = B3/S23
 bo$2bo$3o!&quot;</span>;
 
-        <span class="kw">let</span> <span class="ident">glider</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">GLIDER</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>glider = Rle::new(GLIDER)<span class="question-mark">?</span>;
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">glider</span>.<span class="ident">cxrle_data</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">CxrleData</span> {
-                <span class="ident">pos</span>: <span class="prelude-val">Some</span>((<span class="op">-</span><span class="number">1</span>, <span class="op">-</span><span class="number">1</span>)),
-                <span class="ident">gen</span>: <span class="prelude-val">None</span>
-            })
+            glider.cxrle_data,
+            <span class="prelude-val">Some</span>(CxrleData {
+                pos: <span class="prelude-val">Some</span>((-<span class="number">1</span>, -<span class="number">1</span>)),
+                gen: <span class="prelude-val">None
+            </span>})
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">glider</span>.<span class="ident">header_data</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;B3/S23&quot;</span>))
+            glider.header_data,
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;B3/S23&quot;</span>))
             })
         );
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">glider</span>
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="ident">res</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">position</span>))
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">cells</span>, <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="op">-</span><span class="number">1</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="op">-</span><span class="number">1</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">1</span>)]);
+        <span class="kw">let </span>cells = glider
+            .map(|res| res.map(|c| c.position))
+            .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
+        <span class="macro">assert_eq!</span>(cells, <span class="macro">vec!</span>[(<span class="number">0</span>, -<span class="number">1</span>), (<span class="number">1</span>, <span class="number">0</span>), (-<span class="number">1</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">1</span>)]);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rle_generations</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">OSCILLATOR</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r&quot;x = 3, y = 3, rule = 3457/357/5
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>rle_generations() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>OSCILLATOR: <span class="kw-2">&amp;</span>str = <span class="string">r&quot;x = 3, y = 3, rule = 3457/357/5
 3A$B2A$.CD!&quot;</span>;
 
-        <span class="kw">let</span> <span class="ident">oscillator</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">OSCILLATOR</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>oscillator = Rle::new(OSCILLATOR)<span class="question-mark">?</span>;
 
-        <span class="macro">assert_eq!</span>(<span class="ident">oscillator</span>.<span class="ident">cxrle_data</span>, <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(oscillator.cxrle_data, <span class="prelude-val">None</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">oscillator</span>.<span class="ident">header_data</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;3457/357/5&quot;</span>))
+            oscillator.header_data,
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;3457/357/5&quot;</span>))
             })
         );
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">oscillator</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+        <span class="kw">let </span>cells = oscillator.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
         <span class="macro">assert_eq!</span>(
-            <span class="ident">cells</span>,
+            cells,
             <span class="macro">vec!</span>[
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">0</span>, <span class="number">0</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">0</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">0</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">2</span>,
+                CellData {
+                    position: (<span class="number">0</span>, <span class="number">1</span>),
+                    state: <span class="number">2</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">1</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">1</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">2</span>),
-                    <span class="ident">state</span>: <span class="number">3</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">2</span>),
+                    state: <span class="number">3</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">2</span>),
-                    <span class="ident">state</span>: <span class="number">4</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">2</span>),
+                    state: <span class="number">4</span>,
                 },
             ]
         );
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rle_generations_256</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">OSCILLATOR</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r&quot;x = 3, y = 3, rule = 23/3/256
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>rle_generations_256() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>OSCILLATOR: <span class="kw-2">&amp;</span>str = <span class="string">r&quot;x = 3, y = 3, rule = 23/3/256
 .AwH$vIxNrQ$2pU!&quot;</span>;
 
-        <span class="kw">let</span> <span class="ident">oscillator</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">OSCILLATOR</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>oscillator = Rle::new(OSCILLATOR)<span class="question-mark">?</span>;
 
-        <span class="macro">assert_eq!</span>(<span class="ident">oscillator</span>.<span class="ident">cxrle_data</span>, <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(oscillator.cxrle_data, <span class="prelude-val">None</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">oscillator</span>.<span class="ident">header_data</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;23/3/256&quot;</span>))
+            oscillator.header_data,
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;23/3/256&quot;</span>))
             })
         );
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">oscillator</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+        <span class="kw">let </span>cells = oscillator.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
         <span class="macro">assert_eq!</span>(
-            <span class="ident">cells</span>,
+            cells,
             <span class="macro">vec!</span>[
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">0</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">200</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">0</span>),
+                    state: <span class="number">200</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">177</span>,
+                CellData {
+                    position: (<span class="number">0</span>, <span class="number">1</span>),
+                    state: <span class="number">177</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">230</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">1</span>),
+                    state: <span class="number">230</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">89</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">1</span>),
+                    state: <span class="number">89</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">2</span>),
-                    <span class="ident">state</span>: <span class="number">45</span>,
+                CellData {
+                    position: (<span class="number">0</span>, <span class="number">2</span>),
+                    state: <span class="number">45</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">2</span>),
-                    <span class="ident">state</span>: <span class="number">45</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">2</span>),
+                    state: <span class="number">45</span>,
                 },
             ]
         );
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">rle_two_rles</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">GLIDER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r&quot;#N Glider
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>rle_two_rles() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>GLIDER: <span class="kw-2">&amp;</span>str = <span class="string">r&quot;#N Glider
 #O Richard K. Guy
 #C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.
 #C www.conwaylife.com/wiki/index.php?title=Glider
@@ -1386,100 +1386,100 @@ bob$2bo$3o!
 x = 3, y = 3, rule = B3/S23
 bob$2bo$3o!&quot;</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">first_rle</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">GLIDER</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>first_rle = Rle::new(GLIDER)<span class="question-mark">?</span>;
 
-        <span class="macro">assert_eq!</span>(<span class="ident">first_rle</span>.<span class="ident">cxrle_data</span>, <span class="prelude-val">None</span>);
+        <span class="macro">assert_eq!</span>(first_rle.cxrle_data, <span class="prelude-val">None</span>);
         <span class="macro">assert_eq!</span>(
-            <span class="ident">first_rle</span>.<span class="ident">header_data</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;B3/S23&quot;</span>))
+            first_rle.header_data,
+            <span class="prelude-val">Some</span>(HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;B3/S23&quot;</span>))
             })
         );
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">for</span> <span class="ident">c</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">first_rle</span> {
-            <span class="ident">cells</span>.<span class="ident">push</span>(<span class="ident">c</span><span class="question-mark">?</span>.<span class="ident">position</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>cells = Vec::new();
+        <span class="kw">for </span>c <span class="kw">in </span><span class="kw-2">&amp;mut </span>first_rle {
+            cells.push(c<span class="question-mark">?</span>.position);
         }
-        <span class="macro">assert_eq!</span>(<span class="ident">cells</span>, <span class="macro">vec!</span>[(<span class="number">1</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">2</span>)]);
+        <span class="macro">assert_eq!</span>(cells, <span class="macro">vec!</span>[(<span class="number">1</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">2</span>)]);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">second_rle</span> <span class="op">=</span> <span class="ident">first_rle</span>.<span class="ident">remains</span>()<span class="question-mark">?</span>;
-        <span class="ident">cells</span>.<span class="ident">clear</span>();
+        <span class="kw">let </span><span class="kw-2">mut </span>second_rle = first_rle.remains()<span class="question-mark">?</span>;
+        cells.clear();
 
-        <span class="kw">for</span> <span class="ident">c</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">second_rle</span> {
-            <span class="ident">cells</span>.<span class="ident">push</span>(<span class="ident">c</span><span class="question-mark">?</span>.<span class="ident">position</span>);
+        <span class="kw">for </span>c <span class="kw">in </span><span class="kw-2">&amp;mut </span>second_rle {
+            cells.push(c<span class="question-mark">?</span>.position);
         }
 
-        <span class="kw">let</span> <span class="ident">third_rle</span> <span class="op">=</span> <span class="ident">second_rle</span>.<span class="ident">try_remains</span>()<span class="question-mark">?</span>;
-        <span class="macro">assert!</span>(<span class="ident">third_rle</span>.<span class="ident">is_none</span>());
+        <span class="kw">let </span>third_rle = second_rle.try_remains()<span class="question-mark">?</span>;
+        <span class="macro">assert!</span>(third_rle.is_none());
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unknown&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">rle_glider_with_unknown</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">GLIDER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r&quot;#CXRLE Pos=-1,-1
+    <span class="attribute">#[test]</span>
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;unknown&quot;</span>)]</span>
+    <span class="kw">fn </span>rle_glider_with_unknown() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>GLIDER: <span class="kw-2">&amp;</span>str = <span class="string">r&quot;#CXRLE Pos=-1,-1
 x = 3, y = 3, rule = B3/S23
 5?$?bob?$?2bo?$?3o?$5?!&quot;</span>;
 
-        <span class="kw">let</span> <span class="ident">glider</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">GLIDER</span>)<span class="question-mark">?</span>.<span class="ident">with_unknown</span>();
+        <span class="kw">let </span>glider = Rle::new(GLIDER)<span class="question-mark">?</span>.with_unknown();
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">glider</span>.<span class="ident">cxrle_data</span>(),
-            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">CxrleData</span> {
-                <span class="ident">pos</span>: <span class="prelude-val">Some</span>((<span class="op">-</span><span class="number">1</span>, <span class="op">-</span><span class="number">1</span>)),
-                <span class="ident">gen</span>: <span class="prelude-val">None</span>
-            })
+            glider.cxrle_data(),
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>CxrleData {
+                pos: <span class="prelude-val">Some</span>((-<span class="number">1</span>, -<span class="number">1</span>)),
+                gen: <span class="prelude-val">None
+            </span>})
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">glider</span>.<span class="ident">header_data</span>(),
-            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">HeaderData</span> {
-                <span class="ident">x</span>: <span class="number">3</span>,
-                <span class="ident">y</span>: <span class="number">3</span>,
-                <span class="ident">rule</span>: <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;B3/S23&quot;</span>))
+            glider.header_data(),
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>HeaderData {
+                x: <span class="number">3</span>,
+                y: <span class="number">3</span>,
+                rule: <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;B3/S23&quot;</span>))
             })
         );
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">glider</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+        <span class="kw">let </span>cells = glider.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
         <span class="macro">assert_eq!</span>(
-            <span class="ident">cells</span>,
+            cells,
             <span class="macro">vec!</span>[
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">0</span>,
+                CellData {
+                    position: (<span class="number">0</span>, <span class="number">0</span>),
+                    state: <span class="number">0</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">0</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">0</span>),
-                    <span class="ident">state</span>: <span class="number">0</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">0</span>),
+                    state: <span class="number">0</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">0</span>,
+                CellData {
+                    position: (<span class="number">0</span>, <span class="number">1</span>),
+                    state: <span class="number">0</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">0</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">1</span>),
+                    state: <span class="number">0</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">1</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">1</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">2</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">0</span>, <span class="number">2</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">1</span>, <span class="number">2</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">1</span>, <span class="number">2</span>),
+                    state: <span class="number">1</span>,
                 },
-                <span class="ident">CellData</span> {
-                    <span class="ident">position</span>: (<span class="number">2</span>, <span class="number">2</span>),
-                    <span class="ident">state</span>: <span class="number">1</span>,
+                CellData {
+                    position: (<span class="number">2</span>, <span class="number">2</span>),
+                    state: <span class="number">1</span>,
                 },
             ]
         );
@@ -1487,4 +1487,4 @@ x = 3, y = 3, rule = B3/S23
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

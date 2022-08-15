@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/style/types/attribute.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>attribute.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../crossterm/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style/types/attribute.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>attribute.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../crossterm/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -181,188 +181,188 @@
 <span id="181">181</span>
 <span id="182">182</span>
 <span id="183">183</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Display</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::Display;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::SetAttribute</span>;
+<span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::SetAttribute;
 
-<span class="comment">// This macro generates the Attribute enum, its iterator</span>
-<span class="comment">// function, and the static array containing the sgr code</span>
-<span class="comment">// of each attribute</span>
-<span class="macro">macro_rules!</span> <span class="ident">Attribute</span> {
+<span class="comment">// This macro generates the Attribute enum, its iterator
+// function, and the static array containing the sgr code
+// of each attribute
+</span><span class="macro">macro_rules!</span> Attribute {
     (
         $(
-            $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">ident</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>]</span>)<span class="op">*</span>
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sgr</span>:<span class="ident">expr</span>,
-        )<span class="op">*</span>
+            $(<span class="attribute">#[<span class="macro-nonterminal">$inner</span>:ident $(<span class="macro-nonterminal">$args</span>:tt)<span class="kw-2">*</span>]</span>)*
+            <span class="macro-nonterminal">$name</span>:ident = <span class="macro-nonterminal">$sgr</span>:expr,
+        )*
     ) =&gt; {
-        <span class="doccomment">/// Represents an attribute.</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// # Platform-specific Notes</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// * Only UNIX and Windows 10 terminals do support text attributes.</span>
-        <span class="doccomment">/// * Keep in mind that not all terminals support all attributes.</span>
-        <span class="doccomment">/// * Crossterm implements almost all attributes listed in the</span>
-        <span class="doccomment">///   [SGR parameters](https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters).</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// | Attribute | Windows | UNIX | Notes |</span>
-        <span class="doccomment">/// | :-- | :--: | :--: | :-- |</span>
-        <span class="doccomment">/// | `Reset` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Bold` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Dim` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Italic` | ? | ? | Not widely supported, sometimes treated as inverse. |</span>
-        <span class="doccomment">/// | `Underlined` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `SlowBlink` | ? | ? | Not widely supported, sometimes treated as inverse. |</span>
-        <span class="doccomment">/// | `RapidBlink` | ? | ? | Not widely supported. MS-DOS ANSI.SYS; 150+ per minute. |</span>
-        <span class="doccomment">/// | `Reverse` | ✓ | ✓ | |</span>
-        <span class="doccomment">/// | `Hidden` | ✓ | ✓ | Also known as Conceal. |</span>
-        <span class="doccomment">/// | `Fraktur` | ✗ | ✓ | Legible characters, but marked for deletion. |</span>
-        <span class="doccomment">/// | `DefaultForegroundColor` | ? | ? | Implementation specific (according to standard). |</span>
-        <span class="doccomment">/// | `DefaultBackgroundColor` | ? | ? | Implementation specific (according to standard). |</span>
-        <span class="doccomment">/// | `Framed` | ? | ? | Not widely supported. |</span>
-        <span class="doccomment">/// | `Encircled` | ? | ? | This should turn on the encircled attribute. |</span>
-        <span class="doccomment">/// | `OverLined` | ? | ? | This should draw a line at the top of the text. |</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// # Examples</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// Basic usage:</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// ```no_run</span>
-        <span class="doccomment">/// use crossterm::style::Attribute;</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// println!(</span>
-        <span class="doccomment">///     &quot;{} Underlined {} No Underline&quot;,</span>
-        <span class="doccomment">///     Attribute::Underlined,</span>
-        <span class="doccomment">///     Attribute::NoUnderline</span>
-        <span class="doccomment">/// );</span>
-        <span class="doccomment">/// ```</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// Style existing text:</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// ```no_run</span>
-        <span class="doccomment">/// use crossterm::style::Stylize;</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Bold text&quot;.bold());</span>
-        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Underlined text&quot;.underlined());</span>
-        <span class="doccomment">/// println!(&quot;{}&quot;, &quot;Negative text&quot;.negative());</span>
-        <span class="doccomment">/// ```</span>
-        <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
-        <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-        <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Attribute</span> {
+        <span class="doccomment">/// Represents an attribute.
+        ///
+        /// # Platform-specific Notes
+        ///
+        /// * Only UNIX and Windows 10 terminals do support text attributes.
+        /// * Keep in mind that not all terminals support all attributes.
+        /// * Crossterm implements almost all attributes listed in the
+        ///   [SGR parameters](https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters).
+        ///
+        /// | Attribute | Windows | UNIX | Notes |
+        /// | :-- | :--: | :--: | :-- |
+        /// | `Reset` | ✓ | ✓ | |
+        /// | `Bold` | ✓ | ✓ | |
+        /// | `Dim` | ✓ | ✓ | |
+        /// | `Italic` | ? | ? | Not widely supported, sometimes treated as inverse. |
+        /// | `Underlined` | ✓ | ✓ | |
+        /// | `SlowBlink` | ? | ? | Not widely supported, sometimes treated as inverse. |
+        /// | `RapidBlink` | ? | ? | Not widely supported. MS-DOS ANSI.SYS; 150+ per minute. |
+        /// | `Reverse` | ✓ | ✓ | |
+        /// | `Hidden` | ✓ | ✓ | Also known as Conceal. |
+        /// | `Fraktur` | ✗ | ✓ | Legible characters, but marked for deletion. |
+        /// | `DefaultForegroundColor` | ? | ? | Implementation specific (according to standard). |
+        /// | `DefaultBackgroundColor` | ? | ? | Implementation specific (according to standard). |
+        /// | `Framed` | ? | ? | Not widely supported. |
+        /// | `Encircled` | ? | ? | This should turn on the encircled attribute. |
+        /// | `OverLined` | ? | ? | This should draw a line at the top of the text. |
+        ///
+        /// # Examples
+        ///
+        /// Basic usage:
+        ///
+        /// ```no_run
+        /// use crossterm::style::Attribute;
+        ///
+        /// println!(
+        ///     &quot;{} Underlined {} No Underline&quot;,
+        ///     Attribute::Underlined,
+        ///     Attribute::NoUnderline
+        /// );
+        /// ```
+        ///
+        /// Style existing text:
+        ///
+        /// ```no_run
+        /// use crossterm::style::Stylize;
+        ///
+        /// println!(&quot;{}&quot;, &quot;Bold text&quot;.bold());
+        /// println!(&quot;{}&quot;, &quot;Underlined text&quot;.underlined());
+        /// println!(&quot;{}&quot;, &quot;Negative text&quot;.negative());
+        /// ```
+        </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+        <span class="attribute">#[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]</span>
+        <span class="attribute">#[non_exhaustive]</span>
+        <span class="kw">pub enum </span>Attribute {
             $(
-                $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">args</span>)<span class="kw-2">*</span>]</span>)<span class="op">*</span>
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>,
-            )<span class="op">*</span>
+                $(<span class="attribute">#[<span class="macro-nonterminal">$inner </span>$(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>]</span>)*
+                <span class="macro-nonterminal">$name</span>,
+            )*
         }
 
-        <span class="kw">pub</span> <span class="kw">static</span> <span class="ident">SGR</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span>[<span class="ident">i16</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[
-            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">sgr</span>,)<span class="op">*</span>
+        <span class="kw">pub static </span>SGR: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span>[i16] = <span class="kw-2">&amp;</span>[
+            $(<span class="macro-nonterminal">$sgr</span>,)*
         ];
 
-        <span class="kw">impl</span> <span class="ident">Attribute</span> {
-            <span class="doccomment">/// Iterates over all the variants of the Attribute enum.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span>() -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Attribute</span><span class="op">&gt;</span> {
-                <span class="kw">use</span> <span class="ident"><span class="self">self</span>::Attribute</span>::<span class="kw-2">*</span>;
-                [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>,)<span class="op">*</span> ].<span class="ident">iter</span>().<span class="ident">copied</span>()
+        <span class="kw">impl </span>Attribute {
+            <span class="doccomment">/// Iterates over all the variants of the Attribute enum.
+            </span><span class="kw">pub fn </span>iterator() -&gt; <span class="kw">impl </span>Iterator&lt;Item = Attribute&gt; {
+                <span class="kw">use </span><span class="self">self</span>::Attribute::<span class="kw-2">*</span>;
+                [ $(<span class="macro-nonterminal">$name</span>,)* ].iter().copied()
             }
         }
     }
 }
 
 <span class="macro">Attribute!</span> {
-    <span class="doccomment">/// Resets all the attributes.</span>
-    <span class="ident">Reset</span> <span class="op">=</span> <span class="number">0</span>,
-    <span class="doccomment">/// Increases the text intensity.</span>
-    <span class="ident">Bold</span> <span class="op">=</span> <span class="number">1</span>,
-    <span class="doccomment">/// Decreases the text intensity.</span>
-    <span class="ident">Dim</span> <span class="op">=</span> <span class="number">2</span>,
-    <span class="doccomment">/// Emphasises the text.</span>
-    <span class="ident">Italic</span> <span class="op">=</span> <span class="number">3</span>,
-    <span class="doccomment">/// Underlines the text.</span>
-    <span class="ident">Underlined</span> <span class="op">=</span> <span class="number">4</span>,
+    <span class="doccomment">/// Resets all the attributes.
+    </span>Reset = <span class="number">0</span>,
+    <span class="doccomment">/// Increases the text intensity.
+    </span>Bold = <span class="number">1</span>,
+    <span class="doccomment">/// Decreases the text intensity.
+    </span>Dim = <span class="number">2</span>,
+    <span class="doccomment">/// Emphasises the text.
+    </span>Italic = <span class="number">3</span>,
+    <span class="doccomment">/// Underlines the text.
+    </span>Underlined = <span class="number">4</span>,
 
-    <span class="comment">// Other types of underlining</span>
-    <span class="doccomment">/// Double underlines the text.</span>
-    <span class="ident">DoubleUnderlined</span> <span class="op">=</span> <span class="number">2</span>,
-    <span class="doccomment">/// Undercurls the text.</span>
-    <span class="ident">Undercurled</span> <span class="op">=</span> <span class="number">3</span>,
-    <span class="doccomment">/// Underdots the text.</span>
-    <span class="ident">Underdotted</span> <span class="op">=</span> <span class="number">4</span>,
-    <span class="doccomment">/// Underdashes the text.</span>
-    <span class="ident">Underdashed</span> <span class="op">=</span> <span class="number">5</span>,
+    <span class="comment">// Other types of underlining
+    </span><span class="doccomment">/// Double underlines the text.
+    </span>DoubleUnderlined = <span class="number">2</span>,
+    <span class="doccomment">/// Undercurls the text.
+    </span>Undercurled = <span class="number">3</span>,
+    <span class="doccomment">/// Underdots the text.
+    </span>Underdotted = <span class="number">4</span>,
+    <span class="doccomment">/// Underdashes the text.
+    </span>Underdashed = <span class="number">5</span>,
 
-    <span class="doccomment">/// Makes the text blinking (&lt; 150 per minute).</span>
-    <span class="ident">SlowBlink</span> <span class="op">=</span> <span class="number">5</span>,
-    <span class="doccomment">/// Makes the text blinking (&gt;= 150 per minute).</span>
-    <span class="ident">RapidBlink</span> <span class="op">=</span> <span class="number">6</span>,
-    <span class="doccomment">/// Swaps foreground and background colors.</span>
-    <span class="ident">Reverse</span> <span class="op">=</span> <span class="number">7</span>,
-    <span class="doccomment">/// Hides the text (also known as Conceal).</span>
-    <span class="ident">Hidden</span> <span class="op">=</span> <span class="number">8</span>,
-    <span class="doccomment">/// Crosses the text.</span>
-    <span class="ident">CrossedOut</span> <span class="op">=</span> <span class="number">9</span>,
-    <span class="doccomment">/// Sets the [Fraktur](https://en.wikipedia.org/wiki/Fraktur) typeface.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Mostly used for [mathematical alphanumeric symbols](https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols).</span>
-    <span class="ident">Fraktur</span> <span class="op">=</span> <span class="number">20</span>,
-    <span class="doccomment">/// Turns off the `Bold` attribute. - Inconsistent - Prefer to use NormalIntensity</span>
-    <span class="ident">NoBold</span> <span class="op">=</span> <span class="number">21</span>,
-    <span class="doccomment">/// Switches the text back to normal intensity (no bold, italic).</span>
-    <span class="ident">NormalIntensity</span> <span class="op">=</span> <span class="number">22</span>,
-    <span class="doccomment">/// Turns off the `Italic` attribute.</span>
-    <span class="ident">NoItalic</span> <span class="op">=</span> <span class="number">23</span>,
-    <span class="doccomment">/// Turns off the `Underlined` attribute.</span>
-    <span class="ident">NoUnderline</span> <span class="op">=</span> <span class="number">24</span>,
-    <span class="doccomment">/// Turns off the text blinking (`SlowBlink` or `RapidBlink`).</span>
-    <span class="ident">NoBlink</span> <span class="op">=</span> <span class="number">25</span>,
-    <span class="doccomment">/// Turns off the `Reverse` attribute.</span>
-    <span class="ident">NoReverse</span> <span class="op">=</span> <span class="number">27</span>,
-    <span class="doccomment">/// Turns off the `Hidden` attribute.</span>
-    <span class="ident">NoHidden</span> <span class="op">=</span> <span class="number">28</span>,
-    <span class="doccomment">/// Turns off the `CrossedOut` attribute.</span>
-    <span class="ident">NotCrossedOut</span> <span class="op">=</span> <span class="number">29</span>,
-    <span class="doccomment">/// Makes the text framed.</span>
-    <span class="ident">Framed</span> <span class="op">=</span> <span class="number">51</span>,
-    <span class="doccomment">/// Makes the text encircled.</span>
-    <span class="ident">Encircled</span> <span class="op">=</span> <span class="number">52</span>,
-    <span class="doccomment">/// Draws a line at the top of the text.</span>
-    <span class="ident">OverLined</span> <span class="op">=</span> <span class="number">53</span>,
-    <span class="doccomment">/// Turns off the `Frame` and `Encircled` attributes.</span>
-    <span class="ident">NotFramedOrEncircled</span> <span class="op">=</span> <span class="number">54</span>,
-    <span class="doccomment">/// Turns off the `OverLined` attribute.</span>
-    <span class="ident">NotOverLined</span> <span class="op">=</span> <span class="number">55</span>,
+    <span class="doccomment">/// Makes the text blinking (&lt; 150 per minute).
+    </span>SlowBlink = <span class="number">5</span>,
+    <span class="doccomment">/// Makes the text blinking (&gt;= 150 per minute).
+    </span>RapidBlink = <span class="number">6</span>,
+    <span class="doccomment">/// Swaps foreground and background colors.
+    </span>Reverse = <span class="number">7</span>,
+    <span class="doccomment">/// Hides the text (also known as Conceal).
+    </span>Hidden = <span class="number">8</span>,
+    <span class="doccomment">/// Crosses the text.
+    </span>CrossedOut = <span class="number">9</span>,
+    <span class="doccomment">/// Sets the [Fraktur](https://en.wikipedia.org/wiki/Fraktur) typeface.
+    ///
+    /// Mostly used for [mathematical alphanumeric symbols](https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols).
+    </span>Fraktur = <span class="number">20</span>,
+    <span class="doccomment">/// Turns off the `Bold` attribute. - Inconsistent - Prefer to use NormalIntensity
+    </span>NoBold = <span class="number">21</span>,
+    <span class="doccomment">/// Switches the text back to normal intensity (no bold, italic).
+    </span>NormalIntensity = <span class="number">22</span>,
+    <span class="doccomment">/// Turns off the `Italic` attribute.
+    </span>NoItalic = <span class="number">23</span>,
+    <span class="doccomment">/// Turns off the `Underlined` attribute.
+    </span>NoUnderline = <span class="number">24</span>,
+    <span class="doccomment">/// Turns off the text blinking (`SlowBlink` or `RapidBlink`).
+    </span>NoBlink = <span class="number">25</span>,
+    <span class="doccomment">/// Turns off the `Reverse` attribute.
+    </span>NoReverse = <span class="number">27</span>,
+    <span class="doccomment">/// Turns off the `Hidden` attribute.
+    </span>NoHidden = <span class="number">28</span>,
+    <span class="doccomment">/// Turns off the `CrossedOut` attribute.
+    </span>NotCrossedOut = <span class="number">29</span>,
+    <span class="doccomment">/// Makes the text framed.
+    </span>Framed = <span class="number">51</span>,
+    <span class="doccomment">/// Makes the text encircled.
+    </span>Encircled = <span class="number">52</span>,
+    <span class="doccomment">/// Draws a line at the top of the text.
+    </span>OverLined = <span class="number">53</span>,
+    <span class="doccomment">/// Turns off the `Frame` and `Encircled` attributes.
+    </span>NotFramedOrEncircled = <span class="number">54</span>,
+    <span class="doccomment">/// Turns off the `OverLined` attribute.
+    </span>NotOverLined = <span class="number">55</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Attribute</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">::std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">std::result::Result</span><span class="op">&lt;</span>(), <span class="ident">std::fmt::Error</span><span class="op">&gt;</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">SetAttribute</span>(<span class="kw-2">*</span><span class="self">self</span>))<span class="question-mark">?</span>;
+<span class="kw">impl </span>Display <span class="kw">for </span>Attribute {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>::std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::result::Result&lt;(), std::fmt::Error&gt; {
+        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, SetAttribute(<span class="kw-2">*</span><span class="self">self</span>))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Attribute</span> {
-    <span class="doccomment">/// Returns a u32 with one bit set, which is the</span>
-    <span class="doccomment">/// signature of this attribute in the Attributes</span>
-    <span class="doccomment">/// bitset.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The +1 enables storing Reset (whose index is 0)</span>
-    <span class="doccomment">///  in the bitset Attributes.</span>
-    <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="self">self</span>) -&gt; <span class="ident">u32</span> {
-        <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> ((<span class="self">self</span> <span class="kw">as</span> <span class="ident">u32</span>) <span class="op">+</span> <span class="number">1</span>)
+<span class="kw">impl </span>Attribute {
+    <span class="doccomment">/// Returns a u32 with one bit set, which is the
+    /// signature of this attribute in the Attributes
+    /// bitset.
+    ///
+    /// The +1 enables storing Reset (whose index is 0)
+    ///  in the bitset Attributes.
+    </span><span class="attribute">#[inline(always)]</span>
+    <span class="kw">pub const fn </span>bytes(<span class="self">self</span>) -&gt; u32 {
+        <span class="number">1 </span>&lt;&lt; ((<span class="self">self </span><span class="kw">as </span>u32) + <span class="number">1</span>)
     }
-    <span class="doccomment">/// Returns the SGR attribute value.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// See &lt;https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters&gt;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sgr</span>(<span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="kw">if</span> (<span class="self">self</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&gt;</span> <span class="number">4</span> <span class="op">&amp;&amp;</span> (<span class="self">self</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&lt;</span> <span class="number">9</span> {
-            <span class="kw">return</span> <span class="string">&quot;4:&quot;</span>.<span class="ident">to_string</span>() <span class="op">+</span> <span class="ident">SGR</span>[<span class="self">self</span> <span class="kw">as</span> <span class="ident">usize</span>].<span class="ident">to_string</span>().<span class="ident">as_str</span>();
+    <span class="doccomment">/// Returns the SGR attribute value.
+    ///
+    /// See &lt;https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters&gt;
+    </span><span class="kw">pub fn </span>sgr(<span class="self">self</span>) -&gt; String {
+        <span class="kw">if </span>(<span class="self">self </span><span class="kw">as </span>usize) &gt; <span class="number">4 </span>&amp;&amp; (<span class="self">self </span><span class="kw">as </span>usize) &lt; <span class="number">9 </span>{
+            <span class="kw">return </span><span class="string">&quot;4:&quot;</span>.to_string() + SGR[<span class="self">self </span><span class="kw">as </span>usize].to_string().as_str();
         }
-        <span class="ident">SGR</span>[<span class="self">self</span> <span class="kw">as</span> <span class="ident">usize</span>].<span class="ident">to_string</span>()
+        SGR[<span class="self">self </span><span class="kw">as </span>usize].to_string()
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

@@ -8,30 +8,30 @@
 <li><a href="https://www.conwaylife.com/wiki/Macrocell">Macrocell</a></li>
 </ul>
 <h3 id="example"><a href="#example">Example</a></h3><h4 id="reading-from-a-string"><a href="#reading-from-a-string">Reading from a string:</a></h4>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">ca_formats::rle::Rle</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>ca_formats::rle::Rle;
 
-<span class="kw">const</span> <span class="ident">GLIDER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">r&quot;#N Glider
+<span class="kw">const </span>GLIDER: <span class="kw-2">&amp;</span>str = <span class="string">r&quot;#N Glider
 #O Richard K. Guy
 #C The smallest, most common, and first discovered spaceship. Diagonal, has period 4 and speed c/4.
 #C www.conwaylife.com/wiki/index.php?title=Glider
 x = 3, y = 3, rule = B3/S23
 bob$2bo$3o!&quot;</span>;
 
-<span class="kw">let</span> <span class="ident">glider</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">GLIDER</span>).<span class="ident">unwrap</span>();
-<span class="macro">assert_eq!</span>(<span class="ident">glider</span>.<span class="ident">header_data</span>().<span class="ident">unwrap</span>().<span class="ident">x</span>, <span class="number">3</span>);
-<span class="macro">assert_eq!</span>(<span class="ident">glider</span>.<span class="ident">header_data</span>().<span class="ident">unwrap</span>().<span class="ident">y</span>, <span class="number">3</span>);
-<span class="macro">assert_eq!</span>(<span class="ident">glider</span>.<span class="ident">header_data</span>().<span class="ident">unwrap</span>().<span class="ident">rule</span>, <span class="prelude-val">Some</span>(<span class="ident">String::from</span>(<span class="string">&quot;B3/S23&quot;</span>)));
+<span class="kw">let </span>glider = Rle::new(GLIDER).unwrap();
+<span class="macro">assert_eq!</span>(glider.header_data().unwrap().x, <span class="number">3</span>);
+<span class="macro">assert_eq!</span>(glider.header_data().unwrap().y, <span class="number">3</span>);
+<span class="macro">assert_eq!</span>(glider.header_data().unwrap().rule, <span class="prelude-val">Some</span>(String::from(<span class="string">&quot;B3/S23&quot;</span>)));
 
-<span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">glider</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">cell</span><span class="op">|</span> <span class="ident">cell</span>.<span class="ident">unwrap</span>().<span class="ident">position</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-<span class="macro">assert_eq!</span>(<span class="ident">cells</span>, <span class="macro">vec!</span>[(<span class="number">1</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">2</span>)]);</code></pre></div>
+<span class="kw">let </span>cells = glider.map(|cell| cell.unwrap().position).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<span class="macro">assert_eq!</span>(cells, <span class="macro">vec!</span>[(<span class="number">1</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">2</span>)]);</code></pre></div>
 <h4 id="reading-from-a-file"><a href="#reading-from-a-file">Reading from a file:</a></h4>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::fs::File</span>;
-<span class="kw">use</span> <span class="ident">ca_formats::rle::Rle</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::fs::File;
+<span class="kw">use </span>ca_formats::rle::Rle;
 
-<span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">File::open</span>(<span class="string">&quot;tests/sirrobin.rle&quot;</span>).<span class="ident">unwrap</span>();
-<span class="kw">let</span> <span class="ident">sirrobin</span> <span class="op">=</span> <span class="ident">Rle::new_from_file</span>(<span class="ident">file</span>).<span class="ident">unwrap</span>();
+<span class="kw">let </span>file = File::open(<span class="string">&quot;tests/sirrobin.rle&quot;</span>).unwrap();
+<span class="kw">let </span>sirrobin = Rle::new_from_file(file).unwrap();
 
-<span class="macro">assert_eq!</span>(<span class="ident">sirrobin</span>.<span class="ident">count</span>(), <span class="number">282</span>);</code></pre></div>
+<span class="macro">assert_eq!</span>(sirrobin.count(), <span class="number">282</span>);</code></pre></div>
 <h3 id="see-also"><a href="#see-also">See also</a></h3>
 <ul>
 <li><a href="https://crates.io/crates/ca-rules">ca-rules</a> - A parser for rule strings.</li>
@@ -46,4 +46,4 @@ and <a href="https://www.conwaylife.com/wiki/Apgcode#Extended_Wechsler_Format">E
 </div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="rle/index.html" title="ca_formats::rle mod">rle</a></div><div class="item-right docblock-short"><p>A parser for Golly’s <a href="http://golly.sourceforge.net/Help/formats.html#rle">Extended RLE format</a>.</p>
 </div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.CellData.html" title="ca_formats::CellData struct">CellData</a></div><div class="item-right docblock-short"><p>Position and state of a cell.</p>
 </div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Input.html" title="ca_formats::Input trait">Input</a></div><div class="item-right docblock-short"><p>Types that can be passed to parsers as input.</p>
-</div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Coordinates.html" title="ca_formats::Coordinates type">Coordinates</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Coordinates.html" title="ca_formats::Coordinates type">Coordinates</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

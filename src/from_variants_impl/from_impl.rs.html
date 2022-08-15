@@ -185,64 +185,64 @@
 <span id="185">185</span>
 <span id="186">186</span>
 <span id="187">187</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">proc_macro2</span>::{<span class="ident">Span</span>, <span class="ident">TokenStream</span>};
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">quote</span>, <span class="ident">ToTokens</span>};
-<span class="kw">use</span> <span class="ident">syn::parse_quote</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>proc_macro2::{Span, TokenStream};
+<span class="kw">use </span>quote::{quote, ToTokens};
+<span class="kw">use </span>syn::parse_quote;
 
-<span class="doccomment">/// The generic type parameter used when `into` conversions are requested.</span>
-<span class="kw">const</span> <span class="ident">INTO_GENERIC</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;INTO&quot;</span>;
+<span class="doccomment">/// The generic type parameter used when `into` conversions are requested.
+</span><span class="kw">const </span>INTO_GENERIC: <span class="kw-2">&amp;</span>str = <span class="string">&quot;INTO&quot;</span>;
 
-<span class="doccomment">/// A view of data which can generate a `From&lt;T&gt; for Target` impl block.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FromImpl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The generics of the target enum.</span>
-    <span class="kw">pub</span> <span class="ident">generics</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">syn::Generics</span>,
+<span class="doccomment">/// A view of data which can generate a `From&lt;T&gt; for Target` impl block.
+</span><span class="attribute">#[derive(Debug, Clone)]</span>
+<span class="kw">pub struct </span>FromImpl&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="doccomment">/// The generics of the target enum.
+    </span><span class="kw">pub </span>generics: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>syn::Generics,
 
-    <span class="doccomment">/// The identifier of the target enum.</span>
-    <span class="kw">pub</span> <span class="ident">target_ident</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">syn::Ident</span>,
+    <span class="doccomment">/// The identifier of the target enum.
+    </span><span class="kw">pub </span>target_ident: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>syn::Ident,
 
-    <span class="doccomment">/// The identifier of the target variant.</span>
-    <span class="kw">pub</span> <span class="ident">variant_ident</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">syn::Ident</span>,
+    <span class="doccomment">/// The identifier of the target variant.
+    </span><span class="kw">pub </span>variant_ident: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>syn::Ident,
 
-    <span class="doccomment">/// The type of the target variant.</span>
-    <span class="kw">pub</span> <span class="ident">variant_ty</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">syn::Type</span>,
+    <span class="doccomment">/// The type of the target variant.
+    </span><span class="kw">pub </span>variant_ty: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>syn::Type,
 
-    <span class="doccomment">/// Whether or not this impl should use an `Into` conversion.</span>
-    <span class="kw">pub</span> <span class="ident">into</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Whether or not this impl should use an `Into` conversion.
+    </span><span class="kw">pub </span>into: bool,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">FromImpl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tokens</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream</span>) {
-        <span class="kw">let</span> <span class="ident">target_ident</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">target_ident</span>;
-        <span class="kw">let</span> <span class="ident">variant_ident</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">variant_ident</span>;
-        <span class="kw">let</span> <span class="ident">variant_ty</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">variant_ty</span>;
-        <span class="kw">let</span> <span class="ident">doc_comment</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="macro">include_str!</span>(<span class="string">&quot;impl_doc.md&quot;</span>), <span class="ident">variant</span> <span class="op">=</span> <span class="ident">variant_ident</span>);
-        <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="ident">ty_generics</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">generics</span>.<span class="ident">split_for_impl</span>();
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ToTokens <span class="kw">for </span>FromImpl&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
+        <span class="kw">let </span>target_ident = <span class="kw-2">&amp;</span><span class="self">self</span>.target_ident;
+        <span class="kw">let </span>variant_ident = <span class="kw-2">&amp;</span><span class="self">self</span>.variant_ident;
+        <span class="kw">let </span>variant_ty = <span class="kw-2">&amp;</span><span class="self">self</span>.variant_ty;
+        <span class="kw">let </span>doc_comment = <span class="macro">format!</span>(<span class="macro">include_str!</span>(<span class="string">&quot;impl_doc.md&quot;</span>), variant = variant_ident);
+        <span class="kw">let </span>(impl_generics, ty_generics, where_clause) = <span class="self">self</span>.generics.split_for_impl();
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">into</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">altered_generics</span>: <span class="ident">syn::Generics</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">generics</span>.<span class="ident">clone</span>();
-            <span class="ident">altered_generics</span>
-                .<span class="ident">params</span>
-                .<span class="ident">push</span>(<span class="ident">syn::GenericParam::Type</span>(<span class="ident">generate_into_ty_param</span>(<span class="ident">variant_ty</span>)));
-            <span class="kw">let</span> (<span class="ident">i</span>, <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">altered_generics</span>.<span class="ident">split_for_impl</span>();
-            <span class="kw">let</span> <span class="ident">into_variant</span> <span class="op">=</span> <span class="ident">syn::Ident::new</span>(<span class="ident">INTO_GENERIC</span>, <span class="ident">Span::call_site</span>());
+        <span class="kw">if </span><span class="self">self</span>.into {
+            <span class="kw">let </span><span class="kw-2">mut </span>altered_generics: syn::Generics = <span class="self">self</span>.generics.clone();
+            altered_generics
+                .params
+                .push(syn::GenericParam::Type(generate_into_ty_param(variant_ty)));
+            <span class="kw">let </span>(i, <span class="kw">_</span>, <span class="kw">_</span>) = altered_generics.split_for_impl();
+            <span class="kw">let </span>into_variant = syn::Ident::new(INTO_GENERIC, Span::call_site());
 
-            <span class="ident">tokens</span>.<span class="ident">extend</span>(<span class="macro">quote!</span>(
-                <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> #<span class="ident">doc_comment</span>]</span>
-                <span class="kw">impl</span> #<span class="ident">i</span> <span class="ident">::from_variants::export::From</span><span class="op">&lt;</span>#<span class="ident">into_variant</span><span class="op">&gt;</span> <span class="kw">for</span> #<span class="ident">target_ident</span> #<span class="ident">ty_generics</span>
-                    #<span class="ident">where_clause</span> {
-                    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: #<span class="ident">into_variant</span>) -&gt; <span class="self">Self</span> {
-                        #<span class="ident">target_ident</span>::#<span class="ident">variant_ident</span>(<span class="ident">v</span>.<span class="ident">into</span>())
+            tokens.extend(<span class="macro">quote!</span>(
+                <span class="attribute">#[doc = #doc_comment]</span>
+                <span class="kw">impl </span>#i ::from_variants::export::From&lt;#into_variant&gt; <span class="kw">for </span>#target_ident #ty_generics
+                    #where_clause {
+                    <span class="kw">fn </span>from(v: #into_variant) -&gt; <span class="self">Self </span>{
+                        #target_ident::#variant_ident(v.into())
                     }
                 }
             ))
-        } <span class="kw">else</span> {
-            <span class="ident">tokens</span>.<span class="ident">extend</span>(<span class="macro">quote!</span>(
-                <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> #<span class="ident">doc_comment</span>]</span>
-                <span class="kw">impl</span> #<span class="ident">impl_generics</span> <span class="ident">::from_variants::export::From</span><span class="op">&lt;</span>#<span class="ident">variant_ty</span><span class="op">&gt;</span> <span class="kw">for</span> #<span class="ident">target_ident</span> #<span class="ident">ty_generics</span>
-                    #<span class="ident">where_clause</span> {
-                    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: #<span class="ident">variant_ty</span>) -&gt; <span class="self">Self</span> {
-                        #<span class="ident">target_ident</span>::#<span class="ident">variant_ident</span>(<span class="ident">v</span>)
+        } <span class="kw">else </span>{
+            tokens.extend(<span class="macro">quote!</span>(
+                <span class="attribute">#[doc = #doc_comment]</span>
+                <span class="kw">impl </span>#impl_generics ::from_variants::export::From&lt;#variant_ty&gt; <span class="kw">for </span>#target_ident #ty_generics
+                    #where_clause {
+                    <span class="kw">fn </span>from(v: #variant_ty) -&gt; <span class="self">Self </span>{
+                        #target_ident::#variant_ident(v)
                     }
                 }
             ))
@@ -250,122 +250,122 @@
     }
 }
 
-<span class="kw">fn</span> <span class="ident">generate_into_ty_param</span>(<span class="ident">variant_ty</span>: <span class="kw-2">&amp;</span><span class="ident">syn::Type</span>) -&gt; <span class="ident">syn::TypeParam</span> {
-    <span class="kw">let</span> <span class="ident">into</span> <span class="op">=</span> <span class="ident">syn::Ident::new</span>(<span class="ident">INTO_GENERIC</span>, <span class="ident">Span::call_site</span>());
-    <span class="macro">parse_quote!</span>(#<span class="ident">into</span>: <span class="ident">::from_variants::export::Into</span><span class="op">&lt;</span>#<span class="ident">variant_ty</span><span class="op">&gt;</span>)
+<span class="kw">fn </span>generate_into_ty_param(variant_ty: <span class="kw-2">&amp;</span>syn::Type) -&gt; syn::TypeParam {
+    <span class="kw">let </span>into = syn::Ident::new(INTO_GENERIC, Span::call_site());
+    <span class="macro">parse_quote!</span>(#into: ::from_variants::export::Into&lt;#variant_ty&gt;)
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="macro">macro_rules!</span> <span class="ident">default_from_impl</span> {
+<span class="attribute">#[cfg(test)]</span>
+<span class="macro">macro_rules!</span> default_from_impl {
     () =&gt; {{
-        <span class="ident">FromImpl</span> {
-            <span class="ident">generics</span>: <span class="kw-2">&amp;</span><span class="ident">Default::default</span>(),
-            <span class="ident">target_ident</span>: <span class="kw-2">&amp;</span><span class="ident">syn::Ident::new</span>(<span class="string">&quot;Foo&quot;</span>, <span class="ident">proc_macro2::Span::call_site</span>()),
-            <span class="ident">variant_ident</span>: <span class="kw-2">&amp;</span><span class="ident">syn::Ident::new</span>(<span class="string">&quot;Bar&quot;</span>, <span class="ident">proc_macro2::Span::call_site</span>()),
-            <span class="ident">variant_ty</span>: <span class="kw-2">&amp;</span><span class="ident">syn::Type::Path</span>(<span class="macro">syn::parse_quote!</span>(<span class="ident">String</span>)),
-            <span class="ident">into</span>: <span class="bool-val">false</span>,
+        FromImpl {
+            generics: <span class="kw-2">&amp;</span>Default::default(),
+            target_ident: <span class="kw-2">&amp;</span>syn::Ident::new(<span class="string">&quot;Foo&quot;</span>, proc_macro2::Span::call_site()),
+            variant_ident: <span class="kw-2">&amp;</span>syn::Ident::new(<span class="string">&quot;Bar&quot;</span>, proc_macro2::Span::call_site()),
+            variant_ty: <span class="kw-2">&amp;</span>syn::Type::Path(<span class="macro">syn::parse_quote!</span>(String)),
+            into: <span class="bool-val">false</span>,
         }
     }};
 }
 
-<span class="comment">// rustfmt changes the contents of the quote! macro in a way that causes tests to fail,</span>
-<span class="comment">// so rustfmt is disabled for the unit tests.</span>
-<span class="comment">// Because we are comparing the output of our macro with the token stream,</span>
-<span class="comment">// the spacing between angle brackets matters. Their `Punct` tokens preserve</span>
-<span class="comment">// spacing, so we have to arrange the angle brackets in `quote!` to match the</span>
-<span class="comment">// output of macro under test, but `rustfmt` doesn&#39;t care about spacing in macros</span>
-<span class="comment">// too much and tries to change it.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="attribute">#[<span class="ident">rustfmt::skip</span>]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::FromImpl</span>;
-    <span class="kw">use</span> <span class="ident">pretty_assertions::assert_eq</span>;
-    <span class="kw">use</span> <span class="ident">quote</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">syn::parse_quote</span>;
+<span class="comment">// rustfmt changes the contents of the quote! macro in a way that causes tests to fail,
+// so rustfmt is disabled for the unit tests.
+// Because we are comparing the output of our macro with the token stream,
+// the spacing between angle brackets matters. Their `Punct` tokens preserve
+// spacing, so we have to arrange the angle brackets in `quote!` to match the
+// output of macro under test, but `rustfmt` doesn&#39;t care about spacing in macros
+// too much and tries to change it.
+</span><span class="attribute">#[cfg(test)]</span>
+<span class="attribute">#[rustfmt::skip]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">super</span>::FromImpl;
+    <span class="kw">use </span>pretty_assertions::assert_eq;
+    <span class="kw">use </span>quote::<span class="kw-2">*</span>;
+    <span class="kw">use </span>syn::parse_quote;
 
-    <span class="kw">fn</span> <span class="ident">assert_generates</span>(<span class="ident">actual</span>: <span class="ident">FromImpl</span>, <span class="ident">expected</span>: <span class="ident">proc_macro2::TokenStream</span>) {
-        <span class="macro">assert_eq!</span>(<span class="ident">actual</span>.<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>(), <span class="ident">expected</span>.<span class="ident">to_string</span>());
+    <span class="kw">fn </span>assert_generates(actual: FromImpl, expected: proc_macro2::TokenStream) {
+        <span class="macro">assert_eq!</span>(actual.into_token_stream().to_string(), expected.to_string());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">simple</span>() {
-        <span class="kw">let</span> <span class="ident">fi</span> <span class="op">=</span> <span class="macro">default_from_impl!</span>();
-        <span class="ident">assert_generates</span>(
-            <span class="ident">fi</span>,
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>simple() {
+        <span class="kw">let </span>fi = <span class="macro">default_from_impl!</span>();
+        assert_generates(
+            fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl</span> <span class="ident">::from_variants::export::From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Foo</span> {
-                    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
-                        <span class="ident">Foo::Bar</span>(<span class="ident">v</span>)
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
+                <span class="kw">impl </span>::from_variants::export::From&lt;String&gt; <span class="kw">for </span>Foo {
+                    <span class="kw">fn </span>from(v: String) -&gt; <span class="self">Self </span>{
+                        Foo::Bar(v)
                     }
                 }
             ),
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">lifetime</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">generics</span> <span class="op">=</span> <span class="ident">syn::Generics::default</span>();
-        <span class="ident">generics</span>.<span class="ident">params</span>.<span class="ident">push</span>(<span class="macro">parse_quote!</span>(<span class="lifetime">&#39;a</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>lifetime() {
+        <span class="kw">let </span><span class="kw-2">mut </span>generics = syn::Generics::default();
+        generics.params.push(<span class="macro">parse_quote!</span>(<span class="lifetime">&#39;a</span>));
 
-        <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="macro">parse_quote!</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>);
+        <span class="kw">let </span>ty = <span class="macro">parse_quote!</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fi</span> <span class="op">=</span> <span class="macro">default_from_impl!</span>();
-        <span class="ident">fi</span>.<span class="ident">variant_ty</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">ty</span>;
-        <span class="ident">fi</span>.<span class="ident">generics</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">generics</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>fi = <span class="macro">default_from_impl!</span>();
+        fi.variant_ty = <span class="kw-2">&amp;</span>ty;
+        fi.generics = <span class="kw-2">&amp;</span>generics;
 
-        <span class="ident">assert_generates</span>(
-            <span class="ident">fi</span>,
+        assert_generates(
+            fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">::from_variants::export::From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Foo</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-                    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-                        <span class="ident">Foo::Bar</span>(<span class="ident">v</span>)
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
+                <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ::from_variants::export::From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt; <span class="kw">for </span>Foo&lt;<span class="lifetime">&#39;a</span>&gt; {
+                    <span class="kw">fn </span>from(v: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; <span class="self">Self </span>{
+                        Foo::Bar(v)
                     }
                 }
             ),
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">into</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fi</span> <span class="op">=</span> <span class="macro">default_from_impl!</span>();
-        <span class="ident">fi</span>.<span class="ident">into</span> <span class="op">=</span> <span class="bool-val">true</span>;
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>into() {
+        <span class="kw">let </span><span class="kw-2">mut </span>fi = <span class="macro">default_from_impl!</span>();
+        fi.into = <span class="bool-val">true</span>;
 
-        <span class="ident">assert_generates</span>(
-            <span class="ident">fi</span>,
+        assert_generates(
+            fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">INTO</span>: <span class="ident">::from_variants::export::Into</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">&gt;</span>
-                    <span class="ident">::from_variants::export::From</span><span class="op">&lt;</span><span class="ident">INTO</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Foo</span>
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
+                <span class="kw">impl</span>&lt;INTO: ::from_variants::export::Into&lt;String&gt; &gt;
+                    ::from_variants::export::From&lt;INTO&gt; <span class="kw">for </span>Foo
                 {
-                    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: <span class="ident">INTO</span>) -&gt; <span class="self">Self</span> {
-                        <span class="ident">Foo::Bar</span>(<span class="ident">v</span>.<span class="ident">into</span>())
+                    <span class="kw">fn </span>from(v: INTO) -&gt; <span class="self">Self </span>{
+                        Foo::Bar(v.into())
                     }
                 }
             ),
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">into_generics</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">generics</span>: <span class="ident">syn::Generics</span> <span class="op">=</span> <span class="ident">syn::Generics::default</span>();
-        <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="macro">parse_quote!</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
-        <span class="ident">generics</span>.<span class="ident">params</span>.<span class="ident">push</span>(<span class="macro">parse_quote!</span>(<span class="ident">T</span>));
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fi</span> <span class="op">=</span> <span class="macro">default_from_impl!</span>();
-        <span class="ident">fi</span>.<span class="ident">variant_ty</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">ty</span>;
-        <span class="ident">fi</span>.<span class="ident">generics</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">generics</span>;
-        <span class="ident">fi</span>.<span class="ident">into</span> <span class="op">=</span> <span class="bool-val">true</span>;
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>into_generics() {
+        <span class="kw">let </span><span class="kw-2">mut </span>generics: syn::Generics = syn::Generics::default();
+        <span class="kw">let </span>ty = <span class="macro">parse_quote!</span>(Vec&lt;T&gt;);
+        generics.params.push(<span class="macro">parse_quote!</span>(T));
+        <span class="kw">let </span><span class="kw-2">mut </span>fi = <span class="macro">default_from_impl!</span>();
+        fi.variant_ty = <span class="kw-2">&amp;</span>ty;
+        fi.generics = <span class="kw-2">&amp;</span>generics;
+        fi.into = <span class="bool-val">true</span>;
 
-        <span class="ident">assert_generates</span>(
-            <span class="ident">fi</span>,
+        assert_generates(
+            fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">INTO</span>: <span class="ident">::from_variants::export::Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">&gt;</span> <span class="op">&gt;</span>
-                    <span class="ident">::from_variants::export::From</span><span class="op">&lt;</span><span class="ident">INTO</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Foo</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
+                <span class="kw">impl</span>&lt;T, INTO: ::from_variants::export::Into&lt;Vec&lt;T&gt; &gt; &gt;
+                    ::from_variants::export::From&lt;INTO&gt; <span class="kw">for </span>Foo&lt;T&gt;
                 {
-                    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">v</span>: <span class="ident">INTO</span>) -&gt; <span class="self">Self</span> {
-                        <span class="ident">Foo::Bar</span>(<span class="ident">v</span>.<span class="ident">into</span>())
+                    <span class="kw">fn </span>from(v: INTO) -&gt; <span class="self">Self </span>{
+                        Foo::Bar(v.into())
                     }
                 }
             ),
@@ -373,4 +373,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="from_variants_impl" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="from_variants_impl" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

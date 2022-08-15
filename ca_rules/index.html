@@ -40,31 +40,31 @@ for <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_aut
 <p>Please refer to <a href="http://www.conwaylife.com/wiki/Rulestring">Life Wiki</a> for detailed definitions and
 notations of these rule strings.</p>
 <h2 id="example"><a href="#example">Example:</a></h2>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">ca_rules::ParseLife</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>ca_rules::ParseLife;
 
-<span class="comment">// Define a struct for your rule:</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Rule</span> {
-    <span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+<span class="comment">// Define a struct for your rule:
+</span><span class="attribute">#[derive(Debug, Eq, PartialEq)]</span>
+<span class="kw">struct </span>Rule {
+    b: Vec&lt;u8&gt;,
+    s: Vec&lt;u8&gt;,
 }
 
-<span class="comment">// Implement a parser trait for your rule:</span>
-<span class="comment">// The choice of the trait depends on the type of rules you want to parse.</span>
-<span class="kw">impl</span> <span class="ident">ParseLife</span> <span class="kw">for</span> <span class="ident">Rule</span> {
-    <span class="comment">// Implement a function to construct the rule from b and s data:</span>
-    <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Rule</span> { <span class="ident">b</span>, <span class="ident">s</span> }
+<span class="comment">// Implement a parser trait for your rule:
+// The choice of the trait depends on the type of rules you want to parse.
+</span><span class="kw">impl </span>ParseLife <span class="kw">for </span>Rule {
+    <span class="comment">// Implement a function to construct the rule from b and s data:
+    </span><span class="kw">fn </span>from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+        Rule { b, s }
     }
 }
 
-<span class="comment">// Then you can parse a rule string:</span>
-<span class="kw">let</span> <span class="ident">life</span> <span class="op">=</span> <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3/S23&quot;</span>).<span class="ident">unwrap</span>();
+<span class="comment">// Then you can parse a rule string:
+</span><span class="kw">let </span>life = Rule::parse_rule(<span class="string">&quot;B3/S23&quot;</span>).unwrap();
 <span class="macro">assert_eq!</span>(
-    <span class="ident">life</span>,
-    <span class="ident">Rule</span> {
-        <span class="ident">b</span>: <span class="macro">vec!</span>[<span class="number">3</span>],
-        <span class="ident">s</span>: <span class="macro">vec!</span>[<span class="number">2</span>, <span class="number">3</span>],
+    life,
+    Rule {
+        b: <span class="macro">vec!</span>[<span class="number">3</span>],
+        s: <span class="macro">vec!</span>[<span class="number">2</span>, <span class="number">3</span>],
     }
 )</code></pre></div>
 </div></details><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.ParseRuleError.html" title="ca_rules::ParseRuleError enum">ParseRuleError</a></div><div class="item-right docblock-short"><p>Errors that can be returned when parsing rule strings.</p>
@@ -106,4 +106,4 @@ rules with <a href="http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood">vo
 Both <a href="http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton">isotropic</a>
 and <a href="http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton">non-isotropic</a>
 rules are supported.</p>
-</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

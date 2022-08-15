@@ -31,38 +31,38 @@
 <span id="31">31</span>
 <span id="32">32</span>
 <span id="33">33</span>
-</pre><pre class="rust"><code><span class="doccomment">//! An internal crate to support auto_enums - **do not use directly**</span>
+</pre><pre class="rust"><code><span class="doccomment">//! An internal crate to support auto_enums - **do not use directly**
 
-<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">test</span>(
-    <span class="ident">no_crate_inject</span>,
-    <span class="ident">attr</span>(
-        <span class="ident">deny</span>(<span class="ident">warnings</span>, <span class="ident">rust_2018_idioms</span>, <span class="ident">single_use_lifetimes</span>),
-        <span class="ident">allow</span>(<span class="ident">dead_code</span>, <span class="ident">unused_variables</span>)
+</span><span class="attribute">#![doc(test(
+    no_crate_inject,
+    attr(
+        deny(warnings, rust_2018_idioms, single_use_lifetimes),
+        allow(dead_code, unused_variables)
     )
 ))]</span>
-<span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">future_incompatible</span>, <span class="ident">rust_2018_idioms</span>, <span class="ident">unreachable_pub</span>)]</span>
-<span class="comment">// It cannot be included in the published code because these lints have false positives in the minimum required version.</span>
-<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">warn</span>(<span class="ident">single_use_lifetimes</span>))]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>, <span class="ident">clippy::default_trait_access</span>)]</span>
+<span class="attribute">#![forbid(unsafe_code)]</span>
+<span class="attribute">#![warn(future_incompatible, rust_2018_idioms, unreachable_pub)]</span>
+<span class="comment">// It cannot be included in the published code because these lints have false positives in the minimum required version.
+</span><span class="attribute">#![cfg_attr(test, warn(single_use_lifetimes))]</span>
+<span class="attribute">#![warn(clippy::all, clippy::default_trait_access)]</span>
 
-<span class="comment">// older compilers require explicit `extern crate`.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_extern_crates</span>)]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">proc_macro</span>;
+<span class="comment">// older compilers require explicit `extern crate`.
+</span><span class="attribute">#[allow(unused_extern_crates)]</span>
+<span class="kw">extern crate </span>proc_macro;
 
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">mod</span> <span class="ident">utils</span>;
+<span class="attribute">#[macro_use]</span>
+<span class="kw">mod </span>utils;
 
-<span class="kw">mod</span> <span class="ident">auto_enum</span>;
+<span class="kw">mod </span>auto_enum;
 
-<span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
+<span class="kw">use </span>proc_macro::TokenStream;
 
-<span class="doccomment">/// An attribute macro for to allow multiple return types by automatically generated enum.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See crate level documentation for details.</span>
-<span class="attribute">#[<span class="ident">proc_macro_attribute</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">auto_enum</span>(<span class="ident">args</span>: <span class="ident">TokenStream</span>, <span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident"><span class="kw">crate</span>::auto_enum::attribute</span>(<span class="ident">args</span>.<span class="ident">into</span>(), <span class="ident">input</span>.<span class="ident">into</span>()).<span class="ident">into</span>()
+<span class="doccomment">/// An attribute macro for to allow multiple return types by automatically generated enum.
+///
+/// See crate level documentation for details.
+</span><span class="attribute">#[proc_macro_attribute]</span>
+<span class="kw">pub fn </span>auto_enum(args: TokenStream, input: TokenStream) -&gt; TokenStream {
+    <span class="kw">crate</span>::auto_enum::attribute(args.into(), input.into()).into()
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

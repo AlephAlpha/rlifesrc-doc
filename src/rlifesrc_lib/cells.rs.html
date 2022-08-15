@@ -195,202 +195,202 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Cells in the cellular automaton.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Cells in the cellular automaton.
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::rules::Rule</span>;
-<span class="kw">use</span> <span class="ident">educe::Educe</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">cell::Cell</span>,
-    <span class="ident">fmt</span>::{<span class="ident">Debug</span>, <span class="ident">Error</span>, <span class="ident">Formatter</span>},
-    <span class="ident">ops</span>::{<span class="ident">Deref</span>, <span class="ident">Not</span>},
-    <span class="ident">ptr::NonNull</span>,
+</span><span class="kw">use </span><span class="kw">crate</span>::rules::Rule;
+<span class="kw">use </span>educe::Educe;
+<span class="kw">use </span>std::{
+    cell::Cell,
+    fmt::{Debug, Error, Formatter},
+    ops::{Deref, Not},
+    ptr::NonNull,
 };
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="doccomment">/// Possible states of a known cell.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// During the search, the state of a cell is represented by `Option&lt;State&gt;`,</span>
-<span class="doccomment">/// where `None` means that the state of the cell is unknown.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">State</span>(<span class="kw">pub</span> <span class="ident">usize</span>);
+<span class="doccomment">/// Possible states of a known cell.
+///
+/// During the search, the state of a cell is represented by `Option&lt;State&gt;`,
+/// where `None` means that the state of the cell is unknown.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]</span>
+<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="kw">pub struct </span>State(<span class="kw">pub </span>usize);
 
-<span class="doccomment">/// The Dead state.</span>
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">DEAD</span>: <span class="ident">State</span> <span class="op">=</span> <span class="ident">State</span>(<span class="number">0</span>);
-<span class="doccomment">/// The Alive state.</span>
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALIVE</span>: <span class="ident">State</span> <span class="op">=</span> <span class="ident">State</span>(<span class="number">1</span>);
+<span class="doccomment">/// The Dead state.
+</span><span class="kw">pub const </span>DEAD: State = State(<span class="number">0</span>);
+<span class="doccomment">/// The Alive state.
+</span><span class="kw">pub const </span>ALIVE: State = State(<span class="number">1</span>);
 
-<span class="doccomment">/// Flips the state.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For Generations rules, the `not` of a dying state is [`ALIVE`].</span>
-<span class="kw">impl</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">State</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
+<span class="doccomment">/// Flips the state.
+///
+/// For Generations rules, the `not` of a dying state is [`ALIVE`].
+</span><span class="kw">impl </span>Not <span class="kw">for </span>State {
+    <span class="kw">type </span>Output = <span class="self">Self</span>;
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">not</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Output</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ALIVE</span> =&gt; <span class="ident">DEAD</span>,
-            <span class="kw">_</span> =&gt; <span class="ident">ALIVE</span>,
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>not(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Output {
+        <span class="kw">match </span><span class="self">self </span>{
+            ALIVE =&gt; DEAD,
+            <span class="kw">_ </span>=&gt; ALIVE,
         }
     }
 }
 
-<span class="doccomment">/// The coordinates of a cell.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `(x-coordinate, y-coordinate, time)`.</span>
-<span class="doccomment">/// All three coordinates are 0-indexed.</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Coord</span> <span class="op">=</span> (<span class="ident">i32</span>, <span class="ident">i32</span>, <span class="ident">i32</span>);
+<span class="doccomment">/// The coordinates of a cell.
+///
+/// `(x-coordinate, y-coordinate, time)`.
+/// All three coordinates are 0-indexed.
+</span><span class="kw">pub type </span>Coord = (i32, i32, i32);
 
-<span class="doccomment">/// A cell in the cellular automaton.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The name `LifeCell` is chosen to avoid ambiguity with</span>
-<span class="doccomment">/// [`std::cell::Cell`].</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The coordinates of a cell.</span>
-    <span class="kw">pub</span> <span class="ident">coord</span>: <span class="ident">Coord</span>,
+<span class="doccomment">/// A cell in the cellular automaton.
+///
+/// The name `LifeCell` is chosen to avoid ambiguity with
+/// [`std::cell::Cell`].
+</span><span class="kw">pub struct </span>LifeCell&lt;R: Rule&gt; {
+    <span class="doccomment">/// The coordinates of a cell.
+    </span><span class="kw">pub </span>coord: Coord,
 
-    <span class="doccomment">/// The background state of the cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For rules without `B0`, it is always [`DEAD`].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For rules with `B0`, the background changes periodically.</span>
-    <span class="doccomment">/// For example, for non-Generations rules, it is [`DEAD`] on even generations,</span>
-    <span class="doccomment">/// [`ALIVE`] on odd generations.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">background</span>: <span class="ident">State</span>,
+    <span class="doccomment">/// The background state of the cell.
+    ///
+    /// For rules without `B0`, it is always [`DEAD`].
+    ///
+    /// For rules with `B0`, the background changes periodically.
+    /// For example, for non-Generations rules, it is [`DEAD`] on even generations,
+    /// [`ALIVE`] on odd generations.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) background: State,
 
-    <span class="doccomment">/// The state of the cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `None` means that the state of the cell is unknown.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">state</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The state of the cell.
+    ///
+    /// `None` means that the state of the cell is unknown.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) state: Cell&lt;<span class="prelude-ty">Option</span>&lt;State&gt;&gt;,
 
-    <span class="doccomment">/// The “neighborhood descriptors” of the cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// It describes the states of the cell itself, its neighbors,</span>
-    <span class="doccomment">/// and its successor.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">desc</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">R::Desc</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The “neighborhood descriptors” of the cell.
+    ///
+    /// It describes the states of the cell itself, its neighbors,
+    /// and its successor.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) desc: Cell&lt;R::Desc&gt;,
 
-    <span class="doccomment">/// The predecessor of the cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The cell in the last generation at the same position.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">pred</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The successor of the cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The cell in the next generation at the same position.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">succ</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// The eight cells in the neighborhood.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">nbhd</span>: [<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>; <span class="number">8</span>],
-    <span class="doccomment">/// The cells in the same generation that must has the same state</span>
-    <span class="doccomment">/// with this cell because of the symmetry.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">sym</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The predecessor of the cell.
+    ///
+    /// The cell in the last generation at the same position.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) pred: <span class="prelude-ty">Option</span>&lt;CellRef&lt;R&gt;&gt;,
+    <span class="doccomment">/// The successor of the cell.
+    ///
+    /// The cell in the next generation at the same position.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) succ: <span class="prelude-ty">Option</span>&lt;CellRef&lt;R&gt;&gt;,
+    <span class="doccomment">/// The eight cells in the neighborhood.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) nbhd: [<span class="prelude-ty">Option</span>&lt;CellRef&lt;R&gt;&gt;; <span class="number">8</span>],
+    <span class="doccomment">/// The cells in the same generation that must has the same state
+    /// with this cell because of the symmetry.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) sym: Vec&lt;CellRef&lt;R&gt;&gt;,
 
-    <span class="doccomment">/// The next cell to be searched when searching for an unknown cell.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">next</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The next cell to be searched when searching for an unknown cell.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) next: <span class="prelude-ty">Option</span>&lt;CellRef&lt;R&gt;&gt;,
 
-    <span class="doccomment">/// Whether the cell is on the first row or column.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Here the choice of row or column depends on the search order.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">is_front</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Whether the cell is on the first row or column.
+    ///
+    /// Here the choice of row or column depends on the search order.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) is_front: bool,
 
-    <span class="doccomment">/// The decision level for assigning the cell state.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Only used when backjumping is enabled.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">level</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The decision level for assigning the cell state.
+    ///
+    /// Only used when backjumping is enabled.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) level: Cell&lt;u32&gt;,
 
-    <span class="doccomment">/// Whether the cell has been seen in the analysis.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Only used when backjumping is enabled.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">seen</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Whether the cell has been seen in the analysis.
+    ///
+    /// Only used when backjumping is enabled.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) seen: Cell&lt;bool&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Generates a new cell with background state, such that its neighborhood</span>
-    <span class="doccomment">/// descriptor says that all neighboring cells also have the same state.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `is_front` are set to `false`.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">coord</span>: <span class="ident">Coord</span>, <span class="ident">background</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">coord</span>,
-            <span class="ident">background</span>,
-            <span class="ident">state</span>: <span class="ident">Cell::new</span>(<span class="prelude-val">Some</span>(<span class="ident">background</span>)),
-            <span class="ident">desc</span>: <span class="ident">Cell::new</span>(<span class="ident">R::new_desc</span>(<span class="ident">background</span>, <span class="ident">succ_state</span>)),
-            <span class="ident">pred</span>: <span class="prelude-val">None</span>,
-            <span class="ident">succ</span>: <span class="prelude-val">None</span>,
-            <span class="ident">nbhd</span>: [<span class="prelude-val">None</span>; <span class="number">8</span>],
-            <span class="ident">sym</span>: <span class="ident">Vec::new</span>(),
-            <span class="ident">next</span>: <span class="prelude-val">None</span>,
-            <span class="ident">is_front</span>: <span class="bool-val">false</span>,
-            <span class="ident">level</span>: <span class="ident">Cell::new</span>(<span class="number">0</span>),
-            <span class="ident">seen</span>: <span class="ident">Cell::new</span>(<span class="bool-val">false</span>),
+<span class="kw">impl</span>&lt;R: Rule&gt; LifeCell&lt;R&gt; {
+    <span class="doccomment">/// Generates a new cell with background state, such that its neighborhood
+    /// descriptor says that all neighboring cells also have the same state.
+    ///
+    /// `is_front` are set to `false`.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(coord: Coord, background: State, succ_state: State) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            coord,
+            background,
+            state: Cell::new(<span class="prelude-val">Some</span>(background)),
+            desc: Cell::new(R::new_desc(background, succ_state)),
+            pred: <span class="prelude-val">None</span>,
+            succ: <span class="prelude-val">None</span>,
+            nbhd: [<span class="prelude-val">None</span>; <span class="number">8</span>],
+            sym: Vec::new(),
+            next: <span class="prelude-val">None</span>,
+            is_front: <span class="bool-val">false</span>,
+            level: Cell::new(<span class="number">0</span>),
+            seen: Cell::new(<span class="bool-val">false</span>),
         }
     }
 
-    <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor</span>
-    <span class="doccomment">/// when the state of one cell is changed.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Here `state` is the new state of the cell when `new` is true,</span>
-    <span class="doccomment">/// the old state when `new` is false.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">new</span>: <span class="ident">bool</span>) {
-        <span class="ident">R::update_desc</span>(<span class="self">self</span>, <span class="ident">state</span>, <span class="ident">new</span>);
+    <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor
+    /// when the state of one cell is changed.
+    ///
+    /// Here `state` is the new state of the cell when `new` is true,
+    /// the old state when `new` is false.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>update_desc(<span class="kw-2">&amp;</span><span class="self">self</span>, state: State, new: bool) {
+        R::update_desc(<span class="self">self</span>, state, new);
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&lt;</span><span class="ident">Desc</span> <span class="op">=</span> <span class="ident">D</span><span class="op">&gt;</span>, <span class="ident">D</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;LifeCell&quot;</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;coord&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">coord</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;state&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">state</span>.<span class="ident">get</span>())
-            .<span class="ident">field</span>(<span class="string">&quot;desc&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">desc</span>.<span class="ident">get</span>())
-            .<span class="ident">field</span>(<span class="string">&quot;is_front&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">is_front</span>)
-            .<span class="ident">finish</span>()
+<span class="kw">impl</span>&lt;R: Rule&lt;Desc = D&gt;, D: Copy + Debug&gt; Debug <span class="kw">for </span>LifeCell&lt;R&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        f.debug_struct(<span class="string">&quot;LifeCell&quot;</span>)
+            .field(<span class="string">&quot;coord&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.coord)
+            .field(<span class="string">&quot;state&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.state.get())
+            .field(<span class="string">&quot;desc&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.desc.get())
+            .field(<span class="string">&quot;is_front&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.is_front)
+            .finish()
     }
 }
 
-<span class="doccomment">/// A reference to a [`LifeCell`]. It is just a wrapped [`NonNull`] pointer.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Safety</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This type is just a wrapped raw pointer. Dereferring a [`CellRef`] should</span>
-<span class="doccomment">/// follow the same guarantees for dereferring a raw mut pointer.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Furthermore, a [`CellRef`] referring to a cell in one world should never be</span>
-<span class="doccomment">/// used in any function or method involving another world.</span>
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Educe</span>)]</span>
-<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// The [`LifeCell`] it refers to.</span>
-    <span class="ident">cell</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A reference to a [`LifeCell`]. It is just a wrapped [`NonNull`] pointer.
+///
+/// # Safety
+///
+/// This type is just a wrapped raw pointer. Dereferring a [`CellRef`] should
+/// follow the same guarantees for dereferring a raw mut pointer.
+///
+/// Furthermore, a [`CellRef`] referring to a cell in one world should never be
+/// used in any function or method involving another world.
+</span><span class="attribute">#[repr(transparent)]</span>
+<span class="attribute">#[derive(Educe)]</span>
+<span class="attribute">#[educe(Clone, Copy, PartialEq, Eq, Hash)]</span>
+<span class="kw">pub struct </span>CellRef&lt;R: Rule&gt; {
+    <span class="doccomment">/// The [`LifeCell`] it refers to.
+    </span>cell: NonNull&lt;LifeCell&lt;R&gt;&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Creates a new [`CellRef`] from a mut pointer to a [`LifeCell`].</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ptr</span>: <span class="kw-2">*mut</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">cell</span>: <span class="ident">NonNull::new_unchecked</span>(<span class="ident">ptr</span>),
+<span class="kw">impl</span>&lt;R: Rule&gt; CellRef&lt;R&gt; {
+    <span class="doccomment">/// Creates a new [`CellRef`] from a mut pointer to a [`LifeCell`].
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const unsafe fn </span>new(ptr: <span class="kw-2">*mut </span>LifeCell&lt;R&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            cell: NonNull::new_unchecked(ptr),
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">LifeCell</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>;
+<span class="kw">impl</span>&lt;R: Rule&gt; Deref <span class="kw">for </span>CellRef&lt;R&gt; {
+    <span class="kw">type </span>Target = LifeCell&lt;R&gt;;
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident"><span class="self">Self</span>::Target</span> {
-        <span class="kw">unsafe</span> { <span class="self">self</span>.<span class="ident">cell</span>.<span class="ident">as_ref</span>() }
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="kw">unsafe </span>{ <span class="self">self</span>.cell.as_ref() }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Rule</span><span class="op">&gt;</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">CellRef</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">f</span>.<span class="ident">debug_struct</span>(<span class="string">&quot;CellRef&quot;</span>)
-            .<span class="ident">field</span>(<span class="string">&quot;coord&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">coord</span>)
-            .<span class="ident">finish</span>()
+<span class="kw">impl</span>&lt;R: Rule&gt; Debug <span class="kw">for </span>CellRef&lt;R&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        f.debug_struct(<span class="string">&quot;CellRef&quot;</span>)
+            .field(<span class="string">&quot;coord&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.coord)
+            .finish()
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

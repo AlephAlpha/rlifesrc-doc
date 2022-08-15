@@ -109,116 +109,116 @@
 <span id="109">109</span>
 <span id="110">110</span>
 <span id="111">111</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Traits and types used for tracking the usage of generic parameters through a proc-macro input.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! When generating trait impls, libraries often want to automatically figure out which type parameters</span>
-<span class="doccomment">//! are used in which fields, and then emit bounds that will produce the most permissive compilable</span>
-<span class="doccomment">//! code.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Usage</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Example 1: Filtering</span>
-<span class="doccomment">//! This example accepts a proc-macro input, then finds all lifetimes and type parameters used</span>
-<span class="doccomment">//! by private fields.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! # extern crate darling_core;</span>
-<span class="doccomment">//! # extern crate syn;</span>
-<span class="doccomment">//! #</span>
-<span class="doccomment">//! # // in real-world usage, import from `darling`</span>
-<span class="doccomment">//! # use darling_core::usage::{self, CollectLifetimes, CollectTypeParams, GenericsExt, Purpose};</span>
-<span class="doccomment">//! # use syn::{Data, DeriveInput, GenericParam, Generics, Visibility};</span>
-<span class="doccomment">//! #</span>
-<span class="doccomment">//! # #[allow(dead_code)]</span>
-<span class="doccomment">//! fn process(input: &amp;DeriveInput) -&gt; Generics {</span>
-<span class="doccomment">//!     let type_params = input.generics.declared_type_params();</span>
-<span class="doccomment">//!     let lifetimes = input.generics.declared_lifetimes();</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     let mut ret_generics = input.generics.clone();</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     if let Data::Struct(ref body) = input.data {</span>
-<span class="doccomment">//!         let internal_fields = body</span>
-<span class="doccomment">//!             .fields</span>
-<span class="doccomment">//!             .iter()</span>
-<span class="doccomment">//!             .filter(|field| field.vis == Visibility::Inherited)</span>
-<span class="doccomment">//!             .collect::&lt;Vec&lt;_&gt;&gt;();</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!         let int_type_params = internal_fields</span>
-<span class="doccomment">//!             .collect_type_params(&amp;Purpose::BoundImpl.into(), &amp;type_params);</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!         // We could reuse the vec from above, but here we&#39;ll instead</span>
-<span class="doccomment">//!         // directly consume the chained iterator.</span>
-<span class="doccomment">//!         let int_lifetimes = body</span>
-<span class="doccomment">//!             .fields</span>
-<span class="doccomment">//!             .iter()</span>
-<span class="doccomment">//!             .filter(|field| field.vis == Visibility::Inherited)</span>
-<span class="doccomment">//!             .collect_lifetimes(&amp;Purpose::BoundImpl.into(), &amp;lifetimes);</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!         ret_generics.params = ret_generics</span>
-<span class="doccomment">//!             .params</span>
-<span class="doccomment">//!             .into_iter()</span>
-<span class="doccomment">//!             .filter(|gp| {</span>
-<span class="doccomment">//!                 match *gp {</span>
-<span class="doccomment">//!                     GenericParam::Type(ref ty) =&gt; int_type_params.contains(&amp;ty.ident),</span>
-<span class="doccomment">//!                     GenericParam::Lifetime(ref lt) =&gt; int_lifetimes.contains(&amp;lt.lifetime),</span>
-<span class="doccomment">//!                     _ =&gt; true,</span>
-<span class="doccomment">//!                 }</span>
-<span class="doccomment">//!             })</span>
-<span class="doccomment">//!             .collect();</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     ret_generics</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # fn main() {}</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Example 2: Integrating with `FromDeriveInput`</span>
-<span class="doccomment">//! It is possible to use `darling`&#39;s magic fields feature in tandem with the `usage` feature set.</span>
-<span class="doccomment">//! While there is no custom derive for `UsesTypeParams` or `UsesLifetimes`, there are macros to</span>
-<span class="doccomment">//! generate impls.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust,ignore</span>
-<span class="doccomment">//! #![allow(dead_code)]</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! #[derive(FromField)]</span>
-<span class="doccomment">//! #[darling(attributes(speak))]</span>
-<span class="doccomment">//! struct SpeakerField {</span>
-<span class="doccomment">//!     ident: Option&lt;syn::Ident&gt;,</span>
-<span class="doccomment">//!     ty: syn::Type,</span>
-<span class="doccomment">//!     #[darling(default)]</span>
-<span class="doccomment">//!     volume: Option&lt;u32&gt;,</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! uses_type_params!(SpeakerField, ty);</span>
-<span class="doccomment">//! uses_lifetimes!(SpeakerField, ty);</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! #[derive(FromDeriveInput)]</span>
-<span class="doccomment">//! struct SpeakerOptions {</span>
-<span class="doccomment">//!     generics: syn::Generics,</span>
-<span class="doccomment">//!     data: darling::ast::Data&lt;darling::util::Ignored, SpeakerField&gt;,</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! At this point, you are able to call `uses_type_params` on `SpeakerOptions.data`, or any filtered</span>
-<span class="doccomment">//! view of it. `darling` internally uses this in conjunction with the `skip` meta-item to determine</span>
-<span class="doccomment">//! which type parameters don&#39;t require the `FromMeta` bound in generated impls.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! **Note:** If you are performing operations referencing generic params in meta-items parsed by `darling`,</span>
-<span class="doccomment">//! you should determine if those impact the emitted code and wire up `UsesTypeParams` accordingly for</span>
-<span class="doccomment">//! your field/variant.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Traits and types used for tracking the usage of generic parameters through a proc-macro input.
+//!
+//! When generating trait impls, libraries often want to automatically figure out which type parameters
+//! are used in which fields, and then emit bounds that will produce the most permissive compilable
+//! code.
+//!
+//! # Usage
+//!
+//! ## Example 1: Filtering
+//! This example accepts a proc-macro input, then finds all lifetimes and type parameters used
+//! by private fields.
+//!
+//! ```rust
+//! # extern crate darling_core;
+//! # extern crate syn;
+//! #
+//! # // in real-world usage, import from `darling`
+//! # use darling_core::usage::{self, CollectLifetimes, CollectTypeParams, GenericsExt, Purpose};
+//! # use syn::{Data, DeriveInput, GenericParam, Generics, Visibility};
+//! #
+//! # #[allow(dead_code)]
+//! fn process(input: &amp;DeriveInput) -&gt; Generics {
+//!     let type_params = input.generics.declared_type_params();
+//!     let lifetimes = input.generics.declared_lifetimes();
+//!
+//!     let mut ret_generics = input.generics.clone();
+//!
+//!     if let Data::Struct(ref body) = input.data {
+//!         let internal_fields = body
+//!             .fields
+//!             .iter()
+//!             .filter(|field| field.vis == Visibility::Inherited)
+//!             .collect::&lt;Vec&lt;_&gt;&gt;();
+//!
+//!         let int_type_params = internal_fields
+//!             .collect_type_params(&amp;Purpose::BoundImpl.into(), &amp;type_params);
+//!
+//!         // We could reuse the vec from above, but here we&#39;ll instead
+//!         // directly consume the chained iterator.
+//!         let int_lifetimes = body
+//!             .fields
+//!             .iter()
+//!             .filter(|field| field.vis == Visibility::Inherited)
+//!             .collect_lifetimes(&amp;Purpose::BoundImpl.into(), &amp;lifetimes);
+//!
+//!
+//!         ret_generics.params = ret_generics
+//!             .params
+//!             .into_iter()
+//!             .filter(|gp| {
+//!                 match *gp {
+//!                     GenericParam::Type(ref ty) =&gt; int_type_params.contains(&amp;ty.ident),
+//!                     GenericParam::Lifetime(ref lt) =&gt; int_lifetimes.contains(&amp;lt.lifetime),
+//!                     _ =&gt; true,
+//!                 }
+//!             })
+//!             .collect();
+//!     }
+//!
+//!     ret_generics
+//! }
+//!
+//! # fn main() {}
+//! ```
+//!
+//! ## Example 2: Integrating with `FromDeriveInput`
+//! It is possible to use `darling`&#39;s magic fields feature in tandem with the `usage` feature set.
+//! While there is no custom derive for `UsesTypeParams` or `UsesLifetimes`, there are macros to
+//! generate impls.
+//!
+//! ```rust,ignore
+//! #![allow(dead_code)]
+//!
+//! #[derive(FromField)]
+//! #[darling(attributes(speak))]
+//! struct SpeakerField {
+//!     ident: Option&lt;syn::Ident&gt;,
+//!     ty: syn::Type,
+//!     #[darling(default)]
+//!     volume: Option&lt;u32&gt;,
+//! }
+//!
+//! uses_type_params!(SpeakerField, ty);
+//! uses_lifetimes!(SpeakerField, ty);
+//!
+//! #[derive(FromDeriveInput)]
+//! struct SpeakerOptions {
+//!     generics: syn::Generics,
+//!     data: darling::ast::Data&lt;darling::util::Ignored, SpeakerField&gt;,
+//! }
+//! ```
+//!
+//! At this point, you are able to call `uses_type_params` on `SpeakerOptions.data`, or any filtered
+//! view of it. `darling` internally uses this in conjunction with the `skip` meta-item to determine
+//! which type parameters don&#39;t require the `FromMeta` bound in generated impls.
+//!
+//! **Note:** If you are performing operations referencing generic params in meta-items parsed by `darling`,
+//! you should determine if those impact the emitted code and wire up `UsesTypeParams` accordingly for
+//! your field/variant.
 
-<span class="kw">mod</span> <span class="ident">generics_ext</span>;
-<span class="kw">mod</span> <span class="ident">ident_set</span>;
-<span class="kw">mod</span> <span class="ident">lifetimes</span>;
-<span class="kw">mod</span> <span class="ident">options</span>;
-<span class="kw">mod</span> <span class="ident">type_params</span>;
+</span><span class="kw">mod </span>generics_ext;
+<span class="kw">mod </span>ident_set;
+<span class="kw">mod </span>lifetimes;
+<span class="kw">mod </span>options;
+<span class="kw">mod </span>type_params;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::generics_ext::GenericsExt</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::ident_set</span>::{<span class="ident">IdentRefSet</span>, <span class="ident">IdentSet</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::lifetimes</span>::{<span class="ident">CollectLifetimes</span>, <span class="ident">LifetimeRefSet</span>, <span class="ident">LifetimeSet</span>, <span class="ident">UsesLifetimes</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::options</span>::{<span class="ident">Options</span>, <span class="ident">Purpose</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="self">self</span>::type_params</span>::{<span class="ident">CollectTypeParams</span>, <span class="ident">UsesTypeParams</span>};
+<span class="kw">pub use </span><span class="self">self</span>::generics_ext::GenericsExt;
+<span class="kw">pub use </span><span class="self">self</span>::ident_set::{IdentRefSet, IdentSet};
+<span class="kw">pub use </span><span class="self">self</span>::lifetimes::{CollectLifetimes, LifetimeRefSet, LifetimeSet, UsesLifetimes};
+<span class="kw">pub use </span><span class="self">self</span>::options::{Options, Purpose};
+<span class="kw">pub use </span><span class="self">self</span>::type_params::{CollectTypeParams, UsesTypeParams};
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

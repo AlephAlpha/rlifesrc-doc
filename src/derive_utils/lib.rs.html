@@ -228,235 +228,235 @@
 <span id="228">228</span>
 <span id="229">229</span>
 <span id="230">230</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A procedural macro helper for easily writing [derives macros][proc-macro-derive] for enums.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [`quick_derive!`] macro make easy to write [`proc_macro_derive`][proc-macro-derive]</span>
-<span class="doccomment">//! like deriving trait to enum so long as all variants are implemented that trait.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! # extern crate proc_macro;</span>
-<span class="doccomment">//! #</span>
-<span class="doccomment">//! use derive_utils::quick_derive;</span>
-<span class="doccomment">//! use proc_macro::TokenStream;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # #[cfg(any())]</span>
-<span class="doccomment">//! #[proc_macro_derive(Iterator)]</span>
-<span class="doccomment">//! # pub fn _derive_iterator(_: TokenStream) -&gt; TokenStream { unimplemented!() }</span>
-<span class="doccomment">//! pub fn derive_iterator(input: TokenStream) -&gt; TokenStream {</span>
-<span class="doccomment">//!     quick_derive! {</span>
-<span class="doccomment">//!         input,</span>
-<span class="doccomment">//!         // trait path</span>
-<span class="doccomment">//!         std::iter::Iterator,</span>
-<span class="doccomment">//!         // trait definition</span>
-<span class="doccomment">//!         trait Iterator {</span>
-<span class="doccomment">//!             type Item;</span>
-<span class="doccomment">//!             fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;</span>
-<span class="doccomment">//!             fn size_hint(&amp;self) -&gt; (usize, Option&lt;usize&gt;);</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # #[cfg(any())]</span>
-<span class="doccomment">//! #[proc_macro_derive(ExactSizeIterator)]</span>
-<span class="doccomment">//! # pub fn _derive_exact_size_iterator(_: TokenStream) -&gt; TokenStream { unimplemented!() }</span>
-<span class="doccomment">//! pub fn derive_exact_size_iterator(input: TokenStream) -&gt; TokenStream {</span>
-<span class="doccomment">//!     quick_derive! {</span>
-<span class="doccomment">//!         input,</span>
-<span class="doccomment">//!         // trait path</span>
-<span class="doccomment">//!         std::iter::ExactSizeIterator,</span>
-<span class="doccomment">//!         // super trait&#39;s associated types</span>
-<span class="doccomment">//!         &lt;Item&gt;,</span>
-<span class="doccomment">//!         // trait definition</span>
-<span class="doccomment">//!         trait ExactSizeIterator: Iterator {</span>
-<span class="doccomment">//!             fn len(&amp;self) -&gt; usize;</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # #[cfg(any())]</span>
-<span class="doccomment">//! #[proc_macro_derive(Future)]</span>
-<span class="doccomment">//! # pub fn _derive_future(_: TokenStream) -&gt; TokenStream { unimplemented!() }</span>
-<span class="doccomment">//! pub fn derive_future(input: TokenStream) -&gt; TokenStream {</span>
-<span class="doccomment">//!     quick_derive! {</span>
-<span class="doccomment">//!         input,</span>
-<span class="doccomment">//!         // trait path</span>
-<span class="doccomment">//!         std::future::Future,</span>
-<span class="doccomment">//!         // trait definition</span>
-<span class="doccomment">//!         trait Future {</span>
-<span class="doccomment">//!             type Output;</span>
-<span class="doccomment">//!             fn poll(</span>
-<span class="doccomment">//!                 self: std::pin::Pin&lt;&amp;mut Self&gt;,</span>
-<span class="doccomment">//!                 cx: &amp;mut std::task::Context&lt;&#39;_&gt;,</span>
-<span class="doccomment">//!             ) -&gt; std::task::Poll&lt;Self::Output&gt;;</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Generated code</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! When deriving for enum like the following:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! # #[cfg(any())]</span>
-<span class="doccomment">//! #[derive(Iterator, ExactSizeIterator, Future)]</span>
-<span class="doccomment">//! # struct _Enum&lt;A&gt;(A);</span>
-<span class="doccomment">//! enum Enum&lt;A, B&gt; {</span>
-<span class="doccomment">//!     A(A),</span>
-<span class="doccomment">//!     B(B),</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Code like this will be generated:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! enum Enum&lt;A, B&gt; {</span>
-<span class="doccomment">//!     A(A),</span>
-<span class="doccomment">//!     B(B),</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! impl&lt;A, B&gt; std::iter::Iterator for Enum&lt;A, B&gt;</span>
-<span class="doccomment">//! where</span>
-<span class="doccomment">//!     A: std::iter::Iterator,</span>
-<span class="doccomment">//!     B: std::iter::Iterator&lt;Item = &lt;A as std::iter::Iterator&gt;::Item&gt;,</span>
-<span class="doccomment">//! {</span>
-<span class="doccomment">//!     type Item = &lt;A as std::iter::Iterator&gt;::Item;</span>
-<span class="doccomment">//!     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {</span>
-<span class="doccomment">//!         match self {</span>
-<span class="doccomment">//!             Enum::A(x) =&gt; x.next(),</span>
-<span class="doccomment">//!             Enum::B(x) =&gt; x.next(),</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//!     fn size_hint(&amp;self) -&gt; (usize, Option&lt;usize&gt;) {</span>
-<span class="doccomment">//!         match self {</span>
-<span class="doccomment">//!             Enum::A(x) =&gt; x.size_hint(),</span>
-<span class="doccomment">//!             Enum::B(x) =&gt; x.size_hint(),</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! impl&lt;A, B&gt; std::iter::ExactSizeIterator for Enum&lt;A, B&gt;</span>
-<span class="doccomment">//! where</span>
-<span class="doccomment">//!     A: std::iter::ExactSizeIterator,</span>
-<span class="doccomment">//!     B: std::iter::ExactSizeIterator&lt;Item = &lt;A as Iterator&gt;::Item&gt;,</span>
-<span class="doccomment">//! {</span>
-<span class="doccomment">//!     fn len(&amp;self) -&gt; usize {</span>
-<span class="doccomment">//!         match self {</span>
-<span class="doccomment">//!             Enum::A(x) =&gt; x.len(),</span>
-<span class="doccomment">//!             Enum::B(x) =&gt; x.len(),</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! impl&lt;A, B&gt; std::future::Future for Enum&lt;A, B&gt;</span>
-<span class="doccomment">//! where</span>
-<span class="doccomment">//!     A: std::future::Future,</span>
-<span class="doccomment">//!     B: std::future::Future&lt;Output = &lt;A as std::future::Future&gt;::Output&gt;,</span>
-<span class="doccomment">//! {</span>
-<span class="doccomment">//!     type Output = &lt;A as std::future::Future&gt;::Output;</span>
-<span class="doccomment">//!     fn poll(</span>
-<span class="doccomment">//!         self: std::pin::Pin&lt;&amp;mut Self&gt;,</span>
-<span class="doccomment">//!         cx: &amp;mut std::task::Context&lt;&#39;_&gt;,</span>
-<span class="doccomment">//!     ) -&gt; std::task::Poll&lt;Self::Output&gt; {</span>
-<span class="doccomment">//!         unsafe {</span>
-<span class="doccomment">//!             match self.get_unchecked_mut() {</span>
-<span class="doccomment">//!                 Enum::A(x) =&gt; std::pin::Pin::new_unchecked(x).poll(cx),</span>
-<span class="doccomment">//!                 Enum::B(x) =&gt; std::pin::Pin::new_unchecked(x).poll(cx),</span>
-<span class="doccomment">//!             }</span>
-<span class="doccomment">//!         }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [proc-macro-derive]: https://doc.rust-lang.org/reference/procedural-macros.html#derive-macros</span>
+</pre><pre class="rust"><code><span class="doccomment">//! A procedural macro helper for easily writing [derives macros][proc-macro-derive] for enums.
+//!
+//! # Examples
+//!
+//! [`quick_derive!`] macro make easy to write [`proc_macro_derive`][proc-macro-derive]
+//! like deriving trait to enum so long as all variants are implemented that trait.
+//!
+//! ```rust
+//! # extern crate proc_macro;
+//! #
+//! use derive_utils::quick_derive;
+//! use proc_macro::TokenStream;
+//!
+//! # #[cfg(any())]
+//! #[proc_macro_derive(Iterator)]
+//! # pub fn _derive_iterator(_: TokenStream) -&gt; TokenStream { unimplemented!() }
+//! pub fn derive_iterator(input: TokenStream) -&gt; TokenStream {
+//!     quick_derive! {
+//!         input,
+//!         // trait path
+//!         std::iter::Iterator,
+//!         // trait definition
+//!         trait Iterator {
+//!             type Item;
+//!             fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
+//!             fn size_hint(&amp;self) -&gt; (usize, Option&lt;usize&gt;);
+//!         }
+//!     }
+//! }
+//!
+//! # #[cfg(any())]
+//! #[proc_macro_derive(ExactSizeIterator)]
+//! # pub fn _derive_exact_size_iterator(_: TokenStream) -&gt; TokenStream { unimplemented!() }
+//! pub fn derive_exact_size_iterator(input: TokenStream) -&gt; TokenStream {
+//!     quick_derive! {
+//!         input,
+//!         // trait path
+//!         std::iter::ExactSizeIterator,
+//!         // super trait&#39;s associated types
+//!         &lt;Item&gt;,
+//!         // trait definition
+//!         trait ExactSizeIterator: Iterator {
+//!             fn len(&amp;self) -&gt; usize;
+//!         }
+//!     }
+//! }
+//!
+//! # #[cfg(any())]
+//! #[proc_macro_derive(Future)]
+//! # pub fn _derive_future(_: TokenStream) -&gt; TokenStream { unimplemented!() }
+//! pub fn derive_future(input: TokenStream) -&gt; TokenStream {
+//!     quick_derive! {
+//!         input,
+//!         // trait path
+//!         std::future::Future,
+//!         // trait definition
+//!         trait Future {
+//!             type Output;
+//!             fn poll(
+//!                 self: std::pin::Pin&lt;&amp;mut Self&gt;,
+//!                 cx: &amp;mut std::task::Context&lt;&#39;_&gt;,
+//!             ) -&gt; std::task::Poll&lt;Self::Output&gt;;
+//!         }
+//!     }
+//! }
+//! ```
+//!
+//! ### Generated code
+//!
+//! When deriving for enum like the following:
+//!
+//! ```rust
+//! # #[cfg(any())]
+//! #[derive(Iterator, ExactSizeIterator, Future)]
+//! # struct _Enum&lt;A&gt;(A);
+//! enum Enum&lt;A, B&gt; {
+//!     A(A),
+//!     B(B),
+//! }
+//! ```
+//!
+//! Code like this will be generated:
+//!
+//! ```rust
+//! enum Enum&lt;A, B&gt; {
+//!     A(A),
+//!     B(B),
+//! }
+//!
+//! impl&lt;A, B&gt; std::iter::Iterator for Enum&lt;A, B&gt;
+//! where
+//!     A: std::iter::Iterator,
+//!     B: std::iter::Iterator&lt;Item = &lt;A as std::iter::Iterator&gt;::Item&gt;,
+//! {
+//!     type Item = &lt;A as std::iter::Iterator&gt;::Item;
+//!     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+//!         match self {
+//!             Enum::A(x) =&gt; x.next(),
+//!             Enum::B(x) =&gt; x.next(),
+//!         }
+//!     }
+//!     fn size_hint(&amp;self) -&gt; (usize, Option&lt;usize&gt;) {
+//!         match self {
+//!             Enum::A(x) =&gt; x.size_hint(),
+//!             Enum::B(x) =&gt; x.size_hint(),
+//!         }
+//!     }
+//! }
+//!
+//! impl&lt;A, B&gt; std::iter::ExactSizeIterator for Enum&lt;A, B&gt;
+//! where
+//!     A: std::iter::ExactSizeIterator,
+//!     B: std::iter::ExactSizeIterator&lt;Item = &lt;A as Iterator&gt;::Item&gt;,
+//! {
+//!     fn len(&amp;self) -&gt; usize {
+//!         match self {
+//!             Enum::A(x) =&gt; x.len(),
+//!             Enum::B(x) =&gt; x.len(),
+//!         }
+//!     }
+//! }
+//!
+//! impl&lt;A, B&gt; std::future::Future for Enum&lt;A, B&gt;
+//! where
+//!     A: std::future::Future,
+//!     B: std::future::Future&lt;Output = &lt;A as std::future::Future&gt;::Output&gt;,
+//! {
+//!     type Output = &lt;A as std::future::Future&gt;::Output;
+//!     fn poll(
+//!         self: std::pin::Pin&lt;&amp;mut Self&gt;,
+//!         cx: &amp;mut std::task::Context&lt;&#39;_&gt;,
+//!     ) -&gt; std::task::Poll&lt;Self::Output&gt; {
+//!         unsafe {
+//!             match self.get_unchecked_mut() {
+//!                 Enum::A(x) =&gt; std::pin::Pin::new_unchecked(x).poll(cx),
+//!                 Enum::B(x) =&gt; std::pin::Pin::new_unchecked(x).poll(cx),
+//!             }
+//!         }
+//!     }
+//! }
+//! ```
+//!
+//! [proc-macro-derive]: https://doc.rust-lang.org/reference/procedural-macros.html#derive-macros
 
-<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">test</span>(
-    <span class="ident">no_crate_inject</span>,
-    <span class="ident">attr</span>(
-        <span class="ident">deny</span>(<span class="ident">warnings</span>, <span class="ident">rust_2018_idioms</span>, <span class="ident">single_use_lifetimes</span>),
-        <span class="ident">allow</span>(<span class="ident">dead_code</span>, <span class="ident">unused_variables</span>)
+</span><span class="attribute">#![doc(test(
+    no_crate_inject,
+    attr(
+        deny(warnings, rust_2018_idioms, single_use_lifetimes),
+        allow(dead_code, unused_variables)
     )
 ))]</span>
-<span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">future_incompatible</span>, <span class="ident">rust_2018_idioms</span>, <span class="ident">single_use_lifetimes</span>, <span class="ident">unreachable_pub</span>)]</span>
-<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">clippy::all</span>, <span class="ident">clippy::default_trait_access</span>)]</span>
+<span class="attribute">#![forbid(unsafe_code)]</span>
+<span class="attribute">#![warn(future_incompatible, rust_2018_idioms, single_use_lifetimes, unreachable_pub)]</span>
+<span class="attribute">#![warn(clippy::all, clippy::default_trait_access)]</span>
 
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">mod</span> <span class="ident">utils</span>;
+<span class="attribute">#[macro_use]</span>
+<span class="kw">mod </span>utils;
 
-<span class="kw">mod</span> <span class="ident">ast</span>;
-<span class="kw">mod</span> <span class="ident">parse</span>;
+<span class="kw">mod </span>ast;
+<span class="kw">mod </span>parse;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">ast::EnumData</span>,
-    <span class="ident">parse</span>::{<span class="ident">derive_trait</span>, <span class="ident">EnumImpl</span>},
+<span class="kw">pub use crate</span>::{
+    ast::EnumData,
+    parse::{derive_trait, EnumImpl},
 };
 
-<span class="doccomment">/// A macro for making easy to write `proc_macro_derive` like deriving trait to</span>
-<span class="doccomment">/// enum so long as all variants are implemented that trait.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See crate level documentation for details.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">quick_derive</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_path</span>:<span class="ident">expr</span>, <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">super</span>:<span class="macro-nonterminal">ident</span><span class="op">&gt;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_def</span>:<span class="ident">item</span> $(,)<span class="kw-2">*</span>) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::__private::parse_input</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>, <span class="op">|</span><span class="ident">data</span><span class="op">|</span> {
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::derive_trait</span>(
-                <span class="kw-2">&amp;</span><span class="ident">data</span>,
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_path</span>),
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::__private::Some</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__private::format_ident!</span>(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="kw">super</span>))),
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_def</span>),
+<span class="doccomment">/// A macro for making easy to write `proc_macro_derive` like deriving trait to
+/// enum so long as all variants are implemented that trait.
+///
+/// See crate level documentation for details.
+</span><span class="attribute">#[macro_export]</span>
+<span class="macro">macro_rules!</span> quick_derive {
+    (<span class="macro-nonterminal">$input</span>:expr, <span class="macro-nonterminal">$trait_path</span>:expr, &lt;<span class="macro-nonterminal">$</span><span class="kw">super</span>:<span class="macro-nonterminal">ident</span>&gt;, <span class="macro-nonterminal">$trait_def</span>:item $(,)<span class="kw-2">*</span>) =&gt; {
+        <span class="macro-nonterminal">$crate::__private::parse_input</span>(<span class="macro-nonterminal">$input</span>, |data| {
+            <span class="macro-nonterminal">$crate::derive_trait</span>(
+                <span class="kw-2">&amp;</span>data,
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$trait_path</span>),
+                <span class="macro-nonterminal">$crate::__private::Some</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__private::format_ident!</span>(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="kw">super</span>))),
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$trait_def</span>),
             )
         })
-        .<span class="ident">into</span>()
+        .into()
     };
-    <span class="comment">// TODO: $(,)? requires Rust 1.32.</span>
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_path</span>:<span class="ident">expr</span>, <span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="kw">super</span>:<span class="macro-nonterminal">ident</span>),<span class="op">+</span> $(,)<span class="kw-2">*</span><span class="op">&gt;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_def</span>:<span class="ident">item</span> $(,)<span class="kw-2">*</span>) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::__private::parse_input</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>, <span class="op">|</span><span class="ident">data</span><span class="op">|</span> {
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::derive_trait</span>(
-                <span class="kw-2">&amp;</span><span class="ident">data</span>,
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_path</span>),
-                <span class="macro">vec!</span>[$( <span class="macro-nonterminal">$</span><span class="macro">crate::__private::format_ident!</span>(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="kw">super</span>)) ),<span class="op">+</span>],
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_def</span>),
+    <span class="comment">// TODO: $(,)? requires Rust 1.32.
+    </span>(<span class="macro-nonterminal">$input</span>:expr, <span class="macro-nonterminal">$trait_path</span>:expr, &lt;$(<span class="macro-nonterminal">$</span><span class="kw">super</span>:<span class="macro-nonterminal">ident</span>),+ $(,)<span class="kw-2">*</span>&gt;, <span class="macro-nonterminal">$trait_def</span>:item $(,)<span class="kw-2">*</span>) =&gt; {
+        <span class="macro-nonterminal">$crate::__private::parse_input</span>(<span class="macro-nonterminal">$input</span>, |data| {
+            <span class="macro-nonterminal">$crate::derive_trait</span>(
+                <span class="kw-2">&amp;</span>data,
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$trait_path</span>),
+                <span class="macro">vec!</span>[$( <span class="macro-nonterminal">$</span><span class="macro">crate::__private::format_ident!</span>(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="kw">super</span>)) ),+],
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$trait_def</span>),
             )
         })
-        .<span class="ident">into</span>()
+        .into()
     };
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_path</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_def</span>:<span class="ident">item</span> $(,)<span class="kw-2">*</span>) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::__private::parse_input</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>, <span class="op">|</span><span class="ident">data</span><span class="op">|</span> {
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::derive_trait</span>(
-                <span class="kw-2">&amp;</span><span class="ident">data</span>,
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_path</span>),
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::__private::None</span>,
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_def</span>),
+    (<span class="macro-nonterminal">$input</span>:expr, <span class="macro-nonterminal">$trait_path</span>:expr, <span class="macro-nonterminal">$trait_def</span>:item $(,)<span class="kw-2">*</span>) =&gt; {
+        <span class="macro-nonterminal">$crate::__private::parse_input</span>(<span class="macro-nonterminal">$input</span>, |data| {
+            <span class="macro-nonterminal">$crate::derive_trait</span>(
+                <span class="kw-2">&amp;</span>data,
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$trait_path</span>),
+                <span class="macro-nonterminal">$crate::__private::None</span>,
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__private::parse_quote!</span>(<span class="macro-nonterminal">$trait_def</span>),
             )
         })
-        .<span class="ident">into</span>()
+        .into()
     };
 }
 
-<span class="comment">// Not public API.</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">__private</span> {
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">format_ident</span>, <span class="ident">quote</span>};
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::option::Option</span>::{<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>};
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">parse2</span>, <span class="ident">parse_quote</span>, <span class="ident">ItemTrait</span>, <span class="ident">Path</span>};
+<span class="comment">// Not public API.
+</span><span class="attribute">#[doc(hidden)]</span>
+<span class="kw">pub mod </span>__private {
+    <span class="attribute">#[doc(hidden)]</span>
+    <span class="kw">pub use </span>quote::{format_ident, quote};
+    <span class="attribute">#[doc(hidden)]</span>
+    <span class="kw">pub use </span>std::option::Option::{<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>};
+    <span class="attribute">#[doc(hidden)]</span>
+    <span class="kw">pub use </span>syn::{parse2, parse_quote, ItemTrait, Path};
 
-    <span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
+    <span class="kw">use </span>proc_macro2::TokenStream;
 
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::EnumData</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::EnumData;
 
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_input</span>(
-        <span class="ident">input</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span>,
-        <span class="ident">f</span>: <span class="kw">fn</span>(<span class="ident">EnumData</span>) -&gt; <span class="ident">TokenStream</span>,
-    ) -&gt; <span class="ident">TokenStream</span> {
-        <span class="ident">parse2</span>::<span class="op">&lt;</span><span class="ident">EnumData</span><span class="op">&gt;</span>(<span class="ident">input</span>.<span class="ident">into</span>()).<span class="ident">map</span>(<span class="ident">f</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">e</span>.<span class="ident">to_compile_error</span>())
+    <span class="attribute">#[doc(hidden)]</span>
+    <span class="kw">pub fn </span>parse_input(
+        input: <span class="kw">impl </span>Into&lt;TokenStream&gt;,
+        f: <span class="kw">fn</span>(EnumData) -&gt; TokenStream,
+    ) -&gt; TokenStream {
+        parse2::&lt;EnumData&gt;(input.into()).map(f).unwrap_or_else(|e| e.to_compile_error())
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

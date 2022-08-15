@@ -46,20 +46,20 @@ This is what happens when you enable raw modes.</p>
 </ul>
 <p>Raw mode can be enabled/disabled with the <a href="fn.enable_raw_mode.html">enable_raw_mode</a> and <a href="fn.disable_raw_mode.html">disable_raw_mode</a> functions.</p>
 <h3 id="examples"><a href="#examples">Examples</a></h3>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>};
-<span class="kw">use</span> <span class="ident">crossterm</span>::{<span class="ident">execute</span>, <span class="prelude-ty">Result</span>, <span class="ident">terminal</span>::{<span class="ident">ScrollUp</span>, <span class="ident">SetSize</span>, <span class="ident">size</span>}};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{stdout, Write};
+<span class="kw">use </span>crossterm::{execute, <span class="prelude-ty">Result</span>, terminal::{ScrollUp, SetSize, size}};
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> (<span class="ident">cols</span>, <span class="ident">rows</span>) <span class="op">=</span> <span class="ident">size</span>()<span class="question-mark">?</span>;
-    <span class="comment">// Resize terminal and scroll up.</span>
-    <span class="macro">execute!</span>(
-        <span class="ident">stdout</span>(),
-        <span class="ident">SetSize</span>(<span class="number">10</span>, <span class="number">10</span>),
-        <span class="ident">ScrollUp</span>(<span class="number">5</span>)
+<span class="kw">fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span>(cols, rows) = size()<span class="question-mark">?</span>;
+    <span class="comment">// Resize terminal and scroll up.
+    </span><span class="macro">execute!</span>(
+        stdout(),
+        SetSize(<span class="number">10</span>, <span class="number">10</span>),
+        ScrollUp(<span class="number">5</span>)
     )<span class="question-mark">?</span>;
 
-    <span class="comment">// Be a good citizen, cleanup</span>
-    <span class="macro">execute!</span>(<span class="ident">stdout</span>(), <span class="ident">SetSize</span>(<span class="ident">cols</span>, <span class="ident">rows</span>))<span class="question-mark">?</span>;
+    <span class="comment">// Be a good citizen, cleanup
+    </span><span class="macro">execute!</span>(stdout(), SetSize(cols, rows))<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 <p>For manual execution control check out <a href="../macro.queue.html">crossterm::queue</a>.</p>
@@ -77,4 +77,4 @@ This is what happens when you enable raw modes.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.enable_raw_mode.html" title="crossterm::terminal::enable_raw_mode fn">enable_raw_mode</a></div><div class="item-right docblock-short"><p>Enables raw mode.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.is_raw_mode_enabled.html" title="crossterm::terminal::is_raw_mode_enabled fn">is_raw_mode_enabled</a></div><div class="item-right docblock-short"><p>Tells whether the raw mode is enabled.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.size.html" title="crossterm::terminal::size fn">size</a></div><div class="item-right docblock-short"><p>Returns the terminal size <code>(columns, rows)</code>.</p>
-</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

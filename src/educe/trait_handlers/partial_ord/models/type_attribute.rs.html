@@ -329,336 +329,336 @@
 <span id="329">329</span>
 <span id="330">330</span>
 <span id="331">331</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span></span>::{
-    <span class="ident">create_where_predicates_from_generic_parameters</span>, <span class="ident">create_where_predicates_from_lit_str</span>,
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::{
+    create_where_predicates_from_generic_parameters, create_where_predicates_from_lit_str,
 };
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::panic</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Trait</span>;
+<span class="kw">use </span><span class="kw">crate</span>::panic;
+<span class="kw">use </span><span class="kw">crate</span>::Trait;
 
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">quote</span>, <span class="ident">ToTokens</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">punctuated::Punctuated</span>, <span class="ident">token::Comma</span>, <span class="ident">Attribute</span>, <span class="ident">GenericParam</span>, <span class="ident">Lit</span>, <span class="ident">Meta</span>, <span class="ident">NestedMeta</span>,
-    <span class="ident">WherePredicate</span>,
+<span class="kw">use </span>quote::{quote, ToTokens};
+<span class="kw">use </span>syn::{
+    punctuated::Punctuated, token::Comma, Attribute, GenericParam, Lit, Meta, NestedMeta,
+    WherePredicate,
 };
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">TypeAttributeBound</span> {
+<span class="attribute">#[derive(Clone)]</span>
+<span class="kw">pub enum </span>TypeAttributeBound {
     <span class="prelude-val">None</span>,
-    <span class="ident">Auto</span>,
-    <span class="ident">Custom</span>(<span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">WherePredicate</span>, <span class="ident">Comma</span><span class="op">&gt;</span>),
+    Auto,
+    Custom(Punctuated&lt;WherePredicate, Comma&gt;),
 }
 
-<span class="kw">impl</span> <span class="ident">TypeAttributeBound</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_punctuated_where_predicates_by_generic_parameters</span>(
+<span class="kw">impl </span>TypeAttributeBound {
+    <span class="kw">pub fn </span>into_punctuated_where_predicates_by_generic_parameters(
         <span class="self">self</span>,
-        <span class="ident">params</span>: <span class="kw-2">&amp;</span><span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">GenericParam</span>, <span class="ident">Comma</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">WherePredicate</span>, <span class="ident">Comma</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">TypeAttributeBound::None</span> =&gt; <span class="ident">Punctuated::new</span>(),
-            <span class="ident">TypeAttributeBound::Auto</span> =&gt; {
-                <span class="ident">create_where_predicates_from_generic_parameters</span>(
-                    <span class="ident">params</span>,
-                    <span class="kw-2">&amp;</span><span class="ident">syn::parse2</span>(<span class="macro">quote!</span>(<span class="ident">core::cmp::PartialOrd</span>)).<span class="ident">unwrap</span>(),
+        params: <span class="kw-2">&amp;</span>Punctuated&lt;GenericParam, Comma&gt;,
+    ) -&gt; Punctuated&lt;WherePredicate, Comma&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            TypeAttributeBound::None =&gt; Punctuated::new(),
+            TypeAttributeBound::Auto =&gt; {
+                create_where_predicates_from_generic_parameters(
+                    params,
+                    <span class="kw-2">&amp;</span>syn::parse2(<span class="macro">quote!</span>(core::cmp::PartialOrd)).unwrap(),
                 )
             }
-            <span class="ident">TypeAttributeBound::Custom</span>(<span class="ident">where_predicates</span>) =&gt; <span class="ident">where_predicates</span>,
+            TypeAttributeBound::Custom(where_predicates) =&gt; where_predicates,
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeAttribute</span> {
-    <span class="kw">pub</span> <span class="ident">flag</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">bound</span>: <span class="ident">TypeAttributeBound</span>,
-    <span class="kw">pub</span> <span class="ident">rank</span>: <span class="ident">isize</span>,
+<span class="attribute">#[derive(Clone)]</span>
+<span class="kw">pub struct </span>TypeAttribute {
+    <span class="kw">pub </span>flag: bool,
+    <span class="kw">pub </span>bound: TypeAttributeBound,
+    <span class="kw">pub </span>rank: isize,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TypeAttributeBuilder</span> {
-    <span class="kw">pub</span> <span class="ident">enable_flag</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">enable_bound</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">rank</span>: <span class="ident">isize</span>,
-    <span class="kw">pub</span> <span class="ident">enable_rank</span>: <span class="ident">bool</span>,
+<span class="attribute">#[derive(Debug, Clone)]</span>
+<span class="kw">pub struct </span>TypeAttributeBuilder {
+    <span class="kw">pub </span>enable_flag: bool,
+    <span class="kw">pub </span>enable_bound: bool,
+    <span class="kw">pub </span>rank: isize,
+    <span class="kw">pub </span>enable_rank: bool,
 }
 
-<span class="kw">impl</span> <span class="ident">TypeAttributeBuilder</span> {
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::wrong_self_convention</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_partial_ord_meta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">meta</span>: <span class="kw-2">&amp;</span><span class="ident">Meta</span>) -&gt; <span class="ident">TypeAttribute</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flag</span> <span class="op">=</span> <span class="bool-val">false</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bound</span> <span class="op">=</span> <span class="ident">TypeAttributeBound::None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rank</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">rank</span>;
+<span class="kw">impl </span>TypeAttributeBuilder {
+    <span class="attribute">#[allow(clippy::wrong_self_convention)]</span>
+    <span class="kw">pub fn </span>from_partial_ord_meta(<span class="kw-2">&amp;</span><span class="self">self</span>, meta: <span class="kw-2">&amp;</span>Meta) -&gt; TypeAttribute {
+        <span class="kw">let </span><span class="kw-2">mut </span>flag = <span class="bool-val">false</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>bound = TypeAttributeBound::None;
+        <span class="kw">let </span><span class="kw-2">mut </span>rank = <span class="self">self</span>.rank;
 
-        <span class="kw">let</span> <span class="ident">correct_usage_for_partial_ord_attribute</span> <span class="op">=</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">usage</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+        <span class="kw">let </span>correct_usage_for_partial_ord_attribute = {
+            <span class="kw">let </span><span class="kw-2">mut </span>usage = <span class="macro">vec!</span>[];
 
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">enable_flag</span> {
-                <span class="ident">usage</span>.<span class="ident">push</span>(<span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">PartialOrd</span>)]</span>));
+            <span class="kw">if </span><span class="self">self</span>.enable_flag {
+                usage.push(<span class="macro">stringify!</span>(<span class="attribute">#[educe(PartialOrd)]</span>));
             }
 
-            <span class="ident">usage</span>
+            usage
         };
 
-        <span class="kw">let</span> <span class="ident">correct_usage_for_bound</span> <span class="op">=</span> {
-            <span class="kw">let</span> <span class="ident">usage</span> <span class="op">=</span> <span class="macro">vec!</span>[
-                <span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">PartialOrd</span>(<span class="ident">bound</span>))]</span>),
-                <span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">PartialOrd</span>(<span class="ident">bound</span> <span class="op">=</span> <span class="string">&quot;where_predicates&quot;</span>))]</span>),
-                <span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">PartialOrd</span>(<span class="ident">bound</span>(<span class="string">&quot;where_predicates&quot;</span>)))]</span>),
+        <span class="kw">let </span>correct_usage_for_bound = {
+            <span class="kw">let </span>usage = <span class="macro">vec!</span>[
+                <span class="macro">stringify!</span>(<span class="attribute">#[educe(PartialOrd(bound))]</span>),
+                <span class="macro">stringify!</span>(<span class="attribute">#[educe(PartialOrd(bound = <span class="string">&quot;where_predicates&quot;</span>))]</span>),
+                <span class="macro">stringify!</span>(<span class="attribute">#[educe(PartialOrd(bound(<span class="string">&quot;where_predicates&quot;</span>)))]</span>),
             ];
 
-            <span class="ident">usage</span>
+            usage
         };
 
-        <span class="kw">let</span> <span class="ident">correct_usage_for_rank</span> <span class="op">=</span> {
-            <span class="kw">let</span> <span class="ident">usage</span> <span class="op">=</span> <span class="macro">vec!</span>[
-                <span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">PartialOrd</span>(<span class="ident">rank</span> <span class="op">=</span> <span class="ident">comparison_value</span>))]</span>),
-                <span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">PartialOrd</span>(<span class="ident">rank</span>(<span class="ident">comparison_value</span>)))]</span>),
+        <span class="kw">let </span>correct_usage_for_rank = {
+            <span class="kw">let </span>usage = <span class="macro">vec!</span>[
+                <span class="macro">stringify!</span>(<span class="attribute">#[educe(PartialOrd(rank = comparison_value))]</span>),
+                <span class="macro">stringify!</span>(<span class="attribute">#[educe(PartialOrd(rank(comparison_value)))]</span>),
             ];
 
-            <span class="ident">usage</span>
+            usage
         };
 
-        <span class="kw">match</span> <span class="ident">meta</span> {
-            <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bound_is_set</span> <span class="op">=</span> <span class="bool-val">false</span>;
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rank_is_set</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">match </span>meta {
+            Meta::List(list) =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>bound_is_set = <span class="bool-val">false</span>;
+                <span class="kw">let </span><span class="kw-2">mut </span>rank_is_set = <span class="bool-val">false</span>;
 
-                <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span>.<span class="ident">iter</span>() {
-                    <span class="kw">match</span> <span class="ident">p</span> {
-                        <span class="ident">NestedMeta::Meta</span>(<span class="ident">meta</span>) =&gt; {
-                            <span class="kw">let</span> <span class="ident">meta_name</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">path</span>().<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>();
+                <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
+                    <span class="kw">match </span>p {
+                        NestedMeta::Meta(meta) =&gt; {
+                            <span class="kw">let </span>meta_name = meta.path().into_token_stream().to_string();
 
-                            <span class="kw">match</span> <span class="ident">meta_name</span>.<span class="ident">as_str</span>() {
-                                <span class="string">&quot;bound&quot;</span> =&gt; {
-                                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">enable_bound</span> {
-                                        <span class="ident">panic::unknown_parameter</span>(<span class="string">&quot;PartialOrd&quot;</span>, <span class="ident">meta_name</span>.<span class="ident">as_str</span>());
+                            <span class="kw">match </span>meta_name.as_str() {
+                                <span class="string">&quot;bound&quot; </span>=&gt; {
+                                    <span class="kw">if </span>!<span class="self">self</span>.enable_bound {
+                                        panic::unknown_parameter(<span class="string">&quot;PartialOrd&quot;</span>, meta_name.as_str());
                                     }
 
-                                    <span class="kw">match</span> <span class="ident">meta</span> {
-                                        <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
-                                            <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span>.<span class="ident">iter</span>() {
-                                                <span class="kw">match</span> <span class="ident">p</span> {
-                                                    <span class="ident">NestedMeta::Lit</span>(<span class="ident">Lit::Str</span>(<span class="ident">s</span>)) =&gt; {
-                                                        <span class="kw">if</span> <span class="ident">bound_is_set</span> {
-                                                            <span class="ident">panic::reset_parameter</span>(
-                                                                <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
+                                    <span class="kw">match </span>meta {
+                                        Meta::List(list) =&gt; {
+                                            <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
+                                                <span class="kw">match </span>p {
+                                                    NestedMeta::Lit(Lit::Str(s)) =&gt; {
+                                                        <span class="kw">if </span>bound_is_set {
+                                                            panic::reset_parameter(
+                                                                meta_name.as_str(),
                                                             );
                                                         }
 
-                                                        <span class="ident">bound_is_set</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                                        bound_is_set = <span class="bool-val">true</span>;
 
-                                                        <span class="kw">let</span> <span class="ident">where_predicates</span> <span class="op">=</span>
-                                                            <span class="ident">create_where_predicates_from_lit_str</span>(<span class="ident">s</span>);
+                                                        <span class="kw">let </span>where_predicates =
+                                                            create_where_predicates_from_lit_str(s);
 
-                                                        <span class="ident">bound</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">where_predicates</span> {
-                                                            <span class="prelude-val">Some</span>(<span class="ident">where_predicates</span>) =&gt; {
-                                                                <span class="ident">TypeAttributeBound::Custom</span>(
-                                                                    <span class="ident">where_predicates</span>,
+                                                        bound = <span class="kw">match </span>where_predicates {
+                                                            <span class="prelude-val">Some</span>(where_predicates) =&gt; {
+                                                                TypeAttributeBound::Custom(
+                                                                    where_predicates,
                                                                 )
                                                             }
-                                                            <span class="prelude-val">None</span> =&gt; {
-                                                                <span class="ident">panic::empty_parameter</span>(
-                                                                    <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
+                                                            <span class="prelude-val">None </span>=&gt; {
+                                                                panic::empty_parameter(
+                                                                    meta_name.as_str(),
                                                                 )
                                                             }
                                                         };
                                                     }
-                                                    <span class="kw">_</span> =&gt; {
-                                                        <span class="ident">panic::parameter_incorrect_format</span>(
-                                                            <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                            <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_bound</span>,
+                                                    <span class="kw">_ </span>=&gt; {
+                                                        panic::parameter_incorrect_format(
+                                                            meta_name.as_str(),
+                                                            <span class="kw-2">&amp;</span>correct_usage_for_bound,
                                                         )
                                                     }
                                                 }
                                             }
                                         }
-                                        <span class="ident">Meta::NameValue</span>(<span class="ident">named_value</span>) =&gt; {
-                                            <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">named_value</span>.<span class="ident">lit</span>;
+                                        Meta::NameValue(named_value) =&gt; {
+                                            <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>named_value.lit;
 
-                                            <span class="kw">match</span> <span class="ident">lit</span> {
-                                                <span class="ident">Lit::Str</span>(<span class="ident">s</span>) =&gt; {
-                                                    <span class="kw">if</span> <span class="ident">bound_is_set</span> {
-                                                        <span class="ident">panic::reset_parameter</span>(<span class="ident">meta_name</span>.<span class="ident">as_str</span>());
+                                            <span class="kw">match </span>lit {
+                                                Lit::Str(s) =&gt; {
+                                                    <span class="kw">if </span>bound_is_set {
+                                                        panic::reset_parameter(meta_name.as_str());
                                                     }
 
-                                                    <span class="ident">bound_is_set</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                                    bound_is_set = <span class="bool-val">true</span>;
 
-                                                    <span class="kw">let</span> <span class="ident">where_predicates</span> <span class="op">=</span>
-                                                        <span class="ident">create_where_predicates_from_lit_str</span>(<span class="ident">s</span>);
+                                                    <span class="kw">let </span>where_predicates =
+                                                        create_where_predicates_from_lit_str(s);
 
-                                                    <span class="ident">bound</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">where_predicates</span> {
-                                                        <span class="prelude-val">Some</span>(<span class="ident">where_predicates</span>) =&gt; {
-                                                            <span class="ident">TypeAttributeBound::Custom</span>(
-                                                                <span class="ident">where_predicates</span>,
+                                                    bound = <span class="kw">match </span>where_predicates {
+                                                        <span class="prelude-val">Some</span>(where_predicates) =&gt; {
+                                                            TypeAttributeBound::Custom(
+                                                                where_predicates,
                                                             )
                                                         }
-                                                        <span class="prelude-val">None</span> =&gt; {
-                                                            <span class="ident">panic::empty_parameter</span>(
-                                                                <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
+                                                        <span class="prelude-val">None </span>=&gt; {
+                                                            panic::empty_parameter(
+                                                                meta_name.as_str(),
                                                             )
                                                         }
                                                     };
                                                 }
-                                                <span class="kw">_</span> =&gt; {
-                                                    <span class="ident">panic::parameter_incorrect_format</span>(
-                                                        <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                        <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_bound</span>,
+                                                <span class="kw">_ </span>=&gt; {
+                                                    panic::parameter_incorrect_format(
+                                                        meta_name.as_str(),
+                                                        <span class="kw-2">&amp;</span>correct_usage_for_bound,
                                                     )
                                                 }
                                             }
                                         }
-                                        <span class="ident">Meta::Path</span>(<span class="kw">_</span>) =&gt; {
-                                            <span class="kw">if</span> <span class="ident">bound_is_set</span> {
-                                                <span class="ident">panic::reset_parameter</span>(<span class="ident">meta_name</span>.<span class="ident">as_str</span>());
+                                        Meta::Path(<span class="kw">_</span>) =&gt; {
+                                            <span class="kw">if </span>bound_is_set {
+                                                panic::reset_parameter(meta_name.as_str());
                                             }
 
-                                            <span class="ident">bound_is_set</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                            bound_is_set = <span class="bool-val">true</span>;
 
-                                            <span class="ident">bound</span> <span class="op">=</span> <span class="ident">TypeAttributeBound::Auto</span>;
+                                            bound = TypeAttributeBound::Auto;
                                         }
                                     }
                                 }
-                                <span class="string">&quot;rank&quot;</span> =&gt; {
-                                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">enable_rank</span> {
-                                        <span class="ident">panic::unknown_parameter</span>(<span class="string">&quot;PartialOrd&quot;</span>, <span class="ident">meta_name</span>.<span class="ident">as_str</span>());
+                                <span class="string">&quot;rank&quot; </span>=&gt; {
+                                    <span class="kw">if </span>!<span class="self">self</span>.enable_rank {
+                                        panic::unknown_parameter(<span class="string">&quot;PartialOrd&quot;</span>, meta_name.as_str());
                                     }
 
-                                    <span class="kw">match</span> <span class="ident">meta</span> {
-                                        <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
-                                            <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span>.<span class="ident">iter</span>() {
-                                                <span class="kw">match</span> <span class="ident">p</span> {
-                                                    <span class="ident">NestedMeta::Lit</span>(<span class="ident">Lit::Int</span>(<span class="ident">i</span>)) =&gt; {
-                                                        <span class="kw">if</span> <span class="ident">rank_is_set</span> {
-                                                            <span class="ident">panic::reset_parameter</span>(
-                                                                <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
+                                    <span class="kw">match </span>meta {
+                                        Meta::List(list) =&gt; {
+                                            <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
+                                                <span class="kw">match </span>p {
+                                                    NestedMeta::Lit(Lit::Int(i)) =&gt; {
+                                                        <span class="kw">if </span>rank_is_set {
+                                                            panic::reset_parameter(
+                                                                meta_name.as_str(),
                                                             );
                                                         }
 
-                                                        <span class="ident">rank_is_set</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                                        rank_is_set = <span class="bool-val">true</span>;
 
-                                                        <span class="ident">rank</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">base10_parse</span>().<span class="ident">unwrap</span>();
+                                                        rank = i.base10_parse().unwrap();
                                                     }
-                                                    <span class="kw">_</span> =&gt; {
-                                                        <span class="ident">panic::parameter_incorrect_format</span>(
-                                                            <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                            <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_rank</span>,
+                                                    <span class="kw">_ </span>=&gt; {
+                                                        panic::parameter_incorrect_format(
+                                                            meta_name.as_str(),
+                                                            <span class="kw-2">&amp;</span>correct_usage_for_rank,
                                                         )
                                                     }
                                                 }
                                             }
                                         }
-                                        <span class="ident">Meta::NameValue</span>(<span class="ident">named_value</span>) =&gt; {
-                                            <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">named_value</span>.<span class="ident">lit</span>;
+                                        Meta::NameValue(named_value) =&gt; {
+                                            <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>named_value.lit;
 
-                                            <span class="kw">match</span> <span class="ident">lit</span> {
-                                                <span class="ident">Lit::Int</span>(<span class="ident">i</span>) =&gt; {
-                                                    <span class="kw">if</span> <span class="ident">rank_is_set</span> {
-                                                        <span class="ident">panic::reset_parameter</span>(<span class="ident">meta_name</span>.<span class="ident">as_str</span>());
+                                            <span class="kw">match </span>lit {
+                                                Lit::Int(i) =&gt; {
+                                                    <span class="kw">if </span>rank_is_set {
+                                                        panic::reset_parameter(meta_name.as_str());
                                                     }
 
-                                                    <span class="ident">rank_is_set</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                                    rank_is_set = <span class="bool-val">true</span>;
 
-                                                    <span class="ident">rank</span> <span class="op">=</span> <span class="ident">i</span>.<span class="ident">base10_parse</span>().<span class="ident">unwrap</span>();
+                                                    rank = i.base10_parse().unwrap();
                                                 }
-                                                <span class="kw">_</span> =&gt; {
-                                                    <span class="ident">panic::parameter_incorrect_format</span>(
-                                                        <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                        <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_rank</span>,
+                                                <span class="kw">_ </span>=&gt; {
+                                                    panic::parameter_incorrect_format(
+                                                        meta_name.as_str(),
+                                                        <span class="kw-2">&amp;</span>correct_usage_for_rank,
                                                     )
                                                 }
                                             }
                                         }
-                                        <span class="kw">_</span> =&gt; {
-                                            <span class="ident">panic::parameter_incorrect_format</span>(
-                                                <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_rank</span>,
+                                        <span class="kw">_ </span>=&gt; {
+                                            panic::parameter_incorrect_format(
+                                                meta_name.as_str(),
+                                                <span class="kw-2">&amp;</span>correct_usage_for_rank,
                                             )
                                         }
                                     }
                                 }
-                                <span class="kw">_</span> =&gt; <span class="ident">panic::unknown_parameter</span>(<span class="string">&quot;PartialOrd&quot;</span>, <span class="ident">meta_name</span>.<span class="ident">as_str</span>()),
+                                <span class="kw">_ </span>=&gt; panic::unknown_parameter(<span class="string">&quot;PartialOrd&quot;</span>, meta_name.as_str()),
                             }
                         }
-                        <span class="kw">_</span> =&gt; {
-                            <span class="ident">panic::attribute_incorrect_format</span>(
+                        <span class="kw">_ </span>=&gt; {
+                            panic::attribute_incorrect_format(
                                 <span class="string">&quot;PartialOrd&quot;</span>,
-                                <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_partial_ord_attribute</span>,
+                                <span class="kw-2">&amp;</span>correct_usage_for_partial_ord_attribute,
                             )
                         }
                     }
                 }
             }
-            <span class="ident">Meta::NameValue</span>(<span class="kw">_</span>) =&gt; {
-                <span class="ident">panic::attribute_incorrect_format</span>(
+            Meta::NameValue(<span class="kw">_</span>) =&gt; {
+                panic::attribute_incorrect_format(
                     <span class="string">&quot;PartialOrd&quot;</span>,
-                    <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_partial_ord_attribute</span>,
+                    <span class="kw-2">&amp;</span>correct_usage_for_partial_ord_attribute,
                 )
             }
-            <span class="ident">Meta::Path</span>(<span class="kw">_</span>) =&gt; {
-                <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">enable_flag</span> {
-                    <span class="ident">panic::attribute_incorrect_format</span>(
+            Meta::Path(<span class="kw">_</span>) =&gt; {
+                <span class="kw">if </span>!<span class="self">self</span>.enable_flag {
+                    panic::attribute_incorrect_format(
                         <span class="string">&quot;PartialOrd&quot;</span>,
-                        <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_partial_ord_attribute</span>,
+                        <span class="kw-2">&amp;</span>correct_usage_for_partial_ord_attribute,
                     );
                 }
 
-                <span class="ident">flag</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                flag = <span class="bool-val">true</span>;
             }
         }
 
-        <span class="ident">TypeAttribute</span> {
-            <span class="ident">flag</span>,
-            <span class="ident">bound</span>,
-            <span class="ident">rank</span>,
+        TypeAttribute {
+            flag,
+            bound,
+            rank,
         }
     }
 
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::wrong_self_convention</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_attributes</span>(<span class="self">self</span>, <span class="ident">attributes</span>: <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>], <span class="ident">traits</span>: <span class="kw-2">&amp;</span>[<span class="ident">Trait</span>]) -&gt; <span class="ident">TypeAttribute</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+    <span class="attribute">#[allow(clippy::wrong_self_convention)]</span>
+    <span class="kw">pub fn </span>from_attributes(<span class="self">self</span>, attributes: <span class="kw-2">&amp;</span>[Attribute], traits: <span class="kw-2">&amp;</span>[Trait]) -&gt; TypeAttribute {
+        <span class="kw">let </span><span class="kw-2">mut </span>result = <span class="prelude-val">None</span>;
 
-        <span class="kw">for</span> <span class="ident">attribute</span> <span class="kw">in</span> <span class="ident">attributes</span>.<span class="ident">iter</span>() {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">meta_name</span>) <span class="op">=</span> <span class="ident">attribute</span>.<span class="ident">path</span>.<span class="ident">get_ident</span>() {
-                <span class="kw">if</span> <span class="ident">meta_name</span> <span class="op">==</span> <span class="string">&quot;educe&quot;</span> {
-                    <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">attribute</span>.<span class="ident">parse_meta</span>().<span class="ident">unwrap</span>();
+        <span class="kw">for </span>attribute <span class="kw">in </span>attributes.iter() {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(meta_name) = attribute.path.get_ident() {
+                <span class="kw">if </span>meta_name == <span class="string">&quot;educe&quot; </span>{
+                    <span class="kw">let </span>meta = attribute.parse_meta().unwrap();
 
-                    <span class="kw">match</span> <span class="ident">meta</span> {
-                        <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
-                            <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span>.<span class="ident">iter</span>() {
-                                <span class="kw">match</span> <span class="ident">p</span> {
-                                    <span class="ident">NestedMeta::Meta</span>(<span class="ident">meta</span>) =&gt; {
-                                        <span class="kw">let</span> <span class="ident">meta_name</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">path</span>().<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>();
+                    <span class="kw">match </span>meta {
+                        Meta::List(list) =&gt; {
+                            <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
+                                <span class="kw">match </span>p {
+                                    NestedMeta::Meta(meta) =&gt; {
+                                        <span class="kw">let </span>meta_name = meta.path().into_token_stream().to_string();
 
-                                        <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Trait::from_str</span>(<span class="ident">meta_name</span>);
+                                        <span class="kw">let </span>t = Trait::from_str(meta_name);
 
-                                        <span class="kw">if</span> <span class="ident">traits</span>.<span class="ident">binary_search</span>(<span class="kw-2">&amp;</span><span class="ident">t</span>).<span class="ident">is_err</span>() {
-                                            <span class="ident">panic::trait_not_used</span>(<span class="ident">t</span>);
+                                        <span class="kw">if </span>traits.binary_search(<span class="kw-2">&amp;</span>t).is_err() {
+                                            panic::trait_not_used(t);
                                         }
 
-                                        <span class="kw">if</span> <span class="ident">t</span> <span class="op">==</span> <span class="ident">Trait::PartialOrd</span> {
-                                            <span class="kw">if</span> <span class="ident">result</span>.<span class="ident">is_some</span>() {
-                                                <span class="ident">panic::reuse_a_trait</span>(<span class="ident">t</span>);
+                                        <span class="kw">if </span>t == Trait::PartialOrd {
+                                            <span class="kw">if </span>result.is_some() {
+                                                panic::reuse_a_trait(t);
                                             }
 
-                                            <span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">from_partial_ord_meta</span>(<span class="ident">meta</span>));
+                                            result = <span class="prelude-val">Some</span>(<span class="self">self</span>.from_partial_ord_meta(meta));
                                         }
                                     }
-                                    <span class="kw">_</span> =&gt; <span class="ident">panic::educe_format_incorrect</span>(),
+                                    <span class="kw">_ </span>=&gt; panic::educe_format_incorrect(),
                                 }
                             }
                         }
-                        <span class="kw">_</span> =&gt; <span class="ident">panic::educe_format_incorrect</span>(),
+                        <span class="kw">_ </span>=&gt; panic::educe_format_incorrect(),
                     }
                 }
             }
         }
 
-        <span class="ident">result</span>.<span class="ident">unwrap_or</span>(<span class="ident">TypeAttribute</span> {
-            <span class="ident">flag</span>: <span class="bool-val">false</span>,
-            <span class="ident">bound</span>: <span class="ident">TypeAttributeBound::None</span>,
-            <span class="ident">rank</span>: <span class="self">self</span>.<span class="ident">rank</span>,
+        result.unwrap_or(TypeAttribute {
+            flag: <span class="bool-val">false</span>,
+            bound: TypeAttributeBound::None,
+            rank: <span class="self">self</span>.rank,
         })
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

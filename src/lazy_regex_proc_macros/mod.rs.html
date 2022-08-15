@@ -220,227 +220,227 @@
 <span id="220">220</span>
 <span id="221">221</span>
 <span id="222">222</span>
-</pre><pre class="rust"><code><span class="kw">mod</span> <span class="ident">args</span>;
-<span class="kw">mod</span> <span class="ident">regex_code</span>;
+</pre><pre class="rust"><code><span class="kw">mod </span>args;
+<span class="kw">mod </span>regex_code;
 
-<span class="kw">use</span> {
+<span class="kw">use </span>{
     <span class="kw">crate</span>::{
-        <span class="ident">args</span>::<span class="kw-2">*</span>,
-        <span class="ident">regex_code</span>::<span class="kw-2">*</span>,
+        args::<span class="kw-2">*</span>,
+        regex_code::<span class="kw-2">*</span>,
     },
-    <span class="ident">proc_macro::TokenStream</span>,
-    <span class="ident">quote::quote</span>,
-    <span class="ident">syn</span>::{<span class="ident">Expr</span>, <span class="ident">ExprClosure</span>, <span class="ident">parse_macro_input</span>},
+    proc_macro::TokenStream,
+    quote::quote,
+    syn::{Expr, ExprClosure, parse_macro_input},
 };
 
-<span class="comment">//  The following `process*` functions are convenience funcs</span>
-<span class="comment">//  to reduce boilerplate in macro implementations below.</span>
-<span class="kw">fn</span> <span class="ident">process</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">TokenStream</span>
-<span class="kw">where</span> <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span>, <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">RegexCode</span>) -&gt; <span class="ident">T</span> {
-    <span class="ident">f</span>(<span class="ident">RegexCode::from</span>(<span class="ident">input</span>)).<span class="ident">into</span>()
+<span class="comment">//  The following `process*` functions are convenience funcs
+//  to reduce boilerplate in macro implementations below.
+</span><span class="kw">fn </span>process&lt;T, F&gt;(input: TokenStream, f: F) -&gt; TokenStream
+<span class="kw">where </span>T: Into&lt;TokenStream&gt;, F: Fn(RegexCode) -&gt; T {
+    f(RegexCode::from(input)).into()
 }
 
-<span class="kw">fn</span> <span class="ident">process_with_value</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">TokenStream</span>
-<span class="kw">where</span> <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span>, <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">RegexCode</span>, <span class="ident">Expr</span>) -&gt; <span class="ident">T</span> {
-    <span class="kw">let</span> <span class="ident">parsed</span> <span class="op">=</span> <span class="macro">parse_macro_input!</span>(<span class="ident">input</span> <span class="kw">as</span> <span class="ident">RexValArgs</span>);
-    <span class="ident">f</span>(<span class="ident">RegexCode::from</span>(<span class="ident">parsed</span>.<span class="ident">regex_str</span>), <span class="ident">parsed</span>.<span class="ident">value</span>).<span class="ident">into</span>()
+<span class="kw">fn </span>process_with_value&lt;T, F&gt;(input: TokenStream, f: F) -&gt; TokenStream
+<span class="kw">where </span>T: Into&lt;TokenStream&gt;, F: Fn(RegexCode, Expr) -&gt; T {
+    <span class="kw">let </span>parsed = <span class="macro">parse_macro_input!</span>(input <span class="kw">as </span>RexValArgs);
+    f(RegexCode::from(parsed.regex_str), parsed.value).into()
 }
 
-<span class="kw">fn</span> <span class="ident">process_with_value_fun</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">TokenStream</span>
-<span class="kw">where</span> <span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span>,
-      <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="ident">RegexCode</span>, <span class="ident">Expr</span>, <span class="ident">ExprClosure</span>) -&gt; <span class="ident">T</span> {
-    <span class="kw">let</span> <span class="ident">parsed</span> <span class="op">=</span> <span class="macro">parse_macro_input!</span>(<span class="ident">input</span> <span class="kw">as</span> <span class="ident">RexValFunArgs</span>);
-    <span class="ident">f</span>(<span class="ident">RegexCode::from</span>(<span class="ident">parsed</span>.<span class="ident">regex_str</span>), <span class="ident">parsed</span>.<span class="ident">value</span>, <span class="ident">parsed</span>.<span class="ident">fun</span>).<span class="ident">into</span>()
+<span class="kw">fn </span>process_with_value_fun&lt;T, F&gt;(input: TokenStream, f: F) -&gt; TokenStream
+<span class="kw">where </span>T: Into&lt;TokenStream&gt;,
+      F: Fn(RegexCode, Expr, ExprClosure) -&gt; T {
+    <span class="kw">let </span>parsed = <span class="macro">parse_macro_input!</span>(input <span class="kw">as </span>RexValFunArgs);
+    f(RegexCode::from(parsed.regex_str), parsed.value, parsed.fun).into()
 }
 
-<span class="doccomment">/// Return a lazy static Regex checked at compilation time and</span>
-<span class="doccomment">/// built at first use.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Flags can be specified as suffix:</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// let case_insensitive_regex = regex!(&quot;^ab+$&quot;i);</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The macro returns a reference to a [regex::Regex]</span>
-<span class="doccomment">/// or a [regex::bytes::Regex] instance,</span>
-<span class="doccomment">/// differentiated by the `B` flag:</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// let verbose = regex!(r#&quot;_([\d\.]+)&quot;#)</span>
-<span class="doccomment">///     .replace(&quot;This is lazy-regex_2.2&quot;, &quot; (version $1)&quot;);</span>
-<span class="doccomment">/// assert_eq!(verbose, &quot;This is lazy-regex (version 2.2)&quot;);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">proc_macro</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">regex</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">process</span>(<span class="ident">input</span>, <span class="op">|</span><span class="ident">regex_code</span><span class="op">|</span> <span class="ident">regex_code</span>.<span class="ident">lazy_static</span>())
+<span class="doccomment">/// Return a lazy static Regex checked at compilation time and
+/// built at first use.
+///
+/// Flags can be specified as suffix:
+/// ```
+/// let case_insensitive_regex = regex!(&quot;^ab+$&quot;i);
+/// ```
+///
+/// The macro returns a reference to a [regex::Regex]
+/// or a [regex::bytes::Regex] instance,
+/// differentiated by the `B` flag:
+/// ```
+/// let verbose = regex!(r#&quot;_([\d\.]+)&quot;#)
+///     .replace(&quot;This is lazy-regex_2.2&quot;, &quot; (version $1)&quot;);
+/// assert_eq!(verbose, &quot;This is lazy-regex (version 2.2)&quot;);
+/// ```
+</span><span class="attribute">#[proc_macro]</span>
+<span class="kw">pub fn </span>regex(input: TokenStream) -&gt; TokenStream {
+    process(input, |regex_code| regex_code.lazy_static())
 }
 
-<span class="doccomment">/// Return an instance of `once_cell::sync::Lazy&lt;regex::Regex&gt;` or</span>
-<span class="doccomment">/// `once_cell::sync::Lazy&lt;regex::bytes::Regex&gt;` that</span>
-<span class="doccomment">/// you can use in a public static declaration.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Example:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// pub static GLOBAL_REX: Lazy&lt;Regex&gt; = lazy_regex!(&quot;^ab+$&quot;i);</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// As for other macros, the regex is checked at compilation time.</span>
-<span class="attribute">#[<span class="ident">proc_macro</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lazy_regex</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">process</span>(<span class="ident">input</span>, <span class="op">|</span><span class="ident">regex_code</span><span class="op">|</span> <span class="ident">regex_code</span>.<span class="ident">build</span>)
+<span class="doccomment">/// Return an instance of `once_cell::sync::Lazy&lt;regex::Regex&gt;` or
+/// `once_cell::sync::Lazy&lt;regex::bytes::Regex&gt;` that
+/// you can use in a public static declaration.
+///
+/// Example:
+///
+/// ```
+/// pub static GLOBAL_REX: Lazy&lt;Regex&gt; = lazy_regex!(&quot;^ab+$&quot;i);
+/// ```
+///
+/// As for other macros, the regex is checked at compilation time.
+</span><span class="attribute">#[proc_macro]</span>
+<span class="kw">pub fn </span>lazy_regex(input: TokenStream) -&gt; TokenStream {
+    process(input, |regex_code| regex_code.build)
 }
 
-<span class="doccomment">/// Test whether an expression matches a lazy static</span>
-<span class="doccomment">/// regular expression (the regex is checked at compile</span>
-<span class="doccomment">/// time)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Example:</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// let b = regex_is_match!(&quot;[ab]+&quot;, &quot;car&quot;);</span>
-<span class="doccomment">/// assert_eq!(b, true);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">proc_macro</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">regex_is_match</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">process_with_value</span>(<span class="ident">input</span>, <span class="op">|</span><span class="ident">regex_code</span>, <span class="ident">value</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="ident">statick</span> <span class="op">=</span> <span class="ident">regex_code</span>.<span class="ident">statick</span>();
+<span class="doccomment">/// Test whether an expression matches a lazy static
+/// regular expression (the regex is checked at compile
+/// time)
+///
+/// Example:
+/// ```
+/// let b = regex_is_match!(&quot;[ab]+&quot;, &quot;car&quot;);
+/// assert_eq!(b, true);
+/// ```
+</span><span class="attribute">#[proc_macro]</span>
+<span class="kw">pub fn </span>regex_is_match(input: TokenStream) -&gt; TokenStream {
+    process_with_value(input, |regex_code, value| {
+        <span class="kw">let </span>statick = regex_code.statick();
         <span class="macro">quote!</span> {{
-            #<span class="ident">statick</span>;
-            <span class="ident">RE</span>.<span class="ident">is_match</span>(#<span class="ident">value</span>)
+            #statick;
+            RE.is_match(#value)
         }}
     })
 }
 
-<span class="doccomment">/// Extract the leftmost match of the regex in the</span>
-<span class="doccomment">/// second argument, as a `&amp;str`, or a `&amp;[u8]` if the `B` flag is set.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Example:</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// let f_word = regex_find!(r#&quot;\bf\w+\b&quot;#, &quot;The fox jumps.&quot;);</span>
-<span class="doccomment">/// assert_eq!(f_word, Some(&quot;fox&quot;));</span>
-<span class="doccomment">/// let f_word = regex_find!(r#&quot;\bf\w+\b&quot;#B, &quot;The forest is silent.&quot;);</span>
-<span class="doccomment">/// assert_eq!(f_word, Some(b&quot;forest&quot; as &amp;[u8]));</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">proc_macro</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">regex_find</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">process_with_value</span>(<span class="ident">input</span>, <span class="op">|</span><span class="ident">regex_code</span>, <span class="ident">value</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="ident">statick</span> <span class="op">=</span> <span class="ident">regex_code</span>.<span class="ident">statick</span>();
-        <span class="kw">let</span> <span class="ident">as_method</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">regex_code</span>.<span class="ident">is_bytes</span> {
-            <span class="macro">quote!</span> { <span class="ident">as_bytes</span> }
-        } <span class="kw">else</span> {
-            <span class="macro">quote!</span> { <span class="ident">as_str</span> }
+<span class="doccomment">/// Extract the leftmost match of the regex in the
+/// second argument, as a `&amp;str`, or a `&amp;[u8]` if the `B` flag is set.
+///
+/// Example:
+/// ```
+/// let f_word = regex_find!(r#&quot;\bf\w+\b&quot;#, &quot;The fox jumps.&quot;);
+/// assert_eq!(f_word, Some(&quot;fox&quot;));
+/// let f_word = regex_find!(r#&quot;\bf\w+\b&quot;#B, &quot;The forest is silent.&quot;);
+/// assert_eq!(f_word, Some(b&quot;forest&quot; as &amp;[u8]));
+/// ```
+</span><span class="attribute">#[proc_macro]</span>
+<span class="kw">pub fn </span>regex_find(input: TokenStream) -&gt; TokenStream {
+    process_with_value(input, |regex_code, value| {
+        <span class="kw">let </span>statick = regex_code.statick();
+        <span class="kw">let </span>as_method = <span class="kw">if </span>regex_code.is_bytes {
+            <span class="macro">quote!</span> { as_bytes }
+        } <span class="kw">else </span>{
+            <span class="macro">quote!</span> { as_str }
         };
         <span class="macro">quote!</span> {{
-            #<span class="ident">statick</span>;
-            <span class="ident">RE</span>.<span class="ident">find</span>(#<span class="ident">value</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">mat</span><span class="op">|</span> <span class="ident">mat</span>. #<span class="ident">as_method</span> ())
+            #statick;
+            RE.find(#value).map(|mat| mat. #as_method ())
         }}
     })
 }
 
-<span class="doccomment">/// Extract captured groups as a tuple of &amp;str.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// If there&#39;s no match, the macro returns `None`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// If an optional group has no value, the tuple</span>
-<span class="doccomment">/// will contain `&quot;&quot;` instead.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Example:</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// let (whole, name, version) = regex_captures!(</span>
-<span class="doccomment">///     r#&quot;(\w+)-([0-9.]+)&quot;#, // a literal regex</span>
-<span class="doccomment">///     &quot;This is lazy_regex-2.0!&quot;, // any expression</span>
-<span class="doccomment">/// ).unwrap();</span>
-<span class="doccomment">/// assert_eq!(whole, &quot;lazy_regex-2.0&quot;);</span>
-<span class="doccomment">/// assert_eq!(name, &quot;lazy_regex&quot;);</span>
-<span class="doccomment">/// assert_eq!(version, &quot;2.0&quot;);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">proc_macro</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">regex_captures</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">process_with_value</span>(<span class="ident">input</span>, <span class="op">|</span><span class="ident">regex_code</span>, <span class="ident">value</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="ident">statick</span> <span class="op">=</span> <span class="ident">regex_code</span>.<span class="ident">statick</span>();
-        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">regex_code</span>.<span class="ident">captures_len</span>();
-        <span class="kw">let</span> <span class="ident">groups</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">n</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> {
+<span class="doccomment">/// Extract captured groups as a tuple of &amp;str.
+///
+/// If there&#39;s no match, the macro returns `None`.
+///
+/// If an optional group has no value, the tuple
+/// will contain `&quot;&quot;` instead.
+///
+/// Example:
+/// ```
+/// let (whole, name, version) = regex_captures!(
+///     r#&quot;(\w+)-([0-9.]+)&quot;#, // a literal regex
+///     &quot;This is lazy_regex-2.0!&quot;, // any expression
+/// ).unwrap();
+/// assert_eq!(whole, &quot;lazy_regex-2.0&quot;);
+/// assert_eq!(name, &quot;lazy_regex&quot;);
+/// assert_eq!(version, &quot;2.0&quot;);
+/// ```
+</span><span class="attribute">#[proc_macro]</span>
+<span class="kw">pub fn </span>regex_captures(input: TokenStream) -&gt; TokenStream {
+    process_with_value(input, |regex_code, value| {
+        <span class="kw">let </span>statick = regex_code.statick();
+        <span class="kw">let </span>n = regex_code.captures_len();
+        <span class="kw">let </span>groups = (<span class="number">0</span>..n).map(|i| {
             <span class="macro">quote!</span> {
-                <span class="ident">caps</span>.<span class="ident">get</span>(#<span class="ident">i</span>).<span class="ident">map_or</span>(<span class="string">&quot;&quot;</span>, <span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">as_str</span>())
+                caps.get(#i).map_or(<span class="string">&quot;&quot;</span>, |c| c.as_str())
             }
         });
         <span class="macro">quote!</span> {{
-            #<span class="ident">statick</span>;
-            <span class="ident">RE</span>.<span class="ident">captures</span>(#<span class="ident">value</span>)
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">caps</span><span class="op">|</span> (
-                    #(#<span class="ident">groups</span>),<span class="op">*</span>
+            #statick;
+            RE.captures(#value)
+                .map(|caps| (
+                    #(#groups),*
                 ))
         }}
     })
 }
 
-<span class="doccomment">/// common implementation of regex_replace and regex_replace_all</span>
-<span class="kw">fn</span> <span class="ident">replacen</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>, <span class="ident">limit</span>: <span class="ident">usize</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">process_with_value_fun</span>(<span class="ident">input</span>, <span class="op">|</span><span class="ident">regex_code</span>, <span class="ident">value</span>, <span class="ident">fun</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="ident">statick</span> <span class="op">=</span> <span class="ident">regex_code</span>.<span class="ident">statick</span>();
-        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">regex_code</span>.<span class="ident">captures_len</span>();
-        <span class="kw">let</span> <span class="ident">groups</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">n</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> {
+<span class="doccomment">/// common implementation of regex_replace and regex_replace_all
+</span><span class="kw">fn </span>replacen(input: TokenStream, limit: usize) -&gt; TokenStream {
+    process_with_value_fun(input, |regex_code, value, fun| {
+        <span class="kw">let </span>statick = regex_code.statick();
+        <span class="kw">let </span>n = regex_code.captures_len();
+        <span class="kw">let </span>groups = (<span class="number">0</span>..n).map(|i| {
             <span class="macro">quote!</span> {
-                <span class="ident">caps</span>.<span class="ident">get</span>(#<span class="ident">i</span>).<span class="ident">map_or</span>(<span class="string">&quot;&quot;</span>, <span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span>.<span class="ident">as_str</span>())
+                caps.get(#i).map_or(<span class="string">&quot;&quot;</span>, |c| c.as_str())
             }
         });
         <span class="macro">quote!</span> {{
-            #<span class="ident">statick</span>;
-            <span class="ident">RE</span>.<span class="ident">replacen</span>(
-                #<span class="ident">value</span>,
-                #<span class="ident">limit</span>,
-                <span class="op">|</span><span class="ident">caps</span>: <span class="kw-2">&amp;</span><span class="ident">lazy_regex::Captures</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">fun</span> <span class="op">=</span> #<span class="ident">fun</span>;
-                    <span class="ident">fun</span>(
-                        #(#<span class="ident">groups</span>),<span class="op">*</span>
+            #statick;
+            RE.replacen(
+                #value,
+                #limit,
+                |caps: <span class="kw-2">&amp;</span>lazy_regex::Captures&lt;<span class="lifetime">&#39;_</span>&gt;| {
+                    <span class="kw">let </span>fun = #fun;
+                    fun(
+                        #(#groups),*
                     )
                 })
         }}
     })
 }
 
-<span class="doccomment">/// Replaces the leftmost match in the second argument</span>
-<span class="doccomment">/// with the value returned by the closure given as third argument.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The closure is given one or more `&amp;str`, the first one for</span>
-<span class="doccomment">/// the whole match and the following ones for the groups.</span>
-<span class="doccomment">/// Any optional group with no value is replaced with `&quot;&quot;`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Example:</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// let text = &quot;Fuu fuuu&quot;;</span>
-<span class="doccomment">/// let text = regex_replace!(</span>
-<span class="doccomment">///     &quot;f(u*)&quot;i,</span>
-<span class="doccomment">///     text,</span>
-<span class="doccomment">///     |_, suffix: &amp;str| format!(&quot;F{}&quot;, suffix.len()),</span>
-<span class="doccomment">/// );</span>
-<span class="doccomment">/// assert_eq!(text, &quot;F2 fuuu&quot;);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">proc_macro</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">regex_replace</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">replacen</span>(<span class="ident">input</span>, <span class="number">1</span>)
+<span class="doccomment">/// Replaces the leftmost match in the second argument
+/// with the value returned by the closure given as third argument.
+///
+/// The closure is given one or more `&amp;str`, the first one for
+/// the whole match and the following ones for the groups.
+/// Any optional group with no value is replaced with `&quot;&quot;`.
+///
+/// Example:
+/// ```
+/// let text = &quot;Fuu fuuu&quot;;
+/// let text = regex_replace!(
+///     &quot;f(u*)&quot;i,
+///     text,
+///     |_, suffix: &amp;str| format!(&quot;F{}&quot;, suffix.len()),
+/// );
+/// assert_eq!(text, &quot;F2 fuuu&quot;);
+/// ```
+</span><span class="attribute">#[proc_macro]</span>
+<span class="kw">pub fn </span>regex_replace(input: TokenStream) -&gt; TokenStream {
+    replacen(input, <span class="number">1</span>)
 }
 
-<span class="doccomment">/// Replaces all non-overlapping matches in the second argument</span>
-<span class="doccomment">/// with the value returned by the closure given as third argument.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The closure is given one or more `&amp;str`, the first one for</span>
-<span class="doccomment">/// the whole match and the following ones for the groups.</span>
-<span class="doccomment">/// Any optional group with no value is replaced with `&quot;&quot;`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Example:</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// let text = &quot;Foo fuu&quot;;</span>
-<span class="doccomment">/// let text = regex_replace_all!(</span>
-<span class="doccomment">///     r#&quot;\bf(?P&lt;suffix&gt;\w+)&quot;#i,</span>
-<span class="doccomment">///     text,</span>
-<span class="doccomment">///     |_, suffix| format!(&quot;F&lt;{}&gt;&quot;, suffix),</span>
-<span class="doccomment">/// );</span>
-<span class="doccomment">/// assert_eq!(text, &quot;F&lt;oo&gt; F&lt;uu&gt;&quot;);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">proc_macro</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">regex_replace_all</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
-    <span class="ident">replacen</span>(<span class="ident">input</span>, <span class="number">0</span>)
+<span class="doccomment">/// Replaces all non-overlapping matches in the second argument
+/// with the value returned by the closure given as third argument.
+///
+/// The closure is given one or more `&amp;str`, the first one for
+/// the whole match and the following ones for the groups.
+/// Any optional group with no value is replaced with `&quot;&quot;`.
+///
+/// Example:
+/// ```
+/// let text = &quot;Foo fuu&quot;;
+/// let text = regex_replace_all!(
+///     r#&quot;\bf(?P&lt;suffix&gt;\w+)&quot;#i,
+///     text,
+///     |_, suffix| format!(&quot;F&lt;{}&gt;&quot;, suffix),
+/// );
+/// assert_eq!(text, &quot;F&lt;oo&gt; F&lt;uu&gt;&quot;);
+/// ```
+</span><span class="attribute">#[proc_macro]</span>
+<span class="kw">pub fn </span>regex_replace_all(input: TokenStream) -&gt; TokenStream {
+    replacen(input, <span class="number">0</span>)
 }
 
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="lazy_regex_proc_macros" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="lazy_regex_proc_macros" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

@@ -8,12 +8,12 @@ for which <code>darling</code> does not provide dedicated traits.</p>
 declarations across attributes, so that the following forms are
 equivalent:</p>
 
-<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camel_case&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">borrow</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SplitExample</span> {}
+<div class='information'><div class='tooltip ignore'>ⓘ</div></div><div class="example-wrap"><pre class="rust rust-example-rendered ignore"><code><span class="attribute">#[derive(Serialize)]</span>
+<span class="attribute">#[serde(rename_all = <span class="string">&quot;camel_case&quot;</span>)]</span>
+<span class="attribute">#[serde(borrow)]</span>
+<span class="kw">pub struct </span>SplitExample {}
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">borrow</span>, <span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camel_case&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">JoinedExample</span> {}</code></pre></div>
-</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"></div><script type="text/javascript" src="../implementors/darling_core/from_attributes/trait.FromAttributes.js" data-ignore-extern-crates="" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+<span class="attribute">#[derive(Serialize)]</span>
+<span class="attribute">#[serde(borrow, rename_all = <span class="string">&quot;camel_case&quot;</span>)]</span>
+<span class="kw">pub struct </span>JoinedExample {}</code></pre></div>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"></div><script type="text/javascript" src="../implementors/darling_core/from_attributes/trait.FromAttributes.js" data-ignore-extern-crates="" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

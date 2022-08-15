@@ -135,142 +135,142 @@
 <span id="135">135</span>
 <span id="136">136</span>
 <span id="137">137</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">io</span>::{<span class="ident">BufRead</span>, <span class="ident">BufReader</span>, <span class="ident">Error</span>, <span class="ident">Lines</span> <span class="kw">as</span> <span class="ident">IoLines</span>, <span class="ident">Read</span>},
-    <span class="ident">str</span>::{<span class="ident">Bytes</span>, <span class="ident">Lines</span>},
-    <span class="ident">vec::IntoIter</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    io::{BufRead, BufReader, Error, Lines <span class="kw">as </span>IoLines, Read},
+    str::{Bytes, Lines},
+    vec::IntoIter,
 };
 
-<span class="doccomment">/// Types that can be passed to parsers as input.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The trait is implemented for `&amp;str`, `&amp;[u8]`, [`BufReader`],</span>
-<span class="doccomment">/// and `&amp;mut B` for every type `B` that implements [`BufRead`].</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// When parsing a file, you can take a [`BufReader&lt;File&gt;`] as input.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Input</span> {
-    <span class="doccomment">/// An iterator over lines of the input.</span>
-    <span class="kw">type</span> <span class="ident">Lines</span>: <span class="ident">Iterator</span>;
-    <span class="doccomment">/// A string or a reference to a string, which represents a line of the input.</span>
-    <span class="kw">type</span> <span class="ident">Line</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>;
-    <span class="doccomment">/// An iterator over bytes of a line.</span>
-    <span class="kw">type</span> <span class="ident">Bytes</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">u8</span><span class="op">&gt;</span>;
+<span class="doccomment">/// Types that can be passed to parsers as input.
+///
+/// The trait is implemented for `&amp;str`, `&amp;[u8]`, [`BufReader`],
+/// and `&amp;mut B` for every type `B` that implements [`BufRead`].
+///
+/// When parsing a file, you can take a [`BufReader&lt;File&gt;`] as input.
+</span><span class="kw">pub trait </span>Input {
+    <span class="doccomment">/// An iterator over lines of the input.
+    </span><span class="kw">type </span>Lines: Iterator;
+    <span class="doccomment">/// A string or a reference to a string, which represents a line of the input.
+    </span><span class="kw">type </span>Line: AsRef&lt;str&gt;;
+    <span class="doccomment">/// An iterator over bytes of a line.
+    </span><span class="kw">type </span>Bytes: Iterator&lt;Item = u8&gt;;
 
-    <span class="doccomment">/// Creates an iterator over lines from the input.</span>
-    <span class="kw">fn</span> <span class="ident">lines</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Lines</span>;
+    <span class="doccomment">/// Creates an iterator over lines from the input.
+    </span><span class="kw">fn </span>lines(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Lines;
 
-    <span class="doccomment">/// Converts a item in the lines iterator to a string.</span>
-    <span class="kw">fn</span> <span class="ident">line</span>(<span class="ident">item</span>: <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Lines</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Line</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="doccomment">/// Converts a item in the lines iterator to a string.
+    </span><span class="kw">fn </span>line(item: &lt;<span class="self">Self</span>::Lines <span class="kw">as </span>Iterator&gt;::Item) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Line, Error&gt;;
 
-    <span class="doccomment">/// Creates an iterator over bytes from a line.</span>
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="ident">line</span>: <span class="ident"><span class="self">Self</span>::Line</span>) -&gt; <span class="ident"><span class="self">Self</span>::Bytes</span>;
+    <span class="doccomment">/// Creates an iterator over bytes from a line.
+    </span><span class="kw">fn </span>bytes(line: <span class="self">Self</span>::Line) -&gt; <span class="self">Self</span>::Bytes;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Input</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
-    <span class="kw">type</span> <span class="ident">Lines</span> <span class="op">=</span> <span class="ident">Lines</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Line</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>;
-    <span class="kw">type</span> <span class="ident">Bytes</span> <span class="op">=</span> <span class="ident">Bytes</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Input <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str {
+    <span class="kw">type </span>Lines = Lines&lt;<span class="lifetime">&#39;a</span>&gt;;
+    <span class="kw">type </span>Line = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str;
+    <span class="kw">type </span>Bytes = Bytes&lt;<span class="lifetime">&#39;a</span>&gt;;
 
-    <span class="kw">fn</span> <span class="ident">lines</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Lines</span> {
-        <span class="self">self</span>.<span class="ident">lines</span>()
+    <span class="kw">fn </span>lines(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Lines {
+        <span class="self">self</span>.lines()
     }
 
-    <span class="kw">fn</span> <span class="ident">line</span>(<span class="ident">item</span>: <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Lines</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Line</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">item</span>)
+    <span class="kw">fn </span>line(item: &lt;<span class="self">Self</span>::Lines <span class="kw">as </span>Iterator&gt;::Item) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Line, Error&gt; {
+        <span class="prelude-val">Ok</span>(item)
     }
 
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="ident">line</span>: <span class="ident"><span class="self">Self</span>::Line</span>) -&gt; <span class="ident"><span class="self">Self</span>::Bytes</span> {
-        <span class="ident">line</span>.<span class="ident">bytes</span>()
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Input</span> <span class="kw">for</span> <span class="ident">Lines</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Lines</span> <span class="op">=</span> <span class="self">Self</span>;
-    <span class="kw">type</span> <span class="ident">Line</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>;
-    <span class="kw">type</span> <span class="ident">Bytes</span> <span class="op">=</span> <span class="ident">Bytes</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">lines</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Lines</span> {
-        <span class="self">self</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">line</span>(<span class="ident">item</span>: <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Lines</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Line</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">item</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="ident">line</span>: <span class="ident"><span class="self">Self</span>::Line</span>) -&gt; <span class="ident"><span class="self">Self</span>::Bytes</span> {
-        <span class="ident">line</span>.<span class="ident">bytes</span>()
+    <span class="kw">fn </span>bytes(line: <span class="self">Self</span>::Line) -&gt; <span class="self">Self</span>::Bytes {
+        line.bytes()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Input</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
-    <span class="kw">type</span> <span class="ident">Lines</span> <span class="op">=</span> <span class="ident">IoLines</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Line</span> <span class="op">=</span> <span class="ident">String</span>;
-    <span class="kw">type</span> <span class="ident">Bytes</span> <span class="op">=</span> <span class="ident">IntoIter</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Input <span class="kw">for </span>Lines&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">type </span>Lines = <span class="self">Self</span>;
+    <span class="kw">type </span>Line = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str;
+    <span class="kw">type </span>Bytes = Bytes&lt;<span class="lifetime">&#39;a</span>&gt;;
 
-    <span class="kw">fn</span> <span class="ident">lines</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Lines</span> {
-        <span class="ident">BufRead::lines</span>(<span class="self">self</span>)
+    <span class="kw">fn </span>lines(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Lines {
+        <span class="self">self
+    </span>}
+
+    <span class="kw">fn </span>line(item: &lt;<span class="self">Self</span>::Lines <span class="kw">as </span>Iterator&gt;::Item) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Line, Error&gt; {
+        <span class="prelude-val">Ok</span>(item)
     }
 
-    <span class="kw">fn</span> <span class="ident">line</span>(<span class="ident">item</span>: <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Lines</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Line</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">item</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="ident">line</span>: <span class="ident"><span class="self">Self</span>::Line</span>) -&gt; <span class="ident"><span class="self">Self</span>::Bytes</span> {
-        <span class="ident">line</span>.<span class="ident">into_bytes</span>().<span class="ident">into_iter</span>()
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Read</span><span class="op">&gt;</span> <span class="ident">Input</span> <span class="kw">for</span> <span class="ident">BufReader</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Lines</span> <span class="op">=</span> <span class="ident">IoLines</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Line</span> <span class="op">=</span> <span class="ident">String</span>;
-    <span class="kw">type</span> <span class="ident">Bytes</span> <span class="op">=</span> <span class="ident">IntoIter</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">lines</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Lines</span> {
-        <span class="ident">BufRead::lines</span>(<span class="self">self</span>)
-    }
-
-    <span class="kw">fn</span> <span class="ident">line</span>(<span class="ident">item</span>: <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Lines</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Line</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">item</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="ident">line</span>: <span class="ident"><span class="self">Self</span>::Line</span>) -&gt; <span class="ident"><span class="self">Self</span>::Bytes</span> {
-        <span class="ident">line</span>.<span class="ident">into_bytes</span>().<span class="ident">into_iter</span>()
+    <span class="kw">fn </span>bytes(line: <span class="self">Self</span>::Line) -&gt; <span class="self">Self</span>::Bytes {
+        line.bytes()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">B</span>: <span class="ident">BufRead</span><span class="op">&gt;</span> <span class="ident">Input</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">B</span> {
-    <span class="kw">type</span> <span class="ident">Lines</span> <span class="op">=</span> <span class="ident">IoLines</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Line</span> <span class="op">=</span> <span class="ident">String</span>;
-    <span class="kw">type</span> <span class="ident">Bytes</span> <span class="op">=</span> <span class="ident">IntoIter</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Input <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>[u8] {
+    <span class="kw">type </span>Lines = IoLines&lt;<span class="self">Self</span>&gt;;
+    <span class="kw">type </span>Line = String;
+    <span class="kw">type </span>Bytes = IntoIter&lt;u8&gt;;
 
-    <span class="kw">fn</span> <span class="ident">lines</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Lines</span> {
-        <span class="ident">BufRead::lines</span>(<span class="self">self</span>)
+    <span class="kw">fn </span>lines(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Lines {
+        BufRead::lines(<span class="self">self</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">line</span>(<span class="ident">item</span>: <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Lines</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Line</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">item</span>
+    <span class="kw">fn </span>line(item: &lt;<span class="self">Self</span>::Lines <span class="kw">as </span>Iterator&gt;::Item) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Line, Error&gt; {
+        item
     }
 
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="ident">line</span>: <span class="ident"><span class="self">Self</span>::Line</span>) -&gt; <span class="ident"><span class="self">Self</span>::Bytes</span> {
-        <span class="ident">line</span>.<span class="ident">into_bytes</span>().<span class="ident">into_iter</span>()
+    <span class="kw">fn </span>bytes(line: <span class="self">Self</span>::Line) -&gt; <span class="self">Self</span>::Bytes {
+        line.into_bytes().into_iter()
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">BufRead</span><span class="op">&gt;</span> <span class="ident">Input</span> <span class="kw">for</span> <span class="ident">IoLines</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Lines</span> <span class="op">=</span> <span class="self">Self</span>;
-    <span class="kw">type</span> <span class="ident">Line</span> <span class="op">=</span> <span class="ident">String</span>;
-    <span class="kw">type</span> <span class="ident">Bytes</span> <span class="op">=</span> <span class="ident">IntoIter</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
+<span class="kw">impl</span>&lt;R: Read&gt; Input <span class="kw">for </span>BufReader&lt;R&gt; {
+    <span class="kw">type </span>Lines = IoLines&lt;<span class="self">Self</span>&gt;;
+    <span class="kw">type </span>Line = String;
+    <span class="kw">type </span>Bytes = IntoIter&lt;u8&gt;;
 
-    <span class="kw">fn</span> <span class="ident">lines</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Lines</span> {
-        <span class="self">self</span>
+    <span class="kw">fn </span>lines(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Lines {
+        BufRead::lines(<span class="self">self</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">line</span>(<span class="ident">item</span>: <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Lines</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Line</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">item</span>
+    <span class="kw">fn </span>line(item: &lt;<span class="self">Self</span>::Lines <span class="kw">as </span>Iterator&gt;::Item) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Line, Error&gt; {
+        item
     }
 
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="ident">line</span>: <span class="ident"><span class="self">Self</span>::Line</span>) -&gt; <span class="ident"><span class="self">Self</span>::Bytes</span> {
-        <span class="ident">line</span>.<span class="ident">into_bytes</span>().<span class="ident">into_iter</span>()
+    <span class="kw">fn </span>bytes(line: <span class="self">Self</span>::Line) -&gt; <span class="self">Self</span>::Bytes {
+        line.into_bytes().into_iter()
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, B: BufRead&gt; Input <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>B {
+    <span class="kw">type </span>Lines = IoLines&lt;<span class="self">Self</span>&gt;;
+    <span class="kw">type </span>Line = String;
+    <span class="kw">type </span>Bytes = IntoIter&lt;u8&gt;;
+
+    <span class="kw">fn </span>lines(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Lines {
+        BufRead::lines(<span class="self">self</span>)
+    }
+
+    <span class="kw">fn </span>line(item: &lt;<span class="self">Self</span>::Lines <span class="kw">as </span>Iterator&gt;::Item) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Line, Error&gt; {
+        item
+    }
+
+    <span class="kw">fn </span>bytes(line: <span class="self">Self</span>::Line) -&gt; <span class="self">Self</span>::Bytes {
+        line.into_bytes().into_iter()
+    }
+}
+
+<span class="kw">impl</span>&lt;B: BufRead&gt; Input <span class="kw">for </span>IoLines&lt;B&gt; {
+    <span class="kw">type </span>Lines = <span class="self">Self</span>;
+    <span class="kw">type </span>Line = String;
+    <span class="kw">type </span>Bytes = IntoIter&lt;u8&gt;;
+
+    <span class="kw">fn </span>lines(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Lines {
+        <span class="self">self
+    </span>}
+
+    <span class="kw">fn </span>line(item: &lt;<span class="self">Self</span>::Lines <span class="kw">as </span>Iterator&gt;::Item) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Line, Error&gt; {
+        item
+    }
+
+    <span class="kw">fn </span>bytes(line: <span class="self">Self</span>::Line) -&gt; <span class="self">Self</span>::Bytes {
+        line.into_bytes().into_iter()
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

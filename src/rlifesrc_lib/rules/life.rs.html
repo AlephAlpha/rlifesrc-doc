@@ -605,369 +605,369 @@
 <span id="605">605</span>
 <span id="606">606</span>
 <span id="607">607</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Totalistic Life-like rules.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Totalistic Life-like rules.
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>},
-    <span class="ident">config::Symmetry</span>,
-    <span class="ident">error::Error</span>,
-    <span class="ident">rules</span>::{
-        <span class="ident">private::Sealed</span>,
-        <span class="ident">typebool</span>::{<span class="ident">False</span>, <span class="ident">True</span>},
-        <span class="ident">Rule</span>,
+</span><span class="kw">use crate</span>::{
+    cells::{CellRef, LifeCell, State, ALIVE, DEAD},
+    config::Symmetry,
+    error::Error,
+    rules::{
+        private::Sealed,
+        typebool::{False, True},
+        Rule,
     },
-    <span class="ident">search</span>::{<span class="ident">Algorithm</span>, <span class="ident">Reason</span>},
-    <span class="ident">world::World</span>,
+    search::{Algorithm, Reason},
+    world::World,
 };
-<span class="kw">use</span> <span class="ident">bitflags::bitflags</span>;
-<span class="kw">use</span> <span class="ident">ca_rules</span>::{<span class="ident">ParseLife</span>, <span class="ident">ParseLifeGen</span>};
-<span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
+<span class="kw">use </span>bitflags::bitflags;
+<span class="kw">use </span>ca_rules::{ParseLife, ParseLifeGen};
+<span class="kw">use </span>std::str::FromStr;
 
 <span class="macro">bitflags!</span> {
-    <span class="doccomment">/// Flags to imply the state of a cell and its neighbors.</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-    <span class="kw">struct</span> <span class="ident">ImplFlags</span>: <span class="ident">u8</span> {
-        <span class="doccomment">/// A conflict is detected.</span>
-        <span class="kw">const</span> <span class="ident">CONFLICT</span> <span class="op">=</span> <span class="number">0b_0000_0001</span>;
+    <span class="doccomment">/// Flags to imply the state of a cell and its neighbors.
+    </span><span class="attribute">#[derive(Default)]</span>
+    <span class="kw">struct </span>ImplFlags: u8 {
+        <span class="doccomment">/// A conflict is detected.
+        </span><span class="kw">const </span>CONFLICT = <span class="number">0b_0000_0001</span>;
 
-        <span class="doccomment">/// The successor must be alive.</span>
-        <span class="kw">const</span> <span class="ident">SUCC_ALIVE</span> <span class="op">=</span> <span class="number">0b_0000_0100</span>;
+        <span class="doccomment">/// The successor must be alive.
+        </span><span class="kw">const </span>SUCC_ALIVE = <span class="number">0b_0000_0100</span>;
 
-        <span class="doccomment">/// The successor must be dead.</span>
-        <span class="kw">const</span> <span class="ident">SUCC_DEAD</span> <span class="op">=</span> <span class="number">0b_0000_1000</span>;
+        <span class="doccomment">/// The successor must be dead.
+        </span><span class="kw">const </span>SUCC_DEAD = <span class="number">0b_0000_1000</span>;
 
-        <span class="doccomment">/// The state of the successor is implied.</span>
-        <span class="kw">const</span> <span class="ident">SUCC</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::SUCC_ALIVE</span>.<span class="ident">bits</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::SUCC_DEAD</span>.<span class="ident">bits</span>;
+        <span class="doccomment">/// The state of the successor is implied.
+        </span><span class="kw">const </span>SUCC = <span class="self">Self</span>::SUCC_ALIVE.bits | <span class="self">Self</span>::SUCC_DEAD.bits;
 
-        <span class="doccomment">/// The cell itself must be alive.</span>
-        <span class="kw">const</span> <span class="ident">SELF_ALIVE</span> <span class="op">=</span> <span class="number">0b_0001_0000</span>;
+        <span class="doccomment">/// The cell itself must be alive.
+        </span><span class="kw">const </span>SELF_ALIVE = <span class="number">0b_0001_0000</span>;
 
-        <span class="doccomment">/// The cell itself must be dead.</span>
-        <span class="kw">const</span> <span class="ident">SELF_DEAD</span> <span class="op">=</span> <span class="number">0b_0010_0000</span>;
+        <span class="doccomment">/// The cell itself must be dead.
+        </span><span class="kw">const </span>SELF_DEAD = <span class="number">0b_0010_0000</span>;
 
-        <span class="doccomment">/// The state of the cell itself is implied.</span>
-        <span class="kw">const</span> <span class="ident">SELF</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::SELF_ALIVE</span>.<span class="ident">bits</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::SELF_DEAD</span>.<span class="ident">bits</span>;
+        <span class="doccomment">/// The state of the cell itself is implied.
+        </span><span class="kw">const </span>SELF = <span class="self">Self</span>::SELF_ALIVE.bits | <span class="self">Self</span>::SELF_DEAD.bits;
 
-        <span class="doccomment">/// All unknown neighbors must be alive.</span>
-        <span class="kw">const</span> <span class="ident">NBHD_ALIVE</span> <span class="op">=</span> <span class="number">0b_0100_0000</span>;
+        <span class="doccomment">/// All unknown neighbors must be alive.
+        </span><span class="kw">const </span>NBHD_ALIVE = <span class="number">0b_0100_0000</span>;
 
-        <span class="doccomment">/// All unknown neighbors must be dead.</span>
-        <span class="kw">const</span> <span class="ident">NBHD_DEAD</span> <span class="op">=</span> <span class="number">0b_1000_0000</span>;
+        <span class="doccomment">/// All unknown neighbors must be dead.
+        </span><span class="kw">const </span>NBHD_DEAD = <span class="number">0b_1000_0000</span>;
 
-        <span class="doccomment">/// The states of all unknown neighbors are implied.</span>
-        <span class="kw">const</span> <span class="ident">NBHD</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::NBHD_ALIVE</span>.<span class="ident">bits</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::NBHD_DEAD</span>.<span class="ident">bits</span>;
+        <span class="doccomment">/// The states of all unknown neighbors are implied.
+        </span><span class="kw">const </span>NBHD = <span class="self">Self</span>::NBHD_ALIVE.bits | <span class="self">Self</span>::NBHD_DEAD.bits;
     }
 }
 
-<span class="doccomment">/// The neighborhood descriptor.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// It is a 12-bit integer of the form `0b_abcd_efgh_ij_kl`,</span>
-<span class="doccomment">/// where:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * `0b_abcd` is the number of dead cells in the neighborhood.</span>
-<span class="doccomment">/// * `0b_efgh` is the number of living cells in the neighborhood.</span>
-<span class="doccomment">/// * `0b_ij` is the state of the successor.</span>
-<span class="doccomment">/// * `0b_kl` is the state of the cell itself.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For `0b_ij` and `0b_kl`:</span>
-<span class="doccomment">/// * `0b_10` means dead,</span>
-<span class="doccomment">/// * `0b_01` means alive,</span>
-<span class="doccomment">/// * `0b_00` means unknown.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NbhdDesc</span>(<span class="ident">u16</span>);
+<span class="doccomment">/// The neighborhood descriptor.
+///
+/// It is a 12-bit integer of the form `0b_abcd_efgh_ij_kl`,
+/// where:
+///
+/// * `0b_abcd` is the number of dead cells in the neighborhood.
+/// * `0b_efgh` is the number of living cells in the neighborhood.
+/// * `0b_ij` is the state of the successor.
+/// * `0b_kl` is the state of the cell itself.
+///
+/// For `0b_ij` and `0b_kl`:
+/// * `0b_10` means dead,
+/// * `0b_01` means alive,
+/// * `0b_00` means unknown.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]</span>
+<span class="kw">pub struct </span>NbhdDesc(u16);
 
-<span class="doccomment">/// Totalistic Life-like rules.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Life</span> {
-    <span class="doccomment">/// Whether the rule contains `B0`.</span>
-    <span class="ident">b0</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// Whether the rule contains `S8`.</span>
-    <span class="ident">s8</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// An array of actions for all neighborhood descriptors.</span>
-    <span class="ident">impl_table</span>: [<span class="ident">ImplFlags</span>; <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">12</span>],
+<span class="doccomment">/// Totalistic Life-like rules.
+</span><span class="kw">pub struct </span>Life {
+    <span class="doccomment">/// Whether the rule contains `B0`.
+    </span>b0: bool,
+    <span class="doccomment">/// Whether the rule contains `S8`.
+    </span>s8: bool,
+    <span class="doccomment">/// An array of actions for all neighborhood descriptors.
+    </span>impl_table: [ImplFlags; <span class="number">1 </span>&lt;&lt; <span class="number">12</span>],
 }
 
-<span class="kw">impl</span> <span class="ident">Life</span> {
-    <span class="doccomment">/// Constructs a new rule from the `b` and `s` data.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">s</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">b0</span> <span class="op">=</span> <span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="number">0</span>);
-        <span class="kw">let</span> <span class="ident">s8</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="number">8</span>);
+<span class="kw">impl </span>Life {
+    <span class="doccomment">/// Constructs a new rule from the `b` and `s` data.
+    </span><span class="kw">pub fn </span>new(b: <span class="kw-2">&amp;</span>[u8], s: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>b0 = b.contains(<span class="kw-2">&amp;</span><span class="number">0</span>);
+        <span class="kw">let </span>s8 = s.contains(<span class="kw-2">&amp;</span><span class="number">8</span>);
 
-        <span class="kw">let</span> <span class="ident">impl_table</span> <span class="op">=</span> [<span class="ident">ImplFlags::empty</span>(); <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">12</span>];
+        <span class="kw">let </span>impl_table = [ImplFlags::empty(); <span class="number">1 </span>&lt;&lt; <span class="number">12</span>];
 
-        <span class="self">Self</span> { <span class="ident">b0</span>, <span class="ident">s8</span>, <span class="ident">impl_table</span> }
-            .<span class="ident">init_trans</span>(<span class="ident">b</span>, <span class="ident">s</span>)
-            .<span class="ident">init_conflict</span>()
-            .<span class="ident">init_impl</span>()
-            .<span class="ident">init_impl_nbhd</span>()
+        <span class="self">Self </span>{ b0, s8, impl_table }
+            .init_trans(b, s)
+            .init_conflict()
+            .init_impl()
+            .init_impl_nbhd()
     }
 
-    <span class="doccomment">/// Deduces the implication for the successor.</span>
-    <span class="kw">fn</span> <span class="ident">init_trans</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">b</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">s</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
-        <span class="comment">// Fills in the positions of the neighborhood descriptors</span>
-        <span class="comment">// that have no unknown neighbors.</span>
-        <span class="kw">for</span> <span class="ident">alives</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">8</span> {
-            <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> ((<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span>) <span class="op">|</span> <span class="ident">alives</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
-            <span class="kw">let</span> <span class="ident">alives</span> <span class="op">=</span> <span class="ident">alives</span> <span class="kw">as</span> <span class="ident">u8</span>;
-            <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span> <span class="op">|</span> <span class="number">0b10</span>] <span class="op">|</span><span class="op">=</span> <span class="kw">if</span> <span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">alives</span>) {
-                <span class="ident">ImplFlags::SUCC_ALIVE</span>
-            } <span class="kw">else</span> {
-                <span class="ident">ImplFlags::SUCC_DEAD</span>
+    <span class="doccomment">/// Deduces the implication for the successor.
+    </span><span class="kw">fn </span>init_trans(<span class="kw-2">mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8], s: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="self">Self </span>{
+        <span class="comment">// Fills in the positions of the neighborhood descriptors
+        // that have no unknown neighbors.
+        </span><span class="kw">for </span>alives <span class="kw">in </span><span class="number">0</span>..=<span class="number">8 </span>{
+            <span class="kw">let </span>desc = ((<span class="number">8 </span>- alives) &lt;&lt; <span class="number">8</span>) | alives &lt;&lt; <span class="number">4</span>;
+            <span class="kw">let </span>alives = alives <span class="kw">as </span>u8;
+            <span class="self">self</span>.impl_table[desc | <span class="number">0b10</span>] |= <span class="kw">if </span>b.contains(<span class="kw-2">&amp;</span>alives) {
+                ImplFlags::SUCC_ALIVE
+            } <span class="kw">else </span>{
+                ImplFlags::SUCC_DEAD
             };
-            <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span> <span class="op">|</span> <span class="number">0b01</span>] <span class="op">|</span><span class="op">=</span> <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">alives</span>) {
-                <span class="ident">ImplFlags::SUCC_ALIVE</span>
-            } <span class="kw">else</span> {
-                <span class="ident">ImplFlags::SUCC_DEAD</span>
+            <span class="self">self</span>.impl_table[desc | <span class="number">0b01</span>] |= <span class="kw">if </span>s.contains(<span class="kw-2">&amp;</span>alives) {
+                ImplFlags::SUCC_ALIVE
+            } <span class="kw">else </span>{
+                ImplFlags::SUCC_DEAD
             };
-            <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span>] <span class="op">|</span><span class="op">=</span> <span class="kw">if</span> <span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">alives</span>) <span class="op">&amp;&amp;</span> <span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">alives</span>) {
-                <span class="ident">ImplFlags::SUCC_ALIVE</span>
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">alives</span>) <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">alives</span>) {
-                <span class="ident">ImplFlags::SUCC_DEAD</span>
-            } <span class="kw">else</span> {
-                <span class="ident">ImplFlags::empty</span>()
+            <span class="self">self</span>.impl_table[desc] |= <span class="kw">if </span>b.contains(<span class="kw-2">&amp;</span>alives) &amp;&amp; s.contains(<span class="kw-2">&amp;</span>alives) {
+                ImplFlags::SUCC_ALIVE
+            } <span class="kw">else if </span>!b.contains(<span class="kw-2">&amp;</span>alives) &amp;&amp; !s.contains(<span class="kw-2">&amp;</span>alives) {
+                ImplFlags::SUCC_DEAD
+            } <span class="kw">else </span>{
+                ImplFlags::empty()
             };
         }
 
-        <span class="comment">// Fills in other positions.</span>
-        <span class="kw">for</span> <span class="ident">unknowns</span> <span class="kw">in</span> <span class="number">1</span>..<span class="op">=</span><span class="number">8</span> {
-            <span class="kw">for</span> <span class="ident">alives</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">8</span> <span class="op">-</span> <span class="ident">unknowns</span> {
-                <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> (<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span> <span class="op">-</span> <span class="ident">unknowns</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> <span class="ident">alives</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
-                <span class="kw">let</span> <span class="ident">desc0</span> <span class="op">=</span> (<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span> <span class="op">-</span> <span class="ident">unknowns</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> <span class="ident">alives</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
-                <span class="kw">let</span> <span class="ident">desc1</span> <span class="op">=</span> (<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span> <span class="op">-</span> <span class="ident">unknowns</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> (<span class="ident">alives</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
+        <span class="comment">// Fills in other positions.
+        </span><span class="kw">for </span>unknowns <span class="kw">in </span><span class="number">1</span>..=<span class="number">8 </span>{
+            <span class="kw">for </span>alives <span class="kw">in </span><span class="number">0</span>..=<span class="number">8 </span>- unknowns {
+                <span class="kw">let </span>desc = (<span class="number">8 </span>- alives - unknowns) &lt;&lt; <span class="number">8 </span>| alives &lt;&lt; <span class="number">4</span>;
+                <span class="kw">let </span>desc0 = (<span class="number">8 </span>- alives - unknowns + <span class="number">1</span>) &lt;&lt; <span class="number">8 </span>| alives &lt;&lt; <span class="number">4</span>;
+                <span class="kw">let </span>desc1 = (<span class="number">8 </span>- alives - unknowns) &lt;&lt; <span class="number">8 </span>| (alives + <span class="number">1</span>) &lt;&lt; <span class="number">4</span>;
 
-                <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">2</span> {
-                    <span class="kw">let</span> <span class="ident">trans0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc0</span> <span class="op">|</span> <span class="ident">state</span>];
+                <span class="kw">for </span>state <span class="kw">in </span><span class="number">0</span>..=<span class="number">2 </span>{
+                    <span class="kw">let </span>trans0 = <span class="self">self</span>.impl_table[desc0 | state];
 
-                    <span class="kw">if</span> <span class="ident">trans0</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc1</span> <span class="op">|</span> <span class="ident">state</span>] {
-                        <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span> <span class="op">|</span> <span class="ident">state</span>] <span class="op">|</span><span class="op">=</span> <span class="ident">trans0</span>;
+                    <span class="kw">if </span>trans0 == <span class="self">self</span>.impl_table[desc1 | state] {
+                        <span class="self">self</span>.impl_table[desc | state] |= trans0;
                     }
                 }
             }
         }
 
-        <span class="self">self</span>
-    }
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Deduces the conflicts.</span>
-    <span class="kw">fn</span> <span class="ident">init_conflict</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">for</span> <span class="ident">nbhd_state</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">0xff</span> {
-            <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">2</span> {
-                <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">nbhd_state</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span> <span class="op">|</span> <span class="ident">state</span>;
+    <span class="doccomment">/// Deduces the conflicts.
+    </span><span class="kw">fn </span>init_conflict(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw">for </span>nbhd_state <span class="kw">in </span><span class="number">0</span>..<span class="number">0xff </span>{
+            <span class="kw">for </span>state <span class="kw">in </span><span class="number">0</span>..=<span class="number">2 </span>{
+                <span class="kw">let </span>desc = nbhd_state &lt;&lt; <span class="number">4 </span>| state;
 
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span>].<span class="ident">contains</span>(<span class="ident">ImplFlags::SUCC_ALIVE</span>) {
-                    <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span> <span class="op">|</span> <span class="number">0b10</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>] <span class="op">=</span> <span class="ident">ImplFlags::CONFLICT</span>;
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span>].<span class="ident">contains</span>(<span class="ident">ImplFlags::SUCC_DEAD</span>) {
-                    <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span> <span class="op">|</span> <span class="number">0b01</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>] <span class="op">=</span> <span class="ident">ImplFlags::CONFLICT</span>;
+                <span class="kw">if </span><span class="self">self</span>.impl_table[desc].contains(ImplFlags::SUCC_ALIVE) {
+                    <span class="self">self</span>.impl_table[desc | <span class="number">0b10 </span>&lt;&lt; <span class="number">2</span>] = ImplFlags::CONFLICT;
+                } <span class="kw">else if </span><span class="self">self</span>.impl_table[desc].contains(ImplFlags::SUCC_DEAD) {
+                    <span class="self">self</span>.impl_table[desc | <span class="number">0b01 </span>&lt;&lt; <span class="number">2</span>] = ImplFlags::CONFLICT;
                 }
             }
         }
-        <span class="self">self</span>
-    }
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Deduces the implication for the cell itself.</span>
-    <span class="kw">fn</span> <span class="ident">init_impl</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">for</span> <span class="ident">unknowns</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">8</span> {
-            <span class="kw">for</span> <span class="ident">alives</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">8</span> <span class="op">-</span> <span class="ident">unknowns</span> {
-                <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> (<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span> <span class="op">-</span> <span class="ident">unknowns</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> <span class="ident">alives</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
+    <span class="doccomment">/// Deduces the implication for the cell itself.
+    </span><span class="kw">fn </span>init_impl(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw">for </span>unknowns <span class="kw">in </span><span class="number">0</span>..=<span class="number">8 </span>{
+            <span class="kw">for </span>alives <span class="kw">in </span><span class="number">0</span>..=<span class="number">8 </span>- unknowns {
+                <span class="kw">let </span>desc = (<span class="number">8 </span>- alives - unknowns) &lt;&lt; <span class="number">8 </span>| alives &lt;&lt; <span class="number">4</span>;
 
-                <span class="kw">for</span> <span class="ident">succ_state</span> <span class="kw">in</span> <span class="number">1</span>..<span class="op">=</span><span class="number">2</span> {
-                    <span class="kw">let</span> <span class="ident">flag</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">succ_state</span> <span class="op">==</span> <span class="number">0b10</span> {
-                        <span class="ident">ImplFlags::SUCC_ALIVE</span> <span class="op">|</span> <span class="ident">ImplFlags::CONFLICT</span>
-                    } <span class="kw">else</span> {
-                        <span class="ident">ImplFlags::SUCC_DEAD</span> <span class="op">|</span> <span class="ident">ImplFlags::CONFLICT</span>
+                <span class="kw">for </span>succ_state <span class="kw">in </span><span class="number">1</span>..=<span class="number">2 </span>{
+                    <span class="kw">let </span>flag = <span class="kw">if </span>succ_state == <span class="number">0b10 </span>{
+                        ImplFlags::SUCC_ALIVE | ImplFlags::CONFLICT
+                    } <span class="kw">else </span>{
+                        ImplFlags::SUCC_DEAD | ImplFlags::CONFLICT
                     };
 
-                    <span class="kw">let</span> <span class="ident">possibly_dead</span> <span class="op">=</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span> <span class="op">|</span> <span class="number">0b10</span>].<span class="ident">intersects</span>(<span class="ident">flag</span>);
-                    <span class="kw">let</span> <span class="ident">possibly_alive</span> <span class="op">=</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span> <span class="op">|</span> <span class="number">0b01</span>].<span class="ident">intersects</span>(<span class="ident">flag</span>);
+                    <span class="kw">let </span>possibly_dead = !<span class="self">self</span>.impl_table[desc | <span class="number">0b10</span>].intersects(flag);
+                    <span class="kw">let </span>possibly_alive = !<span class="self">self</span>.impl_table[desc | <span class="number">0b01</span>].intersects(flag);
 
-                    <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident">desc</span> <span class="op">|</span> <span class="ident">succ_state</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>;
-                    <span class="kw">if</span> <span class="ident">possibly_dead</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">possibly_alive</span> {
-                        <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">index</span>] <span class="op">|</span><span class="op">=</span> <span class="ident">ImplFlags::SELF_DEAD</span>;
-                    } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">possibly_dead</span> <span class="op">&amp;&amp;</span> <span class="ident">possibly_alive</span> {
-                        <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">index</span>] <span class="op">|</span><span class="op">=</span> <span class="ident">ImplFlags::SELF_ALIVE</span>;
-                    } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">possibly_dead</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">possibly_alive</span> {
-                        <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">index</span>] <span class="op">=</span> <span class="ident">ImplFlags::CONFLICT</span>;
+                    <span class="kw">let </span>index = desc | succ_state &lt;&lt; <span class="number">2</span>;
+                    <span class="kw">if </span>possibly_dead &amp;&amp; !possibly_alive {
+                        <span class="self">self</span>.impl_table[index] |= ImplFlags::SELF_DEAD;
+                    } <span class="kw">else if </span>!possibly_dead &amp;&amp; possibly_alive {
+                        <span class="self">self</span>.impl_table[index] |= ImplFlags::SELF_ALIVE;
+                    } <span class="kw">else if </span>!possibly_dead &amp;&amp; !possibly_alive {
+                        <span class="self">self</span>.impl_table[index] = ImplFlags::CONFLICT;
                     }
                 }
             }
         }
 
-        <span class="self">self</span>
-    }
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">///  Deduces the implication for the neighbors.</span>
-    <span class="kw">fn</span> <span class="ident">init_impl_nbhd</span>(<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">for</span> <span class="ident">unknowns</span> <span class="kw">in</span> <span class="number">1</span>..<span class="op">=</span><span class="number">8</span> {
-            <span class="kw">for</span> <span class="ident">alives</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">8</span> <span class="op">-</span> <span class="ident">unknowns</span> {
-                <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> (<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span> <span class="op">-</span> <span class="ident">unknowns</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> <span class="ident">alives</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
-                <span class="kw">let</span> <span class="ident">desc0</span> <span class="op">=</span> (<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span> <span class="op">-</span> <span class="ident">unknowns</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> <span class="ident">alives</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
-                <span class="kw">let</span> <span class="ident">desc1</span> <span class="op">=</span> (<span class="number">8</span> <span class="op">-</span> <span class="ident">alives</span> <span class="op">-</span> <span class="ident">unknowns</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">|</span> (<span class="ident">alives</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
+    <span class="doccomment">///  Deduces the implication for the neighbors.
+    </span><span class="kw">fn </span>init_impl_nbhd(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw">for </span>unknowns <span class="kw">in </span><span class="number">1</span>..=<span class="number">8 </span>{
+            <span class="kw">for </span>alives <span class="kw">in </span><span class="number">0</span>..=<span class="number">8 </span>- unknowns {
+                <span class="kw">let </span>desc = (<span class="number">8 </span>- alives - unknowns) &lt;&lt; <span class="number">8 </span>| alives &lt;&lt; <span class="number">4</span>;
+                <span class="kw">let </span>desc0 = (<span class="number">8 </span>- alives - unknowns + <span class="number">1</span>) &lt;&lt; <span class="number">8 </span>| alives &lt;&lt; <span class="number">4</span>;
+                <span class="kw">let </span>desc1 = (<span class="number">8 </span>- alives - unknowns) &lt;&lt; <span class="number">8 </span>| (alives + <span class="number">1</span>) &lt;&lt; <span class="number">4</span>;
 
-                <span class="kw">for</span> <span class="ident">succ_state</span> <span class="kw">in</span> <span class="number">1</span>..<span class="op">=</span><span class="number">2</span> {
-                    <span class="kw">let</span> <span class="ident">flag</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">succ_state</span> <span class="op">==</span> <span class="number">0b10</span> {
-                        <span class="ident">ImplFlags::SUCC_ALIVE</span> <span class="op">|</span> <span class="ident">ImplFlags::CONFLICT</span>
-                    } <span class="kw">else</span> {
-                        <span class="ident">ImplFlags::SUCC_DEAD</span> <span class="op">|</span> <span class="ident">ImplFlags::CONFLICT</span>
+                <span class="kw">for </span>succ_state <span class="kw">in </span><span class="number">1</span>..=<span class="number">2 </span>{
+                    <span class="kw">let </span>flag = <span class="kw">if </span>succ_state == <span class="number">0b10 </span>{
+                        ImplFlags::SUCC_ALIVE | ImplFlags::CONFLICT
+                    } <span class="kw">else </span>{
+                        ImplFlags::SUCC_DEAD | ImplFlags::CONFLICT
                     };
 
-                    <span class="kw">let</span> <span class="ident">index</span> <span class="op">=</span> <span class="ident">desc</span> <span class="op">|</span> <span class="ident">succ_state</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>;
+                    <span class="kw">let </span>index = desc | succ_state &lt;&lt; <span class="number">2</span>;
 
-                    <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">2</span> {
-                        <span class="kw">let</span> <span class="ident">possibly_dead</span> <span class="op">=</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc0</span> <span class="op">|</span> <span class="ident">state</span>].<span class="ident">intersects</span>(<span class="ident">flag</span>);
-                        <span class="kw">let</span> <span class="ident">possibly_alive</span> <span class="op">=</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">desc1</span> <span class="op">|</span> <span class="ident">state</span>].<span class="ident">intersects</span>(<span class="ident">flag</span>);
+                    <span class="kw">for </span>state <span class="kw">in </span><span class="number">0</span>..=<span class="number">2 </span>{
+                        <span class="kw">let </span>possibly_dead = !<span class="self">self</span>.impl_table[desc0 | state].intersects(flag);
+                        <span class="kw">let </span>possibly_alive = !<span class="self">self</span>.impl_table[desc1 | state].intersects(flag);
 
-                        <span class="kw">if</span> <span class="ident">possibly_dead</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">possibly_alive</span> {
-                            <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">index</span> <span class="op">|</span> <span class="ident">state</span>] <span class="op">|</span><span class="op">=</span> <span class="ident">ImplFlags::NBHD_DEAD</span>;
-                        } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">possibly_dead</span> <span class="op">&amp;&amp;</span> <span class="ident">possibly_alive</span> {
-                            <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">index</span> <span class="op">|</span> <span class="ident">state</span>] <span class="op">|</span><span class="op">=</span> <span class="ident">ImplFlags::NBHD_ALIVE</span>;
-                        } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">possibly_dead</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">possibly_alive</span> {
-                            <span class="self">self</span>.<span class="ident">impl_table</span>[<span class="ident">index</span> <span class="op">|</span> <span class="ident">state</span>] <span class="op">=</span> <span class="ident">ImplFlags::CONFLICT</span>;
+                        <span class="kw">if </span>possibly_dead &amp;&amp; !possibly_alive {
+                            <span class="self">self</span>.impl_table[index | state] |= ImplFlags::NBHD_DEAD;
+                        } <span class="kw">else if </span>!possibly_dead &amp;&amp; possibly_alive {
+                            <span class="self">self</span>.impl_table[index | state] |= ImplFlags::NBHD_ALIVE;
+                        } <span class="kw">else if </span>!possibly_dead &amp;&amp; !possibly_alive {
+                            <span class="self">self</span>.impl_table[index | state] = ImplFlags::CONFLICT;
                         }
                     }
                 }
             }
         }
 
-        <span class="self">self</span>
+        <span class="self">self
+    </span>}
+}
+
+<span class="doccomment">/// A parser for the rule.
+</span><span class="kw">impl </span>ParseLife <span class="kw">for </span>Life {
+    <span class="kw">fn </span>from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new(<span class="kw-2">&amp;</span>b, <span class="kw-2">&amp;</span>s)
     }
 }
 
-<span class="doccomment">/// A parser for the rule.</span>
-<span class="kw">impl</span> <span class="ident">ParseLife</span> <span class="kw">for</span> <span class="ident">Life</span> {
-    <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>, <span class="kw-2">&amp;</span><span class="ident">s</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">Life</span> {
-    <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rule</span>: <span class="self">Self</span> <span class="op">=</span> <span class="ident">ParseLife::parse_rule</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="ident">Error::ParseRuleError</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">rule</span>.<span class="ident">has_b0_s8</span>() {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::B0S8Error</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">rule</span>)
+<span class="kw">impl </span>FromStr <span class="kw">for </span>Life {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= Error;
+    <span class="kw">fn </span>from_str(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">let </span>rule: <span class="self">Self </span>= ParseLife::parse_rule(input).map_err(Error::ParseRuleError)<span class="question-mark">?</span>;
+        <span class="kw">if </span>rule.has_b0_s8() {
+            <span class="prelude-val">Err</span>(Error::B0S8Error)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Ok</span>(rule)
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">Life</span> {}
+<span class="kw">impl </span>Sealed <span class="kw">for </span>Life {}
 
-<span class="kw">impl</span> <span class="ident">Rule</span> <span class="kw">for</span> <span class="ident">Life</span> {
-    <span class="kw">type</span> <span class="ident">Desc</span> <span class="op">=</span> <span class="ident">NbhdDesc</span>;
-    <span class="kw">type</span> <span class="ident">IsGen</span> <span class="op">=</span> <span class="ident">False</span>;
+<span class="kw">impl </span>Rule <span class="kw">for </span>Life {
+    <span class="kw">type </span>Desc = NbhdDesc;
+    <span class="kw">type </span>IsGen = False;
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">has_b0</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">b0</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>has_b0(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.b0
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">has_b0_s8</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">b0</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">s8</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>has_b0_s8(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.b0 &amp;&amp; <span class="self">self</span>.s8
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="number">2</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>gen(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="number">2
+    </span>}
+
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>symmetry(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Symmetry {
+        Symmetry::D8
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">symmetry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Symmetry</span> {
-        <span class="ident">Symmetry::D8</span>
-    }
-
-    <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) -&gt; <span class="ident"><span class="self">Self</span>::Desc</span> {
-        <span class="kw">let</span> <span class="ident">nbhd_state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">ALIVE</span> =&gt; <span class="number">0x08</span>,
-            <span class="kw">_</span> =&gt; <span class="number">0x80</span>,
+    <span class="kw">fn </span>new_desc(state: State, succ_state: State) -&gt; <span class="self">Self</span>::Desc {
+        <span class="kw">let </span>nbhd_state = <span class="kw">match </span>state {
+            ALIVE =&gt; <span class="number">0x08</span>,
+            <span class="kw">_ </span>=&gt; <span class="number">0x80</span>,
         };
-        <span class="kw">let</span> <span class="ident">succ_state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">succ_state</span> {
-            <span class="ident">ALIVE</span> =&gt; <span class="number">0b01</span>,
-            <span class="kw">_</span> =&gt; <span class="number">0b10</span>,
+        <span class="kw">let </span>succ_state = <span class="kw">match </span>succ_state {
+            ALIVE =&gt; <span class="number">0b01</span>,
+            <span class="kw">_ </span>=&gt; <span class="number">0b10</span>,
         };
-        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">ALIVE</span> =&gt; <span class="number">0b01</span>,
-            <span class="kw">_</span> =&gt; <span class="number">0b10</span>,
+        <span class="kw">let </span>state = <span class="kw">match </span>state {
+            ALIVE =&gt; <span class="number">0b01</span>,
+            <span class="kw">_ </span>=&gt; <span class="number">0b10</span>,
         };
-        <span class="ident">NbhdDesc</span>(<span class="ident">nbhd_state</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span> <span class="op">|</span> <span class="ident">succ_state</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span> <span class="op">|</span> <span class="ident">state</span>)
+        NbhdDesc(nbhd_state &lt;&lt; <span class="number">4 </span>| succ_state &lt;&lt; <span class="number">2 </span>| state)
     }
 
-    <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="kw-2">&amp;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">new</span>: <span class="ident">bool</span>) {
-        <span class="kw">let</span> <span class="ident">state_num</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">ALIVE</span> =&gt; <span class="number">0x01</span>,
-            <span class="kw">_</span> =&gt; <span class="number">0x10</span>,
+    <span class="kw">fn </span>update_desc(cell: <span class="kw-2">&amp;</span>LifeCell&lt;<span class="self">Self</span>&gt;, state: State, new: bool) {
+        <span class="kw">let </span>state_num = <span class="kw">match </span>state {
+            ALIVE =&gt; <span class="number">0x01</span>,
+            <span class="kw">_ </span>=&gt; <span class="number">0x10</span>,
         };
-        <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">neigh</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">cell</span>.<span class="ident">nbhd</span> {
-            <span class="kw">let</span> <span class="ident">neigh</span> <span class="op">=</span> <span class="ident">neigh</span>.<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">neigh</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
-            <span class="kw">if</span> <span class="ident">new</span> {
-                <span class="ident">desc</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="ident">state_num</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
-            } <span class="kw">else</span> {
-                <span class="ident">desc</span>.<span class="number">0</span> <span class="op">-</span><span class="op">=</span> <span class="ident">state_num</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
+        <span class="kw">for </span><span class="kw-2">&amp;</span>neigh <span class="kw">in </span><span class="kw-2">&amp;</span>cell.nbhd {
+            <span class="kw">let </span>neigh = neigh.unwrap();
+            <span class="kw">let </span><span class="kw-2">mut </span>desc = neigh.desc.get();
+            <span class="kw">if </span>new {
+                desc.<span class="number">0 </span>+= state_num &lt;&lt; <span class="number">4</span>;
+            } <span class="kw">else </span>{
+                desc.<span class="number">0 </span>-= state_num &lt;&lt; <span class="number">4</span>;
             }
-            <span class="ident">neigh</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
+            neigh.desc.set(desc);
         }
 
-        <span class="kw">let</span> <span class="ident">change_num</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">ALIVE</span> =&gt; <span class="number">0b01</span>,
-            <span class="kw">_</span> =&gt; <span class="number">0b10</span>,
+        <span class="kw">let </span>change_num = <span class="kw">match </span>state {
+            ALIVE =&gt; <span class="number">0b01</span>,
+            <span class="kw">_ </span>=&gt; <span class="number">0b10</span>,
         };
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pred</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">pred</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">pred</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
-            <span class="ident">desc</span>.<span class="number">0</span> <span class="op">^</span><span class="op">=</span> <span class="ident">change_num</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>;
-            <span class="ident">pred</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(pred) = cell.pred {
+            <span class="kw">let </span><span class="kw-2">mut </span>desc = pred.desc.get();
+            desc.<span class="number">0 </span>^= change_num &lt;&lt; <span class="number">2</span>;
+            pred.desc.set(desc);
         }
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
-        <span class="ident">desc</span>.<span class="number">0</span> <span class="op">^</span><span class="op">=</span> <span class="ident">change_num</span>;
-        <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>desc = cell.desc.get();
+        desc.<span class="number">0 </span>^= change_num;
+        cell.desc.set(desc);
     }
 
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">impl_table</span>[<span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>().<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>];
+    <span class="kw">fn </span>consistify&lt;A: Algorithm&lt;<span class="self">Self</span>&gt;&gt;(
+        world: <span class="kw-2">&amp;mut </span>World&lt;<span class="self">Self</span>, A&gt;,
+        cell: CellRef&lt;<span class="self">Self</span>&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), A::ConflReason&gt; {
+        <span class="kw">let </span>flags = world.rule.impl_table[cell.desc.get().<span class="number">0 </span><span class="kw">as </span>usize];
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+        <span class="kw">if </span>flags.is_empty() {
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(());
         }
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::CONFLICT</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A::confl_from_cell</span>(<span class="ident">cell</span>));
+        <span class="kw">if </span>flags.contains(ImplFlags::CONFLICT) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(A::confl_from_cell(cell));
         }
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::SUCC</span>) {
-            <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::SUCC_DEAD</span>) {
-                <span class="ident">DEAD</span>
-            } <span class="kw">else</span> {
-                <span class="ident">ALIVE</span>
+        <span class="kw">if </span>flags.intersects(ImplFlags::SUCC) {
+            <span class="kw">let </span>state = <span class="kw">if </span>flags.contains(ImplFlags::SUCC_DEAD) {
+                DEAD
+            } <span class="kw">else </span>{
+                ALIVE
             };
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
-                <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
-            } <span class="kw">else</span> {
-                <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(succ) = cell.succ {
+                <span class="kw">return </span>world.set_cell(succ, state, A::Reason::from_cell(cell));
+            } <span class="kw">else </span>{
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
             }
         }
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::SELF</span>) {
-            <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::SELF_DEAD</span>) {
-                <span class="ident">DEAD</span>
-            } <span class="kw">else</span> {
-                <span class="ident">ALIVE</span>
+        <span class="kw">if </span>flags.intersects(ImplFlags::SELF) {
+            <span class="kw">let </span>state = <span class="kw">if </span>flags.contains(ImplFlags::SELF_DEAD) {
+                DEAD
+            } <span class="kw">else </span>{
+                ALIVE
             };
-            <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+            world.set_cell(cell, state, A::Reason::from_cell(cell))<span class="question-mark">?</span>;
         }
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::NBHD</span>) {
-            <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::NBHD_DEAD</span>) {
-                <span class="ident">DEAD</span>
-            } <span class="kw">else</span> {
-                <span class="ident">ALIVE</span>
+        <span class="kw">if </span>flags.intersects(ImplFlags::NBHD) {
+            <span class="kw">let </span>state = <span class="kw">if </span>flags.contains(ImplFlags::NBHD_DEAD) {
+                DEAD
+            } <span class="kw">else </span>{
+                ALIVE
             };
-            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">neigh</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">cell</span>.<span class="ident">nbhd</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">neigh</span>) <span class="op">=</span> <span class="ident">neigh</span> {
-                    <span class="kw">if</span> <span class="ident">neigh</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() {
-                        <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">neigh</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+            <span class="kw">for </span><span class="kw-2">&amp;</span>neigh <span class="kw">in </span><span class="kw-2">&amp;</span>cell.nbhd {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(neigh) = neigh {
+                    <span class="kw">if </span>neigh.state.get().is_none() {
+                        world.set_cell(neigh, state, A::Reason::from_cell(cell))<span class="question-mark">?</span>;
                     }
                 }
             }
@@ -977,233 +977,233 @@
     }
 }
 
-<span class="doccomment">/// The neighborhood descriptor.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Including a descriptor for the corresponding non-Generations rule,</span>
-<span class="doccomment">/// and the states of the successor.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NbhdDescGen</span>(<span class="ident">u16</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>);
+<span class="doccomment">/// The neighborhood descriptor.
+///
+/// Including a descriptor for the corresponding non-Generations rule,
+/// and the states of the successor.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]</span>
+<span class="kw">pub struct </span>NbhdDescGen(u16, <span class="prelude-ty">Option</span>&lt;State&gt;);
 
-<span class="doccomment">/// Totalistic Life-like Generations rules.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LifeGen</span> {
-    <span class="doccomment">/// Whether the rule contains `B0`.</span>
-    <span class="ident">b0</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// Whether the rule contains `S8`.</span>
-    <span class="ident">s8</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// Number of states.</span>
-    <span class="ident">gen</span>: <span class="ident">usize</span>,
-    <span class="doccomment">/// An array of actions for all neighborhood descriptors.</span>
-    <span class="ident">impl_table</span>: [<span class="ident">ImplFlags</span>; <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">12</span>],
+<span class="doccomment">/// Totalistic Life-like Generations rules.
+</span><span class="kw">pub struct </span>LifeGen {
+    <span class="doccomment">/// Whether the rule contains `B0`.
+    </span>b0: bool,
+    <span class="doccomment">/// Whether the rule contains `S8`.
+    </span>s8: bool,
+    <span class="doccomment">/// Number of states.
+    </span>gen: usize,
+    <span class="doccomment">/// An array of actions for all neighborhood descriptors.
+    </span>impl_table: [ImplFlags; <span class="number">1 </span>&lt;&lt; <span class="number">12</span>],
 }
 
-<span class="kw">impl</span> <span class="ident">LifeGen</span> {
-    <span class="doccomment">/// Constructs a new rule from the `b` and `s` data</span>
-    <span class="doccomment">/// and the number of states.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">s</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">life</span> <span class="op">=</span> <span class="ident">Life::new</span>(<span class="ident">b</span>, <span class="ident">s</span>);
-        <span class="kw">let</span> <span class="ident">impl_table</span> <span class="op">=</span> <span class="ident">life</span>.<span class="ident">impl_table</span>;
-        <span class="self">Self</span> {
-            <span class="ident">b0</span>: <span class="ident">life</span>.<span class="ident">b0</span>,
-            <span class="ident">s8</span>: <span class="ident">life</span>.<span class="ident">s8</span>,
-            <span class="ident">gen</span>,
-            <span class="ident">impl_table</span>,
+<span class="kw">impl </span>LifeGen {
+    <span class="doccomment">/// Constructs a new rule from the `b` and `s` data
+    /// and the number of states.
+    </span><span class="kw">pub fn </span>new(b: <span class="kw-2">&amp;</span>[u8], s: <span class="kw-2">&amp;</span>[u8], gen: usize) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>life = Life::new(b, s);
+        <span class="kw">let </span>impl_table = life.impl_table;
+        <span class="self">Self </span>{
+            b0: life.b0,
+            s8: life.s8,
+            gen,
+            impl_table,
         }
     }
 
-    <span class="doccomment">/// Converts to the corresponding non-Generations rule.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">non_gen</span>(<span class="self">self</span>) -&gt; <span class="ident">Life</span> {
-        <span class="ident">Life</span> {
-            <span class="ident">b0</span>: <span class="self">self</span>.<span class="ident">b0</span>,
-            <span class="ident">s8</span>: <span class="self">self</span>.<span class="ident">s8</span>,
-            <span class="ident">impl_table</span>: <span class="self">self</span>.<span class="ident">impl_table</span>,
-        }
-    }
-}
-
-<span class="doccomment">/// A parser for the rule.</span>
-<span class="kw">impl</span> <span class="ident">ParseLifeGen</span> <span class="kw">for</span> <span class="ident">LifeGen</span> {
-    <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident"><span class="self">Self</span>::new</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>, <span class="kw-2">&amp;</span><span class="ident">s</span>, <span class="ident">gen</span>)
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">LifeGen</span> {
-    <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rule</span>: <span class="self">Self</span> <span class="op">=</span> <span class="ident">ParseLifeGen::parse_rule</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="ident">Error::ParseRuleError</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">rule</span>.<span class="ident">has_b0_s8</span>() {
-            <span class="prelude-val">Err</span>(<span class="ident">Error::B0S8Error</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">rule</span>)
+    <span class="doccomment">/// Converts to the corresponding non-Generations rule.
+    </span><span class="kw">pub const fn </span>non_gen(<span class="self">self</span>) -&gt; Life {
+        Life {
+            b0: <span class="self">self</span>.b0,
+            s8: <span class="self">self</span>.s8,
+            impl_table: <span class="self">self</span>.impl_table,
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">LifeGen</span> {}
+<span class="doccomment">/// A parser for the rule.
+</span><span class="kw">impl </span>ParseLifeGen <span class="kw">for </span>LifeGen {
+    <span class="kw">fn </span>from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::new(<span class="kw-2">&amp;</span>b, <span class="kw-2">&amp;</span>s, gen)
+    }
+}
 
-<span class="doccomment">/// NOTE: This implementation does work when the number of states is 2.</span>
-<span class="kw">impl</span> <span class="ident">Rule</span> <span class="kw">for</span> <span class="ident">LifeGen</span> {
-    <span class="kw">type</span> <span class="ident">Desc</span> <span class="op">=</span> <span class="ident">NbhdDescGen</span>;
-    <span class="kw">type</span> <span class="ident">IsGen</span> <span class="op">=</span> <span class="ident">True</span>;
+<span class="kw">impl </span>FromStr <span class="kw">for </span>LifeGen {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= Error;
+    <span class="kw">fn </span>from_str(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">let </span>rule: <span class="self">Self </span>= ParseLifeGen::parse_rule(input).map_err(Error::ParseRuleError)<span class="question-mark">?</span>;
+        <span class="kw">if </span>rule.has_b0_s8() {
+            <span class="prelude-val">Err</span>(Error::B0S8Error)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">Ok</span>(rule)
+        }
+    }
+}
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">has_b0</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">b0</span>
+<span class="kw">impl </span>Sealed <span class="kw">for </span>LifeGen {}
+
+<span class="doccomment">/// NOTE: This implementation does work when the number of states is 2.
+</span><span class="kw">impl </span>Rule <span class="kw">for </span>LifeGen {
+    <span class="kw">type </span>Desc = NbhdDescGen;
+    <span class="kw">type </span>IsGen = True;
+
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>has_b0(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.b0
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">has_b0_s8</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">b0</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">s8</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>has_b0_s8(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.b0 &amp;&amp; <span class="self">self</span>.s8
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="self">self</span>.<span class="ident">gen</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>gen(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="self">self</span>.gen
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">symmetry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Symmetry</span> {
-        <span class="ident">Symmetry::D8</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>symmetry(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Symmetry {
+        Symmetry::D8
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) -&gt; <span class="ident"><span class="self">Self</span>::Desc</span> {
-        <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">Life::new_desc</span>(<span class="ident">state</span>, <span class="ident">succ_state</span>);
-        <span class="ident">NbhdDescGen</span>(<span class="ident">desc</span>.<span class="number">0</span>, <span class="prelude-val">Some</span>(<span class="ident">succ_state</span>))
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>new_desc(state: State, succ_state: State) -&gt; <span class="self">Self</span>::Desc {
+        <span class="kw">let </span>desc = Life::new_desc(state, succ_state);
+        NbhdDescGen(desc.<span class="number">0</span>, <span class="prelude-val">Some</span>(succ_state))
     }
 
-    <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="kw-2">&amp;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">new</span>: <span class="ident">bool</span>) {
+    <span class="kw">fn </span>update_desc(cell: <span class="kw-2">&amp;</span>LifeCell&lt;<span class="self">Self</span>&gt;, state: State, new: bool) {
         {
-            <span class="kw">let</span> <span class="ident">state_num</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
-                <span class="ident">ALIVE</span> =&gt; <span class="number">0x01</span>,
-                <span class="kw">_</span> =&gt; <span class="number">0x10</span>,
+            <span class="kw">let </span>state_num = <span class="kw">match </span>state {
+                ALIVE =&gt; <span class="number">0x01</span>,
+                <span class="kw">_ </span>=&gt; <span class="number">0x10</span>,
             };
-            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">neigh</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">cell</span>.<span class="ident">nbhd</span> {
-                <span class="kw">let</span> <span class="ident">neigh</span> <span class="op">=</span> <span class="ident">neigh</span>.<span class="ident">unwrap</span>();
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">neigh</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
-                <span class="kw">if</span> <span class="ident">new</span> {
-                    <span class="ident">desc</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="ident">state_num</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
-                } <span class="kw">else</span> {
-                    <span class="ident">desc</span>.<span class="number">0</span> <span class="op">-</span><span class="op">=</span> <span class="ident">state_num</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
+            <span class="kw">for </span><span class="kw-2">&amp;</span>neigh <span class="kw">in </span><span class="kw-2">&amp;</span>cell.nbhd {
+                <span class="kw">let </span>neigh = neigh.unwrap();
+                <span class="kw">let </span><span class="kw-2">mut </span>desc = neigh.desc.get();
+                <span class="kw">if </span>new {
+                    desc.<span class="number">0 </span>+= state_num &lt;&lt; <span class="number">4</span>;
+                } <span class="kw">else </span>{
+                    desc.<span class="number">0 </span>-= state_num &lt;&lt; <span class="number">4</span>;
                 }
-                <span class="ident">neigh</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
+                neigh.desc.set(desc);
             }
         }
-        <span class="kw">let</span> <span class="ident">change_num</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">ALIVE</span> =&gt; <span class="number">0b01</span>,
-            <span class="kw">_</span> =&gt; <span class="number">0b10</span>,
+        <span class="kw">let </span>change_num = <span class="kw">match </span>state {
+            ALIVE =&gt; <span class="number">0b01</span>,
+            <span class="kw">_ </span>=&gt; <span class="number">0b10</span>,
         };
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">pred</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">pred</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">pred</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
-            <span class="ident">desc</span>.<span class="number">0</span> <span class="op">^</span><span class="op">=</span> <span class="ident">change_num</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2</span>;
-            <span class="ident">desc</span>.<span class="number">1</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">new</span> { <span class="prelude-val">Some</span>(<span class="ident">state</span>) } <span class="kw">else</span> { <span class="prelude-val">None</span> };
-            <span class="ident">pred</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(pred) = cell.pred {
+            <span class="kw">let </span><span class="kw-2">mut </span>desc = pred.desc.get();
+            desc.<span class="number">0 </span>^= change_num &lt;&lt; <span class="number">2</span>;
+            desc.<span class="number">1 </span>= <span class="kw">if </span>new { <span class="prelude-val">Some</span>(state) } <span class="kw">else </span>{ <span class="prelude-val">None </span>};
+            pred.desc.set(desc);
         }
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
-        <span class="ident">desc</span>.<span class="number">0</span> <span class="op">^</span><span class="op">=</span> <span class="ident">change_num</span>;
-        <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">set</span>(<span class="ident">desc</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>desc = cell.desc.get();
+        desc.<span class="number">0 </span>^= change_num;
+        cell.desc.set(desc);
     }
 
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">desc</span>.<span class="ident">get</span>();
-        <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">impl_table</span>[<span class="ident">desc</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>];
-        <span class="kw">let</span> <span class="ident">gen</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">rule</span>.<span class="ident">gen</span>;
+    <span class="kw">fn </span>consistify&lt;A: Algorithm&lt;<span class="self">Self</span>&gt;&gt;(
+        world: <span class="kw-2">&amp;mut </span>World&lt;<span class="self">Self</span>, A&gt;,
+        cell: CellRef&lt;<span class="self">Self</span>&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), A::ConflReason&gt; {
+        <span class="kw">let </span>desc = cell.desc.get();
+        <span class="kw">let </span>flags = world.rule.impl_table[desc.<span class="number">0 </span><span class="kw">as </span>usize];
+        <span class="kw">let </span>gen = world.rule.gen;
 
-        <span class="kw">match</span> <span class="ident">cell</span>.<span class="ident">state</span>.<span class="ident">get</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) =&gt; {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">j</span>)) <span class="op">=</span> <span class="ident">desc</span>.<span class="number">1</span> {
-                    <span class="kw">if</span> <span class="ident">j</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A::confl_from_cell</span>(<span class="ident">cell</span>));
+        <span class="kw">match </span>cell.state.get() {
+            <span class="prelude-val">Some</span>(DEAD) =&gt; {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(State(j)) = desc.<span class="number">1 </span>{
+                    <span class="kw">if </span>j &gt;= <span class="number">2 </span>{
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(A::confl_from_cell(cell));
                     }
                 }
 
-                <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::SUCC</span>) {
-                    <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::SUCC_DEAD</span>) {
-                        <span class="ident">DEAD</span>
-                    } <span class="kw">else</span> {
-                        <span class="ident">ALIVE</span>
+                <span class="kw">if </span>flags.intersects(ImplFlags::SUCC) {
+                    <span class="kw">let </span>state = <span class="kw">if </span>flags.contains(ImplFlags::SUCC_DEAD) {
+                        DEAD
+                    } <span class="kw">else </span>{
+                        ALIVE
                     };
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
-                        <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
-                    } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(succ) = cell.succ {
+                        <span class="kw">return </span>world.set_cell(succ, state, A::Reason::from_cell(cell));
+                    } <span class="kw">else </span>{
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                     }
                 }
             }
-            <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) =&gt; {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">j</span>)) <span class="op">=</span> <span class="ident">desc</span>.<span class="number">1</span> {
-                    <span class="kw">if</span> <span class="ident">j</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">j</span> <span class="op">&gt;</span> <span class="number">2</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A::confl_from_cell</span>(<span class="ident">cell</span>));
+            <span class="prelude-val">Some</span>(ALIVE) =&gt; {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(State(j)) = desc.<span class="number">1 </span>{
+                    <span class="kw">if </span>j == <span class="number">0 </span>|| j &gt; <span class="number">2 </span>{
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(A::confl_from_cell(cell));
                     }
                 }
 
-                <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::SUCC</span>) {
-                    <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::SUCC_DEAD</span>) {
-                        <span class="ident">State</span>(<span class="number">2</span>)
-                    } <span class="kw">else</span> {
-                        <span class="ident">ALIVE</span>
+                <span class="kw">if </span>flags.intersects(ImplFlags::SUCC) {
+                    <span class="kw">let </span>state = <span class="kw">if </span>flags.contains(ImplFlags::SUCC_DEAD) {
+                        State(<span class="number">2</span>)
+                    } <span class="kw">else </span>{
+                        ALIVE
                     };
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
-                        <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
-                    } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(succ) = cell.succ {
+                        <span class="kw">return </span>world.set_cell(succ, state, A::Reason::from_cell(cell));
+                    } <span class="kw">else </span>{
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                     }
                 }
             }
-            <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">i</span>)) =&gt; {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">j</span>)) <span class="op">=</span> <span class="ident">desc</span>.<span class="number">1</span> {
-                    <span class="kw">if</span> <span class="ident">j</span> <span class="op">==</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">gen</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
-                    } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A::confl_from_cell</span>(<span class="ident">cell</span>));
+            <span class="prelude-val">Some</span>(State(i)) =&gt; {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(State(j)) = desc.<span class="number">1 </span>{
+                    <span class="kw">if </span>j == (i + <span class="number">1</span>) % gen {
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+                    } <span class="kw">else </span>{
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(A::confl_from_cell(cell));
                     }
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">succ</span>) <span class="op">=</span> <span class="ident">cell</span>.<span class="ident">succ</span> {
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">succ</span>, <span class="ident">State</span>((<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="ident">gen</span>), <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
-                } <span class="kw">else</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+                } <span class="kw">else if let </span><span class="prelude-val">Some</span>(succ) = cell.succ {
+                    <span class="kw">return </span>world.set_cell(succ, State((i + <span class="number">1</span>) % gen), A::Reason::from_cell(cell));
+                } <span class="kw">else </span>{
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                 }
             }
-            <span class="prelude-val">None</span> =&gt; <span class="kw">match</span> <span class="ident">desc</span>.<span class="number">1</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) =&gt; {
-                    <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::SELF_ALIVE</span>) {
-                        <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">State</span>(<span class="ident">gen</span> <span class="op">-</span> <span class="number">1</span>), <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
-                    } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+            <span class="prelude-val">None </span>=&gt; <span class="kw">match </span>desc.<span class="number">1 </span>{
+                <span class="prelude-val">Some</span>(DEAD) =&gt; {
+                    <span class="kw">if </span>flags.contains(ImplFlags::SELF_ALIVE) {
+                        <span class="kw">return </span>world.set_cell(cell, State(gen - <span class="number">1</span>), A::Reason::from_cell(cell));
+                    } <span class="kw">else </span>{
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                     }
                 }
-                <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) =&gt; {
-                    <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::SELF</span>) {
-                        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::SELF_DEAD</span>) {
-                            <span class="ident">DEAD</span>
-                        } <span class="kw">else</span> {
-                            <span class="ident">ALIVE</span>
+                <span class="prelude-val">Some</span>(ALIVE) =&gt; {
+                    <span class="kw">if </span>flags.intersects(ImplFlags::SELF) {
+                        <span class="kw">let </span>state = <span class="kw">if </span>flags.contains(ImplFlags::SELF_DEAD) {
+                            DEAD
+                        } <span class="kw">else </span>{
+                            ALIVE
                         };
-                        <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">state</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+                        world.set_cell(cell, state, A::Reason::from_cell(cell))<span class="question-mark">?</span>;
                     }
                 }
-                <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">j</span>)) =&gt; {
-                    <span class="kw">return</span> <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">cell</span>, <span class="ident">State</span>(<span class="ident">j</span> <span class="op">-</span> <span class="number">1</span>), <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>));
+                <span class="prelude-val">Some</span>(State(j)) =&gt; {
+                    <span class="kw">return </span>world.set_cell(cell, State(j - <span class="number">1</span>), A::Reason::from_cell(cell));
                 }
-                <span class="prelude-val">None</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(()),
+                <span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(()),
             },
         }
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+        <span class="kw">if </span>flags.is_empty() {
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(());
         }
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">ImplFlags::CONFLICT</span>) {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">A::confl_from_cell</span>(<span class="ident">cell</span>));
+        <span class="kw">if </span>flags.contains(ImplFlags::CONFLICT) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(A::confl_from_cell(cell));
         }
 
-        <span class="kw">if</span> <span class="ident">flags</span>.<span class="ident">intersects</span>(<span class="ident">ImplFlags::NBHD_ALIVE</span>) {
-            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">neigh</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">cell</span>.<span class="ident">nbhd</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">neigh</span>) <span class="op">=</span> <span class="ident">neigh</span> {
-                    <span class="kw">if</span> <span class="ident">neigh</span>.<span class="ident">state</span>.<span class="ident">get</span>().<span class="ident">is_none</span>() {
-                        <span class="ident">world</span>.<span class="ident">set_cell</span>(<span class="ident">neigh</span>, <span class="ident">ALIVE</span>, <span class="ident">A::Reason::from_cell</span>(<span class="ident">cell</span>))<span class="question-mark">?</span>;
+        <span class="kw">if </span>flags.intersects(ImplFlags::NBHD_ALIVE) {
+            <span class="kw">for </span><span class="kw-2">&amp;</span>neigh <span class="kw">in </span><span class="kw-2">&amp;</span>cell.nbhd {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(neigh) = neigh {
+                    <span class="kw">if </span>neigh.state.get().is_none() {
+                        world.set_cell(neigh, ALIVE, A::Reason::from_cell(cell))<span class="question-mark">?</span>;
                     }
                 }
             }
@@ -1213,4 +1213,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

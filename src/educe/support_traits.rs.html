@@ -72,79 +72,79 @@
 <span id="72">72</span>
 <span id="73">73</span>
 <span id="74">74</span>
-</pre><pre class="rust"><code><span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">any</span>(
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Debug&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialEq&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Eq&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialOrd&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Ord&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Hash&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Default&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Clone&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Copy&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Deref&quot;</span>,
-    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;DerefMut&quot;</span>
-)))]</span>
+</pre><pre class="rust"><code><span class="attribute">#[cfg(not(any(
+    feature = <span class="string">&quot;Debug&quot;</span>,
+    feature = <span class="string">&quot;PartialEq&quot;</span>,
+    feature = <span class="string">&quot;Eq&quot;</span>,
+    feature = <span class="string">&quot;PartialOrd&quot;</span>,
+    feature = <span class="string">&quot;Ord&quot;</span>,
+    feature = <span class="string">&quot;Hash&quot;</span>,
+    feature = <span class="string">&quot;Default&quot;</span>,
+    feature = <span class="string">&quot;Clone&quot;</span>,
+    feature = <span class="string">&quot;Copy&quot;</span>,
+    feature = <span class="string">&quot;Deref&quot;</span>,
+    feature = <span class="string">&quot;DerefMut&quot;
+</span>)))]</span>
 <span class="macro">compile_error!</span>(<span class="string">&quot;at least one of the trait features must be enabled&quot;</span>);
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Ordinalize</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;default&quot;</span>), <span class="ident">allow</span>(<span class="ident">dead_code</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Trait</span> {
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Debug&quot;</span>)]</span>
-    <span class="ident">Debug</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialEq&quot;</span>)]</span>
-    <span class="ident">PartialEq</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Eq&quot;</span>)]</span>
-    <span class="ident">Eq</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialOrd&quot;</span>)]</span>
-    <span class="ident">PartialOrd</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Ord&quot;</span>)]</span>
-    <span class="ident">Ord</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Hash&quot;</span>)]</span>
-    <span class="ident">Hash</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Default&quot;</span>)]</span>
-    <span class="ident">Default</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Clone&quot;</span>)]</span>
-    <span class="ident">Clone</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Copy&quot;</span>)]</span>
-    <span class="ident">Copy</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Deref&quot;</span>)]</span>
-    <span class="ident">Deref</span>,
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;DerefMut&quot;</span>)]</span>
-    <span class="ident">DerefMut</span>,
+<span class="attribute">#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Ordinalize)]</span>
+<span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;default&quot;</span>), allow(dead_code))]</span>
+<span class="kw">pub enum </span>Trait {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Debug&quot;</span>)]</span>
+    Debug,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;PartialEq&quot;</span>)]</span>
+    PartialEq,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Eq&quot;</span>)]</span>
+    Eq,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;PartialOrd&quot;</span>)]</span>
+    PartialOrd,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Ord&quot;</span>)]</span>
+    Ord,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Hash&quot;</span>)]</span>
+    Hash,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Default&quot;</span>)]</span>
+    Default,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Clone&quot;</span>)]</span>
+    Clone,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Copy&quot;</span>)]</span>
+    Copy,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;Deref&quot;</span>)]</span>
+    Deref,
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;DerefMut&quot;</span>)]</span>
+    DerefMut,
 }
 
-<span class="kw">impl</span> <span class="ident">Trait</span> {
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_str</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">s</span>: <span class="ident">S</span>) -&gt; <span class="ident">Trait</span> {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">as_ref</span>();
+<span class="kw">impl </span>Trait {
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>from_str&lt;S: AsRef&lt;str&gt;&gt;(s: S) -&gt; Trait {
+        <span class="kw">let </span>s = s.as_ref();
 
-        <span class="kw">match</span> <span class="ident">s</span> {
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Debug&quot;</span>)]</span>
-            <span class="string">&quot;Debug&quot;</span> =&gt; <span class="ident">Trait::Debug</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialEq&quot;</span>)]</span>
-            <span class="string">&quot;PartialEq&quot;</span> =&gt; <span class="ident">Trait::PartialEq</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Eq&quot;</span>)]</span>
-            <span class="string">&quot;Eq&quot;</span> =&gt; <span class="ident">Trait::Eq</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialOrd&quot;</span>)]</span>
-            <span class="string">&quot;PartialOrd&quot;</span> =&gt; <span class="ident">Trait::PartialOrd</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Ord&quot;</span>)]</span>
-            <span class="string">&quot;Ord&quot;</span> =&gt; <span class="ident">Trait::Ord</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Hash&quot;</span>)]</span>
-            <span class="string">&quot;Hash&quot;</span> =&gt; <span class="ident">Trait::Hash</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Default&quot;</span>)]</span>
-            <span class="string">&quot;Default&quot;</span> =&gt; <span class="ident">Trait::Default</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Clone&quot;</span>)]</span>
-            <span class="string">&quot;Clone&quot;</span> =&gt; <span class="ident">Trait::Clone</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Copy&quot;</span>)]</span>
-            <span class="string">&quot;Copy&quot;</span> =&gt; <span class="ident">Trait::Copy</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Deref&quot;</span>)]</span>
-            <span class="string">&quot;Deref&quot;</span> =&gt; <span class="ident">Trait::Deref</span>,
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;DerefMut&quot;</span>)]</span>
-            <span class="string">&quot;DerefMut&quot;</span> =&gt; <span class="ident">Trait::DerefMut</span>,
-            <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Unsupported trait `{}`. Available traits are {:?}&quot;</span>, <span class="ident">s</span>, <span class="ident">Trait::variants</span>()),
+        <span class="kw">match </span>s {
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Debug&quot;</span>)]</span>
+            <span class="string">&quot;Debug&quot; </span>=&gt; Trait::Debug,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;PartialEq&quot;</span>)]</span>
+            <span class="string">&quot;PartialEq&quot; </span>=&gt; Trait::PartialEq,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Eq&quot;</span>)]</span>
+            <span class="string">&quot;Eq&quot; </span>=&gt; Trait::Eq,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;PartialOrd&quot;</span>)]</span>
+            <span class="string">&quot;PartialOrd&quot; </span>=&gt; Trait::PartialOrd,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Ord&quot;</span>)]</span>
+            <span class="string">&quot;Ord&quot; </span>=&gt; Trait::Ord,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Hash&quot;</span>)]</span>
+            <span class="string">&quot;Hash&quot; </span>=&gt; Trait::Hash,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Default&quot;</span>)]</span>
+            <span class="string">&quot;Default&quot; </span>=&gt; Trait::Default,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Clone&quot;</span>)]</span>
+            <span class="string">&quot;Clone&quot; </span>=&gt; Trait::Clone,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Copy&quot;</span>)]</span>
+            <span class="string">&quot;Copy&quot; </span>=&gt; Trait::Copy,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;Deref&quot;</span>)]</span>
+            <span class="string">&quot;Deref&quot; </span>=&gt; Trait::Deref,
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;DerefMut&quot;</span>)]</span>
+            <span class="string">&quot;DerefMut&quot; </span>=&gt; Trait::DerefMut,
+            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Unsupported trait `{}`. Available traits are {:?}&quot;</span>, s, Trait::variants()),
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

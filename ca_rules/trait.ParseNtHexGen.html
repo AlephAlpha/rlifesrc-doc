@@ -15,24 +15,24 @@ that cause a cell to be born / survive.</p>
 <div class="example-wrap"><pre class="language-plaintext"><code> 1 0
 1 _ 0
  1 0</code></pre></div><h2 id="examples"><a href="#examples">Examples</a></h2>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">ca_rules::ParseNtHexGen</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>ca_rules::ParseNtHexGen;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Rule</span> {
-    <span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-    <span class="ident">gen</span>: <span class="ident">usize</span>,
+<span class="attribute">#[derive(Debug, Eq, PartialEq)]</span>
+<span class="kw">struct </span>Rule {
+    b: Vec&lt;u8&gt;,
+    s: Vec&lt;u8&gt;,
+    gen: usize,
 }
 
-<span class="kw">impl</span> <span class="ident">ParseNtHexGen</span> <span class="kw">for</span> <span class="ident">Rule</span> {
-    <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Rule</span> { <span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span> }
+<span class="kw">impl </span>ParseNtHexGen <span class="kw">for </span>Rule {
+    <span class="kw">fn </span>from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; <span class="self">Self </span>{
+        Rule { b, s, gen }
     }
 }
 
-<span class="kw">let</span> <span class="ident">life</span> <span class="op">=</span> <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;g3b2o6s2-o34m56h&quot;</span>).<span class="ident">unwrap</span>();
+<span class="kw">let </span>life = Rule::parse_rule(<span class="string">&quot;g3b2o6s2-o34m56h&quot;</span>).unwrap();
 
-<span class="macro">assert_eq!</span>(<span class="ident">life</span>.<span class="ident">gen</span>, <span class="number">3</span>);</code></pre></div>
+<span class="macro">assert_eq!</span>(life.gen, <span class="number">3</span>);</code></pre></div>
 </div></details><h2 id="required-methods" class="small-section-header">Required Methods<a href="#required-methods" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="tymethod.from_bsg" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/ca_rules/rules/nthex.rs.html#153">source</a></div><h4 class="code-header">fn <a href="#tymethod.from_bsg" class="fnname">from_bsg</a>(b: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;, s: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;, gen: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>) -&gt; Self</h4></div></summary><div class="docblock"><p>Construct the rule from <code>b</code> / <code>s</code> data and the number of states.</p>
 </div></details></div><h2 id="provided-methods" class="small-section-header">Provided Methods<a href="#provided-methods" class="anchor"></a></h2><div class="methods"><details class="rustdoc-toggle" open><summary><div id="method.parse_rule" class="method has-srclink"><div class="rightside"><a class="srclink" href="../src/ca_rules/rules/nthex.rs.html#156-175">source</a></div><h4 class="code-header">fn <a href="#method.parse_rule" class="fnname">parse_rule</a>(input: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, <a class="enum" href="enum.ParseRuleError.html" title="enum ca_rules::ParseRuleError">ParseRuleError</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,&nbsp;</span></h4></div></summary><div class="docblock"><p>The parser.</p>
-</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"></div><script type="text/javascript" src="../implementors/ca_rules/rules/nthex/trait.ParseNtHexGen.js" data-ignore-extern-crates="" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor"></a></h2><div class="item-list" id="implementors-list"></div><script type="text/javascript" src="../implementors/ca_rules/rules/nthex/trait.ParseNtHexGen.js" data-ignore-extern-crates="" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

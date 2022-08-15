@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/macros.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>macros.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/macros.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>macros.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -370,377 +370,377 @@
 <span id="370">370</span>
 <span id="371">371</span>
 <span id="372">372</span>
-</pre><pre class="rust"><code><span class="doccomment">/// Append a the first few characters of an ANSI escape code to the given string.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="macro">macro_rules!</span> <span class="ident">csi</span> {
-    ($( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">l</span>:<span class="ident">expr</span> ),<span class="kw-2">*</span>) =&gt; { <span class="macro">concat!</span>(<span class="string">&quot;\x1B[&quot;</span>, $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">l</span> ),<span class="kw-2">*</span>) };
+</pre><pre class="rust"><code><span class="doccomment">/// Append a the first few characters of an ANSI escape code to the given string.
+</span><span class="attribute">#[macro_export]</span>
+<span class="attribute">#[doc(hidden)]</span>
+<span class="macro">macro_rules!</span> csi {
+    ($( <span class="macro-nonterminal">$l</span>:expr ),<span class="kw-2">*</span>) =&gt; { <span class="macro">concat!</span>(<span class="string">&quot;\x1B[&quot;</span>, $( <span class="macro-nonterminal">$l </span>),<span class="kw-2">*</span>) };
 }
 
-<span class="doccomment">/// Queues one or more command(s) for further execution.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Queued commands must be flushed to the underlying device to be executed.</span>
-<span class="doccomment">/// This generally happens in the following cases:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * When `flush` is called manually on the given type implementing `io::Write`.</span>
-<span class="doccomment">/// * The terminal will `flush` automatically if the buffer is full.</span>
-<span class="doccomment">/// * Each line is flushed in case of `stdout`, because it is line buffered.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Arguments</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - [std::io::Writer](std::io::Write)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     ANSI escape codes are written on the given &#39;writer&#39;, after which they are flushed.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - [Command](./trait.Command.html)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     One or more commands</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use std::io::{Write, stdout};</span>
-<span class="doccomment">/// use crossterm::{queue, style::Print};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut stdout = stdout();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // `Print` will executed executed when `flush` is called.</span>
-<span class="doccomment">/// queue!(stdout, Print(&quot;foo&quot;.to_string()));</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // some other code (no execution happening here) ...</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // when calling `flush` on `stdout`, all commands will be written to the stdout and therefore executed.</span>
-<span class="doccomment">/// stdout.flush();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // ==== Output ====</span>
-<span class="doccomment">/// // foo</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Have a look over at the [Command API](./index.html#command-api) for more details.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// In case of Windows versions lower than 10, a direct WinAPI call will be made.</span>
-<span class="doccomment">/// The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
-<span class="doccomment">/// and can therefore not be written to the given `writer`.</span>
-<span class="doccomment">/// Therefore, there is no difference between [execute](macro.execute.html)</span>
-<span class="doccomment">/// and [queue](macro.queue.html) for those old Windows versions.</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">queue</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">writer</span>:<span class="ident">expr</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">command</span>:<span class="ident">expr</span>)<span class="op">*</span> $(,)<span class="question-mark">?</span>) =&gt; {{
-        <span class="kw">use</span> <span class="ident">::std::io::Write</span>;
+<span class="doccomment">/// Queues one or more command(s) for further execution.
+///
+/// Queued commands must be flushed to the underlying device to be executed.
+/// This generally happens in the following cases:
+///
+/// * When `flush` is called manually on the given type implementing `io::Write`.
+/// * The terminal will `flush` automatically if the buffer is full.
+/// * Each line is flushed in case of `stdout`, because it is line buffered.
+///
+/// # Arguments
+///
+/// - [std::io::Writer](std::io::Write)
+///
+///     ANSI escape codes are written on the given &#39;writer&#39;, after which they are flushed.
+///
+/// - [Command](./trait.Command.html)
+///
+///     One or more commands
+///
+/// # Examples
+///
+/// ```rust
+/// use std::io::{Write, stdout};
+/// use crossterm::{queue, style::Print};
+///
+/// let mut stdout = stdout();
+///
+/// // `Print` will executed executed when `flush` is called.
+/// queue!(stdout, Print(&quot;foo&quot;.to_string()));
+///
+/// // some other code (no execution happening here) ...
+///
+/// // when calling `flush` on `stdout`, all commands will be written to the stdout and therefore executed.
+/// stdout.flush();
+///
+/// // ==== Output ====
+/// // foo
+/// ```
+///
+/// Have a look over at the [Command API](./index.html#command-api) for more details.
+///
+/// # Notes
+///
+/// In case of Windows versions lower than 10, a direct WinAPI call will be made.
+/// The reason for this is that Windows versions lower than 10 do not support ANSI codes,
+/// and can therefore not be written to the given `writer`.
+/// Therefore, there is no difference between [execute](macro.execute.html)
+/// and [queue](macro.queue.html) for those old Windows versions.
+///
+</span><span class="attribute">#[macro_export]</span>
+<span class="macro">macro_rules!</span> queue {
+    (<span class="macro-nonterminal">$writer</span>:expr $(, <span class="macro-nonterminal">$command</span>:expr)* $(,)<span class="question-mark">?</span>) =&gt; {{
+        <span class="kw">use </span>::std::io::Write;
 
-        <span class="comment">// This allows the macro to take both mut impl Write and &amp;mut impl Write.</span>
-        <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">writer</span>.<span class="ident">by_ref</span>())
-            $(.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">writer</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::QueueableCommand::queue</span>(<span class="ident">writer</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">command</span>)))<span class="op">*</span>
-            .<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+        <span class="comment">// This allows the macro to take both mut impl Write and &amp;mut impl Write.
+        </span><span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$writer</span>.by_ref())
+            $(.and_then(|writer| <span class="macro-nonterminal">$crate::QueueableCommand::queue</span>(writer, <span class="macro-nonterminal">$command</span>)))*
+            .map(|<span class="kw">_</span>| ())
     }}
 }
 
-<span class="doccomment">/// Executes one or more command(s).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Arguments</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - [std::io::Writer](std::io::Write)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     ANSI escape codes are written on the given &#39;writer&#39;, after which they are flushed.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - [Command](./trait.Command.html)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     One or more commands</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use std::io::{Write, stdout};</span>
-<span class="doccomment">/// use crossterm::{execute, style::Print};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // will be executed directly</span>
-<span class="doccomment">/// execute!(stdout(), Print(&quot;sum:\n&quot;.to_string()));</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // will be executed directly</span>
-<span class="doccomment">/// execute!(stdout(), Print(&quot;1 + 1= &quot;.to_string()), Print((1+1).to_string()));</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // ==== Output ====</span>
-<span class="doccomment">/// // sum:</span>
-<span class="doccomment">/// // 1 + 1 = 2</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Have a look over at the [Command API](./index.html#command-api) for more details.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.</span>
-<span class="doccomment">/// * In case of Windows versions lower than 10, a direct WinAPI call will be made.</span>
-<span class="doccomment">///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,</span>
-<span class="doccomment">///     and can therefore not be written to the given `writer`.</span>
-<span class="doccomment">///     Therefore, there is no difference between [execute](macro.execute.html)</span>
-<span class="doccomment">///     and [queue](macro.queue.html) for those old Windows versions.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">execute</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">writer</span>:<span class="ident">expr</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">command</span>:<span class="ident">expr</span>)<span class="op">*</span> $(,)<span class="question-mark">?</span> ) =&gt; {{
-        <span class="kw">use</span> <span class="ident">::std::io::Write</span>;
+<span class="doccomment">/// Executes one or more command(s).
+///
+/// # Arguments
+///
+/// - [std::io::Writer](std::io::Write)
+///
+///     ANSI escape codes are written on the given &#39;writer&#39;, after which they are flushed.
+///
+/// - [Command](./trait.Command.html)
+///
+///     One or more commands
+///
+/// # Examples
+///
+/// ```rust
+/// use std::io::{Write, stdout};
+/// use crossterm::{execute, style::Print};
+///
+/// // will be executed directly
+/// execute!(stdout(), Print(&quot;sum:\n&quot;.to_string()));
+///
+/// // will be executed directly
+/// execute!(stdout(), Print(&quot;1 + 1= &quot;.to_string()), Print((1+1).to_string()));
+///
+/// // ==== Output ====
+/// // sum:
+/// // 1 + 1 = 2
+/// ```
+///
+/// Have a look over at the [Command API](./index.html#command-api) for more details.
+///
+/// # Notes
+///
+/// * In the case of UNIX and Windows 10, ANSI codes are written to the given &#39;writer&#39;.
+/// * In case of Windows versions lower than 10, a direct WinAPI call will be made.
+///     The reason for this is that Windows versions lower than 10 do not support ANSI codes,
+///     and can therefore not be written to the given `writer`.
+///     Therefore, there is no difference between [execute](macro.execute.html)
+///     and [queue](macro.queue.html) for those old Windows versions.
+</span><span class="attribute">#[macro_export]</span>
+<span class="macro">macro_rules!</span> execute {
+    (<span class="macro-nonterminal">$writer</span>:expr $(, <span class="macro-nonterminal">$command</span>:expr)* $(,)<span class="question-mark">? </span>) =&gt; {{
+        <span class="kw">use </span>::std::io::Write;
 
-        <span class="comment">// Queue each command, then flush</span>
-        <span class="macro-nonterminal">$</span><span class="macro">crate::queue!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">writer</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">command</span>)<span class="kw-2">*</span>)
-            .<span class="ident">and_then</span>(<span class="op">|</span>()<span class="op">|</span> {
-                <span class="ident">::std::io::Write::flush</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">writer</span>.<span class="ident">by_ref</span>())
+        <span class="comment">// Queue each command, then flush
+        </span><span class="macro-nonterminal">$</span><span class="macro">crate::queue!</span>(<span class="macro-nonterminal">$writer </span>$(, <span class="macro-nonterminal">$command</span>)<span class="kw-2">*</span>)
+            .and_then(|()| {
+                ::std::io::Write::flush(<span class="macro-nonterminal">$writer</span>.by_ref())
             })
     }}
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">impl_display</span> {
-    (<span class="kw">for</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>),<span class="op">+</span>) =&gt; {
-        $(<span class="kw">impl</span> <span class="ident">::std::fmt::Display</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> {
-            <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">::std::fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">::std::fmt::Result</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::command::execute_fmt</span>(<span class="ident">f</span>, <span class="self">self</span>)
+<span class="attribute">#[doc(hidden)]</span>
+<span class="attribute">#[macro_export]</span>
+<span class="macro">macro_rules!</span> impl_display {
+    (<span class="kw">for </span>$(<span class="macro-nonterminal">$t</span>:ty),+) =&gt; {
+        $(<span class="kw">impl </span>::std::fmt::Display <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
+            <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>::std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; ::std::fmt::Result {
+                <span class="macro-nonterminal">$crate::command::execute_fmt</span>(f, <span class="self">self</span>)
             }
-        })<span class="op">*</span>
+        })*
     }
 }
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules!</span> <span class="ident">impl_from</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>:<span class="ident">path</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">to</span>:<span class="ident">expr</span>) =&gt; {
-        <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ErrorKind</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>) -&gt; <span class="self">Self</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">to</span>(<span class="ident">e</span>)
+<span class="attribute">#[doc(hidden)]</span>
+<span class="attribute">#[macro_export]</span>
+<span class="macro">macro_rules!</span> impl_from {
+    (<span class="macro-nonterminal">$from</span>:path, <span class="macro-nonterminal">$to</span>:expr) =&gt; {
+        <span class="kw">impl </span>From&lt;<span class="macro-nonterminal">$from</span>&gt; <span class="kw">for </span>ErrorKind {
+            <span class="kw">fn </span>from(e: <span class="macro-nonterminal">$from</span>) -&gt; <span class="self">Self </span>{
+                <span class="macro-nonterminal">$to</span>(e)
             }
         }
     };
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">std::io</span>;
-    <span class="kw">use</span> <span class="ident">std::str</span>;
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use </span>std::io;
+    <span class="kw">use </span>std::str;
 
-    <span class="comment">// Helper for execute tests to confirm flush</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-    <span class="kw">pub</span>(<span class="self">self</span>) <span class="kw">struct</span> <span class="ident">FakeWrite</span> {
-        <span class="ident">buffer</span>: <span class="ident">String</span>,
-        <span class="ident">flushed</span>: <span class="ident">bool</span>,
+    <span class="comment">// Helper for execute tests to confirm flush
+    </span><span class="attribute">#[derive(Default, Debug, Clone)]</span>
+    <span class="kw">pub</span>(<span class="self">self</span>) <span class="kw">struct </span>FakeWrite {
+        buffer: String,
+        flushed: bool,
     }
 
-    <span class="kw">impl</span> <span class="ident">io::Write</span> <span class="kw">for</span> <span class="ident">FakeWrite</span> {
-        <span class="kw">fn</span> <span class="ident">write</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">content</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">content</span> <span class="op">=</span> <span class="ident">str::from_utf8</span>(<span class="ident">content</span>)
-                .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">io::Error::new</span>(<span class="ident">io::ErrorKind::InvalidData</span>, <span class="ident">e</span>))<span class="question-mark">?</span>;
-            <span class="self">self</span>.<span class="ident">buffer</span>.<span class="ident">push_str</span>(<span class="ident">content</span>);
-            <span class="self">self</span>.<span class="ident">flushed</span> <span class="op">=</span> <span class="bool-val">false</span>;
-            <span class="prelude-val">Ok</span>(<span class="ident">content</span>.<span class="ident">len</span>())
+    <span class="kw">impl </span>io::Write <span class="kw">for </span>FakeWrite {
+        <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, content: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+            <span class="kw">let </span>content = str::from_utf8(content)
+                .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))<span class="question-mark">?</span>;
+            <span class="self">self</span>.buffer.push_str(content);
+            <span class="self">self</span>.flushed = <span class="bool-val">false</span>;
+            <span class="prelude-val">Ok</span>(content.len())
         }
 
-        <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">io::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-            <span class="self">self</span>.<span class="ident">flushed</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+            <span class="self">self</span>.flushed = <span class="bool-val">true</span>;
             <span class="prelude-val">Ok</span>(())
         }
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
-    <span class="kw">mod</span> <span class="ident">unix</span> {
-        <span class="kw">use</span> <span class="ident">std::fmt</span>;
+    <span class="attribute">#[cfg(not(windows))]</span>
+    <span class="kw">mod </span>unix {
+        <span class="kw">use </span>std::fmt;
 
-        <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::FakeWrite</span>;
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::command::Command</span>;
+        <span class="kw">use </span><span class="kw">super</span>::FakeWrite;
+        <span class="kw">use </span><span class="kw">crate</span>::command::Command;
 
-        <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FakeCommand</span>;
+        <span class="kw">pub struct </span>FakeCommand;
 
-        <span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">FakeCommand</span> {
-            <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-                <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;cmd&quot;</span>)
+        <span class="kw">impl </span>Command <span class="kw">for </span>FakeCommand {
+            <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+                f.write_str(<span class="string">&quot;cmd&quot;</span>)
             }
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_queue_one</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">FakeWrite::default</span>();
-            <span class="macro">queue!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">result</span>, <span class="ident">FakeCommand</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">buffer</span>, <span class="string">&quot;cmd&quot;</span>);
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">result</span>.<span class="ident">flushed</span>);
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_queue_one() {
+            <span class="kw">let </span><span class="kw-2">mut </span>result = FakeWrite::default();
+            <span class="macro">queue!</span>(<span class="kw-2">&amp;mut </span>result, FakeCommand).unwrap();
+            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>result.buffer, <span class="string">&quot;cmd&quot;</span>);
+            <span class="macro">assert!</span>(!result.flushed);
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_queue_many</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">FakeWrite::default</span>();
-            <span class="macro">queue!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">result</span>, <span class="ident">FakeCommand</span>, <span class="ident">FakeCommand</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">buffer</span>, <span class="string">&quot;cmdcmd&quot;</span>);
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">result</span>.<span class="ident">flushed</span>);
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_queue_many() {
+            <span class="kw">let </span><span class="kw-2">mut </span>result = FakeWrite::default();
+            <span class="macro">queue!</span>(<span class="kw-2">&amp;mut </span>result, FakeCommand, FakeCommand).unwrap();
+            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>result.buffer, <span class="string">&quot;cmdcmd&quot;</span>);
+            <span class="macro">assert!</span>(!result.flushed);
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_queue_trailing_comma</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">FakeWrite::default</span>();
-            <span class="macro">queue!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">result</span>, <span class="ident">FakeCommand</span>, <span class="ident">FakeCommand</span>,).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">buffer</span>, <span class="string">&quot;cmdcmd&quot;</span>);
-            <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">result</span>.<span class="ident">flushed</span>);
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_queue_trailing_comma() {
+            <span class="kw">let </span><span class="kw-2">mut </span>result = FakeWrite::default();
+            <span class="macro">queue!</span>(<span class="kw-2">&amp;mut </span>result, FakeCommand, FakeCommand,).unwrap();
+            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>result.buffer, <span class="string">&quot;cmdcmd&quot;</span>);
+            <span class="macro">assert!</span>(!result.flushed);
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_execute_one</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">FakeWrite::default</span>();
-            <span class="macro">execute!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">result</span>, <span class="ident">FakeCommand</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">buffer</span>, <span class="string">&quot;cmd&quot;</span>);
-            <span class="macro">assert!</span>(<span class="ident">result</span>.<span class="ident">flushed</span>);
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_execute_one() {
+            <span class="kw">let </span><span class="kw-2">mut </span>result = FakeWrite::default();
+            <span class="macro">execute!</span>(<span class="kw-2">&amp;mut </span>result, FakeCommand).unwrap();
+            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>result.buffer, <span class="string">&quot;cmd&quot;</span>);
+            <span class="macro">assert!</span>(result.flushed);
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_execute_many</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">FakeWrite::default</span>();
-            <span class="macro">execute!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">result</span>, <span class="ident">FakeCommand</span>, <span class="ident">FakeCommand</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">buffer</span>, <span class="string">&quot;cmdcmd&quot;</span>);
-            <span class="macro">assert!</span>(<span class="ident">result</span>.<span class="ident">flushed</span>);
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_execute_many() {
+            <span class="kw">let </span><span class="kw-2">mut </span>result = FakeWrite::default();
+            <span class="macro">execute!</span>(<span class="kw-2">&amp;mut </span>result, FakeCommand, FakeCommand).unwrap();
+            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>result.buffer, <span class="string">&quot;cmdcmd&quot;</span>);
+            <span class="macro">assert!</span>(result.flushed);
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_execute_trailing_comma</span>() {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">FakeWrite::default</span>();
-            <span class="macro">execute!</span>(<span class="kw-2">&amp;mut</span> <span class="ident">result</span>, <span class="ident">FakeCommand</span>, <span class="ident">FakeCommand</span>,).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">result</span>.<span class="ident">buffer</span>, <span class="string">&quot;cmdcmd&quot;</span>);
-            <span class="macro">assert!</span>(<span class="ident">result</span>.<span class="ident">flushed</span>);
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_execute_trailing_comma() {
+            <span class="kw">let </span><span class="kw-2">mut </span>result = FakeWrite::default();
+            <span class="macro">execute!</span>(<span class="kw-2">&amp;mut </span>result, FakeCommand, FakeCommand,).unwrap();
+            <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>result.buffer, <span class="string">&quot;cmdcmd&quot;</span>);
+            <span class="macro">assert!</span>(result.flushed);
         }
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">mod</span> <span class="ident">windows</span> {
-        <span class="kw">use</span> <span class="ident">std::fmt</span>;
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">mod </span>windows {
+        <span class="kw">use </span>std::fmt;
 
-        <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
-        <span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
+        <span class="kw">use </span>std::cell::RefCell;
+        <span class="kw">use </span>std::fmt::Debug;
 
-        <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::FakeWrite</span>;
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::command::Command</span>;
-        <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Result</span> <span class="kw">as</span> <span class="ident">CrosstermResult</span>;
+        <span class="kw">use </span><span class="kw">super</span>::FakeWrite;
+        <span class="kw">use </span><span class="kw">crate</span>::command::Command;
+        <span class="kw">use </span><span class="kw">crate</span>::error::Result <span class="kw">as </span>CrosstermResult;
 
-        <span class="comment">// We need to test two different APIs: WinAPI and the write api. We</span>
-        <span class="comment">// don&#39;t know until runtime which we&#39;re supporting (via</span>
-        <span class="comment">// Command::is_ansi_code_supported), so we have to test them both. The</span>
-        <span class="comment">// CI environment hopefully includes both versions of windows.</span>
+        <span class="comment">// We need to test two different APIs: WinAPI and the write api. We
+        // don&#39;t know until runtime which we&#39;re supporting (via
+        // Command::is_ansi_code_supported), so we have to test them both. The
+        // CI environment hopefully includes both versions of windows.
 
-        <span class="comment">// WindowsEventStream is a place for execute_winapi to push strings,</span>
-        <span class="comment">// when called.</span>
-        <span class="kw">type</span> <span class="ident">WindowsEventStream</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>;
+        // WindowsEventStream is a place for execute_winapi to push strings,
+        // when called.
+        </span><span class="kw">type </span>WindowsEventStream = Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;;
 
-        <span class="kw">struct</span> <span class="ident">FakeCommand</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-            <span class="comment">// Need to use a refcell because we want execute_winapi to be able</span>
-            <span class="comment">// push to the vector, but execute_winapi take &amp;self.</span>
-            <span class="ident">stream</span>: <span class="ident">RefCell</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">WindowsEventStream</span><span class="op">&gt;</span>,
-            <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
+        <span class="kw">struct </span>FakeCommand&lt;<span class="lifetime">&#39;a</span>&gt; {
+            <span class="comment">// Need to use a refcell because we want execute_winapi to be able
+            // push to the vector, but execute_winapi take &amp;self.
+            </span>stream: RefCell&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>WindowsEventStream&gt;,
+            value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str,
         }
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">FakeCommand</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">WindowsEventStream</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-                <span class="self">Self</span> {
-                    <span class="ident">value</span>,
-                    <span class="ident">stream</span>: <span class="ident">RefCell::new</span>(<span class="ident">stream</span>),
+        <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; FakeCommand&lt;<span class="lifetime">&#39;a</span>&gt; {
+            <span class="kw">fn </span>new(stream: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>WindowsEventStream, value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str) -&gt; <span class="self">Self </span>{
+                <span class="self">Self </span>{
+                    value,
+                    stream: RefCell::new(stream),
                 }
             }
         }
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">FakeCommand</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-                <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="self">self</span>.<span class="ident">value</span>)
+        <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Command <span class="kw">for </span>FakeCommand&lt;<span class="lifetime">&#39;a</span>&gt; {
+            <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+                f.write_str(<span class="self">self</span>.value)
             }
 
-            <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">stream</span>.<span class="ident">borrow_mut</span>().<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">value</span>);
+            <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+                <span class="self">self</span>.stream.borrow_mut().push(<span class="self">self</span>.value);
                 <span class="prelude-val">Ok</span>(())
             }
         }
 
-        <span class="comment">// Helper function for running tests against either WinAPI or an</span>
-        <span class="comment">// io::Write.</span>
-        <span class="comment">//</span>
-        <span class="comment">// This function will execute the `test` function, which should</span>
-        <span class="comment">// queue some commands against the given FakeWrite and</span>
-        <span class="comment">// WindowsEventStream. It will then test that the correct data sink</span>
-        <span class="comment">// was populated. It does not currently check is_ansi_code_supported;</span>
-        <span class="comment">// for now it simply checks that one of the two streams was correctly</span>
-        <span class="comment">// populated.</span>
-        <span class="comment">//</span>
-        <span class="comment">// If the stream was populated, it tests that the two arrays are equal.</span>
-        <span class="comment">// If the writer was populated, it tests that the contents of the</span>
-        <span class="comment">// write buffer are equal to the concatenation of `stream_result`.</span>
-        <span class="kw">fn</span> <span class="ident">test_harness</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Debug</span><span class="op">&gt;</span>(
-            <span class="ident">stream_result</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>],
-            <span class="ident">test</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">FakeWrite</span>, <span class="kw-2">&amp;mut</span> <span class="ident">WindowsEventStream</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="comment">// Helper function for running tests against either WinAPI or an
+        // io::Write.
+        //
+        // This function will execute the `test` function, which should
+        // queue some commands against the given FakeWrite and
+        // WindowsEventStream. It will then test that the correct data sink
+        // was populated. It does not currently check is_ansi_code_supported;
+        // for now it simply checks that one of the two streams was correctly
+        // populated.
+        //
+        // If the stream was populated, it tests that the two arrays are equal.
+        // If the writer was populated, it tests that the contents of the
+        // write buffer are equal to the concatenation of `stream_result`.
+        </span><span class="kw">fn </span>test_harness&lt;E: Debug&gt;(
+            stream_result: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str],
+            test: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>FakeWrite, <span class="kw-2">&amp;mut </span>WindowsEventStream) -&gt; <span class="prelude-ty">Result</span>&lt;(), E&gt;,
         ) {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stream</span> <span class="op">=</span> <span class="ident">WindowsEventStream::default</span>();
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">writer</span> <span class="op">=</span> <span class="ident">FakeWrite::default</span>();
+            <span class="kw">let </span><span class="kw-2">mut </span>stream = WindowsEventStream::default();
+            <span class="kw">let </span><span class="kw-2">mut </span>writer = FakeWrite::default();
 
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span> <span class="ident">test</span>(<span class="kw-2">&amp;mut</span> <span class="ident">writer</span>, <span class="kw-2">&amp;mut</span> <span class="ident">stream</span>) {
-                <span class="macro">panic!</span>(<span class="string">&quot;Error returned from test function: {:?}&quot;</span>, <span class="ident">err</span>);
+            <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = test(<span class="kw-2">&amp;mut </span>writer, <span class="kw-2">&amp;mut </span>stream) {
+                <span class="macro">panic!</span>(<span class="string">&quot;Error returned from test function: {:?}&quot;</span>, err);
             }
 
-            <span class="comment">// We need this for type inference, for whatever reason.</span>
-            <span class="kw">const</span> <span class="ident">EMPTY_RESULT</span>: [<span class="kw-2">&amp;</span><span class="ident">str</span>; <span class="number">0</span>] <span class="op">=</span> [];
+            <span class="comment">// We need this for type inference, for whatever reason.
+            </span><span class="kw">const </span>EMPTY_RESULT: [<span class="kw-2">&amp;</span>str; <span class="number">0</span>] = [];
 
-            <span class="comment">// TODO: confirm that the correct sink was used, based on</span>
-            <span class="comment">// is_ansi_code_supported</span>
-            <span class="kw">match</span> (<span class="ident">writer</span>.<span class="ident">buffer</span>.<span class="ident">is_empty</span>(), <span class="ident">stream</span>.<span class="ident">is_empty</span>()) {
-                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="kw">if</span> <span class="ident">stream_result</span> <span class="op">==</span> <span class="ident">EMPTY_RESULT</span> =&gt; {}
+            <span class="comment">// TODO: confirm that the correct sink was used, based on
+            // is_ansi_code_supported
+            </span><span class="kw">match </span>(writer.buffer.is_empty(), stream.is_empty()) {
+                (<span class="bool-val">true</span>, <span class="bool-val">true</span>) <span class="kw">if </span>stream_result == EMPTY_RESULT =&gt; {}
                 (<span class="bool-val">true</span>, <span class="bool-val">true</span>) =&gt; <span class="macro">panic!</span>(
                     <span class="string">&quot;Neither the event stream nor the writer were populated. Expected {:?}&quot;</span>,
-                    <span class="ident">stream_result</span>
+                    stream_result
                 ),
 
-                <span class="comment">// writer is populated</span>
-                (<span class="bool-val">false</span>, <span class="bool-val">true</span>) =&gt; {
-                    <span class="comment">// Concat the stream result to find the string result</span>
-                    <span class="kw">let</span> <span class="ident">result</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">stream_result</span>.<span class="ident">iter</span>().<span class="ident">copied</span>().<span class="ident">collect</span>();
-                    <span class="macro">assert_eq!</span>(<span class="ident">result</span>, <span class="ident">writer</span>.<span class="ident">buffer</span>);
-                    <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span><span class="ident">stream</span>, <span class="kw-2">&amp;</span><span class="ident">EMPTY_RESULT</span>);
+                <span class="comment">// writer is populated
+                </span>(<span class="bool-val">false</span>, <span class="bool-val">true</span>) =&gt; {
+                    <span class="comment">// Concat the stream result to find the string result
+                    </span><span class="kw">let </span>result: String = stream_result.iter().copied().collect();
+                    <span class="macro">assert_eq!</span>(result, writer.buffer);
+                    <span class="macro">assert_eq!</span>(<span class="kw-2">&amp;</span>stream, <span class="kw-2">&amp;</span>EMPTY_RESULT);
                 }
 
-                <span class="comment">// stream is populated</span>
-                (<span class="bool-val">true</span>, <span class="bool-val">false</span>) =&gt; {
-                    <span class="macro">assert_eq!</span>(<span class="ident">stream</span>, <span class="ident">stream_result</span>);
-                    <span class="macro">assert_eq!</span>(<span class="ident">writer</span>.<span class="ident">buffer</span>, <span class="string">&quot;&quot;</span>);
+                <span class="comment">// stream is populated
+                </span>(<span class="bool-val">true</span>, <span class="bool-val">false</span>) =&gt; {
+                    <span class="macro">assert_eq!</span>(stream, stream_result);
+                    <span class="macro">assert_eq!</span>(writer.buffer, <span class="string">&quot;&quot;</span>);
                 }
 
-                <span class="comment">// Both are populated</span>
-                (<span class="bool-val">false</span>, <span class="bool-val">false</span>) =&gt; <span class="macro">panic!</span>(
+                <span class="comment">// Both are populated
+                </span>(<span class="bool-val">false</span>, <span class="bool-val">false</span>) =&gt; <span class="macro">panic!</span>(
                     <span class="string">&quot;Both the writer and the event stream were written to.\n\
                      Only one should be used, based on is_ansi_code_supported.\n\
                      stream: {stream:?}\n\
                      writer: {writer:?}&quot;</span>,
-                    <span class="ident">stream</span> <span class="op">=</span> <span class="ident">stream</span>,
-                    <span class="ident">writer</span> <span class="op">=</span> <span class="ident">writer</span>,
+                    stream = stream,
+                    writer = writer,
                 ),
             }
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_queue_one</span>() {
-            <span class="ident">test_harness</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;cmd1&quot;</span>], <span class="op">|</span><span class="ident">writer</span>, <span class="ident">stream</span><span class="op">|</span> {
-                <span class="macro">queue!</span>(<span class="ident">writer</span>, <span class="ident">FakeCommand::new</span>(<span class="ident">stream</span>, <span class="string">&quot;cmd1&quot;</span>))
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_queue_one() {
+            test_harness(<span class="kw-2">&amp;</span>[<span class="string">&quot;cmd1&quot;</span>], |writer, stream| {
+                <span class="macro">queue!</span>(writer, FakeCommand::new(stream, <span class="string">&quot;cmd1&quot;</span>))
             })
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_queue_some</span>() {
-            <span class="ident">test_harness</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;cmd1&quot;</span>, <span class="string">&quot;cmd2&quot;</span>], <span class="op">|</span><span class="ident">writer</span>, <span class="ident">stream</span><span class="op">|</span> {
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_queue_some() {
+            test_harness(<span class="kw-2">&amp;</span>[<span class="string">&quot;cmd1&quot;</span>, <span class="string">&quot;cmd2&quot;</span>], |writer, stream| {
                 <span class="macro">queue!</span>(
-                    <span class="ident">writer</span>,
-                    <span class="ident">FakeCommand::new</span>(<span class="ident">stream</span>, <span class="string">&quot;cmd1&quot;</span>),
-                    <span class="ident">FakeCommand::new</span>(<span class="ident">stream</span>, <span class="string">&quot;cmd2&quot;</span>),
+                    writer,
+                    FakeCommand::new(stream, <span class="string">&quot;cmd1&quot;</span>),
+                    FakeCommand::new(stream, <span class="string">&quot;cmd2&quot;</span>),
                 )
             })
         }
 
-        <span class="attribute">#[<span class="ident">test</span>]</span>
-        <span class="kw">fn</span> <span class="ident">test_many_queues</span>() {
-            <span class="ident">test_harness</span>(<span class="kw-2">&amp;</span>[<span class="string">&quot;cmd1&quot;</span>, <span class="string">&quot;cmd2&quot;</span>, <span class="string">&quot;cmd3&quot;</span>], <span class="op">|</span><span class="ident">writer</span>, <span class="ident">stream</span><span class="op">|</span> {
-                <span class="macro">queue!</span>(<span class="ident">writer</span>, <span class="ident">FakeCommand::new</span>(<span class="ident">stream</span>, <span class="string">&quot;cmd1&quot;</span>))<span class="question-mark">?</span>;
-                <span class="macro">queue!</span>(<span class="ident">writer</span>, <span class="ident">FakeCommand::new</span>(<span class="ident">stream</span>, <span class="string">&quot;cmd2&quot;</span>))<span class="question-mark">?</span>;
-                <span class="macro">queue!</span>(<span class="ident">writer</span>, <span class="ident">FakeCommand::new</span>(<span class="ident">stream</span>, <span class="string">&quot;cmd3&quot;</span>))
+        <span class="attribute">#[test]</span>
+        <span class="kw">fn </span>test_many_queues() {
+            test_harness(<span class="kw-2">&amp;</span>[<span class="string">&quot;cmd1&quot;</span>, <span class="string">&quot;cmd2&quot;</span>, <span class="string">&quot;cmd3&quot;</span>], |writer, stream| {
+                <span class="macro">queue!</span>(writer, FakeCommand::new(stream, <span class="string">&quot;cmd1&quot;</span>))<span class="question-mark">?</span>;
+                <span class="macro">queue!</span>(writer, FakeCommand::new(stream, <span class="string">&quot;cmd2&quot;</span>))<span class="question-mark">?</span>;
+                <span class="macro">queue!</span>(writer, FakeCommand::new(stream, <span class="string">&quot;cmd3&quot;</span>))
             })
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

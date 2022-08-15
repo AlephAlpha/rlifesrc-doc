@@ -366,324 +366,324 @@
 <span id="366">366</span>
 <span id="367">367</span>
 <span id="368">368</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">crossterm</span>::{
-    <span class="ident">cursor</span>::{<span class="ident">Hide</span>, <span class="ident">MoveTo</span>, <span class="ident">MoveToNextLine</span>, <span class="ident">Show</span>},
-    <span class="ident">event</span>::{<span class="ident">Event</span>, <span class="ident">EventStream</span>, <span class="ident">KeyCode</span>, <span class="ident">KeyEvent</span>},
-    <span class="ident">style</span>::{<span class="ident">Color</span>, <span class="ident">Print</span>, <span class="ident">ResetColor</span>, <span class="ident">SetBackgroundColor</span>, <span class="ident">SetForegroundColor</span>},
-    <span class="ident">terminal</span>::{<span class="self">self</span>, <span class="ident">Clear</span>, <span class="ident">ClearType</span>, <span class="ident">EnterAlternateScreen</span>, <span class="ident">LeaveAlternateScreen</span>, <span class="ident">SetTitle</span>},
-    <span class="ident">ExecutableCommand</span>, <span class="ident">QueueableCommand</span>, <span class="prelude-ty">Result</span> <span class="kw">as</span> <span class="ident">CrosstermResult</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>crossterm::{
+    cursor::{Hide, MoveTo, MoveToNextLine, Show},
+    event::{Event, EventStream, KeyCode, KeyEvent},
+    style::{Color, Print, ResetColor, SetBackgroundColor, SetForegroundColor},
+    terminal::{<span class="self">self</span>, Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen, SetTitle},
+    ExecutableCommand, QueueableCommand, <span class="prelude-ty">Result </span><span class="kw">as </span>CrosstermResult,
 };
-<span class="kw">use</span> <span class="ident">futures_util</span>::{<span class="ident">future</span>, <span class="ident">select_biased</span>, <span class="ident">FutureExt</span>, <span class="ident">TryStreamExt</span>};
-<span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{<span class="ident">PolyWorld</span>, <span class="ident">State</span>, <span class="ident">Status</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">io</span>::{<span class="ident">stdout</span>, <span class="ident">Write</span>},
-    <span class="ident">time</span>::{<span class="ident">Duration</span>, <span class="ident">Instant</span>},
+<span class="kw">use </span>futures_util::{future, select_biased, FutureExt, TryStreamExt};
+<span class="kw">use </span>rlifesrc_lib::{PolyWorld, State, Status, ALIVE, DEAD};
+<span class="kw">use </span>std::{
+    io::{stdout, Write},
+    time::{Duration, Instant},
 };
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">debug_assertions</span>)]</span>
-<span class="kw">const</span> <span class="ident">VIEW_FREQ</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">5000</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">debug_assertions</span>))]</span>
-<span class="kw">const</span> <span class="ident">VIEW_FREQ</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">100000</span>;
+<span class="attribute">#[cfg(debug_assertions)]</span>
+<span class="kw">const </span>VIEW_FREQ: u64 = <span class="number">5000</span>;
+<span class="attribute">#[cfg(not(debug_assertions))]</span>
+<span class="kw">const </span>VIEW_FREQ: u64 = <span class="number">100000</span>;
 
-<span class="doccomment">/// Different modes to handle events.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">enum</span> <span class="ident">Mode</span> {
-    <span class="doccomment">/// Searching or paused.</span>
-    <span class="ident">Main</span>,
-    <span class="doccomment">/// Asking for quit.</span>
-    <span class="ident">AskingQuit</span>,
+<span class="doccomment">/// Different modes to handle events.
+</span><span class="attribute">#[derive(Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">enum </span>Mode {
+    <span class="doccomment">/// Searching or paused.
+    </span>Main,
+    <span class="doccomment">/// Asking for quit.
+    </span>AskingQuit,
 }
 
-<span class="kw">struct</span> <span class="ident">App</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span> {
-    <span class="ident">gen</span>: <span class="ident">i32</span>,
-    <span class="ident">period</span>: <span class="ident">i32</span>,
-    <span class="ident">world</span>: <span class="ident">PolyWorld</span>,
-    <span class="ident">status</span>: <span class="ident">Status</span>,
-    <span class="ident">paused</span>: <span class="ident">bool</span>,
-    <span class="ident">start_time</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Instant</span><span class="op">&gt;</span>,
-    <span class="ident">timing</span>: <span class="ident">Duration</span>,
-    <span class="ident">reset</span>: <span class="ident">bool</span>,
-    <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">W</span>,
-    <span class="ident">term_size</span>: (<span class="ident">u16</span>, <span class="ident">u16</span>),
-    <span class="ident">world_size</span>: (<span class="ident">i32</span>, <span class="ident">i32</span>),
-    <span class="ident">mode</span>: <span class="ident">Mode</span>,
+<span class="kw">struct </span>App&lt;<span class="lifetime">&#39;a</span>, W: Write&gt; {
+    gen: i32,
+    period: i32,
+    world: PolyWorld,
+    status: Status,
+    paused: bool,
+    start_time: <span class="prelude-ty">Option</span>&lt;Instant&gt;,
+    timing: Duration,
+    reset: bool,
+    output: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>W,
+    term_size: (u16, u16),
+    world_size: (i32, i32),
+    mode: Mode,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span> <span class="ident">App</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">W</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">W</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">period</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App</span> {
-            <span class="ident">gen</span>: <span class="number">0</span>,
-            <span class="ident">period</span>,
-            <span class="ident">world</span>,
-            <span class="ident">status</span>: <span class="ident">Status::Initial</span>,
-            <span class="ident">paused</span>: <span class="bool-val">true</span>,
-            <span class="ident">start_time</span>: <span class="prelude-val">None</span>,
-            <span class="ident">timing</span>: <span class="ident">Duration::default</span>(),
-            <span class="ident">reset</span>,
-            <span class="ident">output</span>,
-            <span class="ident">term_size</span>: (<span class="number">80</span>, <span class="number">24</span>),
-            <span class="ident">world_size</span>: (<span class="number">80</span>, <span class="number">24</span>),
-            <span class="ident">mode</span>: <span class="ident">Mode::Main</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, W: Write&gt; App&lt;<span class="lifetime">&#39;a</span>, W&gt; {
+    <span class="kw">fn </span>new(world: PolyWorld, reset: bool, output: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>W) -&gt; CrosstermResult&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>period = world.config().period;
+        <span class="kw">let </span><span class="kw-2">mut </span>app = App {
+            gen: <span class="number">0</span>,
+            period,
+            world,
+            status: Status::Initial,
+            paused: <span class="bool-val">true</span>,
+            start_time: <span class="prelude-val">None</span>,
+            timing: Duration::default(),
+            reset,
+            output,
+            term_size: (<span class="number">80</span>, <span class="number">24</span>),
+            world_size: (<span class="number">80</span>, <span class="number">24</span>),
+            mode: Mode::Main,
         };
-        <span class="ident">app</span>.<span class="ident">init</span>()<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">app</span>)
+        app.init()<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(app)
     }
 
-    <span class="doccomment">/// Initializes the screen.</span>
-    <span class="kw">fn</span> <span class="ident">init</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">output</span>
-            .<span class="ident">execute</span>(<span class="ident">EnterAlternateScreen</span>)<span class="question-mark">?</span>
-            .<span class="ident">execute</span>(<span class="ident">Hide</span>)<span class="question-mark">?</span>
-            .<span class="ident">execute</span>(<span class="ident">SetTitle</span>(<span class="string">&quot;rlifesrc&quot;</span>))<span class="question-mark">?</span>;
-        <span class="ident">terminal::enable_raw_mode</span>()<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">term_size</span> <span class="op">=</span> <span class="ident">terminal::size</span>()<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">width</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
-        <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
-        <span class="self">self</span>.<span class="ident">update</span>()
+    <span class="doccomment">/// Initializes the screen.
+    </span><span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+        <span class="self">self</span>.output
+            .execute(EnterAlternateScreen)<span class="question-mark">?
+            </span>.execute(Hide)<span class="question-mark">?
+            </span>.execute(SetTitle(<span class="string">&quot;rlifesrc&quot;</span>))<span class="question-mark">?</span>;
+        terminal::enable_raw_mode()<span class="question-mark">?</span>;
+        <span class="self">self</span>.term_size = terminal::size()<span class="question-mark">?</span>;
+        <span class="self">self</span>.world_size.<span class="number">0 </span>= <span class="self">self</span>.world.config().width.min(<span class="self">self</span>.term_size.<span class="number">0 </span><span class="kw">as </span>i32 - <span class="number">1</span>);
+        <span class="self">self</span>.world_size.<span class="number">1 </span>= <span class="self">self</span>.world.config().height.min(<span class="self">self</span>.term_size.<span class="number">1 </span><span class="kw">as </span>i32 - <span class="number">3</span>);
+        <span class="self">self</span>.update()
     }
 
-    <span class="doccomment">/// Quits the program.</span>
-    <span class="kw">fn</span> <span class="ident">quit</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">terminal::disable_raw_mode</span>()<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">output</span>
-            .<span class="ident">execute</span>(<span class="ident">Show</span>)<span class="question-mark">?</span>
-            .<span class="ident">execute</span>(<span class="ident">ResetColor</span>)<span class="question-mark">?</span>
-            .<span class="ident">execute</span>(<span class="ident">LeaveAlternateScreen</span>)<span class="question-mark">?</span>;
+    <span class="doccomment">/// Quits the program.
+    </span><span class="kw">fn </span>quit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+        terminal::disable_raw_mode()<span class="question-mark">?</span>;
+        <span class="self">self</span>.output
+            .execute(Show)<span class="question-mark">?
+            </span>.execute(ResetColor)<span class="question-mark">?
+            </span>.execute(LeaveAlternateScreen)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Updates the header.</span>
-    <span class="kw">fn</span> <span class="ident">update_header</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">output</span>
-            .<span class="ident">queue</span>(<span class="ident">MoveTo</span>(<span class="number">0</span>, <span class="number">0</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">SetBackgroundColor</span>(<span class="ident">Color::White</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">SetForegroundColor</span>(<span class="ident">Color::Black</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">Print</span>(<span class="macro">format!</span>(
+    <span class="doccomment">/// Updates the header.
+    </span><span class="kw">fn </span>update_header(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+        <span class="self">self</span>.output
+            .queue(MoveTo(<span class="number">0</span>, <span class="number">0</span>))<span class="question-mark">?
+            </span>.queue(SetBackgroundColor(Color::White))<span class="question-mark">?
+            </span>.queue(SetForegroundColor(Color::Black))<span class="question-mark">?
+            </span>.queue(Print(<span class="macro">format!</span>(
                 <span class="string">&quot;{:1$}&quot;</span>,
                 <span class="macro">format!</span>(
                     <span class="string">&quot;Gen: {}  Cells: {}  Confl: {}{}&quot;</span>,
-                    <span class="self">self</span>.<span class="ident">gen</span>,
-                    <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">cell_count_gen</span>(<span class="self">self</span>.<span class="ident">gen</span>),
-                    <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">conflicts</span>(),
-                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
-                        <span class="ident">String::new</span>()
-                    } <span class="kw">else</span> {
-                        <span class="macro">format!</span>(<span class="string">&quot;  Time: {:.2?}&quot;</span>, <span class="self">self</span>.<span class="ident">timing</span>)
+                    <span class="self">self</span>.gen,
+                    <span class="self">self</span>.world.cell_count_gen(<span class="self">self</span>.gen),
+                    <span class="self">self</span>.world.conflicts(),
+                    <span class="kw">if </span>!<span class="self">self</span>.paused {
+                        String::new()
+                    } <span class="kw">else </span>{
+                        <span class="macro">format!</span>(<span class="string">&quot;  Time: {:.2?}&quot;</span>, <span class="self">self</span>.timing)
                     }
                 ),
-                <span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>
+                <span class="self">self</span>.term_size.<span class="number">0 </span><span class="kw">as </span>usize
             )))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Updates the main part of the screen.</span>
-    <span class="doccomment">/// Prints the pattern in a mix of</span>
-    <span class="doccomment">/// [Plaintext](https://conwaylife.com/wiki/Plaintext) and</span>
-    <span class="doccomment">/// [RLE](https://conwaylife.com/wiki/Rle) format.</span>
-    <span class="kw">fn</span> <span class="ident">update_main</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">output</span>
-            .<span class="ident">queue</span>(<span class="ident">MoveTo</span>(<span class="number">0</span>, <span class="number">1</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">ResetColor</span>)<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">Print</span>(<span class="macro">format!</span>(
+    <span class="doccomment">/// Updates the main part of the screen.
+    /// Prints the pattern in a mix of
+    /// [Plaintext](https://conwaylife.com/wiki/Plaintext) and
+    /// [RLE](https://conwaylife.com/wiki/Rle) format.
+    </span><span class="kw">fn </span>update_main(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+        <span class="self">self</span>.output
+            .queue(MoveTo(<span class="number">0</span>, <span class="number">1</span>))<span class="question-mark">?
+            </span>.queue(ResetColor)<span class="question-mark">?
+            </span>.queue(Print(<span class="macro">format!</span>(
                 <span class="string">&quot;x = {}, y = {}, rule = {}&quot;</span>,
-                <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">width</span>,
-                <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span>,
-                <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">rule_string</span>
-            )))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">MoveToNextLine</span>(<span class="number">1</span>))<span class="question-mark">?</span>;
-        <span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">line</span> <span class="op">=</span> <span class="ident">String::new</span>();
-            <span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="number">0</span>..<span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> {
-                <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">get_cell_state</span>((<span class="ident">x</span>, <span class="ident">y</span>, <span class="self">self</span>.<span class="ident">gen</span>));
-                <span class="kw">match</span> <span class="ident">state</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">DEAD</span>) =&gt; <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;.&#39;</span>),
-                    <span class="prelude-val">Some</span>(<span class="ident">ALIVE</span>) =&gt; {
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">is_gen_rule</span>() {
-                            <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;A&#39;</span>);
-                        } <span class="kw">else</span> {
-                            <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;o&#39;</span>);
+                <span class="self">self</span>.world.config().width,
+                <span class="self">self</span>.world.config().height,
+                <span class="self">self</span>.world.config().rule_string
+            )))<span class="question-mark">?
+            </span>.queue(MoveToNextLine(<span class="number">1</span>))<span class="question-mark">?</span>;
+        <span class="kw">for </span>y <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.world_size.<span class="number">1 </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>line = String::new();
+            <span class="kw">for </span>x <span class="kw">in </span><span class="number">0</span>..<span class="self">self</span>.world_size.<span class="number">0 </span>{
+                <span class="kw">let </span>state = <span class="self">self</span>.world.get_cell_state((x, y, <span class="self">self</span>.gen));
+                <span class="kw">match </span>state {
+                    <span class="prelude-val">Some</span>(DEAD) =&gt; line.push(<span class="string">&#39;.&#39;</span>),
+                    <span class="prelude-val">Some</span>(ALIVE) =&gt; {
+                        <span class="kw">if </span><span class="self">self</span>.world.is_gen_rule() {
+                            line.push(<span class="string">&#39;A&#39;</span>);
+                        } <span class="kw">else </span>{
+                            line.push(<span class="string">&#39;o&#39;</span>);
                         }
                     }
-                    <span class="prelude-val">Some</span>(<span class="ident">State</span>(<span class="ident">i</span>)) =&gt; <span class="ident">line</span>.<span class="ident">push</span>((<span class="string">b&#39;A&#39;</span> <span class="op">+</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">char</span>),
-                    <span class="kw">_</span> =&gt; <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;?&#39;</span>),
+                    <span class="prelude-val">Some</span>(State(i)) =&gt; line.push((<span class="string">b&#39;A&#39; </span>+ i <span class="kw">as </span>u8 - <span class="number">1</span>) <span class="kw">as </span>char),
+                    <span class="kw">_ </span>=&gt; line.push(<span class="string">&#39;?&#39;</span>),
                 };
             }
-            <span class="kw">if</span> <span class="ident">y</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> {
-                <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;!&#39;</span>);
-            } <span class="kw">else</span> {
-                <span class="ident">line</span>.<span class="ident">push</span>(<span class="string">&#39;$&#39;</span>);
+            <span class="kw">if </span>y == <span class="self">self</span>.world.config().height - <span class="number">1 </span>{
+                line.push(<span class="string">&#39;!&#39;</span>);
+            } <span class="kw">else </span>{
+                line.push(<span class="string">&#39;$&#39;</span>);
             };
-            <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">queue</span>(<span class="ident">Print</span>(<span class="ident">line</span>))<span class="question-mark">?</span>.<span class="ident">queue</span>(<span class="ident">MoveToNextLine</span>(<span class="number">1</span>))<span class="question-mark">?</span>;
+            <span class="self">self</span>.output.queue(Print(line))<span class="question-mark">?</span>.queue(MoveToNextLine(<span class="number">1</span>))<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Updates the footer.</span>
-    <span class="kw">fn</span> <span class="ident">update_footer</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">INITIAL</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Press [space] to start.&quot;</span>;
-        <span class="kw">const</span> <span class="ident">FOUND</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Found a result. Press [q] to quit or [space] to search for the next.&quot;</span>;
-        <span class="kw">const</span> <span class="ident">NONE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;No more result. Press [q] to quit.&quot;</span>;
-        <span class="kw">const</span> <span class="ident">SEARCHING</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Searching... Press [space] to pause.&quot;</span>;
-        <span class="kw">const</span> <span class="ident">PAUSED</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Paused. Press [space] to resume.&quot;</span>;
+    <span class="doccomment">/// Updates the footer.
+    </span><span class="kw">fn </span>update_footer(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+        <span class="kw">const </span>INITIAL: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Press [space] to start.&quot;</span>;
+        <span class="kw">const </span>FOUND: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Found a result. Press [q] to quit or [space] to search for the next.&quot;</span>;
+        <span class="kw">const </span>NONE: <span class="kw-2">&amp;</span>str = <span class="string">&quot;No more result. Press [q] to quit.&quot;</span>;
+        <span class="kw">const </span>SEARCHING: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Searching... Press [space] to pause.&quot;</span>;
+        <span class="kw">const </span>PAUSED: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Paused. Press [space] to resume.&quot;</span>;
 
-        <span class="self">self</span>.<span class="ident">output</span>
-            .<span class="ident">queue</span>(<span class="ident">MoveTo</span>(<span class="number">0</span>, <span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="op">-</span> <span class="number">1</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">SetBackgroundColor</span>(<span class="ident">Color::White</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">SetForegroundColor</span>(<span class="ident">Color::Black</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">Print</span>(<span class="macro">format!</span>(
+        <span class="self">self</span>.output
+            .queue(MoveTo(<span class="number">0</span>, <span class="self">self</span>.term_size.<span class="number">1 </span>- <span class="number">1</span>))<span class="question-mark">?
+            </span>.queue(SetBackgroundColor(Color::White))<span class="question-mark">?
+            </span>.queue(SetForegroundColor(Color::Black))<span class="question-mark">?
+            </span>.queue(Print(<span class="macro">format!</span>(
                 <span class="string">&quot;{:1$}&quot;</span>,
-                <span class="kw">match</span> <span class="self">self</span>.<span class="ident">status</span> {
-                    <span class="ident">Status::Initial</span> =&gt; <span class="ident">INITIAL</span>,
-                    <span class="ident">Status::Found</span> =&gt; <span class="ident">FOUND</span>,
-                    <span class="ident">Status::None</span> =&gt; <span class="ident">NONE</span>,
-                    <span class="ident">Status::Searching</span> =&gt;
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">paused</span> {
-                            <span class="ident">PAUSED</span>
-                        } <span class="kw">else</span> {
-                            <span class="ident">SEARCHING</span>
+                <span class="kw">match </span><span class="self">self</span>.status {
+                    Status::Initial =&gt; INITIAL,
+                    Status::Found =&gt; FOUND,
+                    Status::None =&gt; NONE,
+                    Status::Searching =&gt;
+                        <span class="kw">if </span><span class="self">self</span>.paused {
+                            PAUSED
+                        } <span class="kw">else </span>{
+                            SEARCHING
                         },
                 },
-                <span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>
+                <span class="self">self</span>.term_size.<span class="number">0 </span><span class="kw">as </span>usize
             )))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Updates the screen.</span>
-    <span class="kw">fn</span> <span class="ident">update</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">update_header</span>()<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">update_main</span>()<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">update_footer</span>()<span class="question-mark">?</span>;
-        <span class="self">self</span>.<span class="ident">output</span>.<span class="ident">flush</span>()<span class="question-mark">?</span>;
+    <span class="doccomment">/// Updates the screen.
+    </span><span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+        <span class="self">self</span>.update_header()<span class="question-mark">?</span>;
+        <span class="self">self</span>.update_main()<span class="question-mark">?</span>;
+        <span class="self">self</span>.update_footer()<span class="question-mark">?</span>;
+        <span class="self">self</span>.output.flush()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Pauses.</span>
-    <span class="kw">fn</span> <span class="ident">pause</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">paused</span> <span class="op">=</span> <span class="bool-val">true</span>;
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">instant</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">start_time</span>.<span class="ident">take</span>() {
-            <span class="self">self</span>.<span class="ident">timing</span> <span class="op">+</span><span class="op">=</span> <span class="ident">instant</span>.<span class="ident">elapsed</span>();
+    <span class="doccomment">/// Pauses.
+    </span><span class="kw">fn </span>pause(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.paused = <span class="bool-val">true</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(instant) = <span class="self">self</span>.start_time.take() {
+            <span class="self">self</span>.timing += instant.elapsed();
         }
     }
 
-    <span class="doccomment">/// Starts or resumes.</span>
-    <span class="kw">fn</span> <span class="ident">start</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">paused</span> <span class="op">=</span> <span class="bool-val">false</span>;
-        <span class="self">self</span>.<span class="ident">start_time</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Instant::now</span>());
+    <span class="doccomment">/// Starts or resumes.
+    </span><span class="kw">fn </span>start(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.paused = <span class="bool-val">false</span>;
+        <span class="self">self</span>.start_time = <span class="prelude-val">Some</span>(Instant::now());
     }
 
-    <span class="doccomment">/// Searches for one step.</span>
-    <span class="kw">fn</span> <span class="ident">step</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">search</span>(<span class="prelude-val">Some</span>(<span class="ident">VIEW_FREQ</span>));
-        <span class="self">self</span>.<span class="ident">status</span> <span class="op">=</span> <span class="ident">s</span>;
-        <span class="kw">if</span> <span class="ident">s</span> <span class="op">!</span><span class="op">=</span> <span class="ident">Status::Searching</span> {
-            <span class="self">self</span>.<span class="ident">paused</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">instant</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">start_time</span>.<span class="ident">take</span>() {
-                <span class="self">self</span>.<span class="ident">timing</span> <span class="op">+</span><span class="op">=</span> <span class="ident">instant</span>.<span class="ident">elapsed</span>();
+    <span class="doccomment">/// Searches for one step.
+    </span><span class="kw">fn </span>step(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">let </span>s = <span class="self">self</span>.world.search(<span class="prelude-val">Some</span>(VIEW_FREQ));
+        <span class="self">self</span>.status = s;
+        <span class="kw">if </span>s != Status::Searching {
+            <span class="self">self</span>.paused = <span class="bool-val">true</span>;
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(instant) = <span class="self">self</span>.start_time.take() {
+                <span class="self">self</span>.timing += instant.elapsed();
             }
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">reset</span> {
-                <span class="self">self</span>.<span class="ident">start_time</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-                <span class="self">self</span>.<span class="ident">timing</span> <span class="op">=</span> <span class="ident">Duration::default</span>();
+            <span class="kw">if </span><span class="self">self</span>.reset {
+                <span class="self">self</span>.start_time = <span class="prelude-val">None</span>;
+                <span class="self">self</span>.timing = Duration::default();
             }
         }
     }
 
-    <span class="doccomment">/// Asks whether to quit.</span>
-    <span class="kw">fn</span> <span class="ident">ask_quit</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">ASK_QUIT</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;Are you sure to quit? [Y/n]&quot;</span>;
+    <span class="doccomment">/// Asks whether to quit.
+    </span><span class="kw">fn </span>ask_quit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; CrosstermResult&lt;()&gt; {
+        <span class="kw">const </span>ASK_QUIT: <span class="kw-2">&amp;</span>str = <span class="string">&quot;Are you sure to quit? [Y/n]&quot;</span>;
 
-        <span class="self">self</span>.<span class="ident">output</span>
-            .<span class="ident">queue</span>(<span class="ident">MoveTo</span>(<span class="number">0</span>, <span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="op">-</span> <span class="number">1</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">SetBackgroundColor</span>(<span class="ident">Color::White</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">SetForegroundColor</span>(<span class="ident">Color::Black</span>))<span class="question-mark">?</span>
-            .<span class="ident">queue</span>(<span class="ident">Print</span>(<span class="macro">format!</span>(<span class="string">&quot;{:1$}&quot;</span>, <span class="ident">ASK_QUIT</span>, <span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>)))<span class="question-mark">?</span>
-            .<span class="ident">flush</span>()<span class="question-mark">?</span>;
+        <span class="self">self</span>.output
+            .queue(MoveTo(<span class="number">0</span>, <span class="self">self</span>.term_size.<span class="number">1 </span>- <span class="number">1</span>))<span class="question-mark">?
+            </span>.queue(SetBackgroundColor(Color::White))<span class="question-mark">?
+            </span>.queue(SetForegroundColor(Color::Black))<span class="question-mark">?
+            </span>.queue(Print(<span class="macro">format!</span>(<span class="string">&quot;{:1$}&quot;</span>, ASK_QUIT, <span class="self">self</span>.term_size.<span class="number">0 </span><span class="kw">as </span>usize)))<span class="question-mark">?
+            </span>.flush()<span class="question-mark">?</span>;
 
-        <span class="self">self</span>.<span class="ident">mode</span> <span class="op">=</span> <span class="ident">Mode::AskingQuit</span>;
+        <span class="self">self</span>.mode = Mode::AskingQuit;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="doccomment">/// Handles a key event. Returns `true` to quit the program.</span>
-    <span class="kw">fn</span> <span class="ident">handle</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Event</span><span class="op">&gt;</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">mode</span> {
-            <span class="ident">Mode::Main</span> =&gt; <span class="kw">match</span> <span class="ident">event</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
-                    <span class="ident">code</span>: <span class="ident">KeyCode::Char</span>(<span class="string">&#39;q&#39;</span> <span class="op">|</span> <span class="string">&#39;Q&#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Esc</span>,
+    <span class="doccomment">/// Handles a key event. Returns `true` to quit the program.
+    </span><span class="kw">fn </span>handle(<span class="kw-2">&amp;mut </span><span class="self">self</span>, event: <span class="prelude-ty">Option</span>&lt;Event&gt;) -&gt; CrosstermResult&lt;bool&gt; {
+        <span class="kw">match </span><span class="self">self</span>.mode {
+            Mode::Main =&gt; <span class="kw">match </span>event {
+                <span class="prelude-val">Some</span>(Event::Key(KeyEvent {
+                    code: KeyCode::Char(<span class="string">&#39;q&#39; </span>| <span class="string">&#39;Q&#39;</span>) | KeyCode::Esc,
                     ..
                 })) =&gt; {
-                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
-                        <span class="self">self</span>.<span class="ident">pause</span>();
+                    <span class="kw">if </span>!<span class="self">self</span>.paused {
+                        <span class="self">self</span>.pause();
                     }
-                    <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">status</span> <span class="op">==</span> <span class="ident">Status::Searching</span> {
-                        <span class="self">self</span>.<span class="ident">ask_quit</span>()<span class="question-mark">?</span>;
-                    } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
+                    <span class="self">self</span>.update()<span class="question-mark">?</span>;
+                    <span class="kw">if </span><span class="self">self</span>.status == Status::Searching {
+                        <span class="self">self</span>.ask_quit()<span class="question-mark">?</span>;
+                    } <span class="kw">else </span>{
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
                     }
                 }
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
-                    <span class="ident">code</span>: <span class="ident">KeyCode::PageDown</span>,
+                <span class="prelude-val">Some</span>(Event::Key(KeyEvent {
+                    code: KeyCode::PageDown,
                     ..
                 })) =&gt; {
-                    <span class="self">self</span>.<span class="ident">gen</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">gen</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">period</span>;
-                    <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
+                    <span class="self">self</span>.gen = (<span class="self">self</span>.gen + <span class="number">1</span>) % <span class="self">self</span>.period;
+                    <span class="self">self</span>.update()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
-                    <span class="ident">code</span>: <span class="ident">KeyCode::PageUp</span>,
+                <span class="prelude-val">Some</span>(Event::Key(KeyEvent {
+                    code: KeyCode::PageUp,
                     ..
                 })) =&gt; {
-                    <span class="self">self</span>.<span class="ident">gen</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">gen</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">period</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">%</span> <span class="self">self</span>.<span class="ident">period</span>;
-                    <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
+                    <span class="self">self</span>.gen = (<span class="self">self</span>.gen + <span class="self">self</span>.period - <span class="number">1</span>) % <span class="self">self</span>.period;
+                    <span class="self">self</span>.update()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
-                    <span class="ident">code</span>: <span class="ident">KeyCode::Char</span>(<span class="string">&#39; &#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Enter</span>,
+                <span class="prelude-val">Some</span>(Event::Key(KeyEvent {
+                    code: KeyCode::Char(<span class="string">&#39; &#39;</span>) | KeyCode::Enter,
                     ..
                 })) =&gt; {
-                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
-                        <span class="self">self</span>.<span class="ident">pause</span>();
-                    } <span class="kw">else</span> {
-                        <span class="self">self</span>.<span class="ident">start</span>();
+                    <span class="kw">if </span>!<span class="self">self</span>.paused {
+                        <span class="self">self</span>.pause();
+                    } <span class="kw">else </span>{
+                        <span class="self">self</span>.start();
                     }
-                    <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
+                    <span class="self">self</span>.update()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>)) =&gt; {
-                    <span class="self">self</span>.<span class="ident">term_size</span> <span class="op">=</span> (<span class="ident">width</span>, <span class="ident">height</span>);
-                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">width</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
-                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world</span>.<span class="ident">config</span>().<span class="ident">height</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
-                    <span class="self">self</span>.<span class="ident">output</span>
-                        .<span class="ident">queue</span>(<span class="ident">ResetColor</span>)<span class="question-mark">?</span>
-                        .<span class="ident">queue</span>(<span class="ident">Clear</span>(<span class="ident">ClearType::All</span>))<span class="question-mark">?</span>;
-                    <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
+                <span class="prelude-val">Some</span>(Event::Resize(width, height)) =&gt; {
+                    <span class="self">self</span>.term_size = (width, height);
+                    <span class="self">self</span>.world_size.<span class="number">0 </span>= <span class="self">self</span>.world.config().width.min(<span class="self">self</span>.term_size.<span class="number">0 </span><span class="kw">as </span>i32 - <span class="number">1</span>);
+                    <span class="self">self</span>.world_size.<span class="number">1 </span>= <span class="self">self</span>.world.config().height.min(<span class="self">self</span>.term_size.<span class="number">1 </span><span class="kw">as </span>i32 - <span class="number">3</span>);
+                    <span class="self">self</span>.output
+                        .queue(ResetColor)<span class="question-mark">?
+                        </span>.queue(Clear(ClearType::All))<span class="question-mark">?</span>;
+                    <span class="self">self</span>.update()<span class="question-mark">?</span>;
                 }
                 <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; (),
-                <span class="prelude-val">None</span> =&gt; {
-                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
-                        <span class="self">self</span>.<span class="ident">pause</span>();
+                <span class="prelude-val">None </span>=&gt; {
+                    <span class="kw">if </span>!<span class="self">self</span>.paused {
+                        <span class="self">self</span>.pause();
                     }
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
                 }
             },
-            <span class="ident">Mode::AskingQuit</span> =&gt; <span class="kw">match</span> <span class="ident">event</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Key</span>(<span class="ident">KeyEvent</span> {
-                    <span class="ident">code</span>: <span class="ident">KeyCode::Char</span>(<span class="string">&#39;y&#39;</span> <span class="op">|</span> <span class="string">&#39;Y&#39;</span>) <span class="op">|</span> <span class="ident">KeyCode::Enter</span>,
+            Mode::AskingQuit =&gt; <span class="kw">match </span>event {
+                <span class="prelude-val">Some</span>(Event::Key(KeyEvent {
+                    code: KeyCode::Char(<span class="string">&#39;y&#39; </span>| <span class="string">&#39;Y&#39;</span>) | KeyCode::Enter,
                     ..
-                })) =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
-                <span class="prelude-val">Some</span>(<span class="ident">Event::Resize</span>(<span class="ident">width</span>, <span class="ident">height</span>)) =&gt; {
-                    <span class="self">self</span>.<span class="ident">term_size</span> <span class="op">=</span> (<span class="ident">width</span>, <span class="ident">height</span>);
-                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">0</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">0</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">1</span>);
-                    <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">world_size</span>.<span class="number">1</span>.<span class="ident">min</span>(<span class="self">self</span>.<span class="ident">term_size</span>.<span class="number">1</span> <span class="kw">as</span> <span class="ident">i32</span> <span class="op">-</span> <span class="number">3</span>);
-                    <span class="self">self</span>.<span class="ident">output</span>
-                        .<span class="ident">queue</span>(<span class="ident">ResetColor</span>)<span class="question-mark">?</span>
-                        .<span class="ident">queue</span>(<span class="ident">Clear</span>(<span class="ident">ClearType::All</span>))<span class="question-mark">?</span>;
-                    <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
-                    <span class="self">self</span>.<span class="ident">ask_quit</span>()<span class="question-mark">?</span>;
+                })) =&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>),
+                <span class="prelude-val">Some</span>(Event::Resize(width, height)) =&gt; {
+                    <span class="self">self</span>.term_size = (width, height);
+                    <span class="self">self</span>.world_size.<span class="number">0 </span>= <span class="self">self</span>.world_size.<span class="number">0</span>.min(<span class="self">self</span>.term_size.<span class="number">0 </span><span class="kw">as </span>i32 - <span class="number">1</span>);
+                    <span class="self">self</span>.world_size.<span class="number">1 </span>= <span class="self">self</span>.world_size.<span class="number">1</span>.min(<span class="self">self</span>.term_size.<span class="number">1 </span><span class="kw">as </span>i32 - <span class="number">3</span>);
+                    <span class="self">self</span>.output
+                        .queue(ResetColor)<span class="question-mark">?
+                        </span>.queue(Clear(ClearType::All))<span class="question-mark">?</span>;
+                    <span class="self">self</span>.update()<span class="question-mark">?</span>;
+                    <span class="self">self</span>.ask_quit()<span class="question-mark">?</span>;
                 }
                 <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {
-                    <span class="self">self</span>.<span class="ident">mode</span> <span class="op">=</span> <span class="ident">Mode::Main</span>;
-                    <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
+                    <span class="self">self</span>.mode = Mode::Main;
+                    <span class="self">self</span>.update()<span class="question-mark">?</span>;
                 }
-                <span class="prelude-val">None</span> =&gt; {
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
+                <span class="prelude-val">None </span>=&gt; {
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
                 }
             },
         }
@@ -691,21 +691,21 @@
         <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>)
     }
 
-    <span class="doccomment">/// The main loop.</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main_loop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">reader</span>: <span class="kw-2">&amp;mut</span> <span class="ident">EventStream</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">loop</span> {
-            <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">paused</span> {
+    <span class="doccomment">/// The main loop.
+    </span><span class="kw">async fn </span>main_loop(<span class="kw-2">&amp;mut </span><span class="self">self</span>, reader: <span class="kw-2">&amp;mut </span>EventStream) -&gt; CrosstermResult&lt;()&gt; {
+        <span class="kw">loop </span>{
+            <span class="kw">if </span>!<span class="self">self</span>.paused {
                 <span class="macro">select_biased!</span> {
-                    <span class="ident">event</span> <span class="op">=</span> <span class="ident">reader</span>.<span class="ident">try_next</span>().<span class="ident">fuse</span>() =&gt; {
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">event</span><span class="question-mark">?</span>)<span class="question-mark">?</span> {
+                    event = reader.try_next().fuse() =&gt; {
+                        <span class="kw">if </span><span class="self">self</span>.handle(event<span class="question-mark">?</span>)<span class="question-mark">? </span>{
                             <span class="kw">break</span>;
                         }
                     },
-                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">future::lazy</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">step</span>()) =&gt; {
-                        <span class="self">self</span>.<span class="ident">update</span>()<span class="question-mark">?</span>;
+                    <span class="kw">_ </span>= future::lazy(|<span class="kw">_</span>| <span class="self">self</span>.step()) =&gt; {
+                        <span class="self">self</span>.update()<span class="question-mark">?</span>;
                     },
                 };
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">handle</span>(<span class="ident">reader</span>.<span class="ident">try_next</span>().<span class="kw">await</span><span class="question-mark">?</span>)<span class="question-mark">?</span> {
+            } <span class="kw">else if </span><span class="self">self</span>.handle(reader.try_next().<span class="kw">await</span><span class="question-mark">?</span>)<span class="question-mark">? </span>{
                 <span class="kw">break</span>;
             }
         }
@@ -713,26 +713,26 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">App</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">W</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">quit</span>().<span class="ident">ok</span>();
+<span class="kw">impl</span>&lt;W: Write&gt; Drop <span class="kw">for </span>App&lt;<span class="lifetime">&#39;_</span>, W&gt; {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.quit().ok();
     }
 }
 
-<span class="doccomment">/// Runs the search with a TUI.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// If `reset` is true, the time will be reset when starting a new search.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tui</span>(<span class="ident">world</span>: <span class="ident">PolyWorld</span>, <span class="ident">reset</span>: <span class="ident">bool</span>) -&gt; <span class="ident">CrosstermResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stdout</span> <span class="op">=</span> <span class="ident">stdout</span>();
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">EventStream::new</span>();
-    <span class="kw">let</span> <span class="ident">result</span>;
+<span class="doccomment">/// Runs the search with a TUI.
+///
+/// If `reset` is true, the time will be reset when starting a new search.
+</span><span class="kw">pub fn </span>tui(world: PolyWorld, reset: bool) -&gt; CrosstermResult&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>stdout = stdout();
+    <span class="kw">let </span><span class="kw-2">mut </span>reader = EventStream::new();
+    <span class="kw">let </span>result;
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">App::new</span>(<span class="ident">world</span>, <span class="ident">reset</span>, <span class="kw-2">&amp;mut</span> <span class="ident">stdout</span>)<span class="question-mark">?</span>;
-        <span class="ident">futures_executor::block_on</span>(<span class="ident">app</span>.<span class="ident">main_loop</span>(<span class="kw-2">&amp;mut</span> <span class="ident">reader</span>))<span class="question-mark">?</span>;
-        <span class="ident">result</span> <span class="op">=</span> <span class="ident">app</span>.<span class="ident">world</span>.<span class="ident">rle_gen</span>(<span class="ident">app</span>.<span class="ident">gen</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>app = App::new(world, reset, <span class="kw-2">&amp;mut </span>stdout)<span class="question-mark">?</span>;
+        futures_executor::block_on(app.main_loop(<span class="kw-2">&amp;mut </span>reader))<span class="question-mark">?</span>;
+        result = app.world.rle_gen(app.gen);
     }
-    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">result</span>);
+    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, result);
     <span class="prelude-val">Ok</span>(())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

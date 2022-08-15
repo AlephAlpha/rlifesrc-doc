@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/style/stylize.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>stylize.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style/stylize.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>stylize.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -198,205 +198,205 @@
 <span id="198">198</span>
 <span id="199">199</span>
 <span id="200">200</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Display</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::Display;
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">style</span>, <span class="ident">Attribute</span>, <span class="ident">Color</span>, <span class="ident">ContentStyle</span>, <span class="ident">StyledContent</span>};
+<span class="kw">use super</span>::{style, Attribute, Color, ContentStyle, StyledContent};
 
-<span class="macro">macro_rules!</span> <span class="ident">stylize_method</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name</span>:<span class="ident">ident</span> <span class="ident">Attribute</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>:<span class="ident">ident</span>) =&gt; {
+<span class="macro">macro_rules!</span> stylize_method {
+    (<span class="macro-nonterminal">$method_name</span>:ident Attribute::<span class="macro-nonterminal">$attribute</span>:ident) =&gt; {
         <span class="macro">calculated_docs!</span> {
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(
+            <span class="attribute">#[doc = <span class="macro">concat!</span>(
                 <span class="string">&quot;Applies the [`&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>),
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$attribute</span>),
                 <span class="string">&quot;`](Attribute::&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>),
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$attribute</span>),
                 <span class="string">&quot;) attribute to the text.&quot;</span>,
             )]</span>
-            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-                <span class="self">self</span>.<span class="ident">attribute</span>(<span class="ident">Attribute</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attribute</span>)
+            <span class="kw">fn </span><span class="macro-nonterminal">$method_name</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled {
+                <span class="self">self</span>.attribute(Attribute::<span class="macro-nonterminal">$attribute</span>)
             }
         }
     };
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_fg</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_bg</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_ul</span>:<span class="ident">ident</span> <span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>:<span class="ident">ident</span>) =&gt; {
+    (<span class="macro-nonterminal">$method_name_fg</span>:ident, <span class="macro-nonterminal">$method_name_bg</span>:ident, <span class="macro-nonterminal">$method_name_ul</span>:ident Color::<span class="macro-nonterminal">$color</span>:ident) =&gt; {
         <span class="macro">calculated_docs!</span> {
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(
+            <span class="attribute">#[doc = <span class="macro">concat!</span>(
                 <span class="string">&quot;Sets the foreground color to [`&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$color</span>),
                 <span class="string">&quot;`](Color::&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
-                <span class="string">&quot;).&quot;</span>
-            )]</span>
-            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_fg</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-                <span class="self">self</span>.<span class="ident">with</span>(<span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>)
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$color</span>),
+                <span class="string">&quot;).&quot;
+            </span>)]</span>
+            <span class="kw">fn </span><span class="macro-nonterminal">$method_name_fg</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled {
+                <span class="self">self</span>.with(Color::<span class="macro-nonterminal">$color</span>)
             }
 
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(
+            <span class="attribute">#[doc = <span class="macro">concat!</span>(
                 <span class="string">&quot;Sets the background color to [`&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$color</span>),
                 <span class="string">&quot;`](Color::&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
-                <span class="string">&quot;).&quot;</span>
-            )]</span>
-            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_bg</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-                <span class="self">self</span>.<span class="ident">on</span>(<span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>)
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$color</span>),
+                <span class="string">&quot;).&quot;
+            </span>)]</span>
+            <span class="kw">fn </span><span class="macro-nonterminal">$method_name_bg</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled {
+                <span class="self">self</span>.on(Color::<span class="macro-nonterminal">$color</span>)
             }
 
-            <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro">concat!</span>(
+            <span class="attribute">#[doc = <span class="macro">concat!</span>(
                 <span class="string">&quot;Sets the underline color to [`&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$color</span>),
                 <span class="string">&quot;`](Color::&quot;</span>,
-                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>),
-                <span class="string">&quot;).&quot;</span>
-            )]</span>
-            <span class="kw">fn</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method_name_ul</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-                <span class="self">self</span>.<span class="ident">underline</span>(<span class="ident">Color</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>)
+                <span class="macro">stringify!</span>(<span class="macro-nonterminal">$color</span>),
+                <span class="string">&quot;).&quot;
+            </span>)]</span>
+            <span class="kw">fn </span><span class="macro-nonterminal">$method_name_ul</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled {
+                <span class="self">self</span>.underline(Color::<span class="macro-nonterminal">$color</span>)
             }
         }
     };
 }
 
-<span class="doccomment">/// Provides a set of methods to set attributes and colors.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use crossterm::style::Stylize;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// println!(&quot;{}&quot;, &quot;Bold text&quot;.bold());</span>
-<span class="doccomment">/// println!(&quot;{}&quot;, &quot;Underlined text&quot;.underlined());</span>
-<span class="doccomment">/// println!(&quot;{}&quot;, &quot;Negative text&quot;.negative());</span>
-<span class="doccomment">/// println!(&quot;{}&quot;, &quot;Red on blue&quot;.red().on_blue());</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Stylize</span>: <span class="ident">Sized</span> {
-    <span class="doccomment">/// This type with styles applied.</span>
-    <span class="kw">type</span> <span class="ident">Styled</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">ContentStyle</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AsMut</span><span class="op">&lt;</span><span class="ident">ContentStyle</span><span class="op">&gt;</span>;
+<span class="doccomment">/// Provides a set of methods to set attributes and colors.
+///
+/// # Examples
+///
+/// ```no_run
+/// use crossterm::style::Stylize;
+///
+/// println!(&quot;{}&quot;, &quot;Bold text&quot;.bold());
+/// println!(&quot;{}&quot;, &quot;Underlined text&quot;.underlined());
+/// println!(&quot;{}&quot;, &quot;Negative text&quot;.negative());
+/// println!(&quot;{}&quot;, &quot;Red on blue&quot;.red().on_blue());
+/// ```
+</span><span class="kw">pub trait </span>Stylize: Sized {
+    <span class="doccomment">/// This type with styles applied.
+    </span><span class="kw">type </span>Styled: AsRef&lt;ContentStyle&gt; + AsMut&lt;ContentStyle&gt;;
 
-    <span class="doccomment">/// Styles this type.</span>
-    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span>;
+    <span class="doccomment">/// Styles this type.
+    </span><span class="kw">fn </span>stylize(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled;
 
-    <span class="doccomment">/// Sets the foreground color.</span>
-    <span class="kw">fn</span> <span class="ident">with</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stylize</span>();
-        <span class="ident">styled</span>.<span class="ident">as_mut</span>().<span class="ident">foreground_color</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>);
-        <span class="ident">styled</span>
+    <span class="doccomment">/// Sets the foreground color.
+    </span><span class="kw">fn </span>with(<span class="self">self</span>, color: Color) -&gt; <span class="self">Self</span>::Styled {
+        <span class="kw">let </span><span class="kw-2">mut </span>styled = <span class="self">self</span>.stylize();
+        styled.as_mut().foreground_color = <span class="prelude-val">Some</span>(color);
+        styled
     }
 
-    <span class="doccomment">/// Sets the background color.</span>
-    <span class="kw">fn</span> <span class="ident">on</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stylize</span>();
-        <span class="ident">styled</span>.<span class="ident">as_mut</span>().<span class="ident">background_color</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>);
-        <span class="ident">styled</span>
+    <span class="doccomment">/// Sets the background color.
+    </span><span class="kw">fn </span>on(<span class="self">self</span>, color: Color) -&gt; <span class="self">Self</span>::Styled {
+        <span class="kw">let </span><span class="kw-2">mut </span>styled = <span class="self">self</span>.stylize();
+        styled.as_mut().background_color = <span class="prelude-val">Some</span>(color);
+        styled
     }
 
-    <span class="doccomment">/// Sets the underline color.</span>
-    <span class="kw">fn</span> <span class="ident">underline</span>(<span class="self">self</span>, <span class="ident">color</span>: <span class="ident">Color</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stylize</span>();
-        <span class="ident">styled</span>.<span class="ident">as_mut</span>().<span class="ident">underline_color</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">color</span>);
-        <span class="ident">styled</span>
+    <span class="doccomment">/// Sets the underline color.
+    </span><span class="kw">fn </span>underline(<span class="self">self</span>, color: Color) -&gt; <span class="self">Self</span>::Styled {
+        <span class="kw">let </span><span class="kw-2">mut </span>styled = <span class="self">self</span>.stylize();
+        styled.as_mut().underline_color = <span class="prelude-val">Some</span>(color);
+        styled
     }
 
-    <span class="doccomment">/// Styles the content with the attribute.</span>
-    <span class="kw">fn</span> <span class="ident">attribute</span>(<span class="self">self</span>, <span class="ident">attr</span>: <span class="ident">Attribute</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">stylize</span>();
-        <span class="ident">styled</span>.<span class="ident">as_mut</span>().<span class="ident">attributes</span>.<span class="ident">set</span>(<span class="ident">attr</span>);
-        <span class="ident">styled</span>
+    <span class="doccomment">/// Styles the content with the attribute.
+    </span><span class="kw">fn </span>attribute(<span class="self">self</span>, attr: Attribute) -&gt; <span class="self">Self</span>::Styled {
+        <span class="kw">let </span><span class="kw-2">mut </span>styled = <span class="self">self</span>.stylize();
+        styled.as_mut().attributes.set(attr);
+        styled
     }
 
-    <span class="macro">stylize_method!</span>(<span class="ident">reset</span> <span class="ident">Attribute::Reset</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">bold</span> <span class="ident">Attribute::Bold</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">underlined</span> <span class="ident">Attribute::Underlined</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">reverse</span> <span class="ident">Attribute::Reverse</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dim</span> <span class="ident">Attribute::Dim</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">italic</span> <span class="ident">Attribute::Italic</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">negative</span> <span class="ident">Attribute::Reverse</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">slow_blink</span> <span class="ident">Attribute::SlowBlink</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">rapid_blink</span> <span class="ident">Attribute::RapidBlink</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">hidden</span> <span class="ident">Attribute::Hidden</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">crossed_out</span> <span class="ident">Attribute::CrossedOut</span>);
+    <span class="macro">stylize_method!</span>(reset Attribute::Reset);
+    <span class="macro">stylize_method!</span>(bold Attribute::Bold);
+    <span class="macro">stylize_method!</span>(underlined Attribute::Underlined);
+    <span class="macro">stylize_method!</span>(reverse Attribute::Reverse);
+    <span class="macro">stylize_method!</span>(dim Attribute::Dim);
+    <span class="macro">stylize_method!</span>(italic Attribute::Italic);
+    <span class="macro">stylize_method!</span>(negative Attribute::Reverse);
+    <span class="macro">stylize_method!</span>(slow_blink Attribute::SlowBlink);
+    <span class="macro">stylize_method!</span>(rapid_blink Attribute::RapidBlink);
+    <span class="macro">stylize_method!</span>(hidden Attribute::Hidden);
+    <span class="macro">stylize_method!</span>(crossed_out Attribute::CrossedOut);
 
-    <span class="macro">stylize_method!</span>(<span class="ident">black</span>, <span class="ident">on_black</span>, <span class="ident">underline_black</span> <span class="ident">Color::Black</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dark_grey</span>, <span class="ident">on_dark_grey</span>, <span class="ident">underline_dark_grey</span> <span class="ident">Color::DarkGrey</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">red</span>, <span class="ident">on_red</span>, <span class="ident">underline_red</span> <span class="ident">Color::Red</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dark_red</span>, <span class="ident">on_dark_red</span>, <span class="ident">underline_dark_red</span> <span class="ident">Color::DarkRed</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">green</span>, <span class="ident">on_green</span>, <span class="ident">underline_green</span> <span class="ident">Color::Green</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dark_green</span>, <span class="ident">on_dark_green</span>, <span class="ident">underline_dark_green</span> <span class="ident">Color::DarkGreen</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">yellow</span>, <span class="ident">on_yellow</span>, <span class="ident">underline_yellow</span> <span class="ident">Color::Yellow</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dark_yellow</span>, <span class="ident">on_dark_yellow</span>, <span class="ident">underline_dark_yellow</span> <span class="ident">Color::DarkYellow</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">blue</span>, <span class="ident">on_blue</span>, <span class="ident">underline_blue</span> <span class="ident">Color::Blue</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dark_blue</span>, <span class="ident">on_dark_blue</span>, <span class="ident">underline_dark_blue</span> <span class="ident">Color::DarkBlue</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">magenta</span>, <span class="ident">on_magenta</span>, <span class="ident">underline_magenta</span> <span class="ident">Color::Magenta</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dark_magenta</span>, <span class="ident">on_dark_magenta</span>, <span class="ident">underline_dark_magenta</span> <span class="ident">Color::DarkMagenta</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">cyan</span>, <span class="ident">on_cyan</span>, <span class="ident">underline_cyan</span> <span class="ident">Color::Cyan</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">dark_cyan</span>, <span class="ident">on_dark_cyan</span>, <span class="ident">underline_dark_cyan</span> <span class="ident">Color::DarkCyan</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">white</span>, <span class="ident">on_white</span>, <span class="ident">underline_white</span> <span class="ident">Color::White</span>);
-    <span class="macro">stylize_method!</span>(<span class="ident">grey</span>, <span class="ident">on_grey</span>, <span class="ident">underline_grey</span> <span class="ident">Color::Grey</span>);
+    <span class="macro">stylize_method!</span>(black, on_black, underline_black Color::Black);
+    <span class="macro">stylize_method!</span>(dark_grey, on_dark_grey, underline_dark_grey Color::DarkGrey);
+    <span class="macro">stylize_method!</span>(red, on_red, underline_red Color::Red);
+    <span class="macro">stylize_method!</span>(dark_red, on_dark_red, underline_dark_red Color::DarkRed);
+    <span class="macro">stylize_method!</span>(green, on_green, underline_green Color::Green);
+    <span class="macro">stylize_method!</span>(dark_green, on_dark_green, underline_dark_green Color::DarkGreen);
+    <span class="macro">stylize_method!</span>(yellow, on_yellow, underline_yellow Color::Yellow);
+    <span class="macro">stylize_method!</span>(dark_yellow, on_dark_yellow, underline_dark_yellow Color::DarkYellow);
+    <span class="macro">stylize_method!</span>(blue, on_blue, underline_blue Color::Blue);
+    <span class="macro">stylize_method!</span>(dark_blue, on_dark_blue, underline_dark_blue Color::DarkBlue);
+    <span class="macro">stylize_method!</span>(magenta, on_magenta, underline_magenta Color::Magenta);
+    <span class="macro">stylize_method!</span>(dark_magenta, on_dark_magenta, underline_dark_magenta Color::DarkMagenta);
+    <span class="macro">stylize_method!</span>(cyan, on_cyan, underline_cyan Color::Cyan);
+    <span class="macro">stylize_method!</span>(dark_cyan, on_dark_cyan, underline_dark_cyan Color::DarkCyan);
+    <span class="macro">stylize_method!</span>(white, on_white, underline_white Color::White);
+    <span class="macro">stylize_method!</span>(grey, on_grey, underline_grey Color::Grey);
 }
 
-<span class="macro">macro_rules!</span> <span class="ident">impl_stylize_for_display</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>),<span class="kw-2">*</span>) =&gt; { $(
-        <span class="kw">impl</span> <span class="ident">Stylize</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span> {
-            <span class="kw">type</span> <span class="ident">Styled</span> <span class="op">=</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
-            <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-                <span class="ident">style</span>(<span class="self">self</span>)
+<span class="macro">macro_rules!</span> impl_stylize_for_display {
+    ($(<span class="macro-nonterminal">$t</span>:ty),<span class="kw-2">*</span>) =&gt; { $(
+        <span class="kw">impl </span>Stylize <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
+            <span class="kw">type </span>Styled = StyledContent&lt;<span class="self">Self</span>&gt;;
+            <span class="attribute">#[inline]</span>
+            <span class="kw">fn </span>stylize(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled {
+                style(<span class="self">self</span>)
             }
         }
-    )<span class="op">*</span> }
+    )* }
 }
-<span class="macro">impl_stylize_for_display!</span>(<span class="ident">String</span>, <span class="ident">char</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>);
+<span class="macro">impl_stylize_for_display!</span>(String, char, <span class="kw-2">&amp;</span>str);
 
-<span class="kw">impl</span> <span class="ident">Stylize</span> <span class="kw">for</span> <span class="ident">ContentStyle</span> {
-    <span class="kw">type</span> <span class="ident">Styled</span> <span class="op">=</span> <span class="self">Self</span>;
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-        <span class="self">self</span>
-    }
+<span class="kw">impl </span>Stylize <span class="kw">for </span>ContentStyle {
+    <span class="kw">type </span>Styled = <span class="self">Self</span>;
+    <span class="attribute">#[inline]</span>
+    <span class="kw">fn </span>stylize(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled {
+        <span class="self">self
+    </span>}
 }
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">Stylize</span> <span class="kw">for</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Styled</span> <span class="op">=</span> <span class="ident">StyledContent</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">stylize</span>(<span class="self">self</span>) -&gt; <span class="ident"><span class="self">Self</span>::Styled</span> {
-        <span class="self">self</span>
-    }
+<span class="kw">impl</span>&lt;D: Display&gt; Stylize <span class="kw">for </span>StyledContent&lt;D&gt; {
+    <span class="kw">type </span>Styled = StyledContent&lt;D&gt;;
+    <span class="kw">fn </span>stylize(<span class="self">self</span>) -&gt; <span class="self">Self</span>::Styled {
+        <span class="self">self
+    </span>}
 }
 
-<span class="comment">// Workaround for https://github.com/rust-lang/rust/issues/78835</span>
-<span class="macro">macro_rules!</span> <span class="ident">calculated_docs</span> {
-    ($(<span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>:<span class="ident">expr</span>]</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>:<span class="ident">item</span>)<span class="kw-2">*</span>) =&gt; { $(<span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">doc</span>]</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">item</span>)<span class="op">*</span> };
+<span class="comment">// Workaround for https://github.com/rust-lang/rust/issues/78835
+</span><span class="macro">macro_rules!</span> calculated_docs {
+    ($(<span class="attribute">#[doc = <span class="macro-nonterminal">$doc</span>:expr]</span> <span class="macro-nonterminal">$item</span>:item)<span class="kw-2">*</span>) =&gt; { $(<span class="attribute">#[doc = <span class="macro-nonterminal">$doc</span>]</span> <span class="macro-nonterminal">$item</span>)* };
 }
-<span class="comment">// Remove once https://github.com/rust-lang/rust-clippy/issues/7106 stabilizes.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::single_component_path_imports</span>)]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::useless_attribute</span>)]</span>
-<span class="kw">use</span> <span class="ident">calculated_docs</span>;
+<span class="comment">// Remove once https://github.com/rust-lang/rust-clippy/issues/7106 stabilizes.
+</span><span class="attribute">#[allow(clippy::single_component_path_imports)]</span>
+<span class="attribute">#[allow(clippy::useless_attribute)]</span>
+<span class="kw">use </span>calculated_docs;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span></span>::{<span class="ident">Attribute</span>, <span class="ident">Color</span>, <span class="ident">ContentStyle</span>, <span class="ident">Stylize</span>};
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::{Attribute, Color, ContentStyle, Stylize};
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">set_fg_bg_add_attr</span>() {
-        <span class="kw">let</span> <span class="ident">style</span> <span class="op">=</span> <span class="ident">ContentStyle::new</span>()
-            .<span class="ident">with</span>(<span class="ident">Color::Blue</span>)
-            .<span class="ident">on</span>(<span class="ident">Color::Red</span>)
-            .<span class="ident">attribute</span>(<span class="ident">Attribute::Bold</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>set_fg_bg_add_attr() {
+        <span class="kw">let </span>style = ContentStyle::new()
+            .with(Color::Blue)
+            .on(Color::Red)
+            .attribute(Attribute::Bold);
 
-        <span class="macro">assert_eq!</span>(<span class="ident">style</span>.<span class="ident">foreground_color</span>, <span class="prelude-val">Some</span>(<span class="ident">Color::Blue</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">style</span>.<span class="ident">background_color</span>, <span class="prelude-val">Some</span>(<span class="ident">Color::Red</span>));
-        <span class="macro">assert!</span>(<span class="ident">style</span>.<span class="ident">attributes</span>.<span class="ident">has</span>(<span class="ident">Attribute::Bold</span>));
+        <span class="macro">assert_eq!</span>(style.foreground_color, <span class="prelude-val">Some</span>(Color::Blue));
+        <span class="macro">assert_eq!</span>(style.background_color, <span class="prelude-val">Some</span>(Color::Red));
+        <span class="macro">assert!</span>(style.attributes.has(Attribute::Bold));
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">styled_content</span> <span class="op">=</span> <span class="ident">style</span>.<span class="ident">apply</span>(<span class="string">&quot;test&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>styled_content = style.apply(<span class="string">&quot;test&quot;</span>);
 
-        <span class="ident">styled_content</span> <span class="op">=</span> <span class="ident">styled_content</span>
-            .<span class="ident">with</span>(<span class="ident">Color::Green</span>)
-            .<span class="ident">on</span>(<span class="ident">Color::Magenta</span>)
-            .<span class="ident">attribute</span>(<span class="ident">Attribute::NoItalic</span>);
+        styled_content = styled_content
+            .with(Color::Green)
+            .on(Color::Magenta)
+            .attribute(Attribute::NoItalic);
 
-        <span class="kw">let</span> <span class="ident">style</span> <span class="op">=</span> <span class="ident">styled_content</span>.<span class="ident">style</span>();
+        <span class="kw">let </span>style = styled_content.style();
 
-        <span class="macro">assert_eq!</span>(<span class="ident">style</span>.<span class="ident">foreground_color</span>, <span class="prelude-val">Some</span>(<span class="ident">Color::Green</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">style</span>.<span class="ident">background_color</span>, <span class="prelude-val">Some</span>(<span class="ident">Color::Magenta</span>));
-        <span class="macro">assert!</span>(<span class="ident">style</span>.<span class="ident">attributes</span>.<span class="ident">has</span>(<span class="ident">Attribute::Bold</span>));
-        <span class="macro">assert!</span>(<span class="ident">style</span>.<span class="ident">attributes</span>.<span class="ident">has</span>(<span class="ident">Attribute::NoItalic</span>));
+        <span class="macro">assert_eq!</span>(style.foreground_color, <span class="prelude-val">Some</span>(Color::Green));
+        <span class="macro">assert_eq!</span>(style.background_color, <span class="prelude-val">Some</span>(Color::Magenta));
+        <span class="macro">assert!</span>(style.attributes.has(Attribute::Bold));
+        <span class="macro">assert!</span>(style.attributes.has(Attribute::NoItalic));
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

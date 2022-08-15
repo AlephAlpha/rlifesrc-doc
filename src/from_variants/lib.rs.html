@@ -49,56 +49,56 @@
 <span id="49">49</span>
 <span id="50">50</span>
 <span id="51">51</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Rust macro crate to automatically generate conversions from variant types into the target enum.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This crate requires Rust 1.45 or above to compile on stable.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! use from_variants::FromVariants;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! #[derive(Debug, Clone, PartialEq, Eq, FromVariants)]</span>
-<span class="doccomment">//! pub enum Lorem {</span>
-<span class="doccomment">//!     Str(String),</span>
-<span class="doccomment">//!     Num(u16),</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! assert_eq!(Lorem::Num(10), Lorem::from(10));</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! You can skip variants to avoid type collisions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! use from_variants::FromVariants;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! #[derive(Debug, Clone, PartialEq, Eq, FromVariants)]</span>
-<span class="doccomment">//! pub enum Ipsum {</span>
-<span class="doccomment">//!     Hello(String),</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     #[from_variants(skip)]</span>
-<span class="doccomment">//!     Goodbye(String),</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! assert_eq!(Ipsum::Hello(&quot;John&quot;.to_string()), Ipsum::from(&quot;John&quot;.to_string()));</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Features</span>
-<span class="doccomment">//! * **Variant opt-out**: To skip a variant, add `#[from_variants(skip)]` to that variant.</span>
-<span class="doccomment">//! * **Conversion opt-in**: Use `#[from_variants(into)]` on an enum or variant to generate conversions</span>
-<span class="doccomment">//!   that will automatically convert - for example, accepting a `&amp;str` for a `String` variant.</span>
-<span class="doccomment">//!   This must be used sparingly to avoid generating conflicting impls.</span>
-<span class="doccomment">//! * **no_std support**: Generated conversions do not depend on the standard library.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Rust macro crate to automatically generate conversions from variant types into the target enum.
+//!
+//! This crate requires Rust 1.45 or above to compile on stable.
+//!
+//! # Examples
+//!
+//! ```rust
+//! use from_variants::FromVariants;
+//!
+//! #[derive(Debug, Clone, PartialEq, Eq, FromVariants)]
+//! pub enum Lorem {
+//!     Str(String),
+//!     Num(u16),
+//! }
+//!
+//! assert_eq!(Lorem::Num(10), Lorem::from(10));
+//! ```
+//!
+//! You can skip variants to avoid type collisions:
+//!
+//! ```rust
+//! use from_variants::FromVariants;
+//!
+//! #[derive(Debug, Clone, PartialEq, Eq, FromVariants)]
+//! pub enum Ipsum {
+//!     Hello(String),
+//!
+//!     #[from_variants(skip)]
+//!     Goodbye(String),
+//! }
+//!
+//! assert_eq!(Ipsum::Hello(&quot;John&quot;.to_string()), Ipsum::from(&quot;John&quot;.to_string()));
+//! ```
+//!
+//! # Features
+//! * **Variant opt-out**: To skip a variant, add `#[from_variants(skip)]` to that variant.
+//! * **Conversion opt-in**: Use `#[from_variants(into)]` on an enum or variant to generate conversions
+//!   that will automatically convert - for example, accepting a `&amp;str` for a `String` variant.
+//!   This must be used sparingly to avoid generating conflicting impls.
+//! * **no_std support**: Generated conversions do not depend on the standard library.
 
-<span class="attribute">#![<span class="ident">no_std</span>]</span>
+</span><span class="attribute">#![no_std]</span>
 
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">from_variants_impl</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[allow(unused_imports)]</span>
+<span class="kw">pub use </span>from_variants_impl::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">export</span> {
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::core::convert::From</span>;
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">::core::convert::Into</span>;
+<span class="attribute">#[doc(hidden)]</span>
+<span class="kw">pub mod </span>export {
+    <span class="kw">pub use </span>::core::convert::From;
+    <span class="kw">pub use </span>::core::convert::Into;
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="from_variants" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="from_variants" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

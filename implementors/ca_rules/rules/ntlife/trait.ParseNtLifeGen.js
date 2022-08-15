@@ -1,3 +1,3 @@
-(function() {var implementors = {};
-implementors["rlifesrc_lib"] = [{"text":"impl <a class=\"trait\" href=\"ca_rules/rules/ntlife/trait.ParseNtLifeGen.html\" title=\"trait ca_rules::rules::ntlife::ParseNtLifeGen\">ParseNtLifeGen</a> for <a class=\"struct\" href=\"rlifesrc_lib/rules/ntlife/struct.NtLifeGen.html\" title=\"struct rlifesrc_lib::rules::ntlife::NtLifeGen\">NtLifeGen</a>","synthetic":false,"types":["rlifesrc_lib::rules::ntlife::NtLifeGen"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {var implementors = {
+"rlifesrc_lib":[["impl <a class=\"trait\" href=\"ca_rules/rules/ntlife/trait.ParseNtLifeGen.html\" title=\"trait ca_rules::rules::ntlife::ParseNtLifeGen\">ParseNtLifeGen</a> for <a class=\"struct\" href=\"rlifesrc_lib/rules/ntlife/struct.NtLifeGen.html\" title=\"struct rlifesrc_lib::rules::ntlife::NtLifeGen\">NtLifeGen</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

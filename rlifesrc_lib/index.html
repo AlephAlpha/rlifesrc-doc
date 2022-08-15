@@ -13,17 +13,17 @@ and a <a href="https://github.com/AlephAlpha/rlifesrc/tree/master/web">web app u
 <h2 id="example"><a href="#example">Example</a></h2>
 <p>Finds the <a href="https://conwaylife.com/wiki/25P3H1V0.1">25P3H1V0.1</a> spaceship.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">rlifesrc_lib</span>::{<span class="ident">Config</span>, <span class="ident">Status</span>};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>rlifesrc_lib::{Config, Status};
 
-<span class="comment">// Configures the world.</span>
-<span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="ident">Config::new</span>(<span class="number">16</span>, <span class="number">5</span>, <span class="number">3</span>).<span class="ident">set_translate</span>(<span class="number">0</span>, <span class="number">1</span>);
+<span class="comment">// Configures the world.
+</span><span class="kw">let </span>config = Config::new(<span class="number">16</span>, <span class="number">5</span>, <span class="number">3</span>).set_translate(<span class="number">0</span>, <span class="number">1</span>);
 
-<span class="comment">// Creates the world.</span>
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">world</span>().<span class="ident">unwrap</span>();
+<span class="comment">// Creates the world.
+</span><span class="kw">let </span><span class="kw-2">mut </span>search = config.world().unwrap();
 
-<span class="comment">// Searches and displays the generation 0 of the result.</span>
-<span class="kw">if</span> <span class="kw">let</span> <span class="ident">Status::Found</span> <span class="op">=</span> <span class="ident">search</span>.<span class="ident">search</span>(<span class="prelude-val">None</span>) {
-    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">search</span>.<span class="ident">rle_gen</span>(<span class="number">0</span>))
+<span class="comment">// Searches and displays the generation 0 of the result.
+</span><span class="kw">if let </span>Status::Found = search.search(<span class="prelude-val">None</span>) {
+    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, search.rle_gen(<span class="number">0</span>))
 }</code></pre></div>
 <p>Search result:</p>
 <div class="example-wrap"><pre class="language-plaintext"><code>x = 16, y = 5, rule = B3/S23
@@ -53,4 +53,4 @@ in a period.</p>
 </div></div></div><h2 id="constants" class="small-section-header"><a href="#constants">Constants</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.ALIVE.html" title="rlifesrc_lib::ALIVE constant">ALIVE</a></div><div class="item-right docblock-short"><p>The Alive state.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.DEAD.html" title="rlifesrc_lib::DEAD constant">DEAD</a></div><div class="item-right docblock-short"><p>The Dead state.</p>
 </div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Coord.html" title="rlifesrc_lib::Coord type">Coord</a></div><div class="item-right docblock-short"><p>The coordinates of a cell.</p>
-</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

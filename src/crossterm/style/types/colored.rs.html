@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/style/types/colored.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>colored.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../crossterm/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style/types/colored.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>colored.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../crossterm/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -268,275 +268,275 @@
 <span id="268">268</span>
 <span id="269">269</span>
 <span id="270">270</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Formatter</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::{<span class="self">self</span>, Formatter};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::style</span>::{<span class="ident">parse_next_u8</span>, <span class="ident">Color</span>};
+<span class="kw">use </span><span class="kw">crate</span>::style::{parse_next_u8, Color};
 
-<span class="doccomment">/// Represents a foreground or background color.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This can be converted to a [Colors](struct.Colors.html) by calling `into()` and applied</span>
-<span class="doccomment">/// using the [SetColors](struct.SetColors.html) command.</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Colored</span> {
-    <span class="doccomment">/// A foreground color.</span>
-    <span class="ident">ForegroundColor</span>(<span class="ident">Color</span>),
-    <span class="doccomment">/// A background color.</span>
-    <span class="ident">BackgroundColor</span>(<span class="ident">Color</span>),
-    <span class="doccomment">/// An underline color.</span>
-    <span class="doccomment">/// Imporant: doesnt work on windows 10 or lower.</span>
-    <span class="ident">UnderlineColor</span>(<span class="ident">Color</span>),
+<span class="doccomment">/// Represents a foreground or background color.
+///
+/// This can be converted to a [Colors](struct.Colors.html) by calling `into()` and applied
+/// using the [SetColors](struct.SetColors.html) command.
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="attribute">#[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]</span>
+<span class="kw">pub enum </span>Colored {
+    <span class="doccomment">/// A foreground color.
+    </span>ForegroundColor(Color),
+    <span class="doccomment">/// A background color.
+    </span>BackgroundColor(Color),
+    <span class="doccomment">/// An underline color.
+    /// Imporant: doesnt work on windows 10 or lower.
+    </span>UnderlineColor(Color),
 }
 
-<span class="kw">impl</span> <span class="ident">Colored</span> {
-    <span class="doccomment">/// Parse an ANSI foreground or background color.</span>
-    <span class="doccomment">/// This is the string that would appear within an `ESC [ &lt;str&gt; m` escape sequence, as found in</span>
-    <span class="doccomment">/// various configuration files.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use crossterm::style::{Colored::{self, ForegroundColor, BackgroundColor}, Color};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(Colored::parse_ansi(&quot;38;5;0&quot;), Some(ForegroundColor(Color::Black)));</span>
-    <span class="doccomment">/// assert_eq!(Colored::parse_ansi(&quot;38;5;26&quot;), Some(ForegroundColor(Color::AnsiValue(26))));</span>
-    <span class="doccomment">/// assert_eq!(Colored::parse_ansi(&quot;48;2;50;60;70&quot;), Some(BackgroundColor(Color::Rgb { r: 50, g: 60, b: 70 })));</span>
-    <span class="doccomment">/// assert_eq!(Colored::parse_ansi(&quot;49&quot;), Some(BackgroundColor(Color::Reset)));</span>
-    <span class="doccomment">/// assert_eq!(Colored::parse_ansi(&quot;invalid color&quot;), None);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Currently, 3/4 bit color values aren&#39;t supported so return `None`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// See also: [`Color::parse_ansi`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_ansi</span>(<span class="ident">ansi</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">use</span> <span class="ident">Colored</span>::{<span class="ident">BackgroundColor</span>, <span class="ident">ForegroundColor</span>, <span class="ident">UnderlineColor</span>};
+<span class="kw">impl </span>Colored {
+    <span class="doccomment">/// Parse an ANSI foreground or background color.
+    /// This is the string that would appear within an `ESC [ &lt;str&gt; m` escape sequence, as found in
+    /// various configuration files.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crossterm::style::{Colored::{self, ForegroundColor, BackgroundColor}, Color};
+    ///
+    /// assert_eq!(Colored::parse_ansi(&quot;38;5;0&quot;), Some(ForegroundColor(Color::Black)));
+    /// assert_eq!(Colored::parse_ansi(&quot;38;5;26&quot;), Some(ForegroundColor(Color::AnsiValue(26))));
+    /// assert_eq!(Colored::parse_ansi(&quot;48;2;50;60;70&quot;), Some(BackgroundColor(Color::Rgb { r: 50, g: 60, b: 70 })));
+    /// assert_eq!(Colored::parse_ansi(&quot;49&quot;), Some(BackgroundColor(Color::Reset)));
+    /// assert_eq!(Colored::parse_ansi(&quot;invalid color&quot;), None);
+    /// ```
+    ///
+    /// Currently, 3/4 bit color values aren&#39;t supported so return `None`.
+    ///
+    /// See also: [`Color::parse_ansi`].
+    </span><span class="kw">pub fn </span>parse_ansi(ansi: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">use </span>Colored::{BackgroundColor, ForegroundColor, UnderlineColor};
 
-        <span class="kw">let</span> <span class="ident">values</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">ansi</span>.<span class="ident">split</span>(<span class="string">&#39;;&#39;</span>);
+        <span class="kw">let </span>values = <span class="kw-2">&amp;mut </span>ansi.split(<span class="string">&#39;;&#39;</span>);
 
-        <span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">parse_next_u8</span>(<span class="ident">values</span>)<span class="question-mark">?</span> {
-            <span class="number">38</span> =&gt; <span class="kw">return</span> <span class="ident">Color::parse_ansi_iter</span>(<span class="ident">values</span>).<span class="ident">map</span>(<span class="ident">ForegroundColor</span>),
-            <span class="number">48</span> =&gt; <span class="kw">return</span> <span class="ident">Color::parse_ansi_iter</span>(<span class="ident">values</span>).<span class="ident">map</span>(<span class="ident">BackgroundColor</span>),
-            <span class="number">58</span> =&gt; <span class="kw">return</span> <span class="ident">Color::parse_ansi_iter</span>(<span class="ident">values</span>).<span class="ident">map</span>(<span class="ident">UnderlineColor</span>),
+        <span class="kw">let </span>output = <span class="kw">match </span>parse_next_u8(values)<span class="question-mark">? </span>{
+            <span class="number">38 </span>=&gt; <span class="kw">return </span>Color::parse_ansi_iter(values).map(ForegroundColor),
+            <span class="number">48 </span>=&gt; <span class="kw">return </span>Color::parse_ansi_iter(values).map(BackgroundColor),
+            <span class="number">58 </span>=&gt; <span class="kw">return </span>Color::parse_ansi_iter(values).map(UnderlineColor),
 
-            <span class="number">39</span> =&gt; <span class="ident">ForegroundColor</span>(<span class="ident">Color::Reset</span>),
-            <span class="number">49</span> =&gt; <span class="ident">BackgroundColor</span>(<span class="ident">Color::Reset</span>),
-            <span class="number">59</span> =&gt; <span class="ident">UnderlineColor</span>(<span class="ident">Color::Reset</span>),
+            <span class="number">39 </span>=&gt; ForegroundColor(Color::Reset),
+            <span class="number">49 </span>=&gt; BackgroundColor(Color::Reset),
+            <span class="number">59 </span>=&gt; UnderlineColor(Color::Reset),
 
-            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
         };
 
-        <span class="kw">if</span> <span class="ident">values</span>.<span class="ident">next</span>().<span class="ident">is_some</span>() {
-            <span class="kw">return</span> <span class="prelude-val">None</span>;
+        <span class="kw">if </span>values.next().is_some() {
+            <span class="kw">return </span><span class="prelude-val">None</span>;
         }
 
-        <span class="prelude-val">Some</span>(<span class="ident">output</span>)
+        <span class="prelude-val">Some</span>(output)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Colored</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">let</span> <span class="ident">color</span>;
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>Colored {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        <span class="kw">let </span>color;
 
-        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">Colored::ForegroundColor</span>(<span class="ident">new_color</span>) =&gt; {
-                <span class="kw">if</span> <span class="ident">new_color</span> <span class="op">==</span> <span class="ident">Color::Reset</span> {
-                    <span class="kw">return</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;39&quot;</span>);
-                } <span class="kw">else</span> {
-                    <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;38;&quot;</span>)<span class="question-mark">?</span>;
-                    <span class="ident">color</span> <span class="op">=</span> <span class="ident">new_color</span>;
+        <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
+            Colored::ForegroundColor(new_color) =&gt; {
+                <span class="kw">if </span>new_color == Color::Reset {
+                    <span class="kw">return </span>f.write_str(<span class="string">&quot;39&quot;</span>);
+                } <span class="kw">else </span>{
+                    f.write_str(<span class="string">&quot;38;&quot;</span>)<span class="question-mark">?</span>;
+                    color = new_color;
                 }
             }
-            <span class="ident">Colored::BackgroundColor</span>(<span class="ident">new_color</span>) =&gt; {
-                <span class="kw">if</span> <span class="ident">new_color</span> <span class="op">==</span> <span class="ident">Color::Reset</span> {
-                    <span class="kw">return</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;49&quot;</span>);
-                } <span class="kw">else</span> {
-                    <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;48;&quot;</span>)<span class="question-mark">?</span>;
-                    <span class="ident">color</span> <span class="op">=</span> <span class="ident">new_color</span>;
+            Colored::BackgroundColor(new_color) =&gt; {
+                <span class="kw">if </span>new_color == Color::Reset {
+                    <span class="kw">return </span>f.write_str(<span class="string">&quot;49&quot;</span>);
+                } <span class="kw">else </span>{
+                    f.write_str(<span class="string">&quot;48;&quot;</span>)<span class="question-mark">?</span>;
+                    color = new_color;
                 }
             }
-            <span class="ident">Colored::UnderlineColor</span>(<span class="ident">new_color</span>) =&gt; {
-                <span class="kw">if</span> <span class="ident">new_color</span> <span class="op">==</span> <span class="ident">Color::Reset</span> {
-                    <span class="kw">return</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;59&quot;</span>);
-                } <span class="kw">else</span> {
-                    <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;58;&quot;</span>)<span class="question-mark">?</span>;
-                    <span class="ident">color</span> <span class="op">=</span> <span class="ident">new_color</span>;
+            Colored::UnderlineColor(new_color) =&gt; {
+                <span class="kw">if </span>new_color == Color::Reset {
+                    <span class="kw">return </span>f.write_str(<span class="string">&quot;59&quot;</span>);
+                } <span class="kw">else </span>{
+                    f.write_str(<span class="string">&quot;58;&quot;</span>)<span class="question-mark">?</span>;
+                    color = new_color;
                 }
             }
         }
 
-        <span class="kw">match</span> <span class="ident">color</span> {
-            <span class="ident">Color::Black</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;0&quot;</span>),
-            <span class="ident">Color::DarkGrey</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;8&quot;</span>),
-            <span class="ident">Color::Red</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;9&quot;</span>),
-            <span class="ident">Color::DarkRed</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;1&quot;</span>),
-            <span class="ident">Color::Green</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;10&quot;</span>),
-            <span class="ident">Color::DarkGreen</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;2&quot;</span>),
-            <span class="ident">Color::Yellow</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;11&quot;</span>),
-            <span class="ident">Color::DarkYellow</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;3&quot;</span>),
-            <span class="ident">Color::Blue</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;12&quot;</span>),
-            <span class="ident">Color::DarkBlue</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;4&quot;</span>),
-            <span class="ident">Color::Magenta</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;13&quot;</span>),
-            <span class="ident">Color::DarkMagenta</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;5&quot;</span>),
-            <span class="ident">Color::Cyan</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;14&quot;</span>),
-            <span class="ident">Color::DarkCyan</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;6&quot;</span>),
-            <span class="ident">Color::White</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;15&quot;</span>),
-            <span class="ident">Color::Grey</span> =&gt; <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;5;7&quot;</span>),
-            <span class="ident">Color::Rgb</span> { <span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span> } =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;2;{};{};{}&quot;</span>, <span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span>),
-            <span class="ident">Color::AnsiValue</span>(<span class="ident">val</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;5;{}&quot;</span>, <span class="ident">val</span>),
-            <span class="kw">_</span> =&gt; <span class="prelude-val">Ok</span>(()),
+        <span class="kw">match </span>color {
+            Color::Black =&gt; f.write_str(<span class="string">&quot;5;0&quot;</span>),
+            Color::DarkGrey =&gt; f.write_str(<span class="string">&quot;5;8&quot;</span>),
+            Color::Red =&gt; f.write_str(<span class="string">&quot;5;9&quot;</span>),
+            Color::DarkRed =&gt; f.write_str(<span class="string">&quot;5;1&quot;</span>),
+            Color::Green =&gt; f.write_str(<span class="string">&quot;5;10&quot;</span>),
+            Color::DarkGreen =&gt; f.write_str(<span class="string">&quot;5;2&quot;</span>),
+            Color::Yellow =&gt; f.write_str(<span class="string">&quot;5;11&quot;</span>),
+            Color::DarkYellow =&gt; f.write_str(<span class="string">&quot;5;3&quot;</span>),
+            Color::Blue =&gt; f.write_str(<span class="string">&quot;5;12&quot;</span>),
+            Color::DarkBlue =&gt; f.write_str(<span class="string">&quot;5;4&quot;</span>),
+            Color::Magenta =&gt; f.write_str(<span class="string">&quot;5;13&quot;</span>),
+            Color::DarkMagenta =&gt; f.write_str(<span class="string">&quot;5;5&quot;</span>),
+            Color::Cyan =&gt; f.write_str(<span class="string">&quot;5;14&quot;</span>),
+            Color::DarkCyan =&gt; f.write_str(<span class="string">&quot;5;6&quot;</span>),
+            Color::White =&gt; f.write_str(<span class="string">&quot;5;15&quot;</span>),
+            Color::Grey =&gt; f.write_str(<span class="string">&quot;5;7&quot;</span>),
+            Color::Rgb { r, g, b } =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;2;{};{};{}&quot;</span>, r, g, b),
+            Color::AnsiValue(val) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;5;{}&quot;</span>, val),
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">Ok</span>(()),
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::style</span>::{<span class="ident">Color</span>, <span class="ident">Colored</span>};
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">crate</span>::style::{Color, Colored};
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_format_fg_color</span>() {
-        <span class="kw">let</span> <span class="ident">colored</span> <span class="op">=</span> <span class="ident">Colored::ForegroundColor</span>(<span class="ident">Color::Red</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">colored</span>.<span class="ident">to_string</span>(), <span class="string">&quot;38;5;9&quot;</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_format_fg_color() {
+        <span class="kw">let </span>colored = Colored::ForegroundColor(Color::Red);
+        <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;38;5;9&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_format_bg_color</span>() {
-        <span class="kw">let</span> <span class="ident">colored</span> <span class="op">=</span> <span class="ident">Colored::BackgroundColor</span>(<span class="ident">Color::Red</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">colored</span>.<span class="ident">to_string</span>(), <span class="string">&quot;48;5;9&quot;</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_format_bg_color() {
+        <span class="kw">let </span>colored = Colored::BackgroundColor(Color::Red);
+        <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;48;5;9&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_format_reset_fg_color</span>() {
-        <span class="kw">let</span> <span class="ident">colored</span> <span class="op">=</span> <span class="ident">Colored::ForegroundColor</span>(<span class="ident">Color::Reset</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">colored</span>.<span class="ident">to_string</span>(), <span class="string">&quot;39&quot;</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_format_reset_fg_color() {
+        <span class="kw">let </span>colored = Colored::ForegroundColor(Color::Reset);
+        <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;39&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_format_reset_bg_color</span>() {
-        <span class="kw">let</span> <span class="ident">colored</span> <span class="op">=</span> <span class="ident">Colored::BackgroundColor</span>(<span class="ident">Color::Reset</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">colored</span>.<span class="ident">to_string</span>(), <span class="string">&quot;49&quot;</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_format_reset_bg_color() {
+        <span class="kw">let </span>colored = Colored::BackgroundColor(Color::Reset);
+        <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;49&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_format_fg_rgb_color</span>() {
-        <span class="kw">let</span> <span class="ident">colored</span> <span class="op">=</span> <span class="ident">Colored::BackgroundColor</span>(<span class="ident">Color::Rgb</span> { <span class="ident">r</span>: <span class="number">1</span>, <span class="ident">g</span>: <span class="number">2</span>, <span class="ident">b</span>: <span class="number">3</span> });
-        <span class="macro">assert_eq!</span>(<span class="ident">colored</span>.<span class="ident">to_string</span>(), <span class="string">&quot;48;2;1;2;3&quot;</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_format_fg_rgb_color() {
+        <span class="kw">let </span>colored = Colored::BackgroundColor(Color::Rgb { r: <span class="number">1</span>, g: <span class="number">2</span>, b: <span class="number">3 </span>});
+        <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;48;2;1;2;3&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_format_fg_ansi_color</span>() {
-        <span class="kw">let</span> <span class="ident">colored</span> <span class="op">=</span> <span class="ident">Colored::ForegroundColor</span>(<span class="ident">Color::AnsiValue</span>(<span class="number">255</span>));
-        <span class="macro">assert_eq!</span>(<span class="ident">colored</span>.<span class="ident">to_string</span>(), <span class="string">&quot;38;5;255&quot;</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_format_fg_ansi_color() {
+        <span class="kw">let </span>colored = Colored::ForegroundColor(Color::AnsiValue(<span class="number">255</span>));
+        <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;38;5;255&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_parse_ansi_fg</span>() {
-        <span class="ident">test_parse_ansi</span>(<span class="ident">Colored::ForegroundColor</span>)
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_parse_ansi_fg() {
+        test_parse_ansi(Colored::ForegroundColor)
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_parse_ansi_bg</span>() {
-        <span class="ident">test_parse_ansi</span>(<span class="ident">Colored::ForegroundColor</span>)
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_parse_ansi_bg() {
+        test_parse_ansi(Colored::ForegroundColor)
     }
 
-    <span class="doccomment">/// Used for test_parse_ansi_fg and test_parse_ansi_bg</span>
-    <span class="kw">fn</span> <span class="ident">test_parse_ansi</span>(<span class="ident">bg_or_fg</span>: <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="ident">Color</span>) -&gt; <span class="ident">Colored</span>) {
-        <span class="doccomment">/// Formats a re-parses `color` to check the result.</span>
-        <span class="macro">macro_rules!</span> <span class="ident">test</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>:<span class="ident">expr</span>) =&gt; {
-                <span class="kw">let</span> <span class="ident">colored</span> <span class="op">=</span> <span class="ident">bg_or_fg</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">color</span>);
-                <span class="macro">assert_eq!</span>(<span class="ident">Colored::parse_ansi</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">colored</span>)), <span class="prelude-val">Some</span>(<span class="ident">colored</span>));
+    <span class="doccomment">/// Used for test_parse_ansi_fg and test_parse_ansi_bg
+    </span><span class="kw">fn </span>test_parse_ansi(bg_or_fg: <span class="kw">impl </span>Fn(Color) -&gt; Colored) {
+        <span class="doccomment">/// Formats a re-parses `color` to check the result.
+        </span><span class="macro">macro_rules!</span> test {
+            (<span class="macro-nonterminal">$color</span>:expr) =&gt; {
+                <span class="kw">let </span>colored = bg_or_fg(<span class="macro-nonterminal">$color</span>);
+                <span class="macro">assert_eq!</span>(Colored::parse_ansi(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, colored)), <span class="prelude-val">Some</span>(colored));
             };
         }
 
-        <span class="kw">use</span> <span class="ident">Color</span>::<span class="kw-2">*</span>;
+        <span class="kw">use </span>Color::<span class="kw-2">*</span>;
 
-        <span class="macro">test!</span>(<span class="ident">Reset</span>);
-        <span class="macro">test!</span>(<span class="ident">Black</span>);
-        <span class="macro">test!</span>(<span class="ident">DarkGrey</span>);
-        <span class="macro">test!</span>(<span class="ident">Red</span>);
-        <span class="macro">test!</span>(<span class="ident">DarkRed</span>);
-        <span class="macro">test!</span>(<span class="ident">Green</span>);
-        <span class="macro">test!</span>(<span class="ident">DarkGreen</span>);
-        <span class="macro">test!</span>(<span class="ident">Yellow</span>);
-        <span class="macro">test!</span>(<span class="ident">DarkYellow</span>);
-        <span class="macro">test!</span>(<span class="ident">Blue</span>);
-        <span class="macro">test!</span>(<span class="ident">DarkBlue</span>);
-        <span class="macro">test!</span>(<span class="ident">Magenta</span>);
-        <span class="macro">test!</span>(<span class="ident">DarkMagenta</span>);
-        <span class="macro">test!</span>(<span class="ident">Cyan</span>);
-        <span class="macro">test!</span>(<span class="ident">DarkCyan</span>);
-        <span class="macro">test!</span>(<span class="ident">White</span>);
-        <span class="macro">test!</span>(<span class="ident">Grey</span>);
+        <span class="macro">test!</span>(Reset);
+        <span class="macro">test!</span>(Black);
+        <span class="macro">test!</span>(DarkGrey);
+        <span class="macro">test!</span>(Red);
+        <span class="macro">test!</span>(DarkRed);
+        <span class="macro">test!</span>(Green);
+        <span class="macro">test!</span>(DarkGreen);
+        <span class="macro">test!</span>(Yellow);
+        <span class="macro">test!</span>(DarkYellow);
+        <span class="macro">test!</span>(Blue);
+        <span class="macro">test!</span>(DarkBlue);
+        <span class="macro">test!</span>(Magenta);
+        <span class="macro">test!</span>(DarkMagenta);
+        <span class="macro">test!</span>(Cyan);
+        <span class="macro">test!</span>(DarkCyan);
+        <span class="macro">test!</span>(White);
+        <span class="macro">test!</span>(Grey);
 
-        <span class="comment">// n in 0..=15 will give us the color values above back.</span>
-        <span class="kw">for</span> <span class="ident">n</span> <span class="kw">in</span> <span class="number">16</span>..<span class="op">=</span><span class="number">255</span> {
-            <span class="macro">test!</span>(<span class="ident">AnsiValue</span>(<span class="ident">n</span>));
+        <span class="comment">// n in 0..=15 will give us the color values above back.
+        </span><span class="kw">for </span>n <span class="kw">in </span><span class="number">16</span>..=<span class="number">255 </span>{
+            <span class="macro">test!</span>(AnsiValue(n));
         }
 
-        <span class="kw">for</span> <span class="ident">r</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">255</span> {
-            <span class="kw">for</span> <span class="ident">g</span> <span class="kw">in</span> [<span class="number">0</span>, <span class="number">2</span>, <span class="number">18</span>, <span class="number">19</span>, <span class="number">60</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="number">250</span>, <span class="number">254</span>, <span class="number">255</span>].<span class="ident">iter</span>().<span class="ident">copied</span>() {
-                <span class="kw">for</span> <span class="ident">b</span> <span class="kw">in</span> [<span class="number">0</span>, <span class="number">12</span>, <span class="number">16</span>, <span class="number">99</span>, <span class="number">100</span>, <span class="number">161</span>, <span class="number">200</span>, <span class="number">255</span>].<span class="ident">iter</span>().<span class="ident">copied</span>() {
-                    <span class="macro">test!</span>(<span class="ident">Rgb</span> { <span class="ident">r</span>, <span class="ident">g</span>, <span class="ident">b</span> });
+        <span class="kw">for </span>r <span class="kw">in </span><span class="number">0</span>..=<span class="number">255 </span>{
+            <span class="kw">for </span>g <span class="kw">in </span>[<span class="number">0</span>, <span class="number">2</span>, <span class="number">18</span>, <span class="number">19</span>, <span class="number">60</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="number">250</span>, <span class="number">254</span>, <span class="number">255</span>].iter().copied() {
+                <span class="kw">for </span>b <span class="kw">in </span>[<span class="number">0</span>, <span class="number">12</span>, <span class="number">16</span>, <span class="number">99</span>, <span class="number">100</span>, <span class="number">161</span>, <span class="number">200</span>, <span class="number">255</span>].iter().copied() {
+                    <span class="macro">test!</span>(Rgb { r, g, b });
                 }
             }
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_parse_invalid_ansi_color</span>() {
-        <span class="doccomment">/// Checks that trying to parse `s` yields None.</span>
-        <span class="kw">fn</span> <span class="ident">test</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
-            <span class="macro">assert_eq!</span>(<span class="ident">Colored::parse_ansi</span>(<span class="ident">s</span>), <span class="prelude-val">None</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_parse_invalid_ansi_color() {
+        <span class="doccomment">/// Checks that trying to parse `s` yields None.
+        </span><span class="kw">fn </span>test(s: <span class="kw-2">&amp;</span>str) {
+            <span class="macro">assert_eq!</span>(Colored::parse_ansi(s), <span class="prelude-val">None</span>);
         }
-        <span class="ident">test</span>(<span class="string">&quot;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;;;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;;;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;0&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;1&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;12&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;100&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;100048949345&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;39;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;49;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;39;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;49;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;0&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;5&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;5;0;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;5;0;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;5;80;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;5;80;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;5;257&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;2;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;2;0&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;2;0;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;2;0;2;257&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;2;0;2;25;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;38;2;0;2;25;3&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;0&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;5&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;5;0;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;5;0;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;5;80;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;5;80;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;5;257&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;2;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;2;0&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;2;0;2&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;2;0;2;257&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;2;0;2;25;&quot;</span>);
-        <span class="ident">test</span>(<span class="string">&quot;48;2;0;2;25;3&quot;</span>);
+        test(<span class="string">&quot;&quot;</span>);
+        test(<span class="string">&quot;;&quot;</span>);
+        test(<span class="string">&quot;;;&quot;</span>);
+        test(<span class="string">&quot;;;&quot;</span>);
+        test(<span class="string">&quot;0&quot;</span>);
+        test(<span class="string">&quot;1&quot;</span>);
+        test(<span class="string">&quot;12&quot;</span>);
+        test(<span class="string">&quot;100&quot;</span>);
+        test(<span class="string">&quot;100048949345&quot;</span>);
+        test(<span class="string">&quot;39;&quot;</span>);
+        test(<span class="string">&quot;49;&quot;</span>);
+        test(<span class="string">&quot;39;2&quot;</span>);
+        test(<span class="string">&quot;49;2&quot;</span>);
+        test(<span class="string">&quot;38&quot;</span>);
+        test(<span class="string">&quot;38;&quot;</span>);
+        test(<span class="string">&quot;38;0&quot;</span>);
+        test(<span class="string">&quot;38;5&quot;</span>);
+        test(<span class="string">&quot;38;5;0;&quot;</span>);
+        test(<span class="string">&quot;38;5;0;2&quot;</span>);
+        test(<span class="string">&quot;38;5;80;&quot;</span>);
+        test(<span class="string">&quot;38;5;80;2&quot;</span>);
+        test(<span class="string">&quot;38;5;257&quot;</span>);
+        test(<span class="string">&quot;38;2&quot;</span>);
+        test(<span class="string">&quot;38;2;&quot;</span>);
+        test(<span class="string">&quot;38;2;0&quot;</span>);
+        test(<span class="string">&quot;38;2;0;2&quot;</span>);
+        test(<span class="string">&quot;38;2;0;2;257&quot;</span>);
+        test(<span class="string">&quot;38;2;0;2;25;&quot;</span>);
+        test(<span class="string">&quot;38;2;0;2;25;3&quot;</span>);
+        test(<span class="string">&quot;48&quot;</span>);
+        test(<span class="string">&quot;48;&quot;</span>);
+        test(<span class="string">&quot;48;0&quot;</span>);
+        test(<span class="string">&quot;48;5&quot;</span>);
+        test(<span class="string">&quot;48;5;0;&quot;</span>);
+        test(<span class="string">&quot;48;5;0;2&quot;</span>);
+        test(<span class="string">&quot;48;5;80;&quot;</span>);
+        test(<span class="string">&quot;48;5;80;2&quot;</span>);
+        test(<span class="string">&quot;48;5;257&quot;</span>);
+        test(<span class="string">&quot;48;2&quot;</span>);
+        test(<span class="string">&quot;48;2;&quot;</span>);
+        test(<span class="string">&quot;48;2;0&quot;</span>);
+        test(<span class="string">&quot;48;2;0;2&quot;</span>);
+        test(<span class="string">&quot;48;2;0;2;257&quot;</span>);
+        test(<span class="string">&quot;48;2;0;2;25;&quot;</span>);
+        test(<span class="string">&quot;48;2;0;2;25;3&quot;</span>);
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

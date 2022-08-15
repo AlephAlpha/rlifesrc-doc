@@ -119,126 +119,126 @@
 <span id="119">119</span>
 <span id="120">120</span>
 <span id="121">121</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Parsing rule strings of life-like and other cellular automata.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Currently the following rules are supported:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * [Totalistic Life-like](http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton),</span>
-<span class="doccomment">//!   e.g., `B3/S23`.</span>
-<span class="doccomment">//! * [Isotropic non-totalistic Life-like](http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton),</span>
-<span class="doccomment">//!   e.g., `B2ci3ai4c8/S02ae3eijkq4iz5ar6i7e`.</span>
-<span class="doccomment">//! * [Non-isotropic Life-like](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton),</span>
-<span class="doccomment">//!   e.g., `MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA`.</span>
-<span class="doccomment">//! * [Totalistic Hexagonal](http://www.conwaylife.com/wiki/Hexagonal_neighbourhood),</span>
-<span class="doccomment">//!   e.g., `B2/S34H`.</span>
-<span class="doccomment">//! * [Isotropic non-totalistic Hexagonal](http://www.conwaylife.com/wiki/Hexagonal_neighbourhood),</span>
-<span class="doccomment">//!   e.g., `B2o3-o4m/S12m3o4m5H`.</span>
-<span class="doccomment">//! * [Non-isotropic Hexagonal](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton),</span>
-<span class="doccomment">//!   e.g., `MAPFgFoF2gXgH5oF4B+gH4A6AH`.</span>
-<span class="doccomment">//! * [von Neumann neighborhood](http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood),</span>
-<span class="doccomment">//!   e.g., `B2/S013V`.</span>
-<span class="doccomment">//! * [Non-isotropic von Neumann](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton),</span>
-<span class="doccomment">//!   e.g., `MAPHmlphg`.</span>
-<span class="doccomment">//! * The corresponding [Generations rules](http://www.conwaylife.com/wiki/Generations)</span>
-<span class="doccomment">//! of the above rules, e.g., `3457/357/5`.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For non-Generations rules, four different notations are supported:</span>
-<span class="doccomment">//! * [B/S notation](http://www.conwaylife.com/wiki/Rulestring#B.2FS_notation) (`B3/S23`)</span>
-<span class="doccomment">//! * [S/B notation](http://www.conwaylife.com/wiki/Rulestring#S.2FB_notation) (`23/3`)</span>
-<span class="doccomment">//! * [MAP strings](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)</span>
-<span class="doccomment">//!   for [non-isotropic rules](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)</span>
-<span class="doccomment">//!   (`MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA`)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For Generations rules, four different notations are supported:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * B/S notation (`B357/S3457/C5`)</span>
-<span class="doccomment">//! * The notation used by [Golly](http://golly.sourceforge.net/Help/Algorithms/Generations.html) (`3457/357/5`)</span>
-<span class="doccomment">//! * The notation used by [Catagolue](https://catagolue.appspot.com/rules/generations) (`g5b357s3457`)</span>
-<span class="doccomment">//! * [MAP strings](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)</span>
-<span class="doccomment">//!   for [non-isotropic rules](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)</span>
-<span class="doccomment">//!   (`MAPARYBFxZpF38WaRd/aZZ//hZpF39pln/+aZZ//pZp/ukWaRd/aZZ//mmWf/6Waf7paZZ//pZp/umWaf7paZbplg/5`)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Please refer to [Life Wiki](http://www.conwaylife.com/wiki/Rulestring) for detailed definitions and</span>
-<span class="doccomment">//! notations of these rule strings.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Example:</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! use ca_rules::ParseLife;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // Define a struct for your rule:</span>
-<span class="doccomment">//! #[derive(Debug, Eq, PartialEq)]</span>
-<span class="doccomment">//! struct Rule {</span>
-<span class="doccomment">//!     b: Vec&lt;u8&gt;,</span>
-<span class="doccomment">//!     s: Vec&lt;u8&gt;,</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // Implement a parser trait for your rule:</span>
-<span class="doccomment">//! // The choice of the trait depends on the type of rules you want to parse.</span>
-<span class="doccomment">//! impl ParseLife for Rule {</span>
-<span class="doccomment">//!     // Implement a function to construct the rule from b and s data:</span>
-<span class="doccomment">//!     fn from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; Self {</span>
-<span class="doccomment">//!         Rule { b, s }</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // Then you can parse a rule string:</span>
-<span class="doccomment">//! let life = Rule::parse_rule(&quot;B3/S23&quot;).unwrap();</span>
-<span class="doccomment">//! assert_eq!(</span>
-<span class="doccomment">//!     life,</span>
-<span class="doccomment">//!     Rule {</span>
-<span class="doccomment">//!         b: vec![3],</span>
-<span class="doccomment">//!         s: vec![2, 3],</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! )</span>
-<span class="doccomment">//! ```</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Parsing rule strings of life-like and other cellular automata.
+//!
+//! Currently the following rules are supported:
+//!
+//! * [Totalistic Life-like](http://www.conwaylife.com/wiki/Totalistic_Life-like_cellular_automaton),
+//!   e.g., `B3/S23`.
+//! * [Isotropic non-totalistic Life-like](http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton),
+//!   e.g., `B2ci3ai4c8/S02ae3eijkq4iz5ar6i7e`.
+//! * [Non-isotropic Life-like](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton),
+//!   e.g., `MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA`.
+//! * [Totalistic Hexagonal](http://www.conwaylife.com/wiki/Hexagonal_neighbourhood),
+//!   e.g., `B2/S34H`.
+//! * [Isotropic non-totalistic Hexagonal](http://www.conwaylife.com/wiki/Hexagonal_neighbourhood),
+//!   e.g., `B2o3-o4m/S12m3o4m5H`.
+//! * [Non-isotropic Hexagonal](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton),
+//!   e.g., `MAPFgFoF2gXgH5oF4B+gH4A6AH`.
+//! * [von Neumann neighborhood](http://www.conwaylife.com/wiki/Von_Neumann_neighbourhood),
+//!   e.g., `B2/S013V`.
+//! * [Non-isotropic von Neumann](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton),
+//!   e.g., `MAPHmlphg`.
+//! * The corresponding [Generations rules](http://www.conwaylife.com/wiki/Generations)
+//! of the above rules, e.g., `3457/357/5`.
+//!
+//! For non-Generations rules, four different notations are supported:
+//! * [B/S notation](http://www.conwaylife.com/wiki/Rulestring#B.2FS_notation) (`B3/S23`)
+//! * [S/B notation](http://www.conwaylife.com/wiki/Rulestring#S.2FB_notation) (`23/3`)
+//! * [MAP strings](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)
+//!   for [non-isotropic rules](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)
+//!   (`MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA`)
+//!
+//! For Generations rules, four different notations are supported:
+//!
+//! * B/S notation (`B357/S3457/C5`)
+//! * The notation used by [Golly](http://golly.sourceforge.net/Help/Algorithms/Generations.html) (`3457/357/5`)
+//! * The notation used by [Catagolue](https://catagolue.appspot.com/rules/generations) (`g5b357s3457`)
+//! * [MAP strings](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)
+//!   for [non-isotropic rules](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)
+//!   (`MAPARYBFxZpF38WaRd/aZZ//hZpF39pln/+aZZ//pZp/ukWaRd/aZZ//mmWf/6Waf7paZZ//pZp/umWaf7paZbplg/5`)
+//!
+//! Please refer to [Life Wiki](http://www.conwaylife.com/wiki/Rulestring) for detailed definitions and
+//! notations of these rule strings.
+//!
+//! # Example:
+//! ```
+//! use ca_rules::ParseLife;
+//!
+//! // Define a struct for your rule:
+//! #[derive(Debug, Eq, PartialEq)]
+//! struct Rule {
+//!     b: Vec&lt;u8&gt;,
+//!     s: Vec&lt;u8&gt;,
+//! }
+//!
+//! // Implement a parser trait for your rule:
+//! // The choice of the trait depends on the type of rules you want to parse.
+//! impl ParseLife for Rule {
+//!     // Implement a function to construct the rule from b and s data:
+//!     fn from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; Self {
+//!         Rule { b, s }
+//!     }
+//! }
+//!
+//! // Then you can parse a rule string:
+//! let life = Rule::parse_rule(&quot;B3/S23&quot;).unwrap();
+//! assert_eq!(
+//!     life,
+//!     Rule {
+//!         b: vec![3],
+//!         s: vec![2, 3],
+//!     }
+//! )
+//! ```
 
-<span class="kw">mod</span> <span class="ident">error</span>;
-<span class="kw">mod</span> <span class="ident">macros</span>;
-<span class="kw">mod</span> <span class="ident">rules</span>;
+</span><span class="kw">mod </span>error;
+<span class="kw">mod </span>macros;
+<span class="kw">mod </span>rules;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">error::ParseRuleError</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">rules</span>::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>error::ParseRuleError;
+<span class="kw">pub use </span>rules::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">test</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">ParseNtLife</span>, <span class="ident">ParseRuleError</span>};
-    <span class="kw">use</span> <span class="ident">base64::decode</span>;
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>test {
+    <span class="kw">use super</span>::{ParseNtLife, ParseRuleError};
+    <span class="kw">use </span>base64::decode;
 
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-    <span class="kw">struct</span> <span class="ident">Rule</span> {
-        <span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-        <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="attribute">#[derive(Debug, Eq, PartialEq)]</span>
+    <span class="kw">struct </span>Rule {
+        b: Vec&lt;u8&gt;,
+        s: Vec&lt;u8&gt;,
     }
 
-    <span class="kw">impl</span> <span class="ident">ParseNtLife</span> <span class="kw">for</span> <span class="ident">Rule</span> {
-        <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-            <span class="ident">Rule</span> { <span class="ident">b</span>, <span class="ident">s</span> }
+    <span class="kw">impl </span>ParseNtLife <span class="kw">for </span>Rule {
+        <span class="kw">fn </span>from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+            Rule { b, s }
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">base64</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA&quot;</span>;
-        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">decode</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>[<span class="number">3</span>..]).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseRuleError::Base64Error</span>)<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">bytes</span>.<span class="ident">len</span>(), <span class="number">0x200</span> <span class="op">/</span> <span class="number">8</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">x</span>) <span class="kw">in</span> <span class="ident">bytes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">reverse_bits</span>()).<span class="ident">enumerate</span>() {
-            <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">8</span> {
-                <span class="kw">if</span> <span class="ident">x</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">j</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-                    <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">*</span> <span class="number">8</span> <span class="op">+</span> <span class="ident">j</span>;
-                    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> ((<span class="ident">k</span> <span class="op">&amp;</span> <span class="number">0x1e0</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span> <span class="op">|</span> (<span class="ident">k</span> <span class="op">&amp;</span> <span class="number">0x0f</span>)) <span class="kw">as</span> <span class="ident">u8</span>;
-                    <span class="kw">if</span> <span class="ident">k</span> <span class="op">&amp;</span> <span class="number">0x10</span> <span class="op">==</span> <span class="number">0</span> {
-                        <span class="ident">b</span>.<span class="ident">push</span>(<span class="ident">n</span>);
-                    } <span class="kw">else</span> {
-                        <span class="ident">s</span>.<span class="ident">push</span>(<span class="ident">n</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>base64() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        <span class="kw">let </span>s = <span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA&quot;</span>;
+        <span class="kw">let </span>bytes = decode(<span class="kw-2">&amp;</span>s[<span class="number">3</span>..]).map_err(|<span class="kw">_</span>| ParseRuleError::Base64Error)<span class="question-mark">?</span>;
+        <span class="macro">assert_eq!</span>(bytes.len(), <span class="number">0x200 </span>/ <span class="number">8</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>b = Vec::new();
+        <span class="kw">let </span><span class="kw-2">mut </span>s = Vec::new();
+        <span class="kw">for </span>(i, x) <span class="kw">in </span>bytes.iter().map(|x| x.reverse_bits()).enumerate() {
+            <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..<span class="number">8 </span>{
+                <span class="kw">if </span>x &amp; (<span class="number">1 </span>&lt;&lt; j) != <span class="number">0 </span>{
+                    <span class="kw">let </span>k = i * <span class="number">8 </span>+ j;
+                    <span class="kw">let </span>n = ((k &amp; <span class="number">0x1e0</span>) &gt;&gt; <span class="number">1 </span>| (k &amp; <span class="number">0x0f</span>)) <span class="kw">as </span>u8;
+                    <span class="kw">if </span>k &amp; <span class="number">0x10 </span>== <span class="number">0 </span>{
+                        b.push(n);
+                    } <span class="kw">else </span>{
+                        s.push(n);
                     }
                 }
             }
         }
-        <span class="macro">assert_eq!</span>(<span class="ident">Rule</span> { <span class="ident">b</span>, <span class="ident">s</span> }, <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>);
+        <span class="macro">assert_eq!</span>(Rule { b, s }, Rule::parse_rule(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>);
         <span class="prelude-val">Ok</span>(())
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

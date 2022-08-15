@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/event/read.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>read.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/event/read.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>read.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -443,450 +443,450 @@
 <span id="443">443</span>
 <span id="444">444</span>
 <span id="445">445</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::vec_deque::VecDeque</span>, <span class="ident">io</span>, <span class="ident">time::Duration</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{collections::vec_deque::VecDeque, io, time::Duration};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::source::unix::UnixInternalEventSource</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::source::windows::WindowsEventSource</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::sys::Waker</span>;
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">filter::Filter</span>, <span class="ident">source::EventSource</span>, <span class="ident">timeout::PollTimeout</span>, <span class="ident">InternalEvent</span>, <span class="prelude-ty">Result</span>};
-<span class="doccomment">/// Can be used to read `InternalEvent`s.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">InternalEventReader</span> {
-    <span class="ident">events</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>,
-    <span class="ident">source</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">EventSource</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="ident">skipped_events</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>,
+<span class="attribute">#[cfg(unix)]</span>
+<span class="kw">use </span><span class="kw">super</span>::source::unix::UnixInternalEventSource;
+<span class="attribute">#[cfg(windows)]</span>
+<span class="kw">use </span><span class="kw">super</span>::source::windows::WindowsEventSource;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
+<span class="kw">use </span><span class="kw">super</span>::sys::Waker;
+<span class="kw">use super</span>::{filter::Filter, source::EventSource, timeout::PollTimeout, InternalEvent, <span class="prelude-ty">Result</span>};
+<span class="doccomment">/// Can be used to read `InternalEvent`s.
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>InternalEventReader {
+    events: VecDeque&lt;InternalEvent&gt;,
+    source: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>EventSource&gt;&gt;,
+    skipped_events: Vec&lt;InternalEvent&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">InternalEventReader</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">WindowsEventSource::new</span>();
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">UnixInternalEventSource::new</span>();
+<span class="kw">impl </span>Default <span class="kw">for </span>InternalEventReader {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="attribute">#[cfg(windows)]</span>
+        <span class="kw">let </span>source = WindowsEventSource::new();
+        <span class="attribute">#[cfg(unix)]</span>
+        <span class="kw">let </span>source = UnixInternalEventSource::new();
 
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">source</span>.<span class="ident">ok</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">Box::new</span>(<span class="ident">x</span>) <span class="kw">as</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">EventSource</span><span class="op">&gt;</span>);
+        <span class="kw">let </span>source = source.ok().map(|x| Box::new(x) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>EventSource&gt;);
 
-        <span class="ident">InternalEventReader</span> {
-            <span class="ident">source</span>,
-            <span class="ident">events</span>: <span class="ident">VecDeque::with_capacity</span>(<span class="number">32</span>),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        InternalEventReader {
+            source,
+            events: VecDeque::with_capacity(<span class="number">32</span>),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">InternalEventReader</span> {
-    <span class="doccomment">/// Returns a `Waker` allowing to wake/force the `poll` method to return `Ok(false)`.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Waker</span> {
-        <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;reader source not set&quot;</span>).<span class="ident">waker</span>()
+<span class="kw">impl </span>InternalEventReader {
+    <span class="doccomment">/// Returns a `Waker` allowing to wake/force the `poll` method to return `Ok(false)`.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>waker(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Waker {
+        <span class="self">self</span>.source.as_ref().expect(<span class="string">&quot;reader source not set&quot;</span>).waker()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">poll</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>, <span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Filter</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>poll&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;, filter: <span class="kw-2">&amp;</span>F) -&gt; <span class="prelude-ty">Result</span>&lt;bool&gt;
+    <span class="kw">where
+        </span>F: Filter,
     {
-        <span class="kw">for</span> <span class="ident">event</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">events</span> {
-            <span class="kw">if</span> <span class="ident">filter</span>.<span class="ident">eval</span>(<span class="ident">event</span>) {
-                <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
+        <span class="kw">for </span>event <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.events {
+            <span class="kw">if </span>filter.eval(event) {
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
             }
         }
 
-        <span class="kw">let</span> <span class="ident">event_source</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">source</span>.<span class="ident">as_mut</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">source</span>) =&gt; <span class="ident">source</span>,
-            <span class="prelude-val">None</span> =&gt; {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">std::io::Error::new</span>(
-                    <span class="ident">std::io::ErrorKind::Other</span>,
+        <span class="kw">let </span>event_source = <span class="kw">match </span><span class="self">self</span>.source.as_mut() {
+            <span class="prelude-val">Some</span>(source) =&gt; source,
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(
+                    std::io::ErrorKind::Other,
                     <span class="string">&quot;Failed to initialize input reader&quot;</span>,
                 ))
             }
         };
 
-        <span class="kw">let</span> <span class="ident">poll_timeout</span> <span class="op">=</span> <span class="ident">PollTimeout::new</span>(<span class="ident">timeout</span>);
+        <span class="kw">let </span>poll_timeout = PollTimeout::new(timeout);
 
-        <span class="kw">loop</span> {
-            <span class="kw">let</span> <span class="ident">maybe_event</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">event_source</span>.<span class="ident">try_read</span>(<span class="ident">poll_timeout</span>.<span class="ident">leftover</span>()) {
+        <span class="kw">loop </span>{
+            <span class="kw">let </span>maybe_event = <span class="kw">match </span>event_source.try_read(poll_timeout.leftover()) {
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) =&gt; <span class="prelude-val">None</span>,
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">event</span>)) =&gt; {
-                    <span class="kw">if</span> <span class="ident">filter</span>.<span class="ident">eval</span>(<span class="kw-2">&amp;</span><span class="ident">event</span>) {
-                        <span class="prelude-val">Some</span>(<span class="ident">event</span>)
-                    } <span class="kw">else</span> {
-                        <span class="self">self</span>.<span class="ident">skipped_events</span>.<span class="ident">push</span>(<span class="ident">event</span>);
-                        <span class="prelude-val">None</span>
-                    }
+                <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(event)) =&gt; {
+                    <span class="kw">if </span>filter.eval(<span class="kw-2">&amp;</span>event) {
+                        <span class="prelude-val">Some</span>(event)
+                    } <span class="kw">else </span>{
+                        <span class="self">self</span>.skipped_events.push(event);
+                        <span class="prelude-val">None
+                    </span>}
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
-                    <span class="kw">if</span> <span class="ident">e</span>.<span class="ident">kind</span>() <span class="op">==</span> <span class="ident">io::ErrorKind::Interrupted</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="kw">if </span>e.kind() == io::ErrorKind::Interrupted {
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
                     }
 
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>);
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(e);
                 }
             };
 
-            <span class="kw">if</span> <span class="ident">poll_timeout</span>.<span class="ident">elapsed</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">maybe_event</span>.<span class="ident">is_some</span>() {
-                <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">extend</span>(<span class="self">self</span>.<span class="ident">skipped_events</span>.<span class="ident">drain</span>(..));
+            <span class="kw">if </span>poll_timeout.elapsed() || maybe_event.is_some() {
+                <span class="self">self</span>.events.extend(<span class="self">self</span>.skipped_events.drain(..));
 
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="ident">maybe_event</span> {
-                    <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">push_front</span>(<span class="ident">event</span>);
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(event) = maybe_event {
+                    <span class="self">self</span>.events.push_front(event);
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>);
                 }
 
-                <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="bool-val">false</span>);
             }
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">read</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">filter</span>: <span class="kw-2">&amp;</span><span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">Filter</span>,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>read&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, filter: <span class="kw-2">&amp;</span>F) -&gt; <span class="prelude-ty">Result</span>&lt;InternalEvent&gt;
+    <span class="kw">where
+        </span>F: Filter,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">skipped_events</span> <span class="op">=</span> <span class="ident">VecDeque::new</span>();
+        <span class="kw">let </span><span class="kw-2">mut </span>skipped_events = VecDeque::new();
 
-        <span class="kw">loop</span> {
-            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">pop_front</span>() {
-                <span class="kw">if</span> <span class="ident">filter</span>.<span class="ident">eval</span>(<span class="kw-2">&amp;</span><span class="ident">event</span>) {
-                    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="ident">skipped_events</span>.<span class="ident">pop_front</span>() {
-                        <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">push_back</span>(<span class="ident">event</span>);
+        <span class="kw">loop </span>{
+            <span class="kw">while let </span><span class="prelude-val">Some</span>(event) = <span class="self">self</span>.events.pop_front() {
+                <span class="kw">if </span>filter.eval(<span class="kw-2">&amp;</span>event) {
+                    <span class="kw">while let </span><span class="prelude-val">Some</span>(event) = skipped_events.pop_front() {
+                        <span class="self">self</span>.events.push_back(event);
                     }
 
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">event</span>);
-                } <span class="kw">else</span> {
-                    <span class="comment">// We can not directly write events back to `self.events`.</span>
-                    <span class="comment">// If we did, we would put our self&#39;s into an endless loop</span>
-                    <span class="comment">// that would enqueue -&gt; dequeue -&gt; enqueue etc.</span>
-                    <span class="comment">// This happens because `poll` in this function will always return true if there are events in it&#39;s.</span>
-                    <span class="comment">// And because we just put the non-fulfilling event there this is going to be the case.</span>
-                    <span class="comment">// Instead we can store them into the temporary buffer,</span>
-                    <span class="comment">// and then when the filter is fulfilled write all events back in order.</span>
-                    <span class="ident">skipped_events</span>.<span class="ident">push_back</span>(<span class="ident">event</span>);
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(event);
+                } <span class="kw">else </span>{
+                    <span class="comment">// We can not directly write events back to `self.events`.
+                    // If we did, we would put our self&#39;s into an endless loop
+                    // that would enqueue -&gt; dequeue -&gt; enqueue etc.
+                    // This happens because `poll` in this function will always return true if there are events in it&#39;s.
+                    // And because we just put the non-fulfilling event there this is going to be the case.
+                    // Instead we can store them into the temporary buffer,
+                    // and then when the filter is fulfilled write all events back in order.
+                    </span>skipped_events.push_back(event);
                 }
             }
 
-            <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">poll</span>(<span class="prelude-val">None</span>, <span class="ident">filter</span>)<span class="question-mark">?</span>;
+            <span class="kw">let _ </span>= <span class="self">self</span>.poll(<span class="prelude-val">None</span>, filter)<span class="question-mark">?</span>;
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">std::io</span>;
-    <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">collections::VecDeque</span>, <span class="ident">time::Duration</span>};
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use </span>std::io;
+    <span class="kw">use </span>std::{collections::VecDeque, time::Duration};
 
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ErrorKind</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::ErrorKind;
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::filter::CursorPositionFilter</span>;
-    <span class="kw">use</span> <span class="kw">super</span>::{
-        <span class="kw">super</span>::{<span class="ident">filter::InternalEventFilter</span>, <span class="ident">Event</span>},
-        <span class="ident">EventSource</span>, <span class="ident">InternalEvent</span>, <span class="ident">InternalEventReader</span>,
+    <span class="attribute">#[cfg(unix)]</span>
+    <span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::filter::CursorPositionFilter;
+    <span class="kw">use super</span>::{
+        <span class="kw">super</span>::{filter::InternalEventFilter, Event},
+        EventSource, InternalEvent, InternalEventReader,
     };
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_fails_without_event_source</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">None</span>,
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_poll_fails_without_event_source() {
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">None</span>,
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert!</span>(<span class="ident">reader</span>.<span class="ident">poll</span>(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">is_err</span>());
-        <span class="macro">assert!</span>(<span class="ident">reader</span>
-            .<span class="ident">poll</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>)), <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-            .<span class="ident">is_err</span>());
-        <span class="macro">assert!</span>(<span class="ident">reader</span>
-            .<span class="ident">poll</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">10</span>)), <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-            .<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(reader.poll(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>InternalEventFilter).is_err());
+        <span class="macro">assert!</span>(reader
+            .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">0</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
+            .is_err());
+        <span class="macro">assert!</span>(reader
+            .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">10</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
+            .is_err());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_returns_true_for_matching_event_in_queue_at_front</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="macro">vec!</span>[<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>))].<span class="ident">into</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">None</span>,
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_poll_returns_true_for_matching_event_in_queue_at_front() {
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: <span class="macro">vec!</span>[InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>))].into(),
+            source: <span class="prelude-val">None</span>,
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert!</span>(<span class="ident">reader</span>.<span class="ident">poll</span>(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert!</span>(reader.poll(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>InternalEventFilter).unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_returns_true_for_matching_event_in_queue_at_back</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="macro">vec!</span>[
-                <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>)),
-                <span class="ident">InternalEvent::CursorPosition</span>(<span class="number">10</span>, <span class="number">20</span>),
+    <span class="attribute">#[test]</span>
+    <span class="attribute">#[cfg(unix)]</span>
+    <span class="kw">fn </span>test_poll_returns_true_for_matching_event_in_queue_at_back() {
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: <span class="macro">vec!</span>[
+                InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>)),
+                InternalEvent::CursorPosition(<span class="number">10</span>, <span class="number">20</span>),
             ]
-            .<span class="ident">into</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">None</span>,
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+            .into(),
+            source: <span class="prelude-val">None</span>,
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert!</span>(<span class="ident">reader</span>.<span class="ident">poll</span>(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">CursorPositionFilter</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert!</span>(reader.poll(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>CursorPositionFilter).unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_read_returns_matching_event_in_queue_at_front</span>() {
-        <span class="kw">const</span> <span class="ident">EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_read_returns_matching_event_in_queue_at_front() {
+        <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="macro">vec!</span>[<span class="ident">EVENT</span>].<span class="ident">into</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">None</span>,
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: <span class="macro">vec!</span>[EVENT].into(),
+            source: <span class="prelude-val">None</span>,
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">test_read_returns_matching_event_in_queue_at_back</span>() {
-        <span class="kw">const</span> <span class="ident">CURSOR_EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::CursorPosition</span>(<span class="number">10</span>, <span class="number">20</span>);
+    <span class="attribute">#[test]</span>
+    <span class="attribute">#[cfg(unix)]</span>
+    <span class="kw">fn </span>test_read_returns_matching_event_in_queue_at_back() {
+        <span class="kw">const </span>CURSOR_EVENT: InternalEvent = InternalEvent::CursorPosition(<span class="number">10</span>, <span class="number">20</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="macro">vec!</span>[<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>)), <span class="ident">CURSOR_EVENT</span>].<span class="ident">into</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">None</span>,
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: <span class="macro">vec!</span>[InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>)), CURSOR_EVENT].into(),
+            source: <span class="prelude-val">None</span>,
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">CursorPositionFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">CURSOR_EVENT</span>);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>CursorPositionFilter).unwrap(), CURSOR_EVENT);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">test_read_does_not_consume_skipped_event</span>() {
-        <span class="kw">const</span> <span class="ident">SKIPPED_EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>));
-        <span class="kw">const</span> <span class="ident">CURSOR_EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::CursorPosition</span>(<span class="number">10</span>, <span class="number">20</span>);
+    <span class="attribute">#[test]</span>
+    <span class="attribute">#[cfg(unix)]</span>
+    <span class="kw">fn </span>test_read_does_not_consume_skipped_event() {
+        <span class="kw">const </span>SKIPPED_EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
+        <span class="kw">const </span>CURSOR_EVENT: InternalEvent = InternalEvent::CursorPosition(<span class="number">10</span>, <span class="number">20</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="macro">vec!</span>[<span class="ident">SKIPPED_EVENT</span>, <span class="ident">CURSOR_EVENT</span>].<span class="ident">into</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">None</span>,
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: <span class="macro">vec!</span>[SKIPPED_EVENT, CURSOR_EVENT].into(),
+            source: <span class="prelude-val">None</span>,
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">CursorPositionFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">CURSOR_EVENT</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">SKIPPED_EVENT</span>);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>CursorPositionFilter).unwrap(), CURSOR_EVENT);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), SKIPPED_EVENT);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_timeouts_if_source_has_no_events</span>() {
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::default</span>();
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_poll_timeouts_if_source_has_no_events() {
+        <span class="kw">let </span>source = FakeSource::default();
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">reader</span>
-            .<span class="ident">poll</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>)), <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-            .<span class="ident">unwrap</span>());
+        <span class="macro">assert!</span>(!reader
+            .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">0</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
+            .unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_returns_true_if_source_has_at_least_one_event</span>() {
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::with_events</span>(<span class="kw-2">&amp;</span>[<span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>))]);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_poll_returns_true_if_source_has_at_least_one_event() {
+        <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>))]);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert!</span>(<span class="ident">reader</span>.<span class="ident">poll</span>(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>());
-        <span class="macro">assert!</span>(<span class="ident">reader</span>
-            .<span class="ident">poll</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>)), <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-            .<span class="ident">unwrap</span>());
+        <span class="macro">assert!</span>(reader.poll(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>InternalEventFilter).unwrap());
+        <span class="macro">assert!</span>(reader
+            .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">0</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
+            .unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_reads_returns_event_if_source_has_at_least_one_event</span>() {
-        <span class="kw">const</span> <span class="ident">EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_reads_returns_event_if_source_has_at_least_one_event() {
+        <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::with_events</span>(<span class="kw-2">&amp;</span>[<span class="ident">EVENT</span>]);
+        <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[EVENT]);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_read_returns_events_if_source_has_events</span>() {
-        <span class="kw">const</span> <span class="ident">EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_read_returns_events_if_source_has_events() {
+        <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::with_events</span>(<span class="kw-2">&amp;</span>[<span class="ident">EVENT</span>, <span class="ident">EVENT</span>, <span class="ident">EVENT</span>]);
+        <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[EVENT, EVENT, EVENT]);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_returns_false_after_all_source_events_are_consumed</span>() {
-        <span class="kw">const</span> <span class="ident">EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_poll_returns_false_after_all_source_events_are_consumed() {
+        <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::with_events</span>(<span class="kw-2">&amp;</span>[<span class="ident">EVENT</span>, <span class="ident">EVENT</span>, <span class="ident">EVENT</span>]);
+        <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[EVENT, EVENT, EVENT]);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">reader</span>
-            .<span class="ident">poll</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>)), <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-            .<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
+        <span class="macro">assert!</span>(!reader
+            .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">0</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
+            .unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_propagates_error</span>() {
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::with_error</span>(<span class="ident">ErrorKind::from</span>(<span class="ident">io::ErrorKind::Other</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_poll_propagates_error() {
+        <span class="kw">let </span>source = FakeSource::with_error(ErrorKind::from(io::ErrorKind::Other));
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
-        };
-
-        <span class="macro">assert_eq!</span>(
-            <span class="ident">reader</span>
-                .<span class="ident">poll</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>)), <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-                .<span class="ident">err</span>()
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">e</span>)),
-            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">ErrorKind::from</span>(<span class="ident">io::ErrorKind::Other</span>)))
-        );
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_read_propagates_error</span>() {
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::with_error</span>(<span class="ident">ErrorKind::from</span>(<span class="ident">io::ErrorKind::Other</span>));
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
         <span class="macro">assert_eq!</span>(
-            <span class="ident">reader</span>
-                .<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-                .<span class="ident">err</span>()
-                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">e</span>)),
-            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">ErrorKind::from</span>(<span class="ident">io::ErrorKind::Other</span>)))
+            reader
+                .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">0</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
+                .err()
+                .map(|e| <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span>e)),
+            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, ErrorKind::from(io::ErrorKind::Other)))
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_poll_continues_after_error</span>() {
-        <span class="kw">const</span> <span class="ident">EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_read_propagates_error() {
+        <span class="kw">let </span>source = FakeSource::with_error(ErrorKind::from(io::ErrorKind::Other));
 
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::new</span>(<span class="kw-2">&amp;</span>[<span class="ident">EVENT</span>, <span class="ident">EVENT</span>], <span class="ident">ErrorKind::from</span>(<span class="ident">io::ErrorKind::Other</span>));
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
-        <span class="macro">assert!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">is_err</span>());
-        <span class="macro">assert!</span>(<span class="ident">reader</span>
-            .<span class="ident">poll</span>(<span class="prelude-val">Some</span>(<span class="ident">Duration::from_secs</span>(<span class="number">0</span>)), <span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>)
-            .<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq!</span>(
+            reader
+                .read(<span class="kw-2">&amp;</span>InternalEventFilter)
+                .err()
+                .map(|e| <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span>e)),
+            <span class="prelude-val">Some</span>(<span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, ErrorKind::from(io::ErrorKind::Other)))
+        );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_read_continues_after_error</span>() {
-        <span class="kw">const</span> <span class="ident">EVENT</span>: <span class="ident">InternalEvent</span> <span class="op">=</span> <span class="ident">InternalEvent::Event</span>(<span class="ident">Event::Resize</span>(<span class="number">10</span>, <span class="number">10</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_poll_continues_after_error() {
+        <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
-        <span class="kw">let</span> <span class="ident">source</span> <span class="op">=</span> <span class="ident">FakeSource::new</span>(<span class="kw-2">&amp;</span>[<span class="ident">EVENT</span>, <span class="ident">EVENT</span>], <span class="ident">ErrorKind::from</span>(<span class="ident">io::ErrorKind::Other</span>));
+        <span class="kw">let </span>source = FakeSource::new(<span class="kw-2">&amp;</span>[EVENT, EVENT], ErrorKind::from(io::ErrorKind::Other));
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">reader</span> <span class="op">=</span> <span class="ident">InternalEventReader</span> {
-            <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-            <span class="ident">source</span>: <span class="prelude-val">Some</span>(<span class="ident">Box::new</span>(<span class="ident">source</span>)),
-            <span class="ident">skipped_events</span>: <span class="ident">Vec::with_capacity</span>(<span class="number">32</span>),
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
         };
 
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
-        <span class="macro">assert!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">is_err</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">reader</span>.<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="ident">InternalEventFilter</span>).<span class="ident">unwrap</span>(), <span class="ident">EVENT</span>);
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
+        <span class="macro">assert!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).is_err());
+        <span class="macro">assert!</span>(reader
+            .poll(<span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">0</span>)), <span class="kw-2">&amp;</span>InternalEventFilter)
+            .unwrap());
     }
 
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-    <span class="kw">struct</span> <span class="ident">FakeSource</span> {
-        <span class="ident">events</span>: <span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>,
-        <span class="ident">error</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ErrorKind</span><span class="op">&gt;</span>,
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_read_continues_after_error() {
+        <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
+
+        <span class="kw">let </span>source = FakeSource::new(<span class="kw-2">&amp;</span>[EVENT, EVENT], ErrorKind::from(io::ErrorKind::Other));
+
+        <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
+            events: VecDeque::new(),
+            source: <span class="prelude-val">Some</span>(Box::new(source)),
+            skipped_events: Vec::with_capacity(<span class="number">32</span>),
+        };
+
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
+        <span class="macro">assert!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).is_err());
+        <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="kw">impl</span> <span class="ident">FakeSource</span> {
-        <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">events</span>: <span class="kw-2">&amp;</span>[<span class="ident">InternalEvent</span>], <span class="ident">error</span>: <span class="ident">ErrorKind</span>) -&gt; <span class="ident">FakeSource</span> {
-            <span class="ident">FakeSource</span> {
-                <span class="ident">events</span>: <span class="ident">events</span>.<span class="ident">to_vec</span>().<span class="ident">into</span>(),
-                <span class="ident">error</span>: <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+    <span class="attribute">#[derive(Default)]</span>
+    <span class="kw">struct </span>FakeSource {
+        events: VecDeque&lt;InternalEvent&gt;,
+        error: <span class="prelude-ty">Option</span>&lt;ErrorKind&gt;,
+    }
+
+    <span class="kw">impl </span>FakeSource {
+        <span class="kw">fn </span>new(events: <span class="kw-2">&amp;</span>[InternalEvent], error: ErrorKind) -&gt; FakeSource {
+            FakeSource {
+                events: events.to_vec().into(),
+                error: <span class="prelude-val">Some</span>(error),
             }
         }
 
-        <span class="kw">fn</span> <span class="ident">with_events</span>(<span class="ident">events</span>: <span class="kw-2">&amp;</span>[<span class="ident">InternalEvent</span>]) -&gt; <span class="ident">FakeSource</span> {
-            <span class="ident">FakeSource</span> {
-                <span class="ident">events</span>: <span class="ident">events</span>.<span class="ident">to_vec</span>().<span class="ident">into</span>(),
-                <span class="ident">error</span>: <span class="prelude-val">None</span>,
+        <span class="kw">fn </span>with_events(events: <span class="kw-2">&amp;</span>[InternalEvent]) -&gt; FakeSource {
+            FakeSource {
+                events: events.to_vec().into(),
+                error: <span class="prelude-val">None</span>,
             }
         }
 
-        <span class="kw">fn</span> <span class="ident">with_error</span>(<span class="ident">error</span>: <span class="ident">ErrorKind</span>) -&gt; <span class="ident">FakeSource</span> {
-            <span class="ident">FakeSource</span> {
-                <span class="ident">events</span>: <span class="ident">VecDeque::new</span>(),
-                <span class="ident">error</span>: <span class="prelude-val">Some</span>(<span class="ident">error</span>),
+        <span class="kw">fn </span>with_error(error: ErrorKind) -&gt; FakeSource {
+            FakeSource {
+                events: VecDeque::new(),
+                error: <span class="prelude-val">Some</span>(error),
             }
         }
     }
 
-    <span class="kw">impl</span> <span class="ident">EventSource</span> <span class="kw">for</span> <span class="ident">FakeSource</span> {
-        <span class="kw">fn</span> <span class="ident">try_read</span>(
-            <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
-            <span class="ident">_timeout</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span>,
-        ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InternalEvent</span><span class="op">&gt;</span>, <span class="ident">ErrorKind</span><span class="op">&gt;</span> {
-            <span class="comment">// Return error if set in case there&#39;s just one remaining event</span>
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">take</span>() {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>);
+    <span class="kw">impl </span>EventSource <span class="kw">for </span>FakeSource {
+        <span class="kw">fn </span>try_read(
+            <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+            _timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;InternalEvent&gt;, ErrorKind&gt; {
+            <span class="comment">// Return error if set in case there&#39;s just one remaining event
+            </span><span class="kw">if </span><span class="self">self</span>.events.len() == <span class="number">1 </span>{
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(error) = <span class="self">self</span>.error.take() {
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(error);
                 }
             }
 
-            <span class="comment">// Return all events from the queue</span>
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">pop_front</span>() {
-                <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="ident">event</span>));
+            <span class="comment">// Return all events from the queue
+            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(event) = <span class="self">self</span>.events.pop_front() {
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(event));
             }
 
-            <span class="comment">// Return error if there&#39;re no more events</span>
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">error</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">take</span>() {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">error</span>);
+            <span class="comment">// Return error if there&#39;re no more events
+            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(error) = <span class="self">self</span>.error.take() {
+                <span class="kw">return </span><span class="prelude-val">Err</span>(error);
             }
 
-            <span class="comment">// Timeout</span>
-            <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
+            <span class="comment">// Timeout
+            </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         }
 
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-stream&quot;</span>)]</span>
-        <span class="kw">fn</span> <span class="ident">waker</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::sys::Waker</span> {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
+        <span class="kw">fn </span>waker(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">super</span>::<span class="kw">super</span>::sys::Waker {
             <span class="macro">unimplemented!</span>();
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

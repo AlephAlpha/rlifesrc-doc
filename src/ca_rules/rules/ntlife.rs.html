@@ -357,88 +357,88 @@
 <span id="357">357</span>
 <span id="358">358</span>
 <span id="359">359</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Non-totalistic life-like rules.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Non-totalistic life-like rules.
 
-<span class="kw">use</span> <span class="kw">super</span>::{
-    <span class="ident">life</span>::{<span class="ident">ParseLife</span>, <span class="ident">ParseLifeGen</span>},
-    <span class="ident">nthex</span>::{<span class="ident">ParseNtHex</span>, <span class="ident">ParseNtHexGen</span>},
-    <span class="ident">ntneumann</span>::{<span class="ident">ParseNtNeumann</span>, <span class="ident">ParseNtNeumannGen</span>},
-    <span class="ident">Gen</span>,
+</span><span class="kw">use super</span>::{
+    life::{ParseLife, ParseLifeGen},
+    nthex::{ParseNtHex, ParseNtHexGen},
+    ntneumann::{ParseNtNeumann, ParseNtNeumannGen},
+    Gen,
 };
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::ParseRuleError</span>;
+<span class="kw">use </span><span class="kw">crate</span>::ParseRuleError;
 
-<span class="macro">rule_struct!</span>(<span class="ident">NtLife</span>);
+<span class="macro">rule_struct!</span>(NtLife);
 
-<span class="kw">impl</span> <span class="ident">NtLife</span> {
+<span class="kw">impl </span>NtLife {
     <span class="macro">parse_bs!</span> {
-        <span class="string">&#39;0&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0x00</span>],
+        <span class="string">&#39;0&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0x00</span>],
         },
-        <span class="string">&#39;1&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0x01</span>, <span class="number">0x04</span>, <span class="number">0x20</span>, <span class="number">0x80</span>],
-            <span class="string">&#39;e&#39;</span> =&gt; [<span class="number">0x02</span>, <span class="number">0x08</span>, <span class="number">0x10</span>, <span class="number">0x40</span>],
+        <span class="string">&#39;1&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0x01</span>, <span class="number">0x04</span>, <span class="number">0x20</span>, <span class="number">0x80</span>],
+            <span class="string">&#39;e&#39; </span>=&gt; [<span class="number">0x02</span>, <span class="number">0x08</span>, <span class="number">0x10</span>, <span class="number">0x40</span>],
         },
-        <span class="string">&#39;2&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0x05</span>, <span class="number">0x21</span>, <span class="number">0x84</span>, <span class="number">0xa0</span>],
-            <span class="string">&#39;e&#39;</span> =&gt; [<span class="number">0x0a</span>, <span class="number">0x12</span>, <span class="number">0x48</span>, <span class="number">0x50</span>],
-            <span class="string">&#39;k&#39;</span> =&gt; [<span class="number">0x0c</span>, <span class="number">0x11</span>, <span class="number">0x22</span>, <span class="number">0x30</span>, <span class="number">0x41</span>, <span class="number">0x44</span>, <span class="number">0x82</span>, <span class="number">0x88</span>],
-            <span class="string">&#39;a&#39;</span> =&gt; [<span class="number">0x03</span>, <span class="number">0x06</span>, <span class="number">0x09</span>, <span class="number">0x14</span>, <span class="number">0x28</span>, <span class="number">0x60</span>, <span class="number">0x90</span>, <span class="number">0xc0</span>],
-            <span class="string">&#39;i&#39;</span> =&gt; [<span class="number">0x18</span>, <span class="number">0x42</span>],
-            <span class="string">&#39;n&#39;</span> =&gt; [<span class="number">0x24</span>, <span class="number">0x81</span>],
+        <span class="string">&#39;2&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0x05</span>, <span class="number">0x21</span>, <span class="number">0x84</span>, <span class="number">0xa0</span>],
+            <span class="string">&#39;e&#39; </span>=&gt; [<span class="number">0x0a</span>, <span class="number">0x12</span>, <span class="number">0x48</span>, <span class="number">0x50</span>],
+            <span class="string">&#39;k&#39; </span>=&gt; [<span class="number">0x0c</span>, <span class="number">0x11</span>, <span class="number">0x22</span>, <span class="number">0x30</span>, <span class="number">0x41</span>, <span class="number">0x44</span>, <span class="number">0x82</span>, <span class="number">0x88</span>],
+            <span class="string">&#39;a&#39; </span>=&gt; [<span class="number">0x03</span>, <span class="number">0x06</span>, <span class="number">0x09</span>, <span class="number">0x14</span>, <span class="number">0x28</span>, <span class="number">0x60</span>, <span class="number">0x90</span>, <span class="number">0xc0</span>],
+            <span class="string">&#39;i&#39; </span>=&gt; [<span class="number">0x18</span>, <span class="number">0x42</span>],
+            <span class="string">&#39;n&#39; </span>=&gt; [<span class="number">0x24</span>, <span class="number">0x81</span>],
         },
-        <span class="string">&#39;3&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0x25</span>, <span class="number">0x85</span>, <span class="number">0xa1</span>, <span class="number">0xa4</span>],
-            <span class="string">&#39;e&#39;</span> =&gt; [<span class="number">0x1a</span>, <span class="number">0x4a</span>, <span class="number">0x52</span>, <span class="number">0x58</span>],
-            <span class="string">&#39;k&#39;</span> =&gt; [<span class="number">0x32</span>, <span class="number">0x4c</span>, <span class="number">0x51</span>, <span class="number">0x8a</span>],
-            <span class="string">&#39;a&#39;</span> =&gt; [<span class="number">0x0b</span>, <span class="number">0x16</span>, <span class="number">0x68</span>, <span class="number">0xd0</span>],
-            <span class="string">&#39;i&#39;</span> =&gt; [<span class="number">0x07</span>, <span class="number">0x29</span>, <span class="number">0x94</span>, <span class="number">0xe0</span>],
-            <span class="string">&#39;n&#39;</span> =&gt; [<span class="number">0x0d</span>, <span class="number">0x15</span>, <span class="number">0x23</span>, <span class="number">0x61</span>, <span class="number">0x86</span>, <span class="number">0xa8</span>, <span class="number">0xb0</span>, <span class="number">0xc4</span>],
-            <span class="string">&#39;y&#39;</span> =&gt; [<span class="number">0x31</span>, <span class="number">0x45</span>, <span class="number">0x8c</span>, <span class="number">0xa2</span>],
-            <span class="string">&#39;q&#39;</span> =&gt; [<span class="number">0x26</span>, <span class="number">0x2c</span>, <span class="number">0x34</span>, <span class="number">0x64</span>, <span class="number">0x83</span>, <span class="number">0x89</span>, <span class="number">0x91</span>, <span class="number">0xc1</span>],
-            <span class="string">&#39;j&#39;</span> =&gt; [<span class="number">0x0e</span>, <span class="number">0x13</span>, <span class="number">0x2a</span>, <span class="number">0x49</span>, <span class="number">0x54</span>, <span class="number">0x70</span>, <span class="number">0x92</span>, <span class="number">0xc8</span>],
-            <span class="string">&#39;r&#39;</span> =&gt; [<span class="number">0x19</span>, <span class="number">0x1c</span>, <span class="number">0x38</span>, <span class="number">0x43</span>, <span class="number">0x46</span>, <span class="number">0x62</span>, <span class="number">0x98</span>, <span class="number">0xc2</span>],
+        <span class="string">&#39;3&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0x25</span>, <span class="number">0x85</span>, <span class="number">0xa1</span>, <span class="number">0xa4</span>],
+            <span class="string">&#39;e&#39; </span>=&gt; [<span class="number">0x1a</span>, <span class="number">0x4a</span>, <span class="number">0x52</span>, <span class="number">0x58</span>],
+            <span class="string">&#39;k&#39; </span>=&gt; [<span class="number">0x32</span>, <span class="number">0x4c</span>, <span class="number">0x51</span>, <span class="number">0x8a</span>],
+            <span class="string">&#39;a&#39; </span>=&gt; [<span class="number">0x0b</span>, <span class="number">0x16</span>, <span class="number">0x68</span>, <span class="number">0xd0</span>],
+            <span class="string">&#39;i&#39; </span>=&gt; [<span class="number">0x07</span>, <span class="number">0x29</span>, <span class="number">0x94</span>, <span class="number">0xe0</span>],
+            <span class="string">&#39;n&#39; </span>=&gt; [<span class="number">0x0d</span>, <span class="number">0x15</span>, <span class="number">0x23</span>, <span class="number">0x61</span>, <span class="number">0x86</span>, <span class="number">0xa8</span>, <span class="number">0xb0</span>, <span class="number">0xc4</span>],
+            <span class="string">&#39;y&#39; </span>=&gt; [<span class="number">0x31</span>, <span class="number">0x45</span>, <span class="number">0x8c</span>, <span class="number">0xa2</span>],
+            <span class="string">&#39;q&#39; </span>=&gt; [<span class="number">0x26</span>, <span class="number">0x2c</span>, <span class="number">0x34</span>, <span class="number">0x64</span>, <span class="number">0x83</span>, <span class="number">0x89</span>, <span class="number">0x91</span>, <span class="number">0xc1</span>],
+            <span class="string">&#39;j&#39; </span>=&gt; [<span class="number">0x0e</span>, <span class="number">0x13</span>, <span class="number">0x2a</span>, <span class="number">0x49</span>, <span class="number">0x54</span>, <span class="number">0x70</span>, <span class="number">0x92</span>, <span class="number">0xc8</span>],
+            <span class="string">&#39;r&#39; </span>=&gt; [<span class="number">0x19</span>, <span class="number">0x1c</span>, <span class="number">0x38</span>, <span class="number">0x43</span>, <span class="number">0x46</span>, <span class="number">0x62</span>, <span class="number">0x98</span>, <span class="number">0xc2</span>],
         },
-        <span class="string">&#39;4&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0xa5</span>],
-            <span class="string">&#39;e&#39;</span> =&gt; [<span class="number">0x5a</span>],
-            <span class="string">&#39;k&#39;</span> =&gt; [<span class="number">0x33</span>, <span class="number">0x4d</span>, <span class="number">0x55</span>, <span class="number">0x71</span>, <span class="number">0x8e</span>, <span class="number">0xaa</span>, <span class="number">0xb2</span>, <span class="number">0xcc</span>],
-            <span class="string">&#39;a&#39;</span> =&gt; [<span class="number">0x0f</span>, <span class="number">0x17</span>, <span class="number">0x2b</span>, <span class="number">0x69</span>, <span class="number">0x96</span>, <span class="number">0xd4</span>, <span class="number">0xe8</span>, <span class="number">0xf0</span>],
-            <span class="string">&#39;i&#39;</span> =&gt; [<span class="number">0x1d</span>, <span class="number">0x63</span>, <span class="number">0xb8</span>, <span class="number">0xc6</span>],
-            <span class="string">&#39;n&#39;</span> =&gt; [<span class="number">0x27</span>, <span class="number">0x2d</span>, <span class="number">0x87</span>, <span class="number">0x95</span>, <span class="number">0xa9</span>, <span class="number">0xb4</span>, <span class="number">0xe1</span>, <span class="number">0xe4</span>],
-            <span class="string">&#39;y&#39;</span> =&gt; [<span class="number">0x35</span>, <span class="number">0x65</span>, <span class="number">0x8d</span>, <span class="number">0xa3</span>, <span class="number">0xa6</span>, <span class="number">0xac</span>, <span class="number">0xb1</span>, <span class="number">0xc5</span>],
-            <span class="string">&#39;q&#39;</span> =&gt; [<span class="number">0x36</span>, <span class="number">0x6c</span>, <span class="number">0x8b</span>, <span class="number">0xd1</span>],
-            <span class="string">&#39;j&#39;</span> =&gt; [<span class="number">0x3a</span>, <span class="number">0x4e</span>, <span class="number">0x53</span>, <span class="number">0x59</span>, <span class="number">0x5c</span>, <span class="number">0x72</span>, <span class="number">0x9a</span>, <span class="number">0xca</span>],
-            <span class="string">&#39;r&#39;</span> =&gt; [<span class="number">0x1b</span>, <span class="number">0x1e</span>, <span class="number">0x4b</span>, <span class="number">0x56</span>, <span class="number">0x6a</span>, <span class="number">0x78</span>, <span class="number">0xd2</span>, <span class="number">0xd8</span>],
-            <span class="string">&#39;t&#39;</span> =&gt; [<span class="number">0x39</span>, <span class="number">0x47</span>, <span class="number">0x9c</span>, <span class="number">0xe2</span>],
-            <span class="string">&#39;w&#39;</span> =&gt; [<span class="number">0x2e</span>, <span class="number">0x74</span>, <span class="number">0x93</span>, <span class="number">0xc9</span>],
-            <span class="string">&#39;z&#39;</span> =&gt; [<span class="number">0x3c</span>, <span class="number">0x66</span>, <span class="number">0x99</span>, <span class="number">0xc3</span>],
+        <span class="string">&#39;4&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0xa5</span>],
+            <span class="string">&#39;e&#39; </span>=&gt; [<span class="number">0x5a</span>],
+            <span class="string">&#39;k&#39; </span>=&gt; [<span class="number">0x33</span>, <span class="number">0x4d</span>, <span class="number">0x55</span>, <span class="number">0x71</span>, <span class="number">0x8e</span>, <span class="number">0xaa</span>, <span class="number">0xb2</span>, <span class="number">0xcc</span>],
+            <span class="string">&#39;a&#39; </span>=&gt; [<span class="number">0x0f</span>, <span class="number">0x17</span>, <span class="number">0x2b</span>, <span class="number">0x69</span>, <span class="number">0x96</span>, <span class="number">0xd4</span>, <span class="number">0xe8</span>, <span class="number">0xf0</span>],
+            <span class="string">&#39;i&#39; </span>=&gt; [<span class="number">0x1d</span>, <span class="number">0x63</span>, <span class="number">0xb8</span>, <span class="number">0xc6</span>],
+            <span class="string">&#39;n&#39; </span>=&gt; [<span class="number">0x27</span>, <span class="number">0x2d</span>, <span class="number">0x87</span>, <span class="number">0x95</span>, <span class="number">0xa9</span>, <span class="number">0xb4</span>, <span class="number">0xe1</span>, <span class="number">0xe4</span>],
+            <span class="string">&#39;y&#39; </span>=&gt; [<span class="number">0x35</span>, <span class="number">0x65</span>, <span class="number">0x8d</span>, <span class="number">0xa3</span>, <span class="number">0xa6</span>, <span class="number">0xac</span>, <span class="number">0xb1</span>, <span class="number">0xc5</span>],
+            <span class="string">&#39;q&#39; </span>=&gt; [<span class="number">0x36</span>, <span class="number">0x6c</span>, <span class="number">0x8b</span>, <span class="number">0xd1</span>],
+            <span class="string">&#39;j&#39; </span>=&gt; [<span class="number">0x3a</span>, <span class="number">0x4e</span>, <span class="number">0x53</span>, <span class="number">0x59</span>, <span class="number">0x5c</span>, <span class="number">0x72</span>, <span class="number">0x9a</span>, <span class="number">0xca</span>],
+            <span class="string">&#39;r&#39; </span>=&gt; [<span class="number">0x1b</span>, <span class="number">0x1e</span>, <span class="number">0x4b</span>, <span class="number">0x56</span>, <span class="number">0x6a</span>, <span class="number">0x78</span>, <span class="number">0xd2</span>, <span class="number">0xd8</span>],
+            <span class="string">&#39;t&#39; </span>=&gt; [<span class="number">0x39</span>, <span class="number">0x47</span>, <span class="number">0x9c</span>, <span class="number">0xe2</span>],
+            <span class="string">&#39;w&#39; </span>=&gt; [<span class="number">0x2e</span>, <span class="number">0x74</span>, <span class="number">0x93</span>, <span class="number">0xc9</span>],
+            <span class="string">&#39;z&#39; </span>=&gt; [<span class="number">0x3c</span>, <span class="number">0x66</span>, <span class="number">0x99</span>, <span class="number">0xc3</span>],
         },
-        <span class="string">&#39;5&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0x5b</span>, <span class="number">0x5e</span>, <span class="number">0x7a</span>, <span class="number">0xda</span>],
-            <span class="string">&#39;e&#39;</span> =&gt; [<span class="number">0xa7</span>, <span class="number">0xad</span>, <span class="number">0xb5</span>, <span class="number">0xe5</span>],
-            <span class="string">&#39;k&#39;</span> =&gt; [<span class="number">0x75</span>, <span class="number">0xae</span>, <span class="number">0xb3</span>, <span class="number">0xcd</span>],
-            <span class="string">&#39;a&#39;</span> =&gt; [<span class="number">0x2f</span>, <span class="number">0x97</span>, <span class="number">0xe9</span>, <span class="number">0xf4</span>],
-            <span class="string">&#39;i&#39;</span> =&gt; [<span class="number">0x1f</span>, <span class="number">0x6b</span>, <span class="number">0xd6</span>, <span class="number">0xf8</span>],
-            <span class="string">&#39;n&#39;</span> =&gt; [<span class="number">0x3b</span>, <span class="number">0x4f</span>, <span class="number">0x57</span>, <span class="number">0x79</span>, <span class="number">0x9e</span>, <span class="number">0xdc</span>, <span class="number">0xea</span>, <span class="number">0xf2</span>],
-            <span class="string">&#39;y&#39;</span> =&gt; [<span class="number">0x5d</span>, <span class="number">0x73</span>, <span class="number">0xba</span>, <span class="number">0xce</span>],
-            <span class="string">&#39;q&#39;</span> =&gt; [<span class="number">0x3e</span>, <span class="number">0x6e</span>, <span class="number">0x76</span>, <span class="number">0x7c</span>, <span class="number">0x9b</span>, <span class="number">0xcb</span>, <span class="number">0xd3</span>, <span class="number">0xd9</span>],
-            <span class="string">&#39;j&#39;</span> =&gt; [<span class="number">0x37</span>, <span class="number">0x6d</span>, <span class="number">0x8f</span>, <span class="number">0xab</span>, <span class="number">0xb6</span>, <span class="number">0xd5</span>, <span class="number">0xec</span>, <span class="number">0xf1</span>],
-            <span class="string">&#39;r&#39;</span> =&gt; [<span class="number">0x3d</span>, <span class="number">0x67</span>, <span class="number">0x9d</span>, <span class="number">0xb9</span>, <span class="number">0xbc</span>, <span class="number">0xc7</span>, <span class="number">0xe3</span>, <span class="number">0xe6</span>],
+        <span class="string">&#39;5&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0x5b</span>, <span class="number">0x5e</span>, <span class="number">0x7a</span>, <span class="number">0xda</span>],
+            <span class="string">&#39;e&#39; </span>=&gt; [<span class="number">0xa7</span>, <span class="number">0xad</span>, <span class="number">0xb5</span>, <span class="number">0xe5</span>],
+            <span class="string">&#39;k&#39; </span>=&gt; [<span class="number">0x75</span>, <span class="number">0xae</span>, <span class="number">0xb3</span>, <span class="number">0xcd</span>],
+            <span class="string">&#39;a&#39; </span>=&gt; [<span class="number">0x2f</span>, <span class="number">0x97</span>, <span class="number">0xe9</span>, <span class="number">0xf4</span>],
+            <span class="string">&#39;i&#39; </span>=&gt; [<span class="number">0x1f</span>, <span class="number">0x6b</span>, <span class="number">0xd6</span>, <span class="number">0xf8</span>],
+            <span class="string">&#39;n&#39; </span>=&gt; [<span class="number">0x3b</span>, <span class="number">0x4f</span>, <span class="number">0x57</span>, <span class="number">0x79</span>, <span class="number">0x9e</span>, <span class="number">0xdc</span>, <span class="number">0xea</span>, <span class="number">0xf2</span>],
+            <span class="string">&#39;y&#39; </span>=&gt; [<span class="number">0x5d</span>, <span class="number">0x73</span>, <span class="number">0xba</span>, <span class="number">0xce</span>],
+            <span class="string">&#39;q&#39; </span>=&gt; [<span class="number">0x3e</span>, <span class="number">0x6e</span>, <span class="number">0x76</span>, <span class="number">0x7c</span>, <span class="number">0x9b</span>, <span class="number">0xcb</span>, <span class="number">0xd3</span>, <span class="number">0xd9</span>],
+            <span class="string">&#39;j&#39; </span>=&gt; [<span class="number">0x37</span>, <span class="number">0x6d</span>, <span class="number">0x8f</span>, <span class="number">0xab</span>, <span class="number">0xb6</span>, <span class="number">0xd5</span>, <span class="number">0xec</span>, <span class="number">0xf1</span>],
+            <span class="string">&#39;r&#39; </span>=&gt; [<span class="number">0x3d</span>, <span class="number">0x67</span>, <span class="number">0x9d</span>, <span class="number">0xb9</span>, <span class="number">0xbc</span>, <span class="number">0xc7</span>, <span class="number">0xe3</span>, <span class="number">0xe6</span>],
         },
-        <span class="string">&#39;6&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0x5f</span>, <span class="number">0x7b</span>, <span class="number">0xde</span>, <span class="number">0xfa</span>],
-            <span class="string">&#39;e&#39;</span> =&gt; [<span class="number">0xaf</span>, <span class="number">0xb7</span>, <span class="number">0xed</span>, <span class="number">0xf5</span>],
-            <span class="string">&#39;k&#39;</span> =&gt; [<span class="number">0x77</span>, <span class="number">0x7d</span>, <span class="number">0xbb</span>, <span class="number">0xbe</span>, <span class="number">0xcf</span>, <span class="number">0xdd</span>, <span class="number">0xee</span>, <span class="number">0xf3</span>],
-            <span class="string">&#39;a&#39;</span> =&gt; [<span class="number">0x3f</span>, <span class="number">0x6f</span>, <span class="number">0x9f</span>, <span class="number">0xd7</span>, <span class="number">0xeb</span>, <span class="number">0xf6</span>, <span class="number">0xf9</span>, <span class="number">0xfc</span>],
-            <span class="string">&#39;i&#39;</span> =&gt; [<span class="number">0xbd</span>, <span class="number">0xe7</span>],
-            <span class="string">&#39;n&#39;</span> =&gt; [<span class="number">0x7e</span>, <span class="number">0xdb</span>],
+        <span class="string">&#39;6&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0x5f</span>, <span class="number">0x7b</span>, <span class="number">0xde</span>, <span class="number">0xfa</span>],
+            <span class="string">&#39;e&#39; </span>=&gt; [<span class="number">0xaf</span>, <span class="number">0xb7</span>, <span class="number">0xed</span>, <span class="number">0xf5</span>],
+            <span class="string">&#39;k&#39; </span>=&gt; [<span class="number">0x77</span>, <span class="number">0x7d</span>, <span class="number">0xbb</span>, <span class="number">0xbe</span>, <span class="number">0xcf</span>, <span class="number">0xdd</span>, <span class="number">0xee</span>, <span class="number">0xf3</span>],
+            <span class="string">&#39;a&#39; </span>=&gt; [<span class="number">0x3f</span>, <span class="number">0x6f</span>, <span class="number">0x9f</span>, <span class="number">0xd7</span>, <span class="number">0xeb</span>, <span class="number">0xf6</span>, <span class="number">0xf9</span>, <span class="number">0xfc</span>],
+            <span class="string">&#39;i&#39; </span>=&gt; [<span class="number">0xbd</span>, <span class="number">0xe7</span>],
+            <span class="string">&#39;n&#39; </span>=&gt; [<span class="number">0x7e</span>, <span class="number">0xdb</span>],
         },
-        <span class="string">&#39;7&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0x7f</span>, <span class="number">0xdf</span>, <span class="number">0xfb</span>, <span class="number">0xfe</span>],
-            <span class="string">&#39;e&#39;</span> =&gt; [<span class="number">0xbf</span>, <span class="number">0xef</span>, <span class="number">0xf7</span>, <span class="number">0xfd</span>],
+        <span class="string">&#39;7&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0x7f</span>, <span class="number">0xdf</span>, <span class="number">0xfb</span>, <span class="number">0xfe</span>],
+            <span class="string">&#39;e&#39; </span>=&gt; [<span class="number">0xbf</span>, <span class="number">0xef</span>, <span class="number">0xf7</span>, <span class="number">0xfd</span>],
         },
-        <span class="string">&#39;8&#39;</span> =&gt; {
-            <span class="string">&#39;c&#39;</span> =&gt; [<span class="number">0xff</span>],
+        <span class="string">&#39;8&#39; </span>=&gt; {
+            <span class="string">&#39;c&#39; </span>=&gt; [<span class="number">0xff</span>],
         },
     }
     <span class="macro">parse_rule!</span>();
@@ -446,275 +446,275 @@
 }
 
 <span class="macro">impl_parser!</span>(
-    (<span class="ident">ParseLife</span>, <span class="ident">ParseLifeGen</span>) <span class="kw">for</span> <span class="ident">NtLife</span>,
-    <span class="op">|</span><span class="ident">i</span>: <span class="ident">u8</span><span class="op">|</span> <span class="ident">i</span>.<span class="ident">count_ones</span>() <span class="kw">as</span> <span class="ident">u8</span>,
+    (ParseLife, ParseLifeGen) <span class="kw">for </span>NtLife,
+    |i: u8| i.count_ones() <span class="kw">as </span>u8,
     <span class="number">0xff</span>,
 );
 
 <span class="macro">impl_parser!</span>(
-    (<span class="ident">ParseNtHex</span>, <span class="ident">ParseNtHexGen</span>) <span class="kw">for</span> <span class="ident">NtLife</span>,
-    <span class="op">|</span><span class="ident">i</span>: <span class="ident">u8</span><span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> <span class="number">0xc0</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span> <span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> <span class="number">0x18</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span> <span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> <span class="number">0x03</span>),
+    (ParseNtHex, ParseNtHexGen) <span class="kw">for </span>NtLife,
+    |i: u8| (i &amp; <span class="number">0xc0</span>) &gt;&gt; <span class="number">2 </span>| (i &amp; <span class="number">0x18</span>) &gt;&gt; <span class="number">1 </span>| (i &amp; <span class="number">0x03</span>),
     <span class="number">0xff</span>,
 );
 
 <span class="macro">impl_parser!</span>(
-    (<span class="ident">ParseNtNeumann</span>, <span class="ident">ParseNtNeumannGen</span>) <span class="kw">for</span> <span class="ident">NtLife</span>,
-    <span class="op">|</span><span class="ident">i</span>: <span class="ident">u8</span><span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> <span class="number">0x40</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span> <span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> <span class="number">0x18</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span> <span class="op">|</span> (<span class="ident">i</span> <span class="op">&amp;</span> <span class="number">0x02</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span>,
+    (ParseNtNeumann, ParseNtNeumannGen) <span class="kw">for </span>NtLife,
+    |i: u8| (i &amp; <span class="number">0x40</span>) &gt;&gt; <span class="number">3 </span>| (i &amp; <span class="number">0x18</span>) &gt;&gt; <span class="number">2 </span>| (i &amp; <span class="number">0x02</span>) &gt;&gt; <span class="number">1</span>,
     <span class="number">0xff</span>,
 );
 
-<span class="doccomment">/// A trait for parsing [non-totalistic life-like rules](http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton).</span>
-<span class="doccomment">/// Both [isotropic](http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton)</span>
-<span class="doccomment">/// and [non-isotropic](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)</span>
-<span class="doccomment">/// rules are supported.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The `b` / `s` data of this type of rules consists of possible combinations of</span>
-<span class="doccomment">/// states of the 8 neighbors, represented by an 8-bit binary number,</span>
-<span class="doccomment">/// that cause a cell to be born / survive.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For example, the following neighborhood is represented by the number `42 = 0b00101010`:</span>
-<span class="doccomment">/// ```plaintext</span>
-<span class="doccomment">/// 0 0 1</span>
-<span class="doccomment">/// 0 _ 1</span>
-<span class="doccomment">/// 0 1 0</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use ca_rules::ParseNtLife;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Eq, PartialEq)]</span>
-<span class="doccomment">/// struct Rule {</span>
-<span class="doccomment">///     b: Vec&lt;u8&gt;,</span>
-<span class="doccomment">///     s: Vec&lt;u8&gt;,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl ParseNtLife for Rule {</span>
-<span class="doccomment">///     fn from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; Self {</span>
-<span class="doccomment">///         Rule { b, s }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let life = Rule::parse_rule(&quot;B35y/S1e2-ci3-a5i&quot;).unwrap();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// assert!(life.s.contains(&amp;0x2a));</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ParseNtLife</span> {
-    <span class="doccomment">/// Construct the rule from `b` / `s` data.</span>
-    <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span>;
+<span class="doccomment">/// A trait for parsing [non-totalistic life-like rules](http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton).
+/// Both [isotropic](http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton)
+/// and [non-isotropic](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)
+/// rules are supported.
+///
+/// The `b` / `s` data of this type of rules consists of possible combinations of
+/// states of the 8 neighbors, represented by an 8-bit binary number,
+/// that cause a cell to be born / survive.
+///
+/// For example, the following neighborhood is represented by the number `42 = 0b00101010`:
+/// ```plaintext
+/// 0 0 1
+/// 0 _ 1
+/// 0 1 0
+/// ```
+///
+/// # Examples
+///
+/// ```
+/// use ca_rules::ParseNtLife;
+///
+/// #[derive(Debug, Eq, PartialEq)]
+/// struct Rule {
+///     b: Vec&lt;u8&gt;,
+///     s: Vec&lt;u8&gt;,
+/// }
+///
+/// impl ParseNtLife for Rule {
+///     fn from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; Self {
+///         Rule { b, s }
+///     }
+/// }
+///
+/// let life = Rule::parse_rule(&quot;B35y/S1e2-ci3-a5i&quot;).unwrap();
+///
+/// assert!(life.s.contains(&amp;0x2a));
+/// ```
+</span><span class="kw">pub trait </span>ParseNtLife {
+    <span class="doccomment">/// Construct the rule from `b` / `s` data.
+    </span><span class="kw">fn </span>from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; <span class="self">Self</span>;
 
-    <span class="doccomment">/// The parser.</span>
-    <span class="kw">fn</span> <span class="ident">parse_rule</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
+    <span class="doccomment">/// The parser.
+    </span><span class="kw">fn </span>parse_rule(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParseRuleError&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized,
     {
-        <span class="kw">let</span> <span class="ident">NtLife</span> { <span class="ident">b</span>, <span class="ident">s</span> } <span class="op">=</span> <span class="ident">ParseLife::parse_rule</span>(<span class="ident">input</span>)
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">NtLife::parse_rule</span>(<span class="ident">input</span>))
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">ParseNtHex::parse_rule</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">e</span>))
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">ParseNtNeumann::parse_rule</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">e</span>))
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                <span class="ident">NtLife::parse_rule_map</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e_map</span><span class="op">|</span> {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ParseRuleError::NotMapRule</span> <span class="op">=</span> <span class="ident">e_map</span> {
-                        <span class="ident">e</span>
-                    } <span class="kw">else</span> {
-                        <span class="ident">e_map</span>
+        <span class="kw">let </span>NtLife { b, s } = ParseLife::parse_rule(input)
+            .or_else(|<span class="kw">_</span>| NtLife::parse_rule(input))
+            .or_else(|e| ParseNtHex::parse_rule(input).map_err(|<span class="kw">_</span>| e))
+            .or_else(|e| ParseNtNeumann::parse_rule(input).map_err(|<span class="kw">_</span>| e))
+            .or_else(|e| {
+                NtLife::parse_rule_map(input).map_err(|e_map| {
+                    <span class="kw">if let </span>ParseRuleError::NotMapRule = e_map {
+                        e
+                    } <span class="kw">else </span>{
+                        e_map
                     }
                 })
             })<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bs</span>(<span class="ident">b</span>, <span class="ident">s</span>))
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bs(b, s))
     }
 }
 
-<span class="doccomment">/// A trait for parsing [non-totalistic life-like](http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton)</span>
-<span class="doccomment">/// [Generations](http://www.conwaylife.com/wiki/Generations) rules.</span>
-<span class="doccomment">/// Both [isotropic](http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton)</span>
-<span class="doccomment">/// and [non-isotropic](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)</span>
-<span class="doccomment">/// rules are supported.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The `b` / `s` data of this type of rules consists of possible combinations of</span>
-<span class="doccomment">/// states of the 8 neighbors, represented by an 8-bit binary number,</span>
-<span class="doccomment">/// that cause a cell to be born / survive.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For example, the following neighborhood is represented by the number `42 = 0b00101010`:</span>
-<span class="doccomment">/// ```plaintext</span>
-<span class="doccomment">/// 0 0 1</span>
-<span class="doccomment">/// 0 _ 1</span>
-<span class="doccomment">/// 0 1 0</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// use ca_rules::ParseNtLifeGen;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Debug, Eq, PartialEq)]</span>
-<span class="doccomment">/// struct Rule {</span>
-<span class="doccomment">///     b: Vec&lt;u8&gt;,</span>
-<span class="doccomment">///     s: Vec&lt;u8&gt;,</span>
-<span class="doccomment">///     gen: usize,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// impl ParseNtLifeGen for Rule {</span>
-<span class="doccomment">///     fn from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; Self {</span>
-<span class="doccomment">///         Rule { b, s, gen }</span>
-<span class="doccomment">///     }</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let life = Rule::parse_rule(&quot;g4b2c36k7s2ak34-a5-i&quot;).unwrap();</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// assert_eq!(life.gen, 4);</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ParseNtLifeGen</span> {
-    <span class="doccomment">/// Construct the rule from `b` / `s` data and the number of states.</span>
-    <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span>;
+<span class="doccomment">/// A trait for parsing [non-totalistic life-like](http://www.conwaylife.com/wiki/Non-totalistic_Life-like_cellular_automaton)
+/// [Generations](http://www.conwaylife.com/wiki/Generations) rules.
+/// Both [isotropic](http://www.conwaylife.com/wiki/Isotropic_non-totalistic_Life-like_cellular_automaton)
+/// and [non-isotropic](http://www.conwaylife.com/wiki/Non-isotropic_Life-like_cellular_automaton)
+/// rules are supported.
+///
+/// The `b` / `s` data of this type of rules consists of possible combinations of
+/// states of the 8 neighbors, represented by an 8-bit binary number,
+/// that cause a cell to be born / survive.
+///
+/// For example, the following neighborhood is represented by the number `42 = 0b00101010`:
+/// ```plaintext
+/// 0 0 1
+/// 0 _ 1
+/// 0 1 0
+/// ```
+///
+/// # Examples
+///
+/// ```
+/// use ca_rules::ParseNtLifeGen;
+///
+/// #[derive(Debug, Eq, PartialEq)]
+/// struct Rule {
+///     b: Vec&lt;u8&gt;,
+///     s: Vec&lt;u8&gt;,
+///     gen: usize,
+/// }
+///
+/// impl ParseNtLifeGen for Rule {
+///     fn from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; Self {
+///         Rule { b, s, gen }
+///     }
+/// }
+///
+/// let life = Rule::parse_rule(&quot;g4b2c36k7s2ak34-a5-i&quot;).unwrap();
+///
+/// assert_eq!(life.gen, 4);
+/// ```
+</span><span class="kw">pub trait </span>ParseNtLifeGen {
+    <span class="doccomment">/// Construct the rule from `b` / `s` data and the number of states.
+    </span><span class="kw">fn </span>from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; <span class="self">Self</span>;
 
-    <span class="doccomment">/// The parser.</span>
-    <span class="kw">fn</span> <span class="ident">parse_rule</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span>,
+    <span class="doccomment">/// The parser.
+    </span><span class="kw">fn </span>parse_rule(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParseRuleError&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized,
     {
-        <span class="kw">let</span> <span class="ident">Gen</span> {
-            <span class="ident">rule</span>: <span class="ident">NtLife</span> { <span class="ident">b</span>, <span class="ident">s</span> },
-            <span class="ident">gen</span>,
-        } <span class="op">=</span> <span class="ident">ParseLifeGen::parse_rule</span>(<span class="ident">input</span>)
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">NtLife::parse_rule_gen</span>(<span class="ident">input</span>))
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">ParseNtHexGen::parse_rule</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">e</span>))
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">ParseNtNeumannGen::parse_rule</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">e</span>))
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                <span class="ident">NtLife::parse_rule_gen_map</span>(<span class="ident">input</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e_map</span><span class="op">|</span> {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="ident">ParseRuleError::NotMapRule</span> <span class="op">=</span> <span class="ident">e_map</span> {
-                        <span class="ident">e</span>
-                    } <span class="kw">else</span> {
-                        <span class="ident">e_map</span>
+        <span class="kw">let </span>Gen {
+            rule: NtLife { b, s },
+            gen,
+        } = ParseLifeGen::parse_rule(input)
+            .or_else(|<span class="kw">_</span>| NtLife::parse_rule_gen(input))
+            .or_else(|e| ParseNtHexGen::parse_rule(input).map_err(|<span class="kw">_</span>| e))
+            .or_else(|e| ParseNtNeumannGen::parse_rule(input).map_err(|<span class="kw">_</span>| e))
+            .or_else(|e| {
+                NtLife::parse_rule_gen_map(input).map_err(|e_map| {
+                    <span class="kw">if let </span>ParseRuleError::NotMapRule = e_map {
+                        e
+                    } <span class="kw">else </span>{
+                        e_map
                     }
                 })
             })<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bsg</span>(<span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span>))
+        <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bsg(b, s, gen))
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="kw">struct</span> <span class="ident">Rule</span>;
+    <span class="kw">struct </span>Rule;
 
-    <span class="kw">impl</span> <span class="ident">ParseNtLife</span> <span class="kw">for</span> <span class="ident">Rule</span> {
-        <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">_b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">_s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-            <span class="ident">Rule</span>
+    <span class="kw">impl </span>ParseNtLife <span class="kw">for </span>Rule {
+        <span class="kw">fn </span>from_bs(_b: Vec&lt;u8&gt;, _s: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+            Rule
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">valid_rules</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B3/S23V&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B2e3-anq/S12-a3&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B35y/S1e2-ci3-a5i&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B2o3p4-o5/S2-p3p45H&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;MAPFgFoF2gXgH5oF4B+gH4A6A&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B2i34cj6a7c8/S2-i3-a4ceit6in&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;1e2cik3ejqry4anrwz5a6k/2c3aenq4aijryz5cikqr6ac8&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA&quot;</span>)<span class="question-mark">?</span>;
-        <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA==&quot;</span>)<span class="question-mark">?</span>;
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>valid_rules() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        Rule::parse_rule(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;B3/S23V&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;B2e3-anq/S12-a3&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;B35y/S1e2-ci3-a5i&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;B2o3p4-o5/S2-p3p45H&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;MAPFgFoF2gXgH5oF4B+gH4A6A&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;B2i34cj6a7c8/S2-i3-a4ceit6in&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;1e2cik3ejqry4anrwz5a6k/2c3aenq4aijryz5cikqr6ac8&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA&quot;</span>)<span class="question-mark">?</span>;
+        Rule::parse_rule(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA==&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">invalid_rules</span>() {
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>invalid_rules() {
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;12-a3/B2e3-anq&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::ExtraJunk</span>)
+            Rule::parse_rule(<span class="string">&quot;12-a3/B2e3-anq&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::ExtraJunk)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B35y/1e2-ci3-a5i&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>))
+            Rule::parse_rule(<span class="string">&quot;B35y/1e2-ci3-a5i&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>))
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B2i34cj6a7c82-i3-a4ceit6in&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>))
+            Rule::parse_rule(<span class="string">&quot;B2i34cj6a7c82-i3-a4ceit6in&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>))
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;B2c3aenq4aijryz5cikqrz6ac8/S1e2cik3ejqry4anrwz5a6k&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>))
+            Rule::parse_rule(<span class="string">&quot;B2c3aenq4aijryz5cikqrz6ac8/S1e2cik3ejqry4anrwz5a6k&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>))
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIA&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::InvalidLength</span>)
+            Rule::parse_rule(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIA&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::InvalidLength)
         );
         <span class="macro">assert_eq!</span>(
-            <span class="ident">Rule::parse_rule</span>(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAX&quot;</span>).<span class="ident">err</span>(),
-            <span class="prelude-val">Some</span>(<span class="ident">ParseRuleError::Base64Error</span>)
+            Rule::parse_rule(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAX&quot;</span>).err(),
+            <span class="prelude-val">Some</span>(ParseRuleError::Base64Error)
         );
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">parse_life_as_ntlife</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rule</span>: <span class="ident">NtLife</span> <span class="op">=</span> <span class="ident">ParseLife::parse_rule</span>(<span class="string">&quot;B2/S23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">for</span> <span class="ident">b</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">0xff</span> {
-            <span class="macro">assert_eq!</span>(<span class="ident">rule</span>.<span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>), [<span class="number">2</span>].<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>.<span class="ident">count_ones</span>()));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>parse_life_as_ntlife() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        <span class="kw">let </span>rule: NtLife = ParseLife::parse_rule(<span class="string">&quot;B2/S23&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">for </span>b <span class="kw">in </span><span class="number">0</span>..=<span class="number">0xff </span>{
+            <span class="macro">assert_eq!</span>(rule.b.contains(<span class="kw-2">&amp;</span>b), [<span class="number">2</span>].contains(<span class="kw-2">&amp;</span>b.count_ones()));
         }
 
-        <span class="kw">for</span> <span class="ident">s</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">0xff</span> {
-            <span class="macro">assert_eq!</span>(<span class="ident">rule</span>.<span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>), [<span class="number">2</span>, <span class="number">3</span>].<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">count_ones</span>()));
-        }
-        <span class="prelude-val">Ok</span>(())
-    }
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">parse_hex_as_ntlife</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rule</span>: <span class="ident">NtLife</span> <span class="op">=</span> <span class="ident">ParseNtHex::parse_rule</span>(<span class="string">&quot;B2/S34H&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">for</span> <span class="ident">b</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">0xff</span> {
-            <span class="macro">assert_eq!</span>(
-                <span class="ident">rule</span>.<span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>),
-                [<span class="number">2</span>].<span class="ident">contains</span>(<span class="kw-2">&amp;</span>(<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b1101_1011</span>).<span class="ident">count_ones</span>())
-            );
-        }
-
-        <span class="kw">for</span> <span class="ident">s</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">0xff</span> {
-            <span class="macro">assert_eq!</span>(
-                <span class="ident">rule</span>.<span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>),
-                [<span class="number">3</span>, <span class="number">4</span>].<span class="ident">contains</span>(<span class="kw-2">&amp;</span>(<span class="ident">s</span> <span class="op">&amp;</span> <span class="number">0b1101_1011</span>).<span class="ident">count_ones</span>())
-            );
+        <span class="kw">for </span>s <span class="kw">in </span><span class="number">0</span>..=<span class="number">0xff </span>{
+            <span class="macro">assert_eq!</span>(rule.s.contains(<span class="kw-2">&amp;</span>s), [<span class="number">2</span>, <span class="number">3</span>].contains(<span class="kw-2">&amp;</span>s.count_ones()));
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">parse_neumann_as_ntlife</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rule</span>: <span class="ident">NtLife</span> <span class="op">=</span> <span class="ident">ParseNtNeumann::parse_rule</span>(<span class="string">&quot;B2/S013V&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">for</span> <span class="ident">b</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">0xff</span> {
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>parse_hex_as_ntlife() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        <span class="kw">let </span>rule: NtLife = ParseNtHex::parse_rule(<span class="string">&quot;B2/S34H&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">for </span>b <span class="kw">in </span><span class="number">0</span>..=<span class="number">0xff </span>{
             <span class="macro">assert_eq!</span>(
-                <span class="ident">rule</span>.<span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">b</span>),
-                [<span class="number">2</span>].<span class="ident">contains</span>(<span class="kw-2">&amp;</span>(<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0101_1010</span>).<span class="ident">count_ones</span>())
+                rule.b.contains(<span class="kw-2">&amp;</span>b),
+                [<span class="number">2</span>].contains(<span class="kw-2">&amp;</span>(b &amp; <span class="number">0b1101_1011</span>).count_ones())
             );
         }
 
-        <span class="kw">for</span> <span class="ident">s</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">0xff</span> {
+        <span class="kw">for </span>s <span class="kw">in </span><span class="number">0</span>..=<span class="number">0xff </span>{
             <span class="macro">assert_eq!</span>(
-                <span class="ident">rule</span>.<span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>),
-                [<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>].<span class="ident">contains</span>(<span class="kw-2">&amp;</span>(<span class="ident">s</span> <span class="op">&amp;</span> <span class="number">0b0101_1010</span>).<span class="ident">count_ones</span>())
+                rule.s.contains(<span class="kw-2">&amp;</span>s),
+                [<span class="number">3</span>, <span class="number">4</span>].contains(<span class="kw-2">&amp;</span>(s &amp; <span class="number">0b1101_1011</span>).count_ones())
             );
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">parse_map</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rule1</span>: <span class="ident">NtLife</span> <span class="op">=</span> <span class="ident">NtLife::parse_rule</span>(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">rule2</span>: <span class="ident">NtLife</span> <span class="op">=</span> <span class="ident">NtLife::parse_rule_map</span>(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA&quot;</span>)<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">rule1</span>, <span class="ident">rule2</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>parse_neumann_as_ntlife() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        <span class="kw">let </span>rule: NtLife = ParseNtNeumann::parse_rule(<span class="string">&quot;B2/S013V&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">for </span>b <span class="kw">in </span><span class="number">0</span>..=<span class="number">0xff </span>{
+            <span class="macro">assert_eq!</span>(
+                rule.b.contains(<span class="kw-2">&amp;</span>b),
+                [<span class="number">2</span>].contains(<span class="kw-2">&amp;</span>(b &amp; <span class="number">0b0101_1010</span>).count_ones())
+            );
+        }
+
+        <span class="kw">for </span>s <span class="kw">in </span><span class="number">0</span>..=<span class="number">0xff </span>{
+            <span class="macro">assert_eq!</span>(
+                rule.s.contains(<span class="kw-2">&amp;</span>s),
+                [<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>].contains(<span class="kw-2">&amp;</span>(s &amp; <span class="number">0b0101_1010</span>).count_ones())
+            );
+        }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">parse_gen_map</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">rule1</span>: <span class="ident">Gen</span><span class="op">&lt;</span><span class="ident">NtLife</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">NtLife::parse_rule_gen</span>(<span class="string">&quot;3457/357/5&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">rule2</span>: <span class="ident">Gen</span><span class="op">&lt;</span><span class="ident">NtLife</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">NtLife::parse_rule_gen_map</span>(<span class="string">&quot;MAPARYBFxZpF38WaRd/aZZ//hZpF39pln/+aZZ//pZp/ukWaRd/aZZ//mmWf/6Waf7paZZ//pZp/umWaf7paZbplg/5&quot;</span>)<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">rule1</span>, <span class="ident">rule2</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>parse_map() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        <span class="kw">let </span>rule1: NtLife = NtLife::parse_rule(<span class="string">&quot;B3/S23&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>rule2: NtLife = NtLife::parse_rule_map(<span class="string">&quot;MAPARYXfhZofugWaH7oaIDogBZofuhogOiAaIDogIAAgAAWaH7oaIDogGiA6ICAAIAAaIDogIAAgACAAIAAAAAAAA&quot;</span>)<span class="question-mark">?</span>;
+        <span class="macro">assert_eq!</span>(rule1, rule2);
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>parse_gen_map() -&gt; <span class="prelude-ty">Result</span>&lt;(), ParseRuleError&gt; {
+        <span class="kw">let </span>rule1: Gen&lt;NtLife&gt; = NtLife::parse_rule_gen(<span class="string">&quot;3457/357/5&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>rule2: Gen&lt;NtLife&gt; = NtLife::parse_rule_gen_map(<span class="string">&quot;MAPARYBFxZpF38WaRd/aZZ//hZpF39pln/+aZZ//pZp/ukWaRd/aZZ//mmWf/6Waf7paZZ//pZp/umWaf7paZbplg/5&quot;</span>)<span class="question-mark">?</span>;
+        <span class="macro">assert_eq!</span>(rule1, rule2);
         <span class="prelude-val">Ok</span>(())
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

@@ -63,17 +63,17 @@ threads, or at least not to register signals concurrently.</p>
 program, the installation and removal is considered a slow operation and should not be done
 very often. Also, there’s limited (though huge) amount of distinct IDs (they are <code>u128</code>).</p>
 <h2 id="examples"><a href="#examples">Examples</a></h2>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">signal_hook_registry</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern crate </span>signal_hook_registry;
 
-<span class="kw">use</span> <span class="ident">std::io::Error</span>;
-<span class="kw">use</span> <span class="ident">std::process</span>;
+<span class="kw">use </span>std::io::Error;
+<span class="kw">use </span>std::process;
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">signal</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-        <span class="ident">signal_hook_registry::register</span>(<span class="ident">signal_hook::consts::SIGTERM</span>, <span class="op">|</span><span class="op">|</span> <span class="ident">process::abort</span>())
+<span class="kw">fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="kw">let </span>signal = <span class="kw">unsafe </span>{
+        signal_hook_registry::register(signal_hook::consts::SIGTERM, || process::abort())
     }<span class="question-mark">?</span>;
-    <span class="comment">// Stuff here...</span>
-    <span class="ident">signal_hook_registry::unregister</span>(<span class="ident">signal</span>); <span class="comment">// Not really necessary.</span>
-    <span class="prelude-val">Ok</span>(())
+    <span class="comment">// Stuff here...
+    </span>signal_hook_registry::unregister(signal); <span class="comment">// Not really necessary.
+    </span><span class="prelude-val">Ok</span>(())
 }</code></pre></div>
-</div></details></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="signal_hook_registry" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></details></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="signal_hook_registry" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

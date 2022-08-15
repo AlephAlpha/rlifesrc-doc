@@ -114,27 +114,27 @@ x = 16, y = 5, rule = B3/S23
 o..o.oo...o..oo.$
 ............o..o!
 ```
-*/</span>
+*/
 
-<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">feature</span>(<span class="ident">doc_cfg</span>))]</span>
+</span><span class="attribute">#![cfg_attr(any(docs_rs, github_io), feature(doc_cfg))]</span>
 
-<span class="kw">mod</span> <span class="ident">cells</span>;
-<span class="kw">mod</span> <span class="ident">config</span>;
-<span class="kw">mod</span> <span class="ident">error</span>;
-<span class="kw">mod</span> <span class="ident">poly_world</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">rules</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">search</span>;
-<span class="kw">mod</span> <span class="ident">world</span>;
+<span class="kw">mod </span>cells;
+<span class="kw">mod </span>config;
+<span class="kw">mod </span>error;
+<span class="kw">mod </span>poly_world;
+<span class="kw">pub mod </span>rules;
+<span class="kw">pub mod </span>search;
+<span class="kw">mod </span>world;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">save</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
+<span class="kw">pub mod </span>save;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>, <span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">config</span>::{<span class="ident">Config</span>, <span class="ident">KnownCell</span>, <span class="ident">NewState</span>, <span class="ident">SearchOrder</span>, <span class="ident">Symmetry</span>, <span class="ident">Transform</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">error::Error</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">poly_world::PolyWorld</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">search::Status</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">world::World</span>;
+<span class="kw">pub use </span>cells::{Coord, State, ALIVE, DEAD};
+<span class="kw">pub use </span>config::{Config, KnownCell, NewState, SearchOrder, Symmetry, Transform};
+<span class="kw">pub use </span>error::Error;
+<span class="kw">pub use </span>poly_world::PolyWorld;
+<span class="kw">pub use </span>search::Status;
+<span class="kw">pub use </span>world::World;
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

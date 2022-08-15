@@ -4,11 +4,11 @@
 will contain <code>&quot;&quot;</code> instead.</p>
 <p>Example:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let</span> (<span class="ident">whole</span>, <span class="ident">name</span>, <span class="ident">version</span>) <span class="op">=</span> <span class="macro">regex_captures!</span>(
-    <span class="string">r#&quot;(\w+)-([0-9.]+)&quot;#</span>, <span class="comment">// a literal regex</span>
-    <span class="string">&quot;This is lazy_regex-2.0!&quot;</span>, <span class="comment">// any expression</span>
-).<span class="ident">unwrap</span>();
-<span class="macro">assert_eq!</span>(<span class="ident">whole</span>, <span class="string">&quot;lazy_regex-2.0&quot;</span>);
-<span class="macro">assert_eq!</span>(<span class="ident">name</span>, <span class="string">&quot;lazy_regex&quot;</span>);
-<span class="macro">assert_eq!</span>(<span class="ident">version</span>, <span class="string">&quot;2.0&quot;</span>);</code></pre></div>
-</div></details></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="lazy_regex" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>(whole, name, version) = <span class="macro">regex_captures!</span>(
+    <span class="string">r#&quot;(\w+)-([0-9.]+)&quot;#</span>, <span class="comment">// a literal regex
+    </span><span class="string">&quot;This is lazy_regex-2.0!&quot;</span>, <span class="comment">// any expression
+</span>).unwrap();
+<span class="macro">assert_eq!</span>(whole, <span class="string">&quot;lazy_regex-2.0&quot;</span>);
+<span class="macro">assert_eq!</span>(name, <span class="string">&quot;lazy_regex&quot;</span>);
+<span class="macro">assert_eq!</span>(version, <span class="string">&quot;2.0&quot;</span>);</code></pre></div>
+</div></details></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="lazy_regex" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

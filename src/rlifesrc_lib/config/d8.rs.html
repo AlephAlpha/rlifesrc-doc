@@ -822,829 +822,829 @@
 <span id="822">822</span>
 <span id="823">823</span>
 <span id="824">824</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Configurations related to the</span>
-<span class="doccomment">//! [dihedral group _D_&lt;sub&gt;8&lt;/sub&gt;](https://en.wikipedia.org/wiki/Examples_of_groups#dihedral_group_of_order_8).</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 8 different transformations correspond to 8 elements of _D_&lt;sub&gt;8&lt;/sub&gt;.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 10 different symmetries correspond to 10 subgroups of _D_&lt;sub&gt;8&lt;/sub&gt;.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Configurations related to the
+//! [dihedral group _D_&lt;sub&gt;8&lt;/sub&gt;](https://en.wikipedia.org/wiki/Examples_of_groups#dihedral_group_of_order_8).
+//!
+//! 8 different transformations correspond to 8 elements of _D_&lt;sub&gt;8&lt;/sub&gt;.
+//!
+//! 10 different symmetries correspond to 10 subgroups of _D_&lt;sub&gt;8&lt;/sub&gt;.
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Config</span>, <span class="ident">Coord</span>};
-<span class="kw">use</span> <span class="ident">educe::Educe</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">cmp::Ordering</span>,
-    <span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Display</span>, <span class="ident">Formatter</span>},
-    <span class="ident">matches</span>,
-    <span class="ident">ops::Mul</span>,
-    <span class="ident">str::FromStr</span>,
-    <span class="ident">vec</span>,
+</span><span class="kw">use super</span>::{Config, Coord};
+<span class="kw">use </span>educe::Educe;
+<span class="kw">use </span>std::{
+    cmp::Ordering,
+    fmt::{<span class="self">self</span>, Display, Formatter},
+    matches,
+    ops::Mul,
+    str::FromStr,
+    vec,
 };
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="doccomment">/// Transformations (rotations and reflections) after the last generation</span>
-<span class="doccomment">/// in a period.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// After the last generation in a period, the pattern will return to</span>
-<span class="doccomment">/// the first generation, applying this transformation first,</span>
-<span class="doccomment">/// and then the translation defined by `dx` and `dy`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// 8 different values correspond to 8 elements of the dihedral group</span>
-<span class="doccomment">/// _D_&lt;sub&gt;8&lt;/sub&gt;.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `Id` is the identity transformation.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `R` means rotations around the center of the world.</span>
-<span class="doccomment">/// The number after it is the counterclockwise rotation angle in degrees.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `F` means reflections (flips).</span>
-<span class="doccomment">/// The symbol after it is the axis of reflection.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Some of the transformations are only valid when the world is square.</span>
-<span class="doccomment">/// and some are only valid when the world has no diagonal width.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Transform</span> {
-    <span class="doccomment">/// `Id`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Identity transformation.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
-    <span class="ident">Id</span>,
-    <span class="doccomment">/// `R90`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 90° rotation counterclockwise.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square and have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;R90&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;R90&quot;</span>))]</span>
-    <span class="ident">Rotate90</span>,
-    <span class="doccomment">/// `R180`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 180° rotation counterclockwise.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;R180&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;R180&quot;</span>))]</span>
-    <span class="ident">Rotate180</span>,
-    <span class="doccomment">/// `R270`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// 270° rotation counterclockwise.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square and have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;R270&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;R270&quot;</span>))]</span>
-    <span class="ident">Rotate270</span>,
-    <span class="doccomment">/// `F-`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Reflection across the middle row.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F-&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F-&quot;</span>))]</span>
-    <span class="ident">FlipRow</span>,
-    <span class="doccomment">/// `F|`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Reflection across the middle column.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F|&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F|&quot;</span>))]</span>
-    <span class="ident">FlipCol</span>,
-    <span class="doccomment">/// `F\`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Reflection across the diagonal.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F\\&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F\\&quot;</span>))]</span>
-    <span class="ident">FlipDiag</span>,
-    <span class="doccomment">/// `F/`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Reflection across the antidiagonal.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;F/&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;F/&quot;</span>))]</span>
-    <span class="ident">FlipAntidiag</span>,
+<span class="doccomment">/// Transformations (rotations and reflections) after the last generation
+/// in a period.
+///
+/// After the last generation in a period, the pattern will return to
+/// the first generation, applying this transformation first,
+/// and then the translation defined by `dx` and `dy`.
+///
+/// 8 different values correspond to 8 elements of the dihedral group
+/// _D_&lt;sub&gt;8&lt;/sub&gt;.
+///
+/// `Id` is the identity transformation.
+///
+/// `R` means rotations around the center of the world.
+/// The number after it is the counterclockwise rotation angle in degrees.
+///
+/// `F` means reflections (flips).
+/// The symbol after it is the axis of reflection.
+///
+/// Some of the transformations are only valid when the world is square.
+/// and some are only valid when the world has no diagonal width.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Educe, PartialEq, Eq, Hash)]</span>
+<span class="attribute">#[educe(Default)]</span>
+<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="kw">pub enum </span>Transform {
+    <span class="doccomment">/// `Id`.
+    ///
+    /// Identity transformation.
+    </span><span class="attribute">#[educe(Default)]</span>
+    Id,
+    <span class="doccomment">/// `R90`.
+    ///
+    /// 90° rotation counterclockwise.
+    ///
+    /// Requires the world to be square and have no diagonal width.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;R90&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;R90&quot;</span>))]</span>
+    Rotate90,
+    <span class="doccomment">/// `R180`.
+    ///
+    /// 180° rotation counterclockwise.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;R180&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;R180&quot;</span>))]</span>
+    Rotate180,
+    <span class="doccomment">/// `R270`.
+    ///
+    /// 270° rotation counterclockwise.
+    ///
+    /// Requires the world to be square and have no diagonal width.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;R270&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;R270&quot;</span>))]</span>
+    Rotate270,
+    <span class="doccomment">/// `F-`.
+    ///
+    /// Reflection across the middle row.
+    ///
+    /// Requires the world to have no diagonal width.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;F-&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;F-&quot;</span>))]</span>
+    FlipRow,
+    <span class="doccomment">/// `F|`.
+    ///
+    /// Reflection across the middle column.
+    ///
+    /// Requires the world to have no diagonal width.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;F|&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;F|&quot;</span>))]</span>
+    FlipCol,
+    <span class="doccomment">/// `F\`.
+    ///
+    /// Reflection across the diagonal.
+    ///
+    /// Requires the world to be square.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;F\\&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;F\\&quot;</span>))]</span>
+    FlipDiag,
+    <span class="doccomment">/// `F/`.
+    ///
+    /// Reflection across the antidiagonal.
+    ///
+    /// Requires the world to be square.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;F/&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;F/&quot;</span>))]</span>
+    FlipAntidiag,
 }
 
-<span class="kw">impl</span> <span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">Transform</span> {
-    <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">String</span>;
+<span class="kw">impl </span>FromStr <span class="kw">for </span>Transform {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= String;
 
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">s</span> {
-            <span class="string">&quot;Id&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::Id</span>),
-            <span class="string">&quot;R90&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::Rotate90</span>),
-            <span class="string">&quot;R180&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::Rotate180</span>),
-            <span class="string">&quot;R270&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::Rotate270</span>),
-            <span class="string">&quot;F-&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::FlipRow</span>),
-            <span class="string">&quot;F|&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::FlipCol</span>),
-            <span class="string">&quot;F\\&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::FlipDiag</span>),
-            <span class="string">&quot;F/&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>),
-            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">String::from</span>(<span class="string">&quot;Invalid Transform&quot;</span>)),
+    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">match </span>s {
+            <span class="string">&quot;Id&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::Id),
+            <span class="string">&quot;R90&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::Rotate90),
+            <span class="string">&quot;R180&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::Rotate180),
+            <span class="string">&quot;R270&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::Rotate270),
+            <span class="string">&quot;F-&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::FlipRow),
+            <span class="string">&quot;F|&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::FlipCol),
+            <span class="string">&quot;F\\&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::FlipDiag),
+            <span class="string">&quot;F/&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::FlipAntidiag),
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(String::from(<span class="string">&quot;Invalid Transform&quot;</span>)),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Transform</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Id</span> =&gt; <span class="string">&quot;Id&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::Rotate90</span> =&gt; <span class="string">&quot;R90&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::Rotate180</span> =&gt; <span class="string">&quot;R180&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::Rotate270</span> =&gt; <span class="string">&quot;R270&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::FlipRow</span> =&gt; <span class="string">&quot;F-&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::FlipCol</span> =&gt; <span class="string">&quot;F|&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::FlipDiag</span> =&gt; <span class="string">&quot;F\\&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::FlipAntidiag</span> =&gt; <span class="string">&quot;F/&quot;</span>,
+<span class="kw">impl </span>Display <span class="kw">for </span>Transform {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), fmt::Error&gt; {
+        <span class="kw">let </span>s = <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::Id =&gt; <span class="string">&quot;Id&quot;</span>,
+            <span class="self">Self</span>::Rotate90 =&gt; <span class="string">&quot;R90&quot;</span>,
+            <span class="self">Self</span>::Rotate180 =&gt; <span class="string">&quot;R180&quot;</span>,
+            <span class="self">Self</span>::Rotate270 =&gt; <span class="string">&quot;R270&quot;</span>,
+            <span class="self">Self</span>::FlipRow =&gt; <span class="string">&quot;F-&quot;</span>,
+            <span class="self">Self</span>::FlipCol =&gt; <span class="string">&quot;F|&quot;</span>,
+            <span class="self">Self</span>::FlipDiag =&gt; <span class="string">&quot;F\\&quot;</span>,
+            <span class="self">Self</span>::FlipAntidiag =&gt; <span class="string">&quot;F/&quot;</span>,
         };
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>)<span class="question-mark">?</span>;
+        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, s)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Mul</span> <span class="kw">for</span> <span class="ident">Transform</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
+<span class="kw">impl </span>Mul <span class="kw">for </span>Transform {
+    <span class="kw">type </span>Output = <span class="self">Self</span>;
 
-    <span class="kw">fn</span> <span class="ident">mul</span>(<span class="self">self</span>, <span class="ident">rhs</span>: <span class="self">Self</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> (<span class="self">self</span>, <span class="ident">rhs</span>) {
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::Id</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::Id</span>,
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::Id</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>) =&gt; <span class="ident"><span class="self">Self</span>::Rotate90</span>,
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::Id</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::Rotate180</span>,
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::Id</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>) =&gt; <span class="ident"><span class="self">Self</span>::Rotate270</span>,
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::Id</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>) =&gt; <span class="ident"><span class="self">Self</span>::FlipRow</span>,
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::Id</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>) =&gt; <span class="ident"><span class="self">Self</span>::FlipCol</span>,
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::Id</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>) =&gt; <span class="ident"><span class="self">Self</span>::FlipDiag</span>,
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span>, <span class="ident"><span class="self">Self</span>::FlipCol</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate180</span>, <span class="ident"><span class="self">Self</span>::FlipDiag</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident"><span class="self">Self</span>::FlipRow</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident"><span class="self">Self</span>::Rotate90</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident"><span class="self">Self</span>::Rotate270</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident"><span class="self">Self</span>::Rotate180</span>)
-            <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident"><span class="self">Self</span>::Id</span>) =&gt; <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>,
+    <span class="kw">fn </span>mul(<span class="self">self</span>, rhs: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>(<span class="self">self</span>, rhs) {
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::Id)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::Rotate270)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::Rotate180)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::Rotate90)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::FlipRow)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::FlipCol)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::FlipDiag)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::FlipAntidiag) =&gt; <span class="self">Self</span>::Id,
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::Rotate90)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::Id)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::Rotate270)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::Rotate180)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::FlipAntidiag)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::FlipDiag)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::FlipRow)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::FlipCol) =&gt; <span class="self">Self</span>::Rotate90,
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::Rotate180)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::Rotate90)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::Id)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::Rotate270)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::FlipCol)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::FlipRow)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::FlipAntidiag)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::FlipDiag) =&gt; <span class="self">Self</span>::Rotate180,
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::Rotate270)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::Rotate180)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::Rotate90)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::Id)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::FlipDiag)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::FlipAntidiag)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::FlipCol)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::FlipRow) =&gt; <span class="self">Self</span>::Rotate270,
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::FlipRow)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::FlipAntidiag)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::FlipCol)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::FlipDiag)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::Id)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::Rotate180)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::Rotate90)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::Rotate270) =&gt; <span class="self">Self</span>::FlipRow,
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::FlipCol)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::FlipDiag)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::FlipRow)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::FlipAntidiag)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::Rotate180)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::Id)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::Rotate270)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::Rotate90) =&gt; <span class="self">Self</span>::FlipCol,
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::FlipDiag)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::FlipRow)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::FlipAntidiag)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::FlipCol)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::Rotate270)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::Rotate90)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::Id)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::Rotate180) =&gt; <span class="self">Self</span>::FlipDiag,
+            (<span class="self">Self</span>::Id, <span class="self">Self</span>::FlipAntidiag)
+            | (<span class="self">Self</span>::Rotate90, <span class="self">Self</span>::FlipCol)
+            | (<span class="self">Self</span>::Rotate180, <span class="self">Self</span>::FlipDiag)
+            | (<span class="self">Self</span>::Rotate270, <span class="self">Self</span>::FlipRow)
+            | (<span class="self">Self</span>::FlipRow, <span class="self">Self</span>::Rotate90)
+            | (<span class="self">Self</span>::FlipCol, <span class="self">Self</span>::Rotate270)
+            | (<span class="self">Self</span>::FlipDiag, <span class="self">Self</span>::Rotate180)
+            | (<span class="self">Self</span>::FlipAntidiag, <span class="self">Self</span>::Id) =&gt; <span class="self">Self</span>::FlipAntidiag,
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Transform</span> {
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALL</span>: [<span class="self">Self</span>; <span class="number">8</span>] <span class="op">=</span> [
-        <span class="ident"><span class="self">Self</span>::Id</span>,
-        <span class="ident"><span class="self">Self</span>::Rotate90</span>,
-        <span class="ident"><span class="self">Self</span>::Rotate180</span>,
-        <span class="ident"><span class="self">Self</span>::Rotate270</span>,
-        <span class="ident"><span class="self">Self</span>::FlipRow</span>,
-        <span class="ident"><span class="self">Self</span>::FlipCol</span>,
-        <span class="ident"><span class="self">Self</span>::FlipDiag</span>,
-        <span class="ident"><span class="self">Self</span>::FlipAntidiag</span>,
+<span class="kw">impl </span>Transform {
+    <span class="kw">pub const </span>ALL: [<span class="self">Self</span>; <span class="number">8</span>] = [
+        <span class="self">Self</span>::Id,
+        <span class="self">Self</span>::Rotate90,
+        <span class="self">Self</span>::Rotate180,
+        <span class="self">Self</span>::Rotate270,
+        <span class="self">Self</span>::FlipRow,
+        <span class="self">Self</span>::FlipCol,
+        <span class="self">Self</span>::FlipDiag,
+        <span class="self">Self</span>::FlipAntidiag,
     ];
 
-    <span class="doccomment">/// Whether this transformation requires the world to be square.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `true` for `R90`, `R270`, `F\` and `F/`.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="op">!</span><span class="self">self</span>.<span class="ident">is_in</span>(<span class="ident">Symmetry::D4Ortho</span>)
+    <span class="doccomment">/// Whether this transformation requires the world to be square.
+    ///
+    /// Returns `true` for `R90`, `R270`, `F\` and `F/`.
+    </span><span class="kw">pub const fn </span>require_square_world(<span class="self">self</span>) -&gt; bool {
+        !<span class="self">self</span>.is_in(Symmetry::D4Ortho)
     }
 
-    <span class="doccomment">/// Whether this transformation requires the world to have no diagonal width.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `true` for `R90`, `R270`, `F-` and `F|`.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="op">!</span><span class="self">self</span>.<span class="ident">is_in</span>(<span class="ident">Symmetry::D4Diag</span>)
+    <span class="doccomment">/// Whether this transformation requires the world to have no diagonal width.
+    ///
+    /// Returns `true` for `R90`, `R270`, `F-` and `F|`.
+    </span><span class="kw">pub const fn </span>require_no_diagonal_width(<span class="self">self</span>) -&gt; bool {
+        !<span class="self">self</span>.is_in(Symmetry::D4Diag)
     }
 
-    <span class="doccomment">/// The order of this transformation in the symmetry group.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">order</span>(<span class="self">self</span>) -&gt; <span class="ident">u8</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Id</span> =&gt; <span class="number">1</span>,
-            <span class="ident"><span class="self">Self</span>::Rotate90</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::Rotate270</span> =&gt; <span class="number">4</span>,
-            <span class="kw">_</span> =&gt; <span class="number">2</span>,
+    <span class="doccomment">/// The order of this transformation in the symmetry group.
+    </span><span class="kw">pub const fn </span>order(<span class="self">self</span>) -&gt; u8 {
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::Id =&gt; <span class="number">1</span>,
+            <span class="self">Self</span>::Rotate90 | <span class="self">Self</span>::Rotate270 =&gt; <span class="number">4</span>,
+            <span class="kw">_ </span>=&gt; <span class="number">2</span>,
         }
     }
 
-    <span class="doccomment">/// The inverse of this transformation.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">inverse</span>(<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Rotate90</span> =&gt; <span class="ident"><span class="self">Self</span>::Rotate270</span>,
-            <span class="ident"><span class="self">Self</span>::Rotate270</span> =&gt; <span class="ident"><span class="self">Self</span>::Rotate90</span>,
-            <span class="ident">x</span> =&gt; <span class="ident">x</span>,
+    <span class="doccomment">/// The inverse of this transformation.
+    </span><span class="kw">pub const fn </span>inverse(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::Rotate90 =&gt; <span class="self">Self</span>::Rotate270,
+            <span class="self">Self</span>::Rotate270 =&gt; <span class="self">Self</span>::Rotate90,
+            x =&gt; x,
         }
     }
 
-    <span class="doccomment">/// Whether the transformation is a member of the symmetry group,</span>
-    <span class="doccomment">/// i.e., whether patterns with this symmetry are invariant under</span>
-    <span class="doccomment">/// this transformation.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_in</span>(<span class="self">self</span>, <span class="ident">sym</span>: <span class="ident">Symmetry</span>) -&gt; <span class="ident">bool</span> {
+    <span class="doccomment">/// Whether the transformation is a member of the symmetry group,
+    /// i.e., whether patterns with this symmetry are invariant under
+    /// this transformation.
+    </span><span class="kw">pub const fn </span>is_in(<span class="self">self</span>, sym: Symmetry) -&gt; bool {
         <span class="macro">matches!</span>(
-            (<span class="self">self</span>, <span class="ident">sym</span>),
-            (<span class="ident"><span class="self">Self</span>::Id</span>, <span class="kw">_</span>)
-                <span class="op">|</span> (<span class="kw">_</span>, <span class="ident">Symmetry::D8</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::Rotate90</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::Rotate270</span>, <span class="ident">Symmetry::C4</span>)
-                <span class="op">|</span> (
-                    <span class="ident"><span class="self">Self</span>::Rotate180</span>,
-                    <span class="ident">Symmetry::C2</span> <span class="op">|</span> <span class="ident">Symmetry::C4</span> <span class="op">|</span> <span class="ident">Symmetry::D4Ortho</span> <span class="op">|</span> <span class="ident">Symmetry::D4Diag</span>
+            (<span class="self">self</span>, sym),
+            (<span class="self">Self</span>::Id, <span class="kw">_</span>)
+                | (<span class="kw">_</span>, Symmetry::D8)
+                | (<span class="self">Self</span>::Rotate90 | <span class="self">Self</span>::Rotate270, Symmetry::C4)
+                | (
+                    <span class="self">Self</span>::Rotate180,
+                    Symmetry::C2 | Symmetry::C4 | Symmetry::D4Ortho | Symmetry::D4Diag
                 )
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipRow</span>, <span class="ident">Symmetry::D2Row</span> <span class="op">|</span> <span class="ident">Symmetry::D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipCol</span>, <span class="ident">Symmetry::D2Col</span> <span class="op">|</span> <span class="ident">Symmetry::D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipDiag</span>, <span class="ident">Symmetry::D2Diag</span> <span class="op">|</span> <span class="ident">Symmetry::D4Diag</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::FlipAntidiag</span>, <span class="ident">Symmetry::D2Antidiag</span> <span class="op">|</span> <span class="ident">Symmetry::D4Diag</span>),
+                | (<span class="self">Self</span>::FlipRow, Symmetry::D2Row | Symmetry::D4Ortho)
+                | (<span class="self">Self</span>::FlipCol, Symmetry::D2Col | Symmetry::D4Ortho)
+                | (<span class="self">Self</span>::FlipDiag, Symmetry::D2Diag | Symmetry::D4Diag)
+                | (<span class="self">Self</span>::FlipAntidiag, Symmetry::D2Antidiag | Symmetry::D4Diag),
         )
     }
 
-    <span class="doccomment">/// Apply the transformation on a coordinate.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">act_on</span>(<span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>, <span class="ident">width</span>: <span class="ident">i32</span>, <span class="ident">height</span>: <span class="ident">i32</span>) -&gt; <span class="ident">Coord</span> {
-        <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>) <span class="op">=</span> <span class="ident">coord</span>;
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::Id</span> =&gt; (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident"><span class="self">Self</span>::Rotate90</span> =&gt; (<span class="ident">y</span>, <span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
-            <span class="ident"><span class="self">Self</span>::Rotate180</span> =&gt; (<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident"><span class="self">Self</span>::Rotate270</span> =&gt; (<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-            <span class="ident"><span class="self">Self</span>::FlipRow</span> =&gt; (<span class="ident">x</span>, <span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident"><span class="self">Self</span>::FlipCol</span> =&gt; (<span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>),
-            <span class="ident"><span class="self">Self</span>::FlipDiag</span> =&gt; (<span class="ident">y</span>, <span class="ident">x</span>, <span class="ident">t</span>),
-            <span class="ident"><span class="self">Self</span>::FlipAntidiag</span> =&gt; (<span class="ident">height</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">y</span>, <span class="ident">width</span> <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">x</span>, <span class="ident">t</span>),
+    <span class="doccomment">/// Apply the transformation on a coordinate.
+    </span><span class="kw">pub const fn </span>act_on(<span class="self">self</span>, coord: Coord, width: i32, height: i32) -&gt; Coord {
+        <span class="kw">let </span>(x, y, t) = coord;
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::Id =&gt; (x, y, t),
+            <span class="self">Self</span>::Rotate90 =&gt; (y, width - <span class="number">1 </span>- x, t),
+            <span class="self">Self</span>::Rotate180 =&gt; (width - <span class="number">1 </span>- x, height - <span class="number">1 </span>- y, t),
+            <span class="self">Self</span>::Rotate270 =&gt; (height - <span class="number">1 </span>- y, x, t),
+            <span class="self">Self</span>::FlipRow =&gt; (x, height - <span class="number">1 </span>- y, t),
+            <span class="self">Self</span>::FlipCol =&gt; (width - <span class="number">1 </span>- x, y, t),
+            <span class="self">Self</span>::FlipDiag =&gt; (y, x, t),
+            <span class="self">Self</span>::FlipAntidiag =&gt; (height - <span class="number">1 </span>- y, width - <span class="number">1 </span>- x, t),
         }
     }
 }
 
-<span class="doccomment">/// Symmetries of the pattern.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// For each symmetry, its [symmetry group](https://en.wikipedia.org/wiki/Symmetry_group)</span>
-<span class="doccomment">/// is a subgroup of the dihedral group _D_&lt;sub&gt;8&lt;/sub&gt;.</span>
-<span class="doccomment">/// 10 different symmetries correspond to 10 subgroups of _D_&lt;sub&gt;8&lt;/sub&gt;.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The notations are stolen from Oscar Cunningham&#39;s</span>
-<span class="doccomment">/// [Logic Life Search](https://github.com/OscarCunningham/logic-life-search).</span>
-<span class="doccomment">/// Please see the [Life Wiki](https://conwaylife.com/wiki/Static_symmetry#Reflectional) for details.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Some of the symmetries are only valid when the world is square,</span>
-<span class="doccomment">/// and some are only valid when the world has no diagonal width.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Symmetry</span> {
-    <span class="doccomment">/// `C1`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// No symmetry at all.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
-    <span class="ident">C1</span>,
-    <span class="doccomment">/// `C2`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under 180° rotation.</span>
-    <span class="ident">C2</span>,
-    <span class="doccomment">/// `C4`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under 90° rotation.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square and have no diagonal width.</span>
-    <span class="ident">C4</span>,
-    <span class="doccomment">/// `D2-`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under reflection across the middle row.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2-&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2-&quot;</span>))]</span>
-    <span class="ident">D2Row</span>,
-    <span class="doccomment">/// `D2|`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under reflection across the middle column.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2|&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2|&quot;</span>))]</span>
-    <span class="ident">D2Col</span>,
-    <span class="doccomment">/// `D2\`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under reflection across the diagonal.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2\\&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2\\&quot;</span>))]</span>
-    <span class="ident">D2Diag</span>,
-    <span class="doccomment">/// `D2/`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under reflection across the antidiagonal.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D2/&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D2/&quot;</span>))]</span>
-    <span class="ident">D2Antidiag</span>,
-    <span class="doccomment">/// `D4+`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under reflections across the middle row</span>
-    <span class="doccomment">/// and the middle column.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D4+&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D4+&quot;</span>))]</span>
-    <span class="ident">D4Ortho</span>,
-    <span class="doccomment">/// `D4X`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under reflections across the diagonal</span>
-    <span class="doccomment">/// and the antidiagonal.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">rename</span>(<span class="ident">serialize</span> <span class="op">=</span> <span class="string">&quot;D4X&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">alias</span> <span class="op">=</span> <span class="string">&quot;D4X&quot;</span>))]</span>
-    <span class="ident">D4Diag</span>,
-    <span class="doccomment">/// `D8`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Symmetry under all 8 transformations.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Requires the world to be square and have no diagonal width.</span>
-    <span class="ident">D8</span>,
+<span class="doccomment">/// Symmetries of the pattern.
+///
+/// For each symmetry, its [symmetry group](https://en.wikipedia.org/wiki/Symmetry_group)
+/// is a subgroup of the dihedral group _D_&lt;sub&gt;8&lt;/sub&gt;.
+/// 10 different symmetries correspond to 10 subgroups of _D_&lt;sub&gt;8&lt;/sub&gt;.
+///
+/// The notations are stolen from Oscar Cunningham&#39;s
+/// [Logic Life Search](https://github.com/OscarCunningham/logic-life-search).
+/// Please see the [Life Wiki](https://conwaylife.com/wiki/Static_symmetry#Reflectional) for details.
+///
+/// Some of the symmetries are only valid when the world is square,
+/// and some are only valid when the world has no diagonal width.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Educe, PartialEq, Eq, Hash)]</span>
+<span class="attribute">#[educe(Default)]</span>
+<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="kw">pub enum </span>Symmetry {
+    <span class="doccomment">/// `C1`.
+    ///
+    /// No symmetry at all.
+    </span><span class="attribute">#[educe(Default)]</span>
+    C1,
+    <span class="doccomment">/// `C2`.
+    ///
+    /// Symmetry under 180° rotation.
+    </span>C2,
+    <span class="doccomment">/// `C4`.
+    ///
+    /// Symmetry under 90° rotation.
+    ///
+    /// Requires the world to be square and have no diagonal width.
+    </span>C4,
+    <span class="doccomment">/// `D2-`.
+    ///
+    /// Symmetry under reflection across the middle row.
+    ///
+    /// Requires the world to have no diagonal width.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;D2-&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;D2-&quot;</span>))]</span>
+    D2Row,
+    <span class="doccomment">/// `D2|`.
+    ///
+    /// Symmetry under reflection across the middle column.
+    ///
+    /// Requires the world to have no diagonal width.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;D2|&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;D2|&quot;</span>))]</span>
+    D2Col,
+    <span class="doccomment">/// `D2\`.
+    ///
+    /// Symmetry under reflection across the diagonal.
+    ///
+    /// Requires the world to be square.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;D2\\&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;D2\\&quot;</span>))]</span>
+    D2Diag,
+    <span class="doccomment">/// `D2/`.
+    ///
+    /// Symmetry under reflection across the antidiagonal.
+    ///
+    /// Requires the world to be square.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;D2/&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;D2/&quot;</span>))]</span>
+    D2Antidiag,
+    <span class="doccomment">/// `D4+`.
+    ///
+    /// Symmetry under reflections across the middle row
+    /// and the middle column.
+    ///
+    /// Requires the world to have no diagonal width.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;D4+&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;D4+&quot;</span>))]</span>
+    D4Ortho,
+    <span class="doccomment">/// `D4X`.
+    ///
+    /// Symmetry under reflections across the diagonal
+    /// and the antidiagonal.
+    ///
+    /// Requires the world to be square.
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(rename(serialize = <span class="string">&quot;D4X&quot;</span>)))]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(alias = <span class="string">&quot;D4X&quot;</span>))]</span>
+    D4Diag,
+    <span class="doccomment">/// `D8`.
+    ///
+    /// Symmetry under all 8 transformations.
+    ///
+    /// Requires the world to be square and have no diagonal width.
+    </span>D8,
 }
 
-<span class="kw">impl</span> <span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">Symmetry</span> {
-    <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">String</span>;
+<span class="kw">impl </span>FromStr <span class="kw">for </span>Symmetry {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= String;
 
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="ident">s</span> {
-            <span class="string">&quot;C1&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::C1</span>),
-            <span class="string">&quot;C2&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::C2</span>),
-            <span class="string">&quot;C4&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::C4</span>),
-            <span class="string">&quot;D2-&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::D2Row</span>),
-            <span class="string">&quot;D2|&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::D2Col</span>),
-            <span class="string">&quot;D2\\&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::D2Diag</span>),
-            <span class="string">&quot;D2/&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::D2Antidiag</span>),
-            <span class="string">&quot;D4+&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::D4Ortho</span>),
-            <span class="string">&quot;D4X&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::D4Diag</span>),
-            <span class="string">&quot;D8&quot;</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::D8</span>),
-            <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">String::from</span>(<span class="string">&quot;invalid Self&quot;</span>)),
+    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">match </span>s {
+            <span class="string">&quot;C1&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::C1),
+            <span class="string">&quot;C2&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::C2),
+            <span class="string">&quot;C4&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::C4),
+            <span class="string">&quot;D2-&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::D2Row),
+            <span class="string">&quot;D2|&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::D2Col),
+            <span class="string">&quot;D2\\&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::D2Diag),
+            <span class="string">&quot;D2/&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::D2Antidiag),
+            <span class="string">&quot;D4+&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::D4Ortho),
+            <span class="string">&quot;D4X&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::D4Diag),
+            <span class="string">&quot;D8&quot; </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::D8),
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(String::from(<span class="string">&quot;invalid Self&quot;</span>)),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Symmetry</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt::Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::C1</span> =&gt; <span class="string">&quot;C1&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::C2</span> =&gt; <span class="string">&quot;C2&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::C4</span> =&gt; <span class="string">&quot;C4&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::D2Row</span> =&gt; <span class="string">&quot;D2-&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::D2Col</span> =&gt; <span class="string">&quot;D2|&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::D2Diag</span> =&gt; <span class="string">&quot;D2\\&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::D2Antidiag</span> =&gt; <span class="string">&quot;D2/&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::D4Ortho</span> =&gt; <span class="string">&quot;D4+&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::D4Diag</span> =&gt; <span class="string">&quot;D4X&quot;</span>,
-            <span class="ident"><span class="self">Self</span>::D8</span> =&gt; <span class="string">&quot;D8&quot;</span>,
+<span class="kw">impl </span>Display <span class="kw">for </span>Symmetry {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), fmt::Error&gt; {
+        <span class="kw">let </span>s = <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::C1 =&gt; <span class="string">&quot;C1&quot;</span>,
+            <span class="self">Self</span>::C2 =&gt; <span class="string">&quot;C2&quot;</span>,
+            <span class="self">Self</span>::C4 =&gt; <span class="string">&quot;C4&quot;</span>,
+            <span class="self">Self</span>::D2Row =&gt; <span class="string">&quot;D2-&quot;</span>,
+            <span class="self">Self</span>::D2Col =&gt; <span class="string">&quot;D2|&quot;</span>,
+            <span class="self">Self</span>::D2Diag =&gt; <span class="string">&quot;D2\\&quot;</span>,
+            <span class="self">Self</span>::D2Antidiag =&gt; <span class="string">&quot;D2/&quot;</span>,
+            <span class="self">Self</span>::D4Ortho =&gt; <span class="string">&quot;D4+&quot;</span>,
+            <span class="self">Self</span>::D4Diag =&gt; <span class="string">&quot;D4X&quot;</span>,
+            <span class="self">Self</span>::D8 =&gt; <span class="string">&quot;D8&quot;</span>,
         };
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>)<span class="question-mark">?</span>;
+        <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, s)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">PartialOrd</span> <span class="kw">for</span> <span class="ident">Symmetry</span> {
-    <span class="doccomment">/// We say that symmetry `a` is smaller than symmetry `b`,</span>
-    <span class="doccomment">/// when the symmetry group of `a` is a subgroup of that of `b`,</span>
-    <span class="doccomment">/// i.e., all patterns with symmetry `b` also have symmetry `a`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For example, `Symmetry::C1` is smaller than all other symmetries.</span>
-    <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span> <span class="op">==</span> <span class="ident">other</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Equal</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="kw-2">*</span><span class="ident">other</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Less</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">other</span>.<span class="ident">is_subgroup_of</span>(<span class="kw-2">*</span><span class="self">self</span>) {
-            <span class="prelude-val">Some</span>(<span class="ident">Ordering::Greater</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+<span class="kw">impl </span>PartialOrd <span class="kw">for </span>Symmetry {
+    <span class="doccomment">/// We say that symmetry `a` is smaller than symmetry `b`,
+    /// when the symmetry group of `a` is a subgroup of that of `b`,
+    /// i.e., all patterns with symmetry `b` also have symmetry `a`.
+    ///
+    /// For example, `Symmetry::C1` is smaller than all other symmetries.
+    </span><span class="kw">fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Ordering&gt; {
+        <span class="kw">if </span><span class="self">self </span>== other {
+            <span class="prelude-val">Some</span>(Ordering::Equal)
+        } <span class="kw">else if </span><span class="self">self</span>.is_subgroup_of(<span class="kw-2">*</span>other) {
+            <span class="prelude-val">Some</span>(Ordering::Less)
+        } <span class="kw">else if </span>other.is_subgroup_of(<span class="kw-2">*</span><span class="self">self</span>) {
+            <span class="prelude-val">Some</span>(Ordering::Greater)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Symmetry</span> {
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALL</span>: [<span class="self">Self</span>; <span class="number">10</span>] <span class="op">=</span> [
-        <span class="ident"><span class="self">Self</span>::C1</span>,
-        <span class="ident"><span class="self">Self</span>::C2</span>,
-        <span class="ident"><span class="self">Self</span>::C4</span>,
-        <span class="ident"><span class="self">Self</span>::D2Col</span>,
-        <span class="ident"><span class="self">Self</span>::D2Row</span>,
-        <span class="ident"><span class="self">Self</span>::D2Diag</span>,
-        <span class="ident"><span class="self">Self</span>::D2Antidiag</span>,
-        <span class="ident"><span class="self">Self</span>::D4Diag</span>,
-        <span class="ident"><span class="self">Self</span>::D4Ortho</span>,
-        <span class="ident"><span class="self">Self</span>::D8</span>,
+<span class="kw">impl </span>Symmetry {
+    <span class="kw">pub const </span>ALL: [<span class="self">Self</span>; <span class="number">10</span>] = [
+        <span class="self">Self</span>::C1,
+        <span class="self">Self</span>::C2,
+        <span class="self">Self</span>::C4,
+        <span class="self">Self</span>::D2Col,
+        <span class="self">Self</span>::D2Row,
+        <span class="self">Self</span>::D2Diag,
+        <span class="self">Self</span>::D2Antidiag,
+        <span class="self">Self</span>::D4Diag,
+        <span class="self">Self</span>::D4Ortho,
+        <span class="self">Self</span>::D8,
     ];
 
-    <span class="doccomment">/// Whether the symmetry group of `self` is a subgroup of that of `other`,</span>
-    <span class="doccomment">/// i.e., all patterns with symmetry `other` also have symmetry `self`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For example, the symmetry group of `Symmetry::C1` is a subgroup of</span>
-    <span class="doccomment">/// that of all other symmetries.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_subgroup_of</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) -&gt; <span class="ident">bool</span> {
+    <span class="doccomment">/// Whether the symmetry group of `self` is a subgroup of that of `other`,
+    /// i.e., all patterns with symmetry `other` also have symmetry `self`.
+    ///
+    /// For example, the symmetry group of `Symmetry::C1` is a subgroup of
+    /// that of all other symmetries.
+    </span><span class="kw">pub const fn </span>is_subgroup_of(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; bool {
         <span class="macro">matches!</span>(
-            (<span class="self">self</span>, <span class="ident">other</span>),
-            (<span class="ident"><span class="self">Self</span>::C1</span>, <span class="kw">_</span>)
-                <span class="op">|</span> (<span class="kw">_</span>, <span class="ident"><span class="self">Self</span>::D8</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::C2</span>, <span class="ident"><span class="self">Self</span>::C2</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::C4</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::D4Ortho</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::D4Diag</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::C4</span>, <span class="ident"><span class="self">Self</span>::C4</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::D2Row</span>, <span class="ident"><span class="self">Self</span>::D2Row</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::D2Col</span>, <span class="ident"><span class="self">Self</span>::D2Col</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::D2Diag</span>, <span class="ident"><span class="self">Self</span>::D2Diag</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::D4Diag</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::D2Antidiag</span>, <span class="ident"><span class="self">Self</span>::D2Antidiag</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::D4Diag</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::D4Ortho</span>, <span class="ident"><span class="self">Self</span>::D4Ortho</span>)
-                <span class="op">|</span> (<span class="ident"><span class="self">Self</span>::D4Diag</span>, <span class="ident"><span class="self">Self</span>::D4Diag</span>)
+            (<span class="self">self</span>, other),
+            (<span class="self">Self</span>::C1, <span class="kw">_</span>)
+                | (<span class="kw">_</span>, <span class="self">Self</span>::D8)
+                | (<span class="self">Self</span>::C2, <span class="self">Self</span>::C2 | <span class="self">Self</span>::C4 | <span class="self">Self</span>::D4Ortho | <span class="self">Self</span>::D4Diag)
+                | (<span class="self">Self</span>::C4, <span class="self">Self</span>::C4)
+                | (<span class="self">Self</span>::D2Row, <span class="self">Self</span>::D2Row | <span class="self">Self</span>::D4Ortho)
+                | (<span class="self">Self</span>::D2Col, <span class="self">Self</span>::D2Col | <span class="self">Self</span>::D4Ortho)
+                | (<span class="self">Self</span>::D2Diag, <span class="self">Self</span>::D2Diag | <span class="self">Self</span>::D4Diag)
+                | (<span class="self">Self</span>::D2Antidiag, <span class="self">Self</span>::D2Antidiag | <span class="self">Self</span>::D4Diag)
+                | (<span class="self">Self</span>::D4Ortho, <span class="self">Self</span>::D4Ortho)
+                | (<span class="self">Self</span>::D4Diag, <span class="self">Self</span>::D4Diag)
         )
     }
 
-    <span class="doccomment">/// Whether this symmetry requires the world to be square.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `true` for `C4`, `D2\`, `D2/`, `D4X` and `D8`.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="op">!</span><span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="ident"><span class="self">Self</span>::D4Ortho</span>)
+    <span class="doccomment">/// Whether this symmetry requires the world to be square.
+    ///
+    /// Returns `true` for `C4`, `D2\`, `D2/`, `D4X` and `D8`.
+    </span><span class="kw">pub const fn </span>require_square_world(<span class="self">self</span>) -&gt; bool {
+        !<span class="self">self</span>.is_subgroup_of(<span class="self">Self</span>::D4Ortho)
     }
 
-    <span class="doccomment">/// Whether this transformation requires the world to have no diagonal width.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `true` for `C4`, `D2-`, `D2|`, `D4+` and `D8`.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="op">!</span><span class="self">self</span>.<span class="ident">is_subgroup_of</span>(<span class="ident"><span class="self">Self</span>::D4Diag</span>)
+    <span class="doccomment">/// Whether this transformation requires the world to have no diagonal width.
+    ///
+    /// Returns `true` for `C4`, `D2-`, `D2|`, `D4+` and `D8`.
+    </span><span class="kw">pub const fn </span>require_no_diagonal_width(<span class="self">self</span>) -&gt; bool {
+        !<span class="self">self</span>.is_subgroup_of(<span class="self">Self</span>::D4Diag)
     }
 
-    <span class="doccomment">/// Transformations contained in the symmetry group.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">members</span>(<span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Transform</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::C1</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>],
-            <span class="ident"><span class="self">Self</span>::C2</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::Rotate180</span>],
-            <span class="ident"><span class="self">Self</span>::C4</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::Rotate90</span>,
-                <span class="ident">Transform::Rotate180</span>,
-                <span class="ident">Transform::Rotate270</span>,
+    <span class="doccomment">/// Transformations contained in the symmetry group.
+    </span><span class="kw">pub fn </span>members(<span class="self">self</span>) -&gt; Vec&lt;Transform&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::C1 =&gt; <span class="macro">vec!</span>[Transform::Id],
+            <span class="self">Self</span>::C2 =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::Rotate180],
+            <span class="self">Self</span>::C4 =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::Rotate90,
+                Transform::Rotate180,
+                Transform::Rotate270,
             ],
-            <span class="ident"><span class="self">Self</span>::D2Row</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::FlipRow</span>],
-            <span class="ident"><span class="self">Self</span>::D2Col</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::FlipCol</span>],
-            <span class="ident"><span class="self">Self</span>::D2Diag</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::FlipDiag</span>],
-            <span class="ident"><span class="self">Self</span>::D2Antidiag</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::FlipAntidiag</span>],
-            <span class="ident"><span class="self">Self</span>::D4Ortho</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::FlipRow</span>,
-                <span class="ident">Transform::FlipCol</span>,
-                <span class="ident">Transform::Rotate180</span>,
+            <span class="self">Self</span>::D2Row =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::FlipRow],
+            <span class="self">Self</span>::D2Col =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::FlipCol],
+            <span class="self">Self</span>::D2Diag =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::FlipDiag],
+            <span class="self">Self</span>::D2Antidiag =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::FlipAntidiag],
+            <span class="self">Self</span>::D4Ortho =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::FlipRow,
+                Transform::FlipCol,
+                Transform::Rotate180,
             ],
-            <span class="ident"><span class="self">Self</span>::D4Diag</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::FlipDiag</span>,
-                <span class="ident">Transform::FlipAntidiag</span>,
-                <span class="ident">Transform::Rotate180</span>,
+            <span class="self">Self</span>::D4Diag =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::FlipDiag,
+                Transform::FlipAntidiag,
+                Transform::Rotate180,
             ],
-            <span class="ident"><span class="self">Self</span>::D8</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::Rotate90</span>,
-                <span class="ident">Transform::Rotate180</span>,
-                <span class="ident">Transform::Rotate270</span>,
-                <span class="ident">Transform::FlipRow</span>,
-                <span class="ident">Transform::FlipCol</span>,
-                <span class="ident">Transform::FlipDiag</span>,
-                <span class="ident">Transform::FlipAntidiag</span>,
+            <span class="self">Self</span>::D8 =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::Rotate90,
+                Transform::Rotate180,
+                Transform::Rotate270,
+                Transform::FlipRow,
+                Transform::FlipCol,
+                Transform::FlipDiag,
+                Transform::FlipAntidiag,
             ],
         }
     }
 
-    <span class="doccomment">/// A list of coset representatives,</span>
-    <span class="doccomment">/// seeing the symmetry group as a subgroup of _D_&lt;sub&gt;8&lt;/sub&gt;.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The first element in the result is always [`Transform::Id`].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cosets</span>(<span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Transform</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident"><span class="self">Self</span>::C1</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::Rotate90</span>,
-                <span class="ident">Transform::Rotate180</span>,
-                <span class="ident">Transform::Rotate270</span>,
-                <span class="ident">Transform::FlipRow</span>,
-                <span class="ident">Transform::FlipCol</span>,
-                <span class="ident">Transform::FlipDiag</span>,
-                <span class="ident">Transform::FlipAntidiag</span>,
+    <span class="doccomment">/// A list of coset representatives,
+    /// seeing the symmetry group as a subgroup of _D_&lt;sub&gt;8&lt;/sub&gt;.
+    ///
+    /// The first element in the result is always [`Transform::Id`].
+    </span><span class="kw">pub fn </span>cosets(<span class="self">self</span>) -&gt; Vec&lt;Transform&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::C1 =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::Rotate90,
+                Transform::Rotate180,
+                Transform::Rotate270,
+                Transform::FlipRow,
+                Transform::FlipCol,
+                Transform::FlipDiag,
+                Transform::FlipAntidiag,
             ],
-            <span class="ident"><span class="self">Self</span>::C2</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::Rotate90</span>,
-                <span class="ident">Transform::FlipRow</span>,
-                <span class="ident">Transform::FlipDiag</span>,
+            <span class="self">Self</span>::C2 =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::Rotate90,
+                Transform::FlipRow,
+                Transform::FlipDiag,
             ],
-            <span class="ident"><span class="self">Self</span>::C4</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::FlipRow</span>],
-            <span class="ident"><span class="self">Self</span>::D2Row</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::FlipCol</span>,
-                <span class="ident">Transform::FlipDiag</span>,
-                <span class="ident">Transform::FlipAntidiag</span>,
+            <span class="self">Self</span>::C4 =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::FlipRow],
+            <span class="self">Self</span>::D2Row =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::FlipCol,
+                Transform::FlipDiag,
+                Transform::FlipAntidiag,
             ],
-            <span class="ident"><span class="self">Self</span>::D2Col</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::FlipRow</span>,
-                <span class="ident">Transform::FlipDiag</span>,
-                <span class="ident">Transform::FlipAntidiag</span>,
+            <span class="self">Self</span>::D2Col =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::FlipRow,
+                Transform::FlipDiag,
+                Transform::FlipAntidiag,
             ],
-            <span class="ident"><span class="self">Self</span>::D2Diag</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::FlipRow</span>,
-                <span class="ident">Transform::FlipCol</span>,
-                <span class="ident">Transform::FlipAntidiag</span>,
+            <span class="self">Self</span>::D2Diag =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::FlipRow,
+                Transform::FlipCol,
+                Transform::FlipAntidiag,
             ],
-            <span class="ident"><span class="self">Self</span>::D2Antidiag</span> =&gt; <span class="macro">vec!</span>[
-                <span class="ident">Transform::Id</span>,
-                <span class="ident">Transform::FlipRow</span>,
-                <span class="ident">Transform::FlipCol</span>,
-                <span class="ident">Transform::FlipDiag</span>,
+            <span class="self">Self</span>::D2Antidiag =&gt; <span class="macro">vec!</span>[
+                Transform::Id,
+                Transform::FlipRow,
+                Transform::FlipCol,
+                Transform::FlipDiag,
             ],
-            <span class="ident"><span class="self">Self</span>::D4Ortho</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::FlipDiag</span>],
-            <span class="ident"><span class="self">Self</span>::D4Diag</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>, <span class="ident">Transform::FlipRow</span>],
-            <span class="ident"><span class="self">Self</span>::D8</span> =&gt; <span class="macro">vec!</span>[<span class="ident">Transform::Id</span>],
+            <span class="self">Self</span>::D4Ortho =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::FlipDiag],
+            <span class="self">Self</span>::D4Diag =&gt; <span class="macro">vec!</span>[Transform::Id, Transform::FlipRow],
+            <span class="self">Self</span>::D8 =&gt; <span class="macro">vec!</span>[Transform::Id],
         }
     }
 
-    <span class="doccomment">/// The symmetry group &quot;generated by&quot; the given symmetry and the transformation.</span>
-    <span class="doccomment">/// i.e., the smallest symmetry group which is larger than the given symmetry</span>
-    <span class="doccomment">/// group and contains that transformation.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">generated_with</span>(<span class="self">self</span>, <span class="ident">transform</span>: <span class="ident">Transform</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> (<span class="self">self</span>, <span class="ident">transform</span>) {
-            (<span class="ident">sym</span>, <span class="ident">Transform::Id</span>) =&gt; <span class="ident">sym</span>,
-            (<span class="ident"><span class="self">Self</span>::C1</span>, <span class="ident">Transform::Rotate90</span> <span class="op">|</span> <span class="ident">Transform::Rotate270</span>) =&gt; <span class="ident"><span class="self">Self</span>::C4</span>,
-            (<span class="ident"><span class="self">Self</span>::C1</span>, <span class="ident">Transform::Rotate180</span>) =&gt; <span class="ident"><span class="self">Self</span>::C2</span>,
-            (<span class="ident"><span class="self">Self</span>::C1</span>, <span class="ident">Transform::FlipRow</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Row</span>,
-            (<span class="ident"><span class="self">Self</span>::C1</span>, <span class="ident">Transform::FlipCol</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Col</span>,
-            (<span class="ident"><span class="self">Self</span>::C1</span>, <span class="ident">Transform::FlipDiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Diag</span>,
-            (<span class="ident"><span class="self">Self</span>::C1</span>, <span class="ident">Transform::FlipAntidiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Antidiag</span>,
-            (<span class="ident"><span class="self">Self</span>::C2</span>, <span class="ident">Transform::Rotate90</span> <span class="op">|</span> <span class="ident">Transform::Rotate270</span>) =&gt; <span class="ident"><span class="self">Self</span>::C4</span>,
-            (<span class="ident"><span class="self">Self</span>::C2</span>, <span class="ident">Transform::Rotate180</span>) =&gt; <span class="ident"><span class="self">Self</span>::C2</span>,
-            (<span class="ident"><span class="self">Self</span>::C2</span>, <span class="ident">Transform::FlipRow</span> <span class="op">|</span> <span class="ident">Transform::FlipCol</span>) =&gt; <span class="ident"><span class="self">Self</span>::D4Ortho</span>,
-            (<span class="ident"><span class="self">Self</span>::C2</span>, <span class="ident">Transform::FlipDiag</span> <span class="op">|</span> <span class="ident">Transform::FlipAntidiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::D4Diag</span>,
-            (<span class="ident"><span class="self">Self</span>::C4</span>, <span class="ident">Transform::Rotate90</span> <span class="op">|</span> <span class="ident">Transform::Rotate180</span> <span class="op">|</span> <span class="ident">Transform::Rotate270</span>) =&gt; {
-                <span class="ident"><span class="self">Self</span>::C4</span>
+    <span class="doccomment">/// The symmetry group &quot;generated by&quot; the given symmetry and the transformation.
+    /// i.e., the smallest symmetry group which is larger than the given symmetry
+    /// group and contains that transformation.
+    </span><span class="kw">pub const fn </span>generated_with(<span class="self">self</span>, transform: Transform) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>(<span class="self">self</span>, transform) {
+            (sym, Transform::Id) =&gt; sym,
+            (<span class="self">Self</span>::C1, Transform::Rotate90 | Transform::Rotate270) =&gt; <span class="self">Self</span>::C4,
+            (<span class="self">Self</span>::C1, Transform::Rotate180) =&gt; <span class="self">Self</span>::C2,
+            (<span class="self">Self</span>::C1, Transform::FlipRow) =&gt; <span class="self">Self</span>::D2Row,
+            (<span class="self">Self</span>::C1, Transform::FlipCol) =&gt; <span class="self">Self</span>::D2Col,
+            (<span class="self">Self</span>::C1, Transform::FlipDiag) =&gt; <span class="self">Self</span>::D2Diag,
+            (<span class="self">Self</span>::C1, Transform::FlipAntidiag) =&gt; <span class="self">Self</span>::D2Antidiag,
+            (<span class="self">Self</span>::C2, Transform::Rotate90 | Transform::Rotate270) =&gt; <span class="self">Self</span>::C4,
+            (<span class="self">Self</span>::C2, Transform::Rotate180) =&gt; <span class="self">Self</span>::C2,
+            (<span class="self">Self</span>::C2, Transform::FlipRow | Transform::FlipCol) =&gt; <span class="self">Self</span>::D4Ortho,
+            (<span class="self">Self</span>::C2, Transform::FlipDiag | Transform::FlipAntidiag) =&gt; <span class="self">Self</span>::D4Diag,
+            (<span class="self">Self</span>::C4, Transform::Rotate90 | Transform::Rotate180 | Transform::Rotate270) =&gt; {
+                <span class="self">Self</span>::C4
             }
-            (<span class="ident"><span class="self">Self</span>::D2Row</span>, <span class="ident">Transform::Rotate180</span> <span class="op">|</span> <span class="ident">Transform::FlipCol</span>) =&gt; <span class="ident"><span class="self">Self</span>::D4Ortho</span>,
-            (<span class="ident"><span class="self">Self</span>::D2Row</span>, <span class="ident">Transform::FlipRow</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Row</span>,
-            (<span class="ident"><span class="self">Self</span>::D2Col</span>, <span class="ident">Transform::Rotate180</span> <span class="op">|</span> <span class="ident">Transform::FlipRow</span>) =&gt; <span class="ident"><span class="self">Self</span>::D4Ortho</span>,
-            (<span class="ident"><span class="self">Self</span>::D2Col</span>, <span class="ident">Transform::FlipCol</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Col</span>,
-            (<span class="ident"><span class="self">Self</span>::D2Diag</span>, <span class="ident">Transform::Rotate180</span> <span class="op">|</span> <span class="ident">Transform::FlipAntidiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::D4Diag</span>,
-            (<span class="ident"><span class="self">Self</span>::D2Diag</span>, <span class="ident">Transform::FlipDiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Diag</span>,
-            (<span class="ident"><span class="self">Self</span>::D2Antidiag</span>, <span class="ident">Transform::Rotate180</span> <span class="op">|</span> <span class="ident">Transform::FlipDiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::D4Diag</span>,
-            (<span class="ident"><span class="self">Self</span>::D2Antidiag</span>, <span class="ident">Transform::FlipAntidiag</span>) =&gt; <span class="ident"><span class="self">Self</span>::D2Antidiag</span>,
-            (<span class="ident"><span class="self">Self</span>::D4Ortho</span>, <span class="ident">Transform::Rotate180</span> <span class="op">|</span> <span class="ident">Transform::FlipRow</span> <span class="op">|</span> <span class="ident">Transform::FlipCol</span>) =&gt; {
-                <span class="ident"><span class="self">Self</span>::D4Ortho</span>
+            (<span class="self">Self</span>::D2Row, Transform::Rotate180 | Transform::FlipCol) =&gt; <span class="self">Self</span>::D4Ortho,
+            (<span class="self">Self</span>::D2Row, Transform::FlipRow) =&gt; <span class="self">Self</span>::D2Row,
+            (<span class="self">Self</span>::D2Col, Transform::Rotate180 | Transform::FlipRow) =&gt; <span class="self">Self</span>::D4Ortho,
+            (<span class="self">Self</span>::D2Col, Transform::FlipCol) =&gt; <span class="self">Self</span>::D2Col,
+            (<span class="self">Self</span>::D2Diag, Transform::Rotate180 | Transform::FlipAntidiag) =&gt; <span class="self">Self</span>::D4Diag,
+            (<span class="self">Self</span>::D2Diag, Transform::FlipDiag) =&gt; <span class="self">Self</span>::D2Diag,
+            (<span class="self">Self</span>::D2Antidiag, Transform::Rotate180 | Transform::FlipDiag) =&gt; <span class="self">Self</span>::D4Diag,
+            (<span class="self">Self</span>::D2Antidiag, Transform::FlipAntidiag) =&gt; <span class="self">Self</span>::D2Antidiag,
+            (<span class="self">Self</span>::D4Ortho, Transform::Rotate180 | Transform::FlipRow | Transform::FlipCol) =&gt; {
+                <span class="self">Self</span>::D4Ortho
             }
             (
-                <span class="ident"><span class="self">Self</span>::D4Diag</span>,
-                <span class="ident">Transform::Rotate180</span> <span class="op">|</span> <span class="ident">Transform::FlipDiag</span> <span class="op">|</span> <span class="ident">Transform::FlipAntidiag</span>,
-            ) =&gt; <span class="ident"><span class="self">Self</span>::D4Diag</span>,
-            <span class="kw">_</span> =&gt; <span class="ident"><span class="self">Self</span>::D8</span>,
+                <span class="self">Self</span>::D4Diag,
+                Transform::Rotate180 | Transform::FlipDiag | Transform::FlipAntidiag,
+            ) =&gt; <span class="self">Self</span>::D4Diag,
+            <span class="kw">_ </span>=&gt; <span class="self">Self</span>::D8,
         }
     }
 
-    <span class="doccomment">/// The symmetry group generated by the given transformations,</span>
-    <span class="doccomment">/// i.e., the smallest symmetry group containing all these transformations.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">generated_by</span>(<span class="ident">transforms</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Transform</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">transforms</span>
-            .<span class="ident">into_iter</span>()
-            .<span class="ident">fold</span>(<span class="ident"><span class="self">Self</span>::C1</span>, <span class="op">|</span><span class="ident">sym</span>, <span class="ident">transform</span><span class="op">|</span> <span class="ident">sym</span>.<span class="ident">generated_with</span>(<span class="ident">transform</span>))
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">Config</span> {
-    <span class="doccomment">/// Applies the transformation and translation to a coord.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">translate</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) -&gt; <span class="ident">Coord</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">coord</span> <span class="op">=</span> <span class="ident">coord</span>;
-        <span class="kw">while</span> <span class="ident">coord</span>.<span class="number">2</span> <span class="op">&lt;</span> <span class="number">0</span> {
-            <span class="ident">coord</span> <span class="op">=</span> <span class="self">self</span>
-                .<span class="ident">transform</span>
-                .<span class="ident">inverse</span>()
-                .<span class="ident">act_on</span>(<span class="ident">coord</span>, <span class="self">self</span>.<span class="ident">width</span>, <span class="self">self</span>.<span class="ident">height</span>);
-            <span class="ident">coord</span>.<span class="number">0</span> <span class="op">-</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">dx</span>;
-            <span class="ident">coord</span>.<span class="number">1</span> <span class="op">-</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">dy</span>;
-            <span class="ident">coord</span>.<span class="number">2</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">period</span>;
-        }
-        <span class="kw">while</span> <span class="ident">coord</span>.<span class="number">2</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">period</span> {
-            <span class="ident">coord</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">dx</span>;
-            <span class="ident">coord</span>.<span class="number">1</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">dy</span>;
-            <span class="ident">coord</span>.<span class="number">2</span> <span class="op">-</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">period</span>;
-            <span class="ident">coord</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">act_on</span>(<span class="ident">coord</span>, <span class="self">self</span>.<span class="ident">width</span>, <span class="self">self</span>.<span class="ident">height</span>);
-        }
-        <span class="ident">coord</span>
+    <span class="doccomment">/// The symmetry group generated by the given transformations,
+    /// i.e., the smallest symmetry group containing all these transformations.
+    </span><span class="kw">pub fn </span>generated_by(transforms: <span class="kw">impl </span>IntoIterator&lt;Item = Transform&gt;) -&gt; <span class="self">Self </span>{
+        transforms
+            .into_iter()
+            .fold(<span class="self">Self</span>::C1, |sym, transform| sym.generated_with(transform))
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">rand</span>::{<span class="ident">thread_rng</span>, <span class="ident">Rng</span>};
-    <span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_sym_tran_names</span>() {
-        <span class="kw">for</span> <span class="ident">sym</span> <span class="kw">in</span> <span class="ident">Symmetry::ALL</span> {
-            <span class="macro">assert!</span>(<span class="ident">Symmetry::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">sym</span>.<span class="ident">to_string</span>()) <span class="op">==</span> <span class="prelude-val">Ok</span>(<span class="ident">sym</span>))
+<span class="kw">impl </span>Config {
+    <span class="doccomment">/// Applies the transformation and translation to a coord.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>translate(<span class="kw-2">&amp;</span><span class="self">self</span>, coord: Coord) -&gt; Coord {
+        <span class="kw">let </span><span class="kw-2">mut </span>coord = coord;
+        <span class="kw">while </span>coord.<span class="number">2 </span>&lt; <span class="number">0 </span>{
+            coord = <span class="self">self
+                </span>.transform
+                .inverse()
+                .act_on(coord, <span class="self">self</span>.width, <span class="self">self</span>.height);
+            coord.<span class="number">0 </span>-= <span class="self">self</span>.dx;
+            coord.<span class="number">1 </span>-= <span class="self">self</span>.dy;
+            coord.<span class="number">2 </span>+= <span class="self">self</span>.period;
         }
-        <span class="kw">for</span> <span class="ident">trans</span> <span class="kw">in</span> <span class="ident">Transform::ALL</span> {
-            <span class="macro">assert!</span>(<span class="ident">Transform::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">trans</span>.<span class="ident">to_string</span>()) <span class="op">==</span> <span class="prelude-val">Ok</span>(<span class="ident">trans</span>))
+        <span class="kw">while </span>coord.<span class="number">2 </span>&gt;= <span class="self">self</span>.period {
+            coord.<span class="number">0 </span>+= <span class="self">self</span>.dx;
+            coord.<span class="number">1 </span>+= <span class="self">self</span>.dy;
+            coord.<span class="number">2 </span>-= <span class="self">self</span>.period;
+            coord = <span class="self">self</span>.transform.act_on(coord, <span class="self">self</span>.width, <span class="self">self</span>.height);
+        }
+        coord
+    }
+}
+
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>rand::{thread_rng, Rng};
+    <span class="kw">use </span>std::collections::HashSet;
+
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_sym_tran_names() {
+        <span class="kw">for </span>sym <span class="kw">in </span>Symmetry::ALL {
+            <span class="macro">assert!</span>(Symmetry::from_str(<span class="kw-2">&amp;</span>sym.to_string()) == <span class="prelude-val">Ok</span>(sym))
+        }
+        <span class="kw">for </span>trans <span class="kw">in </span>Transform::ALL {
+            <span class="macro">assert!</span>(Transform::from_str(<span class="kw-2">&amp;</span>trans.to_string()) == <span class="prelude-val">Ok</span>(trans))
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_symmetry_group_member</span>() {
-        <span class="kw">for</span> <span class="ident">sym</span> <span class="kw">in</span> <span class="ident">Symmetry::ALL</span> {
-            <span class="kw">let</span> <span class="ident">members</span> <span class="op">=</span> <span class="ident">sym</span>.<span class="ident">members</span>();
-            <span class="kw">for</span> <span class="ident">tran</span> <span class="kw">in</span> <span class="ident">Transform::ALL</span> {
-                <span class="macro">assert_eq!</span>(<span class="ident">tran</span>.<span class="ident">is_in</span>(<span class="ident">sym</span>), <span class="ident">members</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">tran</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_symmetry_group_member() {
+        <span class="kw">for </span>sym <span class="kw">in </span>Symmetry::ALL {
+            <span class="kw">let </span>members = sym.members();
+            <span class="kw">for </span>tran <span class="kw">in </span>Transform::ALL {
+                <span class="macro">assert_eq!</span>(tran.is_in(sym), members.contains(<span class="kw-2">&amp;</span>tran));
             }
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_symmetry_subgroup</span>() {
-        <span class="kw">for</span> <span class="ident">sym</span> <span class="kw">in</span> <span class="ident">Symmetry::ALL</span> {
-            <span class="kw">for</span> <span class="ident">sub_sym</span> <span class="kw">in</span> <span class="ident">Symmetry::ALL</span> {
-                <span class="kw">let</span> <span class="ident">is_subgroup</span> <span class="op">=</span> <span class="ident">sub_sym</span>.<span class="ident">members</span>().<span class="ident">into_iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="ident">tran</span><span class="op">|</span> <span class="ident">tran</span>.<span class="ident">is_in</span>(<span class="ident">sym</span>));
-                <span class="macro">assert_eq!</span>(<span class="ident">sub_sym</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">sym</span>, <span class="ident">is_subgroup</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_symmetry_subgroup() {
+        <span class="kw">for </span>sym <span class="kw">in </span>Symmetry::ALL {
+            <span class="kw">for </span>sub_sym <span class="kw">in </span>Symmetry::ALL {
+                <span class="kw">let </span>is_subgroup = sub_sym.members().into_iter().all(|tran| tran.is_in(sym));
+                <span class="macro">assert_eq!</span>(sub_sym &lt;= sym, is_subgroup);
             }
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_symmetry_coset</span>() {
-        <span class="kw">let</span> <span class="ident">group</span> <span class="op">=</span> <span class="ident">Transform::ALL</span>.<span class="ident">iter</span>().<span class="ident">copied</span>().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-        <span class="kw">for</span> <span class="ident">sym</span> <span class="kw">in</span> <span class="ident">Symmetry::ALL</span> {
-            <span class="kw">let</span> <span class="ident">all_cosets</span> <span class="op">=</span> <span class="ident">sym</span>
-                .<span class="ident">cosets</span>()
-                .<span class="ident">into_iter</span>()
-                .<span class="ident">flat_map</span>(<span class="op">|</span><span class="ident">coset</span><span class="op">|</span> <span class="ident">sym</span>.<span class="ident">members</span>().<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">elem</span><span class="op">|</span> <span class="ident">elem</span> <span class="op">*</span> <span class="ident">coset</span>))
-                .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">HashSet</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">all_cosets</span>, <span class="ident">group</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_symmetry_coset() {
+        <span class="kw">let </span>group = Transform::ALL.iter().copied().collect::&lt;HashSet&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">for </span>sym <span class="kw">in </span>Symmetry::ALL {
+            <span class="kw">let </span>all_cosets = sym
+                .cosets()
+                .into_iter()
+                .flat_map(|coset| sym.members().into_iter().map(<span class="kw">move </span>|elem| elem * coset))
+                .collect::&lt;HashSet&lt;<span class="kw">_</span>&gt;&gt;();
+            <span class="macro">assert_eq!</span>(all_cosets, group);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_generating</span>() {
-        <span class="kw">for</span> <span class="ident">sym</span> <span class="kw">in</span> <span class="ident">Symmetry::ALL</span> {
-            <span class="kw">let</span> <span class="ident">members</span> <span class="op">=</span> <span class="ident">sym</span>.<span class="ident">members</span>();
-            <span class="macro">assert_eq!</span>(<span class="ident">sym</span>, <span class="ident">Symmetry::generated_by</span>(<span class="ident">members</span>));
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_generating() {
+        <span class="kw">for </span>sym <span class="kw">in </span>Symmetry::ALL {
+            <span class="kw">let </span>members = sym.members();
+            <span class="macro">assert_eq!</span>(sym, Symmetry::generated_by(members));
 
-            <span class="kw">let</span> <span class="ident">generated_with_cosets</span> <span class="op">=</span> <span class="ident">sym</span>
-                .<span class="ident">cosets</span>()
-                .<span class="ident">iter</span>()
-                .<span class="ident">cloned</span>()
-                .<span class="ident">fold</span>(<span class="ident">sym</span>, <span class="ident">Symmetry::generated_with</span>);
-            <span class="macro">assert_eq!</span>(<span class="ident">generated_with_cosets</span>, <span class="ident">Symmetry::D8</span>);
+            <span class="kw">let </span>generated_with_cosets = sym
+                .cosets()
+                .iter()
+                .cloned()
+                .fold(sym, Symmetry::generated_with);
+            <span class="macro">assert_eq!</span>(generated_with_cosets, Symmetry::D8);
 
-            <span class="kw">for</span> <span class="ident">transform</span> <span class="kw">in</span> <span class="ident">Transform::ALL</span> {
-                <span class="kw">let</span> <span class="ident">generated_with</span> <span class="op">=</span> <span class="ident">sym</span>.<span class="ident">generated_with</span>(<span class="ident">transform</span>);
-                <span class="kw">if</span> <span class="ident">transform</span>.<span class="ident">is_in</span>(<span class="ident">sym</span>) {
-                    <span class="macro">assert_eq!</span>(<span class="ident">generated_with</span>, <span class="ident">sym</span>);
-                } <span class="kw">else</span> {
-                    <span class="macro">assert!</span>(<span class="ident">generated_with</span> <span class="op">&gt;</span> <span class="ident">sym</span>);
+            <span class="kw">for </span>transform <span class="kw">in </span>Transform::ALL {
+                <span class="kw">let </span>generated_with = sym.generated_with(transform);
+                <span class="kw">if </span>transform.is_in(sym) {
+                    <span class="macro">assert_eq!</span>(generated_with, sym);
+                } <span class="kw">else </span>{
+                    <span class="macro">assert!</span>(generated_with &gt; sym);
                 }
             }
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_transform_inverse</span>() {
-        <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="number">16</span>;
-        <span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="number">16</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">thread_rng</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="ident">width</span>);
-            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="ident">height</span>);
-            <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="number">0</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_transform_inverse() {
+        <span class="kw">let </span>width = <span class="number">16</span>;
+        <span class="kw">let </span>height = <span class="number">16</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = thread_rng();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..width);
+            <span class="kw">let </span>y = rng.gen_range(<span class="number">0</span>..height);
+            <span class="kw">let </span>coord = (x, y, <span class="number">0</span>);
 
-            <span class="kw">for</span> <span class="ident">tran</span> <span class="kw">in</span> <span class="ident">Transform::ALL</span> {
+            <span class="kw">for </span>tran <span class="kw">in </span>Transform::ALL {
                 <span class="macro">assert_eq!</span>(
-                    <span class="ident">coord</span>,
-                    <span class="ident">tran</span>.<span class="ident">inverse</span>()
-                        .<span class="ident">act_on</span>(<span class="ident">tran</span>.<span class="ident">act_on</span>(<span class="ident">coord</span>, <span class="ident">width</span>, <span class="ident">height</span>), <span class="ident">width</span>, <span class="ident">height</span>),
+                    coord,
+                    tran.inverse()
+                        .act_on(tran.act_on(coord, width, height), width, height),
                     <span class="string">&quot;{} ^ -1 != {}&quot;</span>,
-                    <span class="ident">tran</span>,
-                    <span class="ident">tran</span>.<span class="ident">inverse</span>()
+                    tran,
+                    tran.inverse()
                 )
             }
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_transform_mul</span>() {
-        <span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="number">16</span>;
-        <span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="number">16</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rng</span> <span class="op">=</span> <span class="ident">thread_rng</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="ident">width</span>);
-            <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">rng</span>.<span class="ident">gen_range</span>(<span class="number">0</span>..<span class="ident">height</span>);
-            <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span> (<span class="ident">x</span>, <span class="ident">y</span>, <span class="number">0</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_transform_mul() {
+        <span class="kw">let </span>width = <span class="number">16</span>;
+        <span class="kw">let </span>height = <span class="number">16</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>rng = thread_rng();
+        <span class="kw">for _ in </span><span class="number">0</span>..<span class="number">10 </span>{
+            <span class="kw">let </span>x = rng.gen_range(<span class="number">0</span>..width);
+            <span class="kw">let </span>y = rng.gen_range(<span class="number">0</span>..height);
+            <span class="kw">let </span>coord = (x, y, <span class="number">0</span>);
 
-            <span class="kw">for</span> <span class="ident">tran0</span> <span class="kw">in</span> <span class="ident">Transform::ALL</span> {
-                <span class="kw">for</span> <span class="ident">tran1</span> <span class="kw">in</span> <span class="ident">Transform::ALL</span> {
+            <span class="kw">for </span>tran0 <span class="kw">in </span>Transform::ALL {
+                <span class="kw">for </span>tran1 <span class="kw">in </span>Transform::ALL {
                     <span class="macro">assert_eq!</span>(
-                        (<span class="ident">tran0</span> <span class="op">*</span> <span class="ident">tran1</span>).<span class="ident">act_on</span>(<span class="ident">coord</span>, <span class="ident">width</span>, <span class="ident">height</span>),
-                        <span class="ident">tran1</span>.<span class="ident">act_on</span>(<span class="ident">tran0</span>.<span class="ident">act_on</span>(<span class="ident">coord</span>, <span class="ident">width</span>, <span class="ident">height</span>), <span class="ident">width</span>, <span class="ident">height</span>),
+                        (tran0 * tran1).act_on(coord, width, height),
+                        tran1.act_on(tran0.act_on(coord, width, height), width, height),
                         <span class="string">&quot;{} * {} != {}&quot;</span>,
-                        <span class="ident">tran0</span>,
-                        <span class="ident">tran1</span>,
-                        <span class="ident">tran0</span> <span class="op">*</span> <span class="ident">tran1</span>
+                        tran0,
+                        tran1,
+                        tran0 * tran1
                     )
                 }
             }
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_world_condition</span>() {
-        <span class="kw">for</span> <span class="ident">tran</span> <span class="kw">in</span> <span class="ident">Transform::ALL</span> {
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_world_condition() {
+        <span class="kw">for </span>tran <span class="kw">in </span>Transform::ALL {
             <span class="macro">assert_eq!</span>(
-                <span class="ident">tran</span>.<span class="ident">require_square_world</span>(),
+                tran.require_square_world(),
                 <span class="macro">matches!</span>(
-                    <span class="ident">tran</span>,
-                    <span class="ident">Transform::Rotate90</span>
-                        <span class="op">|</span> <span class="ident">Transform::Rotate270</span>
-                        <span class="op">|</span> <span class="ident">Transform::FlipDiag</span>
-                        <span class="op">|</span> <span class="ident">Transform::FlipAntidiag</span>
+                    tran,
+                    Transform::Rotate90
+                        | Transform::Rotate270
+                        | Transform::FlipDiag
+                        | Transform::FlipAntidiag
                 )
             );
             <span class="macro">assert_eq!</span>(
-                <span class="ident">tran</span>.<span class="ident">require_no_diagonal_width</span>(),
+                tran.require_no_diagonal_width(),
                 <span class="macro">matches!</span>(
-                    <span class="ident">tran</span>,
-                    <span class="ident">Transform::Rotate90</span>
-                        <span class="op">|</span> <span class="ident">Transform::Rotate270</span>
-                        <span class="op">|</span> <span class="ident">Transform::FlipRow</span>
-                        <span class="op">|</span> <span class="ident">Transform::FlipCol</span>
+                    tran,
+                    Transform::Rotate90
+                        | Transform::Rotate270
+                        | Transform::FlipRow
+                        | Transform::FlipCol
                 )
             );
         }
-        <span class="kw">for</span> <span class="ident">sym</span> <span class="kw">in</span> <span class="ident">Symmetry::ALL</span> {
+        <span class="kw">for </span>sym <span class="kw">in </span>Symmetry::ALL {
             <span class="macro">assert_eq!</span>(
-                <span class="ident">sym</span>.<span class="ident">require_square_world</span>(),
+                sym.require_square_world(),
                 <span class="macro">matches!</span>(
-                    <span class="ident">sym</span>,
-                    <span class="ident">Symmetry::C4</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D2Diag</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D2Antidiag</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D4Diag</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D8</span>
+                    sym,
+                    Symmetry::C4
+                        | Symmetry::D2Diag
+                        | Symmetry::D2Antidiag
+                        | Symmetry::D4Diag
+                        | Symmetry::D8
                 )
             );
             <span class="macro">assert_eq!</span>(
-                <span class="ident">sym</span>.<span class="ident">require_no_diagonal_width</span>(),
+                sym.require_no_diagonal_width(),
                 <span class="macro">matches!</span>(
-                    <span class="ident">sym</span>,
-                    <span class="ident">Symmetry::C4</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D2Row</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D2Col</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D4Ortho</span>
-                        <span class="op">|</span> <span class="ident">Symmetry::D8</span>
+                    sym,
+                    Symmetry::C4
+                        | Symmetry::D2Row
+                        | Symmetry::D2Col
+                        | Symmetry::D4Ortho
+                        | Symmetry::D8
                 )
             );
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

@@ -644,94 +644,94 @@
 <span id="644">644</span>
 <span id="645">645</span>
 <span id="646">646</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt::Write</span>;
-<span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::Write;
+<span class="kw">use </span>std::str::FromStr;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::TraitHandler</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">super</span>::models</span>::{
-    <span class="ident">FieldAttributeBuilder</span>, <span class="ident">FieldAttributeName</span>, <span class="ident">TypeAttributeBuilder</span>, <span class="ident">TypeAttributeName</span>,
+<span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::TraitHandler;
+<span class="kw">use </span><span class="kw">super</span>::models::{
+    FieldAttributeBuilder, FieldAttributeName, TypeAttributeBuilder, TypeAttributeName,
 };
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::panic</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Trait</span>;
+<span class="kw">use </span><span class="kw">crate</span>::panic;
+<span class="kw">use </span><span class="kw">crate</span>::Trait;
 
-<span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">quote</span>, <span class="ident">ToTokens</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">Data</span>, <span class="ident">DeriveInput</span>, <span class="ident">Fields</span>, <span class="ident">Generics</span>, <span class="ident">Meta</span>};
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::{quote, ToTokens};
+<span class="kw">use </span>syn::{Data, DeriveInput, Fields, Generics, Meta};
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DebugEnumHandler</span>;
+<span class="kw">pub struct </span>DebugEnumHandler;
 
-<span class="kw">impl</span> <span class="ident">TraitHandler</span> <span class="kw">for</span> <span class="ident">DebugEnumHandler</span> {
-    <span class="kw">fn</span> <span class="ident">trait_meta_handler</span>(
-        <span class="ident">ast</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>,
-        <span class="ident">tokens</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream</span>,
-        <span class="ident">traits</span>: <span class="kw-2">&amp;</span>[<span class="ident">Trait</span>],
-        <span class="ident">meta</span>: <span class="kw-2">&amp;</span><span class="ident">Meta</span>,
+<span class="kw">impl </span>TraitHandler <span class="kw">for </span>DebugEnumHandler {
+    <span class="kw">fn </span>trait_meta_handler(
+        ast: <span class="kw-2">&amp;</span>DeriveInput,
+        tokens: <span class="kw-2">&amp;mut </span>TokenStream,
+        traits: <span class="kw-2">&amp;</span>[Trait],
+        meta: <span class="kw-2">&amp;</span>Meta,
     ) {
-        <span class="kw">let</span> <span class="ident">type_attribute</span> <span class="op">=</span> <span class="ident">TypeAttributeBuilder</span> {
-            <span class="ident">enable_flag</span>: <span class="bool-val">true</span>,
-            <span class="ident">name</span>: <span class="ident">TypeAttributeName::Disable</span>,
-            <span class="ident">enable_name</span>: <span class="bool-val">true</span>,
-            <span class="ident">named_field</span>: <span class="bool-val">false</span>,
-            <span class="ident">enable_named_field</span>: <span class="bool-val">false</span>,
-            <span class="ident">enable_bound</span>: <span class="bool-val">true</span>,
+        <span class="kw">let </span>type_attribute = TypeAttributeBuilder {
+            enable_flag: <span class="bool-val">true</span>,
+            name: TypeAttributeName::Disable,
+            enable_name: <span class="bool-val">true</span>,
+            named_field: <span class="bool-val">false</span>,
+            enable_named_field: <span class="bool-val">false</span>,
+            enable_bound: <span class="bool-val">true</span>,
         }
-        .<span class="ident">from_debug_meta</span>(<span class="ident">meta</span>);
+        .from_debug_meta(meta);
 
-        <span class="kw">let</span> <span class="ident">enum_name</span> <span class="op">=</span> <span class="ident">ast</span>.<span class="ident">ident</span>.<span class="ident">to_string</span>();
+        <span class="kw">let </span>enum_name = ast.ident.to_string();
 
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">type_attribute</span>.<span class="ident">name</span>.<span class="ident">into_string_by_ident</span>(<span class="kw-2">&amp;</span><span class="ident">ast</span>.<span class="ident">ident</span>);
+        <span class="kw">let </span>name = type_attribute.name.into_string_by_ident(<span class="kw-2">&amp;</span>ast.ident);
 
-        <span class="kw">let</span> <span class="ident">bound</span> <span class="op">=</span> <span class="ident">type_attribute</span>
-            .<span class="ident">bound</span>
-            .<span class="ident">into_punctuated_where_predicates_by_generic_parameters</span>(<span class="kw-2">&amp;</span><span class="ident">ast</span>.<span class="ident">generics</span>.<span class="ident">params</span>);
+        <span class="kw">let </span>bound = type_attribute
+            .bound
+            .into_punctuated_where_predicates_by_generic_parameters(<span class="kw-2">&amp;</span>ast.generics.params);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder_tokens</span> <span class="op">=</span> <span class="ident">TokenStream::new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">has_variants</span> <span class="op">=</span> <span class="bool-val">false</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>builder_tokens = TokenStream::new();
+        <span class="kw">let </span><span class="kw-2">mut </span>has_variants = <span class="bool-val">false</span>;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">match_tokens</span> <span class="op">=</span> <span class="ident">String::from</span>(<span class="string">&quot;match self {&quot;</span>);
+        <span class="kw">let </span><span class="kw-2">mut </span>match_tokens = String::from(<span class="string">&quot;match self {&quot;</span>);
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Data::Enum</span>(<span class="ident">data</span>) <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">ast</span>.<span class="ident">data</span> {
-            <span class="kw">for</span> <span class="ident">variant</span> <span class="kw">in</span> <span class="ident">data</span>.<span class="ident">variants</span>.<span class="ident">iter</span>() {
-                <span class="kw">let</span> <span class="ident">type_attribute</span> <span class="op">=</span> <span class="ident">TypeAttributeBuilder</span> {
-                    <span class="ident">enable_flag</span>: <span class="bool-val">false</span>,
-                    <span class="ident">name</span>: <span class="ident">TypeAttributeName::Default</span>,
-                    <span class="ident">enable_name</span>: <span class="bool-val">true</span>,
-                    <span class="ident">named_field</span>: <span class="macro">matches!</span>(<span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">fields</span>, <span class="ident">Fields::Named</span>(<span class="kw">_</span>)),
-                    <span class="ident">enable_named_field</span>: <span class="bool-val">true</span>,
-                    <span class="ident">enable_bound</span>: <span class="bool-val">false</span>,
+        <span class="kw">if let </span>Data::Enum(data) = <span class="kw-2">&amp;</span>ast.data {
+            <span class="kw">for </span>variant <span class="kw">in </span>data.variants.iter() {
+                <span class="kw">let </span>type_attribute = TypeAttributeBuilder {
+                    enable_flag: <span class="bool-val">false</span>,
+                    name: TypeAttributeName::Default,
+                    enable_name: <span class="bool-val">true</span>,
+                    named_field: <span class="macro">matches!</span>(<span class="kw-2">&amp;</span>variant.fields, Fields::Named(<span class="kw">_</span>)),
+                    enable_named_field: <span class="bool-val">true</span>,
+                    enable_bound: <span class="bool-val">false</span>,
                 }
-                .<span class="ident">from_attributes</span>(<span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">attrs</span>, <span class="ident">traits</span>);
+                .from_attributes(<span class="kw-2">&amp;</span>variant.attrs, traits);
 
-                <span class="kw">let</span> <span class="ident">variant_name</span> <span class="op">=</span> <span class="ident">type_attribute</span>.<span class="ident">name</span>.<span class="ident">into_string_by_ident</span>(<span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">ident</span>);
+                <span class="kw">let </span>variant_name = type_attribute.name.into_string_by_ident(<span class="kw-2">&amp;</span>variant.ident);
 
-                <span class="kw">let</span> <span class="ident">named_field</span> <span class="op">=</span> <span class="ident">type_attribute</span>.<span class="ident">named_field</span>;
+                <span class="kw">let </span>named_field = type_attribute.named_field;
 
-                <span class="kw">let</span> <span class="ident">variant_ident</span> <span class="op">=</span> <span class="ident">variant</span>.<span class="ident">ident</span>.<span class="ident">to_string</span>();
+                <span class="kw">let </span>variant_ident = variant.ident.to_string();
 
-                <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">combine_names</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>, <span class="ident">variant_name</span>);
+                <span class="kw">let </span>name = combine_names(<span class="kw-2">&amp;</span>name, variant_name);
 
-                <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">fields</span> {
-                    <span class="ident">Fields::Unit</span> =&gt; {
-                        <span class="comment">// TODO Unit</span>
-                        <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
-                            <span class="ident">panic::unit_variant_need_name</span>();
+                <span class="kw">match </span><span class="kw-2">&amp;</span>variant.fields {
+                    Fields::Unit =&gt; {
+                        <span class="comment">// TODO Unit
+                        </span><span class="kw">if </span>name.is_empty() {
+                            panic::unit_variant_need_name();
                         }
 
-                        <span class="ident">match_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;{enum_name}::{variant_ident} =&gt; {{ formatter.write_str({name:?}) }}&quot;</span>, <span class="ident">enum_name</span> <span class="op">=</span> <span class="ident">enum_name</span>, <span class="ident">variant_ident</span> <span class="op">=</span> <span class="ident">variant_ident</span>, <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>)).<span class="ident">unwrap</span>();
+                        match_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;{enum_name}::{variant_ident} =&gt; {{ formatter.write_str({name:?}) }}&quot;</span>, enum_name = enum_name, variant_ident = variant_ident, name = name)).unwrap();
 
-                        <span class="ident">has_variants</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                        has_variants = <span class="bool-val">true</span>;
                     }
-                    <span class="ident">Fields::Named</span>(<span class="ident">fields</span>) =&gt; {
-                        <span class="comment">// TODO Struct</span>
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">has_fields</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                    Fields::Named(fields) =&gt; {
+                        <span class="comment">// TODO Struct
+                        </span><span class="kw">let </span><span class="kw-2">mut </span>has_fields = <span class="bool-val">false</span>;
 
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pattern_tokens</span> <span class="op">=</span> <span class="ident">String::new</span>();
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">block_tokens</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                        <span class="kw">let </span><span class="kw-2">mut </span>pattern_tokens = String::new();
+                        <span class="kw">let </span><span class="kw-2">mut </span>block_tokens = String::new();
 
-                        <span class="kw">if</span> <span class="ident">named_field</span> {
-                            <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
-                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;
+                        <span class="kw">if </span>named_field {
+                            <span class="kw">if </span>name.is_empty() {
+                                block_tokens.push_str(<span class="string">&quot;
                                     struct RawString(&amp;&#39;static str);
 
                                     impl core::fmt::Debug for RawString {{
@@ -741,56 +741,56 @@
                                     }}
                                 &quot;</span>);
 
-                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;let mut builder = formatter.debug_map();&quot;</span>);
-                            } <span class="kw">else</span> {
-                                <span class="ident">block_tokens</span>
-                                    .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                block_tokens.push_str(<span class="string">&quot;let mut builder = formatter.debug_map();&quot;</span>);
+                            } <span class="kw">else </span>{
+                                block_tokens
+                                    .write_fmt(<span class="macro">format_args!</span>(
                                         <span class="string">&quot;let mut builder = formatter.debug_struct({name:?});&quot;</span>,
-                                        <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>
+                                        name = name
                                     ))
-                                    .<span class="ident">unwrap</span>();
+                                    .unwrap();
                             }
 
-                            <span class="kw">for</span> <span class="ident">field</span> <span class="kw">in</span> <span class="ident">fields</span>.<span class="ident">named</span>.<span class="ident">iter</span>() {
-                                <span class="kw">let</span> <span class="ident">field_attribute</span> <span class="op">=</span> <span class="ident">FieldAttributeBuilder</span> {
-                                    <span class="ident">name</span>: <span class="ident">FieldAttributeName::Default</span>,
-                                    <span class="ident">enable_name</span>: <span class="bool-val">true</span>,
-                                    <span class="ident">enable_ignore</span>: <span class="bool-val">true</span>,
-                                    <span class="ident">enable_impl</span>: <span class="bool-val">true</span>,
+                            <span class="kw">for </span>field <span class="kw">in </span>fields.named.iter() {
+                                <span class="kw">let </span>field_attribute = FieldAttributeBuilder {
+                                    name: FieldAttributeName::Default,
+                                    enable_name: <span class="bool-val">true</span>,
+                                    enable_ignore: <span class="bool-val">true</span>,
+                                    enable_impl: <span class="bool-val">true</span>,
                                 }
-                                .<span class="ident">from_attributes</span>(<span class="kw-2">&amp;</span><span class="ident">field</span>.<span class="ident">attrs</span>, <span class="ident">traits</span>);
+                                .from_attributes(<span class="kw-2">&amp;</span>field.attrs, traits);
 
-                                <span class="kw">let</span> <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field</span>.<span class="ident">ident</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">to_string</span>();
+                                <span class="kw">let </span>field_name = field.ident.as_ref().unwrap().to_string();
 
-                                <span class="kw">if</span> <span class="ident">field_attribute</span>.<span class="ident">ignore</span> {
-                                    <span class="ident">pattern_tokens</span>
-                                        .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                <span class="kw">if </span>field_attribute.ignore {
+                                    pattern_tokens
+                                        .write_fmt(<span class="macro">format_args!</span>(
                                             <span class="string">&quot;{field_name}: _,&quot;</span>,
-                                            <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                            field_name = field_name
                                         ))
-                                        .<span class="ident">unwrap</span>();
+                                        .unwrap();
                                     <span class="kw">continue</span>;
                                 }
 
-                                <span class="kw">let</span> <span class="ident">rename</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">name</span>.<span class="ident">into_option_string</span>();
+                                <span class="kw">let </span>rename = field_attribute.name.into_option_string();
 
-                                <span class="kw">let</span> <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_trait</span>;
-                                <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_method</span>;
+                                <span class="kw">let </span>format_trait = field_attribute.format_trait;
+                                <span class="kw">let </span>format_method = field_attribute.format_method;
 
-                                <span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">rename</span>.<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">field_name</span>.<span class="ident">clone</span>());
+                                <span class="kw">let </span>key = rename.unwrap_or_else(|| field_name.clone());
 
-                                <span class="ident">pattern_tokens</span>
-                                    .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                pattern_tokens
+                                    .write_fmt(<span class="macro">format_args!</span>(
                                         <span class="string">&quot;{field_name},&quot;</span>,
-                                        <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                        field_name = field_name
                                     ))
-                                    .<span class="ident">unwrap</span>();
+                                    .unwrap();
 
-                                <span class="kw">match</span> <span class="ident">format_trait</span> {
-                                    <span class="prelude-val">Some</span>(<span class="ident">format_trait</span>) =&gt; {
-                                        <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>.<span class="ident">unwrap</span>();
+                                <span class="kw">match </span>format_trait {
+                                    <span class="prelude-val">Some</span>(format_trait) =&gt; {
+                                        <span class="kw">let </span>format_method = format_method.unwrap();
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                        block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                             let arg = {{
                                                 struct MyDebug&lt;&#39;a, T: {format_trait}&gt;(&amp;&#39;a T);
 
@@ -802,29 +802,29 @@
 
                                                 MyDebug({field_name})
                                             }};
-                                        &quot;</span>, <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">format_trait</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                        &quot;</span>, format_trait = format_trait, format_method = format_method, field_name = field_name)).unwrap();
 
-                                        <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
+                                        <span class="kw">let </span>statement = <span class="kw">if </span>name.is_empty() {
                                             <span class="macro">format!</span>(
                                                 <span class="string">&quot;builder.entry(&amp;RawString({key:?}), &amp;arg);&quot;</span>,
-                                                <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>
+                                                key = key
                                             )
-                                        } <span class="kw">else</span> {
-                                            <span class="macro">format!</span>(<span class="string">&quot;builder.field({key:?}, &amp;arg);&quot;</span>, <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>)
+                                        } <span class="kw">else </span>{
+                                            <span class="macro">format!</span>(<span class="string">&quot;builder.field({key:?}, &amp;arg);&quot;</span>, key = key)
                                         };
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                        block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                     }
-                                    <span class="prelude-val">None</span> =&gt; {
-                                        <span class="kw">match</span> <span class="ident">format_method</span> {
-                                            <span class="prelude-val">Some</span>(<span class="ident">format_method</span>) =&gt; {
-                                                <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">field</span>
-                                                    .<span class="ident">ty</span>
-                                                    .<span class="ident">clone</span>()
-                                                    .<span class="ident">into_token_stream</span>()
-                                                    .<span class="ident">to_string</span>();
+                                    <span class="prelude-val">None </span>=&gt; {
+                                        <span class="kw">match </span>format_method {
+                                            <span class="prelude-val">Some</span>(format_method) =&gt; {
+                                                <span class="kw">let </span>ty = field
+                                                    .ty
+                                                    .clone()
+                                                    .into_token_stream()
+                                                    .to_string();
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                                block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                                     let arg = {{
                                                         struct MyDebug&lt;&#39;a&gt;(&amp;&#39;a {ty});
 
@@ -836,85 +836,85 @@
 
                                                         MyDebug({field_name})
                                                     }};
-                                                &quot;</span>, <span class="ident">ty</span> <span class="op">=</span> <span class="ident">ty</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                                &quot;</span>, ty = ty, format_method = format_method, field_name = field_name)).unwrap();
 
-                                                <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
+                                                <span class="kw">let </span>statement = <span class="kw">if </span>name.is_empty() {
                                                     <span class="macro">format!</span>(
                                                         <span class="string">&quot;builder.entry(&amp;RawString({key:?}), &amp;arg);&quot;</span>,
-                                                        <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>
+                                                        key = key
                                                     )
-                                                } <span class="kw">else</span> {
+                                                } <span class="kw">else </span>{
                                                     <span class="macro">format!</span>(
                                                         <span class="string">&quot;builder.field({key:?}, &amp;arg);&quot;</span>,
-                                                        <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>
+                                                        key = key
                                                     )
                                                 };
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                                block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                             }
-                                            <span class="prelude-val">None</span> =&gt; {
-                                                <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
-                                                    <span class="macro">format!</span>(<span class="string">&quot;builder.entry(&amp;RawString({key:?}), {field_name});&quot;</span>, <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)
-                                                } <span class="kw">else</span> {
+                                            <span class="prelude-val">None </span>=&gt; {
+                                                <span class="kw">let </span>statement = <span class="kw">if </span>name.is_empty() {
+                                                    <span class="macro">format!</span>(<span class="string">&quot;builder.entry(&amp;RawString({key:?}), {field_name});&quot;</span>, key = key, field_name = field_name)
+                                                } <span class="kw">else </span>{
                                                     <span class="macro">format!</span>(
                                                         <span class="string">&quot;builder.field({key:?}, {field_name});&quot;</span>,
-                                                        <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>,
-                                                        <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                                        key = key,
+                                                        field_name = field_name
                                                     )
                                                 };
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                                block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                             }
                                         }
                                     }
                                 }
 
-                                <span class="ident">has_fields</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                has_fields = <span class="bool-val">true</span>;
                             }
-                        } <span class="kw">else</span> {
-                            <span class="ident">block_tokens</span>
-                                .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                        } <span class="kw">else </span>{
+                            block_tokens
+                                .write_fmt(<span class="macro">format_args!</span>(
                                     <span class="string">&quot;let mut builder = formatter.debug_tuple({name:?});&quot;</span>,
-                                    <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>
+                                    name = name
                                 ))
-                                .<span class="ident">unwrap</span>();
+                                .unwrap();
 
-                            <span class="kw">for</span> <span class="ident">field</span> <span class="kw">in</span> <span class="ident">fields</span>.<span class="ident">named</span>.<span class="ident">iter</span>() {
-                                <span class="kw">let</span> <span class="ident">field_attribute</span> <span class="op">=</span> <span class="ident">FieldAttributeBuilder</span> {
-                                    <span class="ident">name</span>: <span class="ident">FieldAttributeName::Default</span>,
-                                    <span class="ident">enable_name</span>: <span class="bool-val">false</span>,
-                                    <span class="ident">enable_ignore</span>: <span class="bool-val">true</span>,
-                                    <span class="ident">enable_impl</span>: <span class="bool-val">true</span>,
+                            <span class="kw">for </span>field <span class="kw">in </span>fields.named.iter() {
+                                <span class="kw">let </span>field_attribute = FieldAttributeBuilder {
+                                    name: FieldAttributeName::Default,
+                                    enable_name: <span class="bool-val">false</span>,
+                                    enable_ignore: <span class="bool-val">true</span>,
+                                    enable_impl: <span class="bool-val">true</span>,
                                 }
-                                .<span class="ident">from_attributes</span>(<span class="kw-2">&amp;</span><span class="ident">field</span>.<span class="ident">attrs</span>, <span class="ident">traits</span>);
+                                .from_attributes(<span class="kw-2">&amp;</span>field.attrs, traits);
 
-                                <span class="kw">let</span> <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field</span>.<span class="ident">ident</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>().<span class="ident">to_string</span>();
+                                <span class="kw">let </span>field_name = field.ident.as_ref().unwrap().to_string();
 
-                                <span class="kw">if</span> <span class="ident">field_attribute</span>.<span class="ident">ignore</span> {
-                                    <span class="ident">pattern_tokens</span>
-                                        .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                <span class="kw">if </span>field_attribute.ignore {
+                                    pattern_tokens
+                                        .write_fmt(<span class="macro">format_args!</span>(
                                             <span class="string">&quot;{field_name}: _,&quot;</span>,
-                                            <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                            field_name = field_name
                                         ))
-                                        .<span class="ident">unwrap</span>();
+                                        .unwrap();
                                     <span class="kw">continue</span>;
                                 }
 
-                                <span class="kw">let</span> <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_trait</span>;
-                                <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_method</span>;
+                                <span class="kw">let </span>format_trait = field_attribute.format_trait;
+                                <span class="kw">let </span>format_method = field_attribute.format_method;
 
-                                <span class="ident">pattern_tokens</span>
-                                    .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                pattern_tokens
+                                    .write_fmt(<span class="macro">format_args!</span>(
                                         <span class="string">&quot;{field_name},&quot;</span>,
-                                        <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                        field_name = field_name
                                     ))
-                                    .<span class="ident">unwrap</span>();
+                                    .unwrap();
 
-                                <span class="kw">match</span> <span class="ident">format_trait</span> {
-                                    <span class="prelude-val">Some</span>(<span class="ident">format_trait</span>) =&gt; {
-                                        <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>.<span class="ident">unwrap</span>();
+                                <span class="kw">match </span>format_trait {
+                                    <span class="prelude-val">Some</span>(format_trait) =&gt; {
+                                        <span class="kw">let </span>format_method = format_method.unwrap();
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                        block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                             let arg = {{
                                                 struct MyDebug&lt;&#39;a, T: {format_trait}&gt;(&amp;&#39;a T);
 
@@ -926,20 +926,20 @@
 
                                                 MyDebug({field_name})
                                             }};
-                                        &quot;</span>, <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">format_trait</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                        &quot;</span>, format_trait = format_trait, format_method = format_method, field_name = field_name)).unwrap();
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
+                                        block_tokens.push_str(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
                                     }
-                                    <span class="prelude-val">None</span> =&gt; {
-                                        <span class="kw">match</span> <span class="ident">format_method</span> {
-                                            <span class="prelude-val">Some</span>(<span class="ident">format_method</span>) =&gt; {
-                                                <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">field</span>
-                                                    .<span class="ident">ty</span>
-                                                    .<span class="ident">clone</span>()
-                                                    .<span class="ident">into_token_stream</span>()
-                                                    .<span class="ident">to_string</span>();
+                                    <span class="prelude-val">None </span>=&gt; {
+                                        <span class="kw">match </span>format_method {
+                                            <span class="prelude-val">Some</span>(format_method) =&gt; {
+                                                <span class="kw">let </span>ty = field
+                                                    .ty
+                                                    .clone()
+                                                    .into_token_stream()
+                                                    .to_string();
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                                block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                                     let arg = {{
                                                         struct MyDebug&lt;&#39;a&gt;(&amp;&#39;a {ty});
 
@@ -951,46 +951,46 @@
 
                                                         MyDebug({field_name})
                                                     }};
-                                                &quot;</span>, <span class="ident">ty</span> <span class="op">=</span> <span class="ident">ty</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                                &quot;</span>, ty = ty, format_method = format_method, field_name = field_name)).unwrap();
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
+                                                block_tokens.push_str(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
                                             }
-                                            <span class="prelude-val">None</span> =&gt; {
-                                                <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="macro">format!</span>(
+                                            <span class="prelude-val">None </span>=&gt; {
+                                                <span class="kw">let </span>statement = <span class="macro">format!</span>(
                                                     <span class="string">&quot;builder.field({field_name});&quot;</span>,
-                                                    <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                                    field_name = field_name
                                                 );
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                                block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                             }
                                         }
                                     }
                                 }
 
-                                <span class="ident">has_fields</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                has_fields = <span class="bool-val">true</span>;
                             }
                         }
 
-                        <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">has_fields</span> {
-                            <span class="ident">panic::unit_struct_need_name</span>();
+                        <span class="kw">if </span>name.is_empty() &amp;&amp; !has_fields {
+                            panic::unit_struct_need_name();
                         }
 
-                        <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;return builder.finish();&quot;</span>);
+                        block_tokens.push_str(<span class="string">&quot;return builder.finish();&quot;</span>);
 
-                        <span class="ident">match_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;{enum_name}::{variant_ident}{{ {pattern_tokens} }} =&gt; {{ {block_tokens} }}&quot;</span>, <span class="ident">enum_name</span> <span class="op">=</span> <span class="ident">enum_name</span>, <span class="ident">variant_ident</span> <span class="op">=</span> <span class="ident">variant_ident</span>, <span class="ident">pattern_tokens</span> <span class="op">=</span> <span class="ident">pattern_tokens</span>, <span class="ident">block_tokens</span> <span class="op">=</span> <span class="ident">block_tokens</span>)).<span class="ident">unwrap</span>();
+                        match_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;{enum_name}::{variant_ident}{{ {pattern_tokens} }} =&gt; {{ {block_tokens} }}&quot;</span>, enum_name = enum_name, variant_ident = variant_ident, pattern_tokens = pattern_tokens, block_tokens = block_tokens)).unwrap();
 
-                        <span class="ident">has_variants</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                        has_variants = <span class="bool-val">true</span>;
                     }
-                    <span class="ident">Fields::Unnamed</span>(<span class="ident">fields</span>) =&gt; {
-                        <span class="comment">// TODO Tuple</span>
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">has_fields</span> <span class="op">=</span> <span class="bool-val">false</span>;
+                    Fields::Unnamed(fields) =&gt; {
+                        <span class="comment">// TODO Tuple
+                        </span><span class="kw">let </span><span class="kw-2">mut </span>has_fields = <span class="bool-val">false</span>;
 
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pattern_tokens</span> <span class="op">=</span> <span class="ident">String::new</span>();
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">block_tokens</span> <span class="op">=</span> <span class="ident">String::new</span>();
+                        <span class="kw">let </span><span class="kw-2">mut </span>pattern_tokens = String::new();
+                        <span class="kw">let </span><span class="kw-2">mut </span>block_tokens = String::new();
 
-                        <span class="kw">if</span> <span class="ident">named_field</span> {
-                            <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
-                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;
+                        <span class="kw">if </span>named_field {
+                            <span class="kw">if </span>name.is_empty() {
+                                block_tokens.push_str(<span class="string">&quot;
                                     struct RawString(&amp;&#39;static str);
 
                                     impl core::fmt::Debug for RawString {{
@@ -1000,52 +1000,52 @@
                                     }}
                                 &quot;</span>);
 
-                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;let mut builder = formatter.debug_map();&quot;</span>);
-                            } <span class="kw">else</span> {
-                                <span class="ident">block_tokens</span>
-                                    .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                block_tokens.push_str(<span class="string">&quot;let mut builder = formatter.debug_map();&quot;</span>);
+                            } <span class="kw">else </span>{
+                                block_tokens
+                                    .write_fmt(<span class="macro">format_args!</span>(
                                         <span class="string">&quot;let mut builder = formatter.debug_struct({name:?});&quot;</span>,
-                                        <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>
+                                        name = name
                                     ))
-                                    .<span class="ident">unwrap</span>();
+                                    .unwrap();
                             }
 
-                            <span class="kw">for</span> (<span class="ident">index</span>, <span class="ident">field</span>) <span class="kw">in</span> <span class="ident">fields</span>.<span class="ident">unnamed</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
-                                <span class="kw">let</span> <span class="ident">field_attribute</span> <span class="op">=</span> <span class="ident">FieldAttributeBuilder</span> {
-                                    <span class="ident">name</span>: <span class="ident">FieldAttributeName::Default</span>,
-                                    <span class="ident">enable_name</span>: <span class="bool-val">true</span>,
-                                    <span class="ident">enable_ignore</span>: <span class="bool-val">true</span>,
-                                    <span class="ident">enable_impl</span>: <span class="bool-val">true</span>,
+                            <span class="kw">for </span>(index, field) <span class="kw">in </span>fields.unnamed.iter().enumerate() {
+                                <span class="kw">let </span>field_attribute = FieldAttributeBuilder {
+                                    name: FieldAttributeName::Default,
+                                    enable_name: <span class="bool-val">true</span>,
+                                    enable_ignore: <span class="bool-val">true</span>,
+                                    enable_impl: <span class="bool-val">true</span>,
                                 }
-                                .<span class="ident">from_attributes</span>(<span class="kw-2">&amp;</span><span class="ident">field</span>.<span class="ident">attrs</span>, <span class="ident">traits</span>);
+                                .from_attributes(<span class="kw-2">&amp;</span>field.attrs, traits);
 
-                                <span class="kw">if</span> <span class="ident">field_attribute</span>.<span class="ident">ignore</span> {
-                                    <span class="ident">pattern_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;_,&quot;</span>);
+                                <span class="kw">if </span>field_attribute.ignore {
+                                    pattern_tokens.push_str(<span class="string">&quot;_,&quot;</span>);
                                     <span class="kw">continue</span>;
                                 }
 
-                                <span class="kw">let</span> <span class="ident">rename</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">name</span>.<span class="ident">into_option_string</span>();
+                                <span class="kw">let </span>rename = field_attribute.name.into_option_string();
 
-                                <span class="kw">let</span> <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_trait</span>;
-                                <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_method</span>;
+                                <span class="kw">let </span>format_trait = field_attribute.format_trait;
+                                <span class="kw">let </span>format_method = field_attribute.format_method;
 
-                                <span class="kw">let</span> (<span class="ident">key</span>, <span class="ident">field_name</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">rename</span> {
-                                    <span class="prelude-val">Some</span>(<span class="ident">rename</span>) =&gt; (<span class="ident">rename</span>, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">index</span>)),
-                                    <span class="prelude-val">None</span> =&gt; (<span class="macro">format!</span>(<span class="string">&quot;_{}&quot;</span>, <span class="ident">index</span>), <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">index</span>)),
+                                <span class="kw">let </span>(key, field_name) = <span class="kw">match </span>rename {
+                                    <span class="prelude-val">Some</span>(rename) =&gt; (rename, <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, index)),
+                                    <span class="prelude-val">None </span>=&gt; (<span class="macro">format!</span>(<span class="string">&quot;_{}&quot;</span>, index), <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, index)),
                                 };
 
-                                <span class="ident">pattern_tokens</span>
-                                    .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                pattern_tokens
+                                    .write_fmt(<span class="macro">format_args!</span>(
                                         <span class="string">&quot;_{field_name},&quot;</span>,
-                                        <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                        field_name = field_name
                                     ))
-                                    .<span class="ident">unwrap</span>();
+                                    .unwrap();
 
-                                <span class="kw">match</span> <span class="ident">format_trait</span> {
-                                    <span class="prelude-val">Some</span>(<span class="ident">format_trait</span>) =&gt; {
-                                        <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>.<span class="ident">unwrap</span>();
+                                <span class="kw">match </span>format_trait {
+                                    <span class="prelude-val">Some</span>(format_trait) =&gt; {
+                                        <span class="kw">let </span>format_method = format_method.unwrap();
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                        block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                             let arg = {{
                                                 struct MyDebug&lt;&#39;a, T: {format_trait}&gt;(&amp;&#39;a T);
 
@@ -1057,29 +1057,29 @@
 
                                                 MyDebug(_{field_name})
                                             }};
-                                        &quot;</span>, <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">format_trait</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                        &quot;</span>, format_trait = format_trait, format_method = format_method, field_name = field_name)).unwrap();
 
-                                        <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
+                                        <span class="kw">let </span>statement = <span class="kw">if </span>name.is_empty() {
                                             <span class="macro">format!</span>(
                                                 <span class="string">&quot;builder.entry(&amp;RawString({key:?}), &amp;arg);&quot;</span>,
-                                                <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>
+                                                key = key
                                             )
-                                        } <span class="kw">else</span> {
-                                            <span class="macro">format!</span>(<span class="string">&quot;builder.field({key:?}, &amp;arg);&quot;</span>, <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>)
+                                        } <span class="kw">else </span>{
+                                            <span class="macro">format!</span>(<span class="string">&quot;builder.field({key:?}, &amp;arg);&quot;</span>, key = key)
                                         };
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                        block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                     }
-                                    <span class="prelude-val">None</span> =&gt; {
-                                        <span class="kw">match</span> <span class="ident">format_method</span> {
-                                            <span class="prelude-val">Some</span>(<span class="ident">format_method</span>) =&gt; {
-                                                <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">field</span>
-                                                    .<span class="ident">ty</span>
-                                                    .<span class="ident">clone</span>()
-                                                    .<span class="ident">into_token_stream</span>()
-                                                    .<span class="ident">to_string</span>();
+                                    <span class="prelude-val">None </span>=&gt; {
+                                        <span class="kw">match </span>format_method {
+                                            <span class="prelude-val">Some</span>(format_method) =&gt; {
+                                                <span class="kw">let </span>ty = field
+                                                    .ty
+                                                    .clone()
+                                                    .into_token_stream()
+                                                    .to_string();
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                                block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                                     let arg = {{
                                                         struct MyDebug&lt;&#39;a&gt;(&amp;&#39;a {ty});
 
@@ -1091,80 +1091,80 @@
 
                                                         MyDebug(_{field_name})
                                                     }};
-                                                &quot;</span>, <span class="ident">ty</span> <span class="op">=</span> <span class="ident">ty</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                                &quot;</span>, ty = ty, format_method = format_method, field_name = field_name)).unwrap();
 
-                                                <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
+                                                <span class="kw">let </span>statement = <span class="kw">if </span>name.is_empty() {
                                                     <span class="macro">format!</span>(
                                                         <span class="string">&quot;builder.entry(&amp;RawString({key:?}), &amp;arg);&quot;</span>,
-                                                        <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>
+                                                        key = key
                                                     )
-                                                } <span class="kw">else</span> {
+                                                } <span class="kw">else </span>{
                                                     <span class="macro">format!</span>(
                                                         <span class="string">&quot;builder.field({key:?}, &amp;arg);&quot;</span>,
-                                                        <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>
+                                                        key = key
                                                     )
                                                 };
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                                block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                             }
-                                            <span class="prelude-val">None</span> =&gt; {
-                                                <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
-                                                    <span class="macro">format!</span>(<span class="string">&quot;builder.entry(&amp;RawString({key:?}), {field_name});&quot;</span>, <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)
-                                                } <span class="kw">else</span> {
+                                            <span class="prelude-val">None </span>=&gt; {
+                                                <span class="kw">let </span>statement = <span class="kw">if </span>name.is_empty() {
+                                                    <span class="macro">format!</span>(<span class="string">&quot;builder.entry(&amp;RawString({key:?}), {field_name});&quot;</span>, key = key, field_name = field_name)
+                                                } <span class="kw">else </span>{
                                                     <span class="macro">format!</span>(
                                                         <span class="string">&quot;builder.field({key:?}, _{field_name});&quot;</span>,
-                                                        <span class="ident">key</span> <span class="op">=</span> <span class="ident">key</span>,
-                                                        <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                                        key = key,
+                                                        field_name = field_name
                                                     )
                                                 };
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                                block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                             }
                                         }
                                     }
                                 }
 
-                                <span class="ident">has_fields</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                has_fields = <span class="bool-val">true</span>;
                             }
-                        } <span class="kw">else</span> {
-                            <span class="ident">block_tokens</span>
-                                .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                        } <span class="kw">else </span>{
+                            block_tokens
+                                .write_fmt(<span class="macro">format_args!</span>(
                                     <span class="string">&quot;let mut builder = formatter.debug_tuple({name:?});&quot;</span>,
-                                    <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>
+                                    name = name
                                 ))
-                                .<span class="ident">unwrap</span>();
+                                .unwrap();
 
-                            <span class="kw">for</span> (<span class="ident">index</span>, <span class="ident">field</span>) <span class="kw">in</span> <span class="ident">fields</span>.<span class="ident">unnamed</span>.<span class="ident">iter</span>().<span class="ident">enumerate</span>() {
-                                <span class="kw">let</span> <span class="ident">field_attribute</span> <span class="op">=</span> <span class="ident">FieldAttributeBuilder</span> {
-                                    <span class="ident">name</span>: <span class="ident">FieldAttributeName::Default</span>,
-                                    <span class="ident">enable_name</span>: <span class="bool-val">false</span>,
-                                    <span class="ident">enable_ignore</span>: <span class="bool-val">true</span>,
-                                    <span class="ident">enable_impl</span>: <span class="bool-val">true</span>,
+                            <span class="kw">for </span>(index, field) <span class="kw">in </span>fields.unnamed.iter().enumerate() {
+                                <span class="kw">let </span>field_attribute = FieldAttributeBuilder {
+                                    name: FieldAttributeName::Default,
+                                    enable_name: <span class="bool-val">false</span>,
+                                    enable_ignore: <span class="bool-val">true</span>,
+                                    enable_impl: <span class="bool-val">true</span>,
                                 }
-                                .<span class="ident">from_attributes</span>(<span class="kw-2">&amp;</span><span class="ident">field</span>.<span class="ident">attrs</span>, <span class="ident">traits</span>);
+                                .from_attributes(<span class="kw-2">&amp;</span>field.attrs, traits);
 
-                                <span class="kw">if</span> <span class="ident">field_attribute</span>.<span class="ident">ignore</span> {
-                                    <span class="ident">pattern_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;_,&quot;</span>);
+                                <span class="kw">if </span>field_attribute.ignore {
+                                    pattern_tokens.push_str(<span class="string">&quot;_,&quot;</span>);
                                     <span class="kw">continue</span>;
                                 }
 
-                                <span class="kw">let</span> <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_trait</span>;
-                                <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">field_attribute</span>.<span class="ident">format_method</span>;
+                                <span class="kw">let </span>format_trait = field_attribute.format_trait;
+                                <span class="kw">let </span>format_method = field_attribute.format_method;
 
-                                <span class="kw">let</span> <span class="ident">field_name</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">index</span>);
+                                <span class="kw">let </span>field_name = <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, index);
 
-                                <span class="ident">pattern_tokens</span>
-                                    .<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(
+                                pattern_tokens
+                                    .write_fmt(<span class="macro">format_args!</span>(
                                         <span class="string">&quot;_{field_name},&quot;</span>,
-                                        <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                        field_name = field_name
                                     ))
-                                    .<span class="ident">unwrap</span>();
+                                    .unwrap();
 
-                                <span class="kw">match</span> <span class="ident">format_trait</span> {
-                                    <span class="prelude-val">Some</span>(<span class="ident">format_trait</span>) =&gt; {
-                                        <span class="kw">let</span> <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>.<span class="ident">unwrap</span>();
+                                <span class="kw">match </span>format_trait {
+                                    <span class="prelude-val">Some</span>(format_trait) =&gt; {
+                                        <span class="kw">let </span>format_method = format_method.unwrap();
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                        block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                             let arg = {{
                                                 struct MyDebug&lt;&#39;a, T: {format_trait}&gt;(&amp;&#39;a T);
 
@@ -1176,20 +1176,20 @@
 
                                                 MyDebug(_{field_name})
                                             }};
-                                        &quot;</span>, <span class="ident">format_trait</span> <span class="op">=</span> <span class="ident">format_trait</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                        &quot;</span>, format_trait = format_trait, format_method = format_method, field_name = field_name)).unwrap();
 
-                                        <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
+                                        block_tokens.push_str(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
                                     }
-                                    <span class="prelude-val">None</span> =&gt; {
-                                        <span class="kw">match</span> <span class="ident">format_method</span> {
-                                            <span class="prelude-val">Some</span>(<span class="ident">format_method</span>) =&gt; {
-                                                <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">field</span>
-                                                    .<span class="ident">ty</span>
-                                                    .<span class="ident">clone</span>()
-                                                    .<span class="ident">into_token_stream</span>()
-                                                    .<span class="ident">to_string</span>();
+                                    <span class="prelude-val">None </span>=&gt; {
+                                        <span class="kw">match </span>format_method {
+                                            <span class="prelude-val">Some</span>(format_method) =&gt; {
+                                                <span class="kw">let </span>ty = field
+                                                    .ty
+                                                    .clone()
+                                                    .into_token_stream()
+                                                    .to_string();
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;
+                                                block_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;
                                                     let arg = {{
                                                         struct MyDebug&lt;&#39;a&gt;(&amp;&#39;a {ty});
 
@@ -1201,94 +1201,94 @@
 
                                                         MyDebug(_{field_name})
                                                     }};
-                                                &quot;</span>, <span class="ident">ty</span> <span class="op">=</span> <span class="ident">ty</span>, <span class="ident">format_method</span> <span class="op">=</span> <span class="ident">format_method</span>, <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>)).<span class="ident">unwrap</span>();
+                                                &quot;</span>, ty = ty, format_method = format_method, field_name = field_name)).unwrap();
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
+                                                block_tokens.push_str(<span class="string">&quot;builder.field(&amp;arg);&quot;</span>);
                                             }
-                                            <span class="prelude-val">None</span> =&gt; {
-                                                <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="macro">format!</span>(
+                                            <span class="prelude-val">None </span>=&gt; {
+                                                <span class="kw">let </span>statement = <span class="macro">format!</span>(
                                                     <span class="string">&quot;builder.field(_{field_name});&quot;</span>,
-                                                    <span class="ident">field_name</span> <span class="op">=</span> <span class="ident">field_name</span>
+                                                    field_name = field_name
                                                 );
 
-                                                <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">statement</span>);
+                                                block_tokens.push_str(<span class="kw-2">&amp;</span>statement);
                                             }
                                         }
                                     }
                                 }
 
-                                <span class="ident">has_fields</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                                has_fields = <span class="bool-val">true</span>;
                             }
                         }
 
-                        <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">has_fields</span> {
-                            <span class="ident">panic::unit_struct_need_name</span>();
+                        <span class="kw">if </span>name.is_empty() &amp;&amp; !has_fields {
+                            panic::unit_struct_need_name();
                         }
 
-                        <span class="ident">block_tokens</span>.<span class="ident">push_str</span>(<span class="string">&quot;return builder.finish();&quot;</span>);
+                        block_tokens.push_str(<span class="string">&quot;return builder.finish();&quot;</span>);
 
-                        <span class="ident">match_tokens</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args!</span>(<span class="string">&quot;{enum_name}::{variant_ident}( {pattern_tokens} ) =&gt; {{ {block_tokens} }}&quot;</span>, <span class="ident">enum_name</span> <span class="op">=</span> <span class="ident">enum_name</span>, <span class="ident">variant_ident</span> <span class="op">=</span> <span class="ident">variant_ident</span>, <span class="ident">pattern_tokens</span> <span class="op">=</span> <span class="ident">pattern_tokens</span>, <span class="ident">block_tokens</span> <span class="op">=</span> <span class="ident">block_tokens</span>)).<span class="ident">unwrap</span>();
+                        match_tokens.write_fmt(<span class="macro">format_args!</span>(<span class="string">&quot;{enum_name}::{variant_ident}( {pattern_tokens} ) =&gt; {{ {block_tokens} }}&quot;</span>, enum_name = enum_name, variant_ident = variant_ident, pattern_tokens = pattern_tokens, block_tokens = block_tokens)).unwrap();
 
-                        <span class="ident">has_variants</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                        has_variants = <span class="bool-val">true</span>;
                     }
                 }
             }
         }
 
-        <span class="ident">match_tokens</span>.<span class="ident">push</span>(<span class="string">&#39;}&#39;</span>);
+        match_tokens.push(<span class="string">&#39;}&#39;</span>);
 
-        <span class="ident">builder_tokens</span>.<span class="ident">extend</span>(<span class="ident">TokenStream::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">match_tokens</span>).<span class="ident">unwrap</span>());
+        builder_tokens.extend(TokenStream::from_str(<span class="kw-2">&amp;</span>match_tokens).unwrap());
 
-        <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">has_variants</span> {
-            <span class="ident">panic::unit_enum_need_name</span>();
+        <span class="kw">if </span>name.is_empty() &amp;&amp; !has_variants {
+            panic::unit_enum_need_name();
         }
 
-        <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">ast</span>.<span class="ident">ident</span>;
+        <span class="kw">let </span>ident = <span class="kw-2">&amp;</span>ast.ident;
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">generics_cloned</span>: <span class="ident">Generics</span> <span class="op">=</span> <span class="ident">ast</span>.<span class="ident">generics</span>.<span class="ident">clone</span>();
+        <span class="kw">let </span><span class="kw-2">mut </span>generics_cloned: Generics = ast.generics.clone();
 
-        <span class="kw">let</span> <span class="ident">where_clause</span> <span class="op">=</span> <span class="ident">generics_cloned</span>.<span class="ident">make_where_clause</span>();
+        <span class="kw">let </span>where_clause = generics_cloned.make_where_clause();
 
-        <span class="kw">for</span> <span class="ident">where_predicate</span> <span class="kw">in</span> <span class="ident">bound</span> {
-            <span class="ident">where_clause</span>.<span class="ident">predicates</span>.<span class="ident">push</span>(<span class="ident">where_predicate</span>);
+        <span class="kw">for </span>where_predicate <span class="kw">in </span>bound {
+            where_clause.predicates.push(where_predicate);
         }
 
-        <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="ident">ty_generics</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="ident">generics_cloned</span>.<span class="ident">split_for_impl</span>();
+        <span class="kw">let </span>(impl_generics, ty_generics, where_clause) = generics_cloned.split_for_impl();
 
-        <span class="kw">let</span> <span class="ident">debug_impl</span> <span class="op">=</span> <span class="macro">quote!</span> {
-            <span class="kw">impl</span> #<span class="ident">impl_generics</span> <span class="ident">core::fmt::Debug</span> <span class="kw">for</span> #<span class="ident">ident</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
-                <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::unneeded_field_pattern</span>)]</span>
-                <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;mut</span> <span class="ident">core::fmt::Formatter</span>) -&gt; <span class="ident">core::fmt::Result</span> {
-                    #<span class="ident">builder_tokens</span>
+        <span class="kw">let </span>debug_impl = <span class="macro">quote!</span> {
+            <span class="kw">impl </span>#impl_generics core::fmt::Debug <span class="kw">for </span>#ident #ty_generics #where_clause {
+                <span class="attribute">#[inline]</span>
+                <span class="attribute">#[allow(clippy::unneeded_field_pattern)]</span>
+                <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, formatter: <span class="kw-2">&amp;mut </span>core::fmt::Formatter) -&gt; core::fmt::Result {
+                    #builder_tokens
                 }
             }
         };
 
-        <span class="ident">tokens</span>.<span class="ident">extend</span>(<span class="ident">debug_impl</span>);
+        tokens.extend(debug_impl);
     }
 }
 
-<span class="kw">fn</span> <span class="ident">combine_names</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">variant_name</span>: <span class="ident">String</span>) -&gt; <span class="ident">String</span> {
-    <span class="kw">if</span> <span class="ident">name</span>.<span class="ident">is_empty</span>() {
-        <span class="kw">if</span> <span class="ident">variant_name</span>.<span class="ident">is_empty</span>() {
-            <span class="ident">String::new</span>()
-        } <span class="kw">else</span> {
-            <span class="ident">variant_name</span>
+<span class="kw">fn </span>combine_names(name: <span class="kw-2">&amp;</span>str, variant_name: String) -&gt; String {
+    <span class="kw">if </span>name.is_empty() {
+        <span class="kw">if </span>variant_name.is_empty() {
+            String::new()
+        } <span class="kw">else </span>{
+            variant_name
         }
-    } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">to_string</span>();
+    } <span class="kw">else </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>name = name.to_string();
 
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">variant_name</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">variant_name</span>.<span class="ident">starts_with</span>(<span class="string">&quot;::&quot;</span>) {
-                <span class="ident">name</span>.<span class="ident">push_str</span>(<span class="string">&quot;::&quot;</span>);
+        <span class="kw">if </span>!variant_name.is_empty() {
+            <span class="kw">if </span>!variant_name.starts_with(<span class="string">&quot;::&quot;</span>) {
+                name.push_str(<span class="string">&quot;::&quot;</span>);
             }
 
-            <span class="ident">name</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">variant_name</span>);
+            name.push_str(<span class="kw-2">&amp;</span>variant_name);
         }
 
-        <span class="ident">name</span>
+        name
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

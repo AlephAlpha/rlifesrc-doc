@@ -143,150 +143,150 @@
 <span id="143">143</span>
 <span id="144">144</span>
 <span id="145">145</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::attr::AttrsHelper</span>;
-<span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">format_ident</span>, <span class="ident">quote</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">Data</span>, <span class="ident">DataEnum</span>, <span class="ident">DataStruct</span>, <span class="ident">DeriveInput</span>, <span class="ident">Error</span>, <span class="ident">Fields</span>, <span class="prelude-ty">Result</span>};
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::attr::AttrsHelper;
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::{format_ident, quote};
+<span class="kw">use </span>syn::{Data, DataEnum, DataStruct, DeriveInput, Error, Fields, <span class="prelude-ty">Result</span>};
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">derive</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">impls</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">data</span> {
-        <span class="ident">Data::Struct</span>(<span class="ident">data</span>) =&gt; <span class="ident">impl_struct</span>(<span class="ident">input</span>, <span class="ident">data</span>),
-        <span class="ident">Data::Enum</span>(<span class="ident">data</span>) =&gt; <span class="ident">impl_enum</span>(<span class="ident">input</span>, <span class="ident">data</span>),
-        <span class="ident">Data::Union</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">Error::new_spanned</span>(<span class="ident">input</span>, <span class="string">&quot;Unions are not supported&quot;</span>)),
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>derive(input: <span class="kw-2">&amp;</span>DeriveInput) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
+    <span class="kw">let </span>impls = <span class="kw">match </span><span class="kw-2">&amp;</span>input.data {
+        Data::Struct(data) =&gt; impl_struct(input, data),
+        Data::Enum(data) =&gt; impl_enum(input, data),
+        Data::Union(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(Error::new_spanned(input, <span class="string">&quot;Unions are not supported&quot;</span>)),
     }<span class="question-mark">?</span>;
 
-    <span class="kw">let</span> <span class="ident">helpers</span> <span class="op">=</span> <span class="ident">specialization</span>();
-    <span class="kw">let</span> <span class="ident">dummy_const</span> <span class="op">=</span> <span class="macro">format_ident!</span>(<span class="string">&quot;_DERIVE_Display_FOR_{}&quot;</span>, <span class="ident">input</span>.<span class="ident">ident</span>);
+    <span class="kw">let </span>helpers = specialization();
+    <span class="kw">let </span>dummy_const = <span class="macro">format_ident!</span>(<span class="string">&quot;_DERIVE_Display_FOR_{}&quot;</span>, input.ident);
     <span class="prelude-val">Ok</span>(<span class="macro">quote!</span> {
-        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_upper_case_globals</span>, <span class="ident">unused_attributes</span>, <span class="ident">unused_qualifications</span>)]</span>
-        <span class="kw">const</span> #<span class="ident">dummy_const</span>: () <span class="op">=</span> {
-            #<span class="ident">helpers</span>
-            #<span class="ident">impls</span>
+        <span class="attribute">#[allow(non_upper_case_globals, unused_attributes, unused_qualifications)]</span>
+        <span class="kw">const </span>#dummy_const: () = {
+            #helpers
+            #impls
         };
     })
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">fn</span> <span class="ident">specialization</span>() -&gt; <span class="ident">TokenStream</span> {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
+<span class="kw">fn </span>specialization() -&gt; TokenStream {
     <span class="macro">quote!</span> {
-        <span class="kw">trait</span> <span class="ident">DisplayToDisplayDoc</span> {
-            <span class="kw">fn</span> <span class="ident">__displaydoc_display</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>;
+        <span class="kw">trait </span>DisplayToDisplayDoc {
+            <span class="kw">fn </span>__displaydoc_display(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>;
         }
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">core::fmt::Display</span><span class="op">&gt;</span> <span class="ident">DisplayToDisplayDoc</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
-            <span class="kw">fn</span> <span class="ident">__displaydoc_display</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span> {
-                <span class="self">self</span>
+        <span class="kw">impl</span>&lt;T: core::fmt::Display&gt; DisplayToDisplayDoc <span class="kw">for </span><span class="kw-2">&amp;</span>T {
+            <span class="kw">fn </span>__displaydoc_display(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+                <span class="self">self
+            </span>}
+        }
+
+        <span class="comment">// If the `std` feature gets enabled we want to ensure that any crate
+        // using displaydoc can still reference the std crate, which is already
+        // being compiled in by whoever enabled the `std` feature in
+        // `displaydoc`, even if the crates using displaydoc are no_std.
+        </span><span class="kw">extern crate </span>std;
+
+        <span class="kw">trait </span>PathToDisplayDoc {
+            <span class="kw">fn </span>__displaydoc_display(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::path::Display&lt;<span class="lifetime">&#39;_</span>&gt;;
+        }
+
+        <span class="kw">impl </span>PathToDisplayDoc <span class="kw">for </span>std::path::Path {
+            <span class="kw">fn </span>__displaydoc_display(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::path::Display&lt;<span class="lifetime">&#39;_</span>&gt; {
+                <span class="self">self</span>.display()
             }
         }
 
-        <span class="comment">// If the `std` feature gets enabled we want to ensure that any crate</span>
-        <span class="comment">// using displaydoc can still reference the std crate, which is already</span>
-        <span class="comment">// being compiled in by whoever enabled the `std` feature in</span>
-        <span class="comment">// `displaydoc`, even if the crates using displaydoc are no_std.</span>
-        <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">std</span>;
-
-        <span class="kw">trait</span> <span class="ident">PathToDisplayDoc</span> {
-            <span class="kw">fn</span> <span class="ident">__displaydoc_display</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">std::path::Display</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>;
-        }
-
-        <span class="kw">impl</span> <span class="ident">PathToDisplayDoc</span> <span class="kw">for</span> <span class="ident">std::path::Path</span> {
-            <span class="kw">fn</span> <span class="ident">__displaydoc_display</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">std::path::Display</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">display</span>()
-            }
-        }
-
-        <span class="kw">impl</span> <span class="ident">PathToDisplayDoc</span> <span class="kw">for</span> <span class="ident">std::path::PathBuf</span> {
-            <span class="kw">fn</span> <span class="ident">__displaydoc_display</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">std::path::Display</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">display</span>()
+        <span class="kw">impl </span>PathToDisplayDoc <span class="kw">for </span>std::path::PathBuf {
+            <span class="kw">fn </span>__displaydoc_display(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::path::Display&lt;<span class="lifetime">&#39;_</span>&gt; {
+                <span class="self">self</span>.display()
             }
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>))]</span>
-<span class="kw">fn</span> <span class="ident">specialization</span>() -&gt; <span class="ident">TokenStream</span> {
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
+<span class="kw">fn </span>specialization() -&gt; TokenStream {
     <span class="macro">quote!</span> {}
 }
 
-<span class="kw">fn</span> <span class="ident">impl_struct</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">DataStruct</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">ident</span>;
-    <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="ident">ty_generics</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">generics</span>.<span class="ident">split_for_impl</span>();
+<span class="kw">fn </span>impl_struct(input: <span class="kw-2">&amp;</span>DeriveInput, data: <span class="kw-2">&amp;</span>DataStruct) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
+    <span class="kw">let </span>ty = <span class="kw-2">&amp;</span>input.ident;
+    <span class="kw">let </span>(impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
-    <span class="kw">let</span> <span class="ident">helper</span> <span class="op">=</span> <span class="ident">AttrsHelper::new</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">attrs</span>);
+    <span class="kw">let </span>helper = AttrsHelper::new(<span class="kw-2">&amp;</span>input.attrs);
 
-    <span class="kw">let</span> <span class="ident">display</span> <span class="op">=</span> <span class="ident">helper</span>.<span class="ident">display</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">attrs</span>)<span class="question-mark">?</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">display</span><span class="op">|</span> {
-        <span class="kw">let</span> <span class="ident">pat</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">data</span>.<span class="ident">fields</span> {
-            <span class="ident">Fields::Named</span>(<span class="ident">fields</span>) =&gt; {
-                <span class="kw">let</span> <span class="ident">var</span> <span class="op">=</span> <span class="ident">fields</span>.<span class="ident">named</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">field</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">field</span>.<span class="ident">ident</span>);
-                <span class="macro">quote!</span>(<span class="self">Self</span> { #(#<span class="ident">var</span>),<span class="op">*</span> })
+    <span class="kw">let </span>display = helper.display(<span class="kw-2">&amp;</span>input.attrs)<span class="question-mark">?</span>.map(|display| {
+        <span class="kw">let </span>pat = <span class="kw">match </span><span class="kw-2">&amp;</span>data.fields {
+            Fields::Named(fields) =&gt; {
+                <span class="kw">let </span>var = fields.named.iter().map(|field| <span class="kw-2">&amp;</span>field.ident);
+                <span class="macro">quote!</span>(<span class="self">Self </span>{ #(#var),* })
             }
-            <span class="ident">Fields::Unnamed</span>(<span class="ident">fields</span>) =&gt; {
-                <span class="kw">let</span> <span class="ident">var</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">fields</span>.<span class="ident">unnamed</span>.<span class="ident">len</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="macro">format_ident!</span>(<span class="string">&quot;_{}&quot;</span>, <span class="ident">i</span>));
-                <span class="macro">quote!</span>(<span class="self">Self</span>(#(#<span class="ident">var</span>),<span class="kw-2">*</span>))
+            Fields::Unnamed(fields) =&gt; {
+                <span class="kw">let </span>var = (<span class="number">0</span>..fields.unnamed.len()).map(|i| <span class="macro">format_ident!</span>(<span class="string">&quot;_{}&quot;</span>, i));
+                <span class="macro">quote!</span>(<span class="self">Self</span>(#(#var),<span class="kw-2">*</span>))
             }
-            <span class="ident">Fields::Unit</span> =&gt; <span class="macro">quote!</span>(<span class="kw">_</span>),
+            Fields::Unit =&gt; <span class="macro">quote!</span>(<span class="kw">_</span>),
         };
         <span class="macro">quote!</span> {
-            <span class="kw">impl</span> #<span class="ident">impl_generics</span> <span class="ident">core::fmt::Display</span> <span class="kw">for</span> #<span class="ident">ty</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
-                <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;mut</span> <span class="ident">core::fmt::Formatter</span>) -&gt; <span class="ident">core::fmt::Result</span> {
-                    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>
-                    <span class="kw">let</span> #<span class="ident">pat</span> <span class="op">=</span> <span class="self">self</span>;
-                    #<span class="ident">display</span>
+            <span class="kw">impl </span>#impl_generics core::fmt::Display <span class="kw">for </span>#ty #ty_generics #where_clause {
+                <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, formatter: <span class="kw-2">&amp;mut </span>core::fmt::Formatter) -&gt; core::fmt::Result {
+                    <span class="attribute">#[allow(unused_variables)]</span>
+                    <span class="kw">let </span>#pat = <span class="self">self</span>;
+                    #display
                 }
             }
         }
     });
 
-    <span class="prelude-val">Ok</span>(<span class="macro">quote!</span> { #<span class="ident">display</span> })
+    <span class="prelude-val">Ok</span>(<span class="macro">quote!</span> { #display })
 }
 
-<span class="kw">fn</span> <span class="ident">impl_enum</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span><span class="ident">DataEnum</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TokenStream</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">ident</span>;
-    <span class="kw">let</span> (<span class="ident">impl_generics</span>, <span class="ident">ty_generics</span>, <span class="ident">where_clause</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">generics</span>.<span class="ident">split_for_impl</span>();
+<span class="kw">fn </span>impl_enum(input: <span class="kw-2">&amp;</span>DeriveInput, data: <span class="kw-2">&amp;</span>DataEnum) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
+    <span class="kw">let </span>ty = <span class="kw-2">&amp;</span>input.ident;
+    <span class="kw">let </span>(impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
 
-    <span class="kw">let</span> <span class="ident">helper</span> <span class="op">=</span> <span class="ident">AttrsHelper::new</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">attrs</span>);
+    <span class="kw">let </span>helper = AttrsHelper::new(<span class="kw-2">&amp;</span>input.attrs);
 
-    <span class="kw">let</span> <span class="ident">displays</span> <span class="op">=</span> <span class="ident">data</span>
-        .<span class="ident">variants</span>
-        .<span class="ident">iter</span>()
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">variant</span><span class="op">|</span> <span class="ident">helper</span>.<span class="ident">display_with_input</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>.<span class="ident">attrs</span>, <span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">attrs</span>))
-        .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+    <span class="kw">let </span>displays = data
+        .variants
+        .iter()
+        .map(|variant| helper.display_with_input(<span class="kw-2">&amp;</span>input.attrs, <span class="kw-2">&amp;</span>variant.attrs))
+        .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;&gt;()<span class="question-mark">?</span>;
 
-    <span class="kw">if</span> <span class="ident">displays</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="ident">Option::is_some</span>) {
-        <span class="kw">let</span> <span class="ident">arms</span> <span class="op">=</span> <span class="ident">data</span>
-            .<span class="ident">variants</span>
-            .<span class="ident">iter</span>()
-            .<span class="ident">zip</span>(<span class="ident">displays</span>)
-            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">variant</span>, <span class="ident">display</span>)<span class="op">|</span> {
-                <span class="kw">let</span> <span class="ident">display</span> <span class="op">=</span>
-                    <span class="ident">display</span>.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Error::new_spanned</span>(<span class="ident">variant</span>, <span class="string">&quot;missing doc comment&quot;</span>))<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">ident</span>;
-                <span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">variant</span>.<span class="ident">fields</span> {
-                    <span class="ident">Fields::Named</span>(<span class="ident">fields</span>) =&gt; {
-                        <span class="kw">let</span> <span class="ident">var</span> <span class="op">=</span> <span class="ident">fields</span>.<span class="ident">named</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">field</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="ident">field</span>.<span class="ident">ident</span>);
-                        <span class="macro">quote!</span>(#<span class="ident">ty</span>::#<span class="ident">ident</span> { #(#<span class="ident">var</span>),<span class="op">*</span> } =&gt; { #<span class="ident">display</span> })
+    <span class="kw">if </span>displays.iter().any(Option::is_some) {
+        <span class="kw">let </span>arms = data
+            .variants
+            .iter()
+            .zip(displays)
+            .map(|(variant, display)| {
+                <span class="kw">let </span>display =
+                    display.ok_or_else(|| Error::new_spanned(variant, <span class="string">&quot;missing doc comment&quot;</span>))<span class="question-mark">?</span>;
+                <span class="kw">let </span>ident = <span class="kw-2">&amp;</span>variant.ident;
+                <span class="prelude-val">Ok</span>(<span class="kw">match </span><span class="kw-2">&amp;</span>variant.fields {
+                    Fields::Named(fields) =&gt; {
+                        <span class="kw">let </span>var = fields.named.iter().map(|field| <span class="kw-2">&amp;</span>field.ident);
+                        <span class="macro">quote!</span>(#ty::#ident { #(#var),* } =&gt; { #display })
                     }
-                    <span class="ident">Fields::Unnamed</span>(<span class="ident">fields</span>) =&gt; {
-                        <span class="kw">let</span> <span class="ident">var</span> <span class="op">=</span> (<span class="number">0</span>..<span class="ident">fields</span>.<span class="ident">unnamed</span>.<span class="ident">len</span>()).<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="macro">format_ident!</span>(<span class="string">&quot;_{}&quot;</span>, <span class="ident">i</span>));
-                        <span class="macro">quote!</span>(#<span class="ident">ty</span>::#<span class="ident">ident</span>(#(#<span class="ident">var</span>),<span class="kw-2">*</span>) =&gt; { #<span class="ident">display</span> })
+                    Fields::Unnamed(fields) =&gt; {
+                        <span class="kw">let </span>var = (<span class="number">0</span>..fields.unnamed.len()).map(|i| <span class="macro">format_ident!</span>(<span class="string">&quot;_{}&quot;</span>, i));
+                        <span class="macro">quote!</span>(#ty::#ident(#(#var),<span class="kw-2">*</span>) =&gt; { #display })
                     }
-                    <span class="ident">Fields::Unit</span> =&gt; <span class="macro">quote!</span>(#<span class="ident">ty</span>::#<span class="ident">ident</span> =&gt; { #<span class="ident">display</span> }),
+                    Fields::Unit =&gt; <span class="macro">quote!</span>(#ty::#ident =&gt; { #display }),
                 })
             })
-            .<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+            .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;&gt;()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="macro">quote!</span> {
-            <span class="kw">impl</span> #<span class="ident">impl_generics</span> <span class="ident">core::fmt::Display</span> <span class="kw">for</span> #<span class="ident">ty</span> #<span class="ident">ty_generics</span> #<span class="ident">where_clause</span> {
-                <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;mut</span> <span class="ident">core::fmt::Formatter</span>) -&gt; <span class="ident">core::fmt::Result</span> {
-                    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>
-                    <span class="kw">match</span> <span class="self">self</span> {
-                        #(#<span class="ident">arms</span>,)<span class="op">*</span>
+            <span class="kw">impl </span>#impl_generics core::fmt::Display <span class="kw">for </span>#ty #ty_generics #where_clause {
+                <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, formatter: <span class="kw-2">&amp;mut </span>core::fmt::Formatter) -&gt; core::fmt::Result {
+                    <span class="attribute">#[allow(unused_variables)]</span>
+                    <span class="kw">match </span><span class="self">self </span>{
+                        #(#arms,)*
                     }
                 }
             }
         })
-    } <span class="kw">else</span> {
-        <span class="prelude-val">Err</span>(<span class="ident">Error::new_spanned</span>(<span class="ident">input</span>, <span class="string">&quot;Missing doc comments&quot;</span>))
+    } <span class="kw">else </span>{
+        <span class="prelude-val">Err</span>(Error::new_spanned(input, <span class="string">&quot;Missing doc comments&quot;</span>))
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="displaydoc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="displaydoc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

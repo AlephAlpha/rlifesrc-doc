@@ -29,36 +29,36 @@
 <span id="29">29</span>
 <span id="30">30</span>
 <span id="31">31</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">syn::NestedMeta</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>syn::NestedMeta;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util::PathList</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">FromMeta</span>, <span class="prelude-ty">Result</span>};
+<span class="kw">use </span><span class="kw">crate</span>::util::PathList;
+<span class="kw">use crate</span>::{FromMeta, <span class="prelude-ty">Result</span>};
 
-<span class="doccomment">/// A rule about which attributes to forward to the generated struct.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ForwardAttrs</span> {
-    <span class="ident">All</span>,
-    <span class="ident">Only</span>(<span class="ident">PathList</span>),
+<span class="doccomment">/// A rule about which attributes to forward to the generated struct.
+</span><span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]</span>
+<span class="kw">pub enum </span>ForwardAttrs {
+    All,
+    Only(PathList),
 }
 
-<span class="kw">impl</span> <span class="ident">ForwardAttrs</span> {
-    <span class="doccomment">/// Returns `true` if this will not forward any attributes.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">ForwardAttrs::All</span> =&gt; <span class="bool-val">false</span>,
-            <span class="ident">ForwardAttrs::Only</span>(<span class="kw-2">ref</span> <span class="ident">list</span>) =&gt; <span class="ident">list</span>.<span class="ident">is_empty</span>(),
+<span class="kw">impl </span>ForwardAttrs {
+    <span class="doccomment">/// Returns `true` if this will not forward any attributes.
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
+            ForwardAttrs::All =&gt; <span class="bool-val">false</span>,
+            ForwardAttrs::Only(<span class="kw-2">ref </span>list) =&gt; list.is_empty(),
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">FromMeta</span> <span class="kw">for</span> <span class="ident">ForwardAttrs</span> {
-    <span class="kw">fn</span> <span class="ident">from_word</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">ForwardAttrs::All</span>)
+<span class="kw">impl </span>FromMeta <span class="kw">for </span>ForwardAttrs {
+    <span class="kw">fn </span>from_word() -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Ok</span>(ForwardAttrs::All)
     }
 
-    <span class="kw">fn</span> <span class="ident">from_list</span>(<span class="ident">nested</span>: <span class="kw-2">&amp;</span>[<span class="ident">NestedMeta</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">ForwardAttrs::Only</span>(<span class="ident">PathList::from_list</span>(<span class="ident">nested</span>)<span class="question-mark">?</span>))
+    <span class="kw">fn </span>from_list(nested: <span class="kw-2">&amp;</span>[NestedMeta]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Ok</span>(ForwardAttrs::Only(PathList::from_list(nested)<span class="question-mark">?</span>))
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

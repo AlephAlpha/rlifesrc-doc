@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.24.0/src/terminal.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>terminal.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/terminal.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>terminal.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -440,447 +440,447 @@
 <span id="440">440</span>
 <span id="441">441</span>
 <span id="442">442</span>
-</pre><pre class="rust"><code><span class="doccomment">//! # Terminal</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The `terminal` module provides functionality to work with the terminal.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly</span>
-<span class="doccomment">//! obvious how to use this crate. Although, we do provide</span>
-<span class="doccomment">//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository</span>
-<span class="doccomment">//! to demonstrate the capabilities.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Most terminal actions can be performed with commands.</span>
-<span class="doccomment">//! Please have a look at [command documentation](../index.html#command-api) for a more detailed documentation.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Screen Buffer</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! A screen buffer is a two-dimensional array of character</span>
-<span class="doccomment">//! and color data which is displayed in a terminal screen.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The terminal has several of those buffers and is able to switch between them.</span>
-<span class="doccomment">//! The default screen in which you work is called the &#39;main screen&#39;.</span>
-<span class="doccomment">//! The other screens are called the &#39;alternative screen&#39;.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! It is important to understand that crossterm does not yet support creating screens,</span>
-<span class="doccomment">//! or switch between more than two buffers, and only offers the ability to change</span>
-<span class="doccomment">//! between the &#39;alternate&#39; and &#39;main screen&#39;.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Alternate Screen</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! By default, you will be working on the main screen.</span>
-<span class="doccomment">//! There is also another screen called the &#39;alternative&#39; screen.</span>
-<span class="doccomment">//! This screen is slightly different from the main screen.</span>
-<span class="doccomment">//! For example, it has the exact dimensions of the terminal window,</span>
-<span class="doccomment">//! without any scroll-back area.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Crossterm offers the possibility to switch to the &#39;alternative&#39; screen,</span>
-<span class="doccomment">//! make some modifications, and move back to the &#39;main&#39; screen again.</span>
-<span class="doccomment">//! The main screen will stay intact and will have the original data as we performed all</span>
-<span class="doccomment">//! operations on the alternative screen.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! An good example of this is Vim.</span>
-<span class="doccomment">//! When it is launched from bash, a whole new buffer is used to modify a file.</span>
-<span class="doccomment">//! Then, when the modification is finished, it closes again and continues on the main screen.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ### Raw Mode</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! By default, the terminal functions in a certain way.</span>
-<span class="doccomment">//! For example, it will move the cursor to the beginning of the next line when the input hits the end of a line.</span>
-<span class="doccomment">//! Or that the backspace is interpreted for character removal.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Sometimes these default modes are irrelevant,</span>
-<span class="doccomment">//! and in this case, we can turn them off.</span>
-<span class="doccomment">//! This is what happens when you enable raw modes.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Those modes will be set when enabling raw modes:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - Input will not be forwarded to screen</span>
-<span class="doccomment">//! - Input will not be processed on enter press</span>
-<span class="doccomment">//! - Input will not be line buffered (input sent byte-by-byte to input buffer)</span>
-<span class="doccomment">//! - Special keys like backspace and CTRL+C will not be processed by terminal driver</span>
-<span class="doccomment">//! - New line character will not be processed therefore `println!` can&#39;t be used, use `write!` instead</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Raw mode can be enabled/disabled with the [enable_raw_mode](terminal::enable_raw_mode) and [disable_raw_mode](terminal::disable_raw_mode) functions.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ## Examples</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```no_run</span>
-<span class="doccomment">//! use std::io::{stdout, Write};</span>
-<span class="doccomment">//! use crossterm::{execute, Result, terminal::{ScrollUp, SetSize, size}};</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">//!     let (cols, rows) = size()?;</span>
-<span class="doccomment">//!     // Resize terminal and scroll up.</span>
-<span class="doccomment">//!     execute!(</span>
-<span class="doccomment">//!         stdout(),</span>
-<span class="doccomment">//!         SetSize(10, 10),</span>
-<span class="doccomment">//!         ScrollUp(5)</span>
-<span class="doccomment">//!     )?;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     // Be a good citizen, cleanup</span>
-<span class="doccomment">//!     execute!(stdout(), SetSize(cols, rows))?;</span>
-<span class="doccomment">//!     Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For manual execution control check out [crossterm::queue](../macro.queue.html).</span>
+</pre><pre class="rust"><code><span class="doccomment">//! # Terminal
+//!
+//! The `terminal` module provides functionality to work with the terminal.
+//!
+//! This documentation does not contain a lot of examples. The reason is that it&#39;s fairly
+//! obvious how to use this crate. Although, we do provide
+//! [examples](https://github.com/crossterm-rs/crossterm/tree/master/examples) repository
+//! to demonstrate the capabilities.
+//!
+//! Most terminal actions can be performed with commands.
+//! Please have a look at [command documentation](../index.html#command-api) for a more detailed documentation.
+//!
+//! ## Screen Buffer
+//!
+//! A screen buffer is a two-dimensional array of character
+//! and color data which is displayed in a terminal screen.
+//!
+//! The terminal has several of those buffers and is able to switch between them.
+//! The default screen in which you work is called the &#39;main screen&#39;.
+//! The other screens are called the &#39;alternative screen&#39;.
+//!
+//! It is important to understand that crossterm does not yet support creating screens,
+//! or switch between more than two buffers, and only offers the ability to change
+//! between the &#39;alternate&#39; and &#39;main screen&#39;.
+//!
+//! ### Alternate Screen
+//!
+//! By default, you will be working on the main screen.
+//! There is also another screen called the &#39;alternative&#39; screen.
+//! This screen is slightly different from the main screen.
+//! For example, it has the exact dimensions of the terminal window,
+//! without any scroll-back area.
+//!
+//! Crossterm offers the possibility to switch to the &#39;alternative&#39; screen,
+//! make some modifications, and move back to the &#39;main&#39; screen again.
+//! The main screen will stay intact and will have the original data as we performed all
+//! operations on the alternative screen.
+//!
+//! An good example of this is Vim.
+//! When it is launched from bash, a whole new buffer is used to modify a file.
+//! Then, when the modification is finished, it closes again and continues on the main screen.
+//!
+//! ### Raw Mode
+//!
+//! By default, the terminal functions in a certain way.
+//! For example, it will move the cursor to the beginning of the next line when the input hits the end of a line.
+//! Or that the backspace is interpreted for character removal.
+//!
+//! Sometimes these default modes are irrelevant,
+//! and in this case, we can turn them off.
+//! This is what happens when you enable raw modes.
+//!
+//! Those modes will be set when enabling raw modes:
+//!
+//! - Input will not be forwarded to screen
+//! - Input will not be processed on enter press
+//! - Input will not be line buffered (input sent byte-by-byte to input buffer)
+//! - Special keys like backspace and CTRL+C will not be processed by terminal driver
+//! - New line character will not be processed therefore `println!` can&#39;t be used, use `write!` instead
+//!
+//! Raw mode can be enabled/disabled with the [enable_raw_mode](terminal::enable_raw_mode) and [disable_raw_mode](terminal::disable_raw_mode) functions.
+//!
+//! ## Examples
+//!
+//! ```no_run
+//! use std::io::{stdout, Write};
+//! use crossterm::{execute, Result, terminal::{ScrollUp, SetSize, size}};
+//!
+//! fn main() -&gt; Result&lt;()&gt; {
+//!     let (cols, rows) = size()?;
+//!     // Resize terminal and scroll up.
+//!     execute!(
+//!         stdout(),
+//!         SetSize(10, 10),
+//!         ScrollUp(5)
+//!     )?;
+//!
+//!     // Be a good citizen, cleanup
+//!     execute!(stdout(), SetSize(cols, rows))?;
+//!     Ok(())
+//! }
+//! ```
+//!
+//! For manual execution control check out [crossterm::queue](../macro.queue.html).
 
-<span class="kw">use</span> <span class="ident">std::fmt</span>;
+</span><span class="kw">use </span>std::fmt;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="kw">use</span> <span class="ident">crossterm_winapi</span>::{<span class="ident">ConsoleMode</span>, <span class="ident">Handle</span>, <span class="ident">ScreenBuffer</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-<span class="kw">use</span> <span class="ident">winapi::um::wincon::ENABLE_WRAP_AT_EOL_OUTPUT</span>;
+<span class="attribute">#[cfg(windows)]</span>
+<span class="kw">use </span>crossterm_winapi::{ConsoleMode, Handle, ScreenBuffer};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="attribute">#[cfg(windows)]</span>
+<span class="kw">use </span>winapi::um::wincon::ENABLE_WRAP_AT_EOL_OUTPUT;
 
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">no_inline</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Command</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">csi</span>, <span class="ident">impl_display</span>, <span class="prelude-ty">Result</span>};
+<span class="attribute">#[doc(no_inline)]</span>
+<span class="kw">use </span><span class="kw">crate</span>::Command;
+<span class="kw">use crate</span>::{csi, impl_display, <span class="prelude-ty">Result</span>};
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">sys</span>;
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>sys;
 
-<span class="doccomment">/// Tells whether the raw mode is enabled.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Please have a look at the [raw mode](./index.html#raw-mode) section.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_raw_mode_enabled</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>
+<span class="doccomment">/// Tells whether the raw mode is enabled.
+///
+/// Please have a look at the [raw mode](./index.html#raw-mode) section.
+</span><span class="kw">pub fn </span>is_raw_mode_enabled() -&gt; <span class="prelude-ty">Result</span>&lt;bool&gt; {
+    <span class="attribute">#[cfg(unix)]</span>
     {
-        <span class="prelude-val">Ok</span>(<span class="ident">sys::is_raw_mode_enabled</span>())
+        <span class="prelude-val">Ok</span>(sys::is_raw_mode_enabled())
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
+    <span class="attribute">#[cfg(windows)]</span>
     {
-        <span class="ident">sys::is_raw_mode_enabled</span>()
+        sys::is_raw_mode_enabled()
     }
 }
 
-<span class="doccomment">/// Enables raw mode.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Please have a look at the [raw mode](./index.html#raw-mode) section.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_raw_mode</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="ident">sys::enable_raw_mode</span>()
+<span class="doccomment">/// Enables raw mode.
+///
+/// Please have a look at the [raw mode](./index.html#raw-mode) section.
+</span><span class="kw">pub fn </span>enable_raw_mode() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    sys::enable_raw_mode()
 }
 
-<span class="doccomment">/// Disables raw mode.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Please have a look at the [raw mode](./index.html#raw-mode) section.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">disable_raw_mode</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="ident">sys::disable_raw_mode</span>()
+<span class="doccomment">/// Disables raw mode.
+///
+/// Please have a look at the [raw mode](./index.html#raw-mode) section.
+</span><span class="kw">pub fn </span>disable_raw_mode() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    sys::disable_raw_mode()
 }
 
-<span class="doccomment">/// Returns the terminal size `(columns, rows)`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The top left cell is represented `(1, 1)`.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">u16</span>, <span class="ident">u16</span>)<span class="op">&gt;</span> {
-    <span class="ident">sys::size</span>()
+<span class="doccomment">/// Returns the terminal size `(columns, rows)`.
+///
+/// The top left cell is represented `(1, 1)`.
+</span><span class="kw">pub fn </span>size() -&gt; <span class="prelude-ty">Result</span>&lt;(u16, u16)&gt; {
+    sys::size()
 }
 
-<span class="doccomment">/// Disables line wrapping.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DisableLineWrap</span>;
+<span class="doccomment">/// Disables line wrapping.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>DisableLineWrap;
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">DisableLineWrap</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="macro">csi!</span>(<span class="string">&quot;?7l&quot;</span>))
+<span class="kw">impl </span>Command <span class="kw">for </span>DisableLineWrap {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?7l&quot;</span>))
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">screen_buffer</span> <span class="op">=</span> <span class="ident">ScreenBuffer::current</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">console_mode</span> <span class="op">=</span> <span class="ident">ConsoleMode::from</span>(<span class="ident">screen_buffer</span>.<span class="ident">handle</span>().<span class="ident">clone</span>());
-        <span class="kw">let</span> <span class="ident">new_mode</span> <span class="op">=</span> <span class="ident">console_mode</span>.<span class="ident">mode</span>()<span class="question-mark">?</span> <span class="op">&amp;</span> <span class="op">!</span><span class="ident">ENABLE_WRAP_AT_EOL_OUTPUT</span>;
-        <span class="ident">console_mode</span>.<span class="ident">set_mode</span>(<span class="ident">new_mode</span>)<span class="question-mark">?</span>;
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>screen_buffer = ScreenBuffer::current()<span class="question-mark">?</span>;
+        <span class="kw">let </span>console_mode = ConsoleMode::from(screen_buffer.handle().clone());
+        <span class="kw">let </span>new_mode = console_mode.mode()<span class="question-mark">? </span>&amp; !ENABLE_WRAP_AT_EOL_OUTPUT;
+        console_mode.set_mode(new_mode)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// Enable line wrapping.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnableLineWrap</span>;
+<span class="doccomment">/// Enable line wrapping.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>EnableLineWrap;
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">EnableLineWrap</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="macro">csi!</span>(<span class="string">&quot;?7h&quot;</span>))
+<span class="kw">impl </span>Command <span class="kw">for </span>EnableLineWrap {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?7h&quot;</span>))
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">screen_buffer</span> <span class="op">=</span> <span class="ident">ScreenBuffer::current</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">console_mode</span> <span class="op">=</span> <span class="ident">ConsoleMode::from</span>(<span class="ident">screen_buffer</span>.<span class="ident">handle</span>().<span class="ident">clone</span>());
-        <span class="kw">let</span> <span class="ident">new_mode</span> <span class="op">=</span> <span class="ident">console_mode</span>.<span class="ident">mode</span>()<span class="question-mark">?</span> <span class="op">|</span> <span class="ident">ENABLE_WRAP_AT_EOL_OUTPUT</span>;
-        <span class="ident">console_mode</span>.<span class="ident">set_mode</span>(<span class="ident">new_mode</span>)<span class="question-mark">?</span>;
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>screen_buffer = ScreenBuffer::current()<span class="question-mark">?</span>;
+        <span class="kw">let </span>console_mode = ConsoleMode::from(screen_buffer.handle().clone());
+        <span class="kw">let </span>new_mode = console_mode.mode()<span class="question-mark">? </span>| ENABLE_WRAP_AT_EOL_OUTPUT;
+        console_mode.set_mode(new_mode)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// A command that switches to alternate screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="doccomment">/// * Use [LeaveAlternateScreen](./struct.LeaveAlternateScreen.html) command to leave the entered alternate screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::io::{stdout, Write};</span>
-<span class="doccomment">/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">///     execute!(stdout(), EnterAlternateScreen)?;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     // Do anything on the alternate screen</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     execute!(stdout(), LeaveAlternateScreen)</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EnterAlternateScreen</span>;
+<span class="doccomment">/// A command that switches to alternate screen.
+///
+/// # Notes
+///
+/// * Commands must be executed/queued for execution otherwise they do nothing.
+/// * Use [LeaveAlternateScreen](./struct.LeaveAlternateScreen.html) command to leave the entered alternate screen.
+///
+/// # Examples
+///
+/// ```no_run
+/// use std::io::{stdout, Write};
+/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};
+///
+/// fn main() -&gt; Result&lt;()&gt; {
+///     execute!(stdout(), EnterAlternateScreen)?;
+///
+///     // Do anything on the alternate screen
+///
+///     execute!(stdout(), LeaveAlternateScreen)
+/// }
+/// ```
+///
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>EnterAlternateScreen;
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">EnterAlternateScreen</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="macro">csi!</span>(<span class="string">&quot;?1049h&quot;</span>))
+<span class="kw">impl </span>Command <span class="kw">for </span>EnterAlternateScreen {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?1049h&quot;</span>))
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">alternate_screen</span> <span class="op">=</span> <span class="ident">ScreenBuffer::create</span>()<span class="question-mark">?</span>;
-        <span class="ident">alternate_screen</span>.<span class="ident">show</span>()<span class="question-mark">?</span>;
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>alternate_screen = ScreenBuffer::create()<span class="question-mark">?</span>;
+        alternate_screen.show()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// A command that switches back to the main screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// * Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="doccomment">/// * Use [EnterAlternateScreen](./struct.EnterAlternateScreen.html) to enter the alternate screen.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```no_run</span>
-<span class="doccomment">/// use std::io::{stdout, Write};</span>
-<span class="doccomment">/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// fn main() -&gt; Result&lt;()&gt; {</span>
-<span class="doccomment">///     execute!(stdout(), EnterAlternateScreen)?;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     // Do anything on the alternate screen</span>
-<span class="doccomment">///</span>
-<span class="doccomment">///     execute!(stdout(), LeaveAlternateScreen)</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">LeaveAlternateScreen</span>;
+<span class="doccomment">/// A command that switches back to the main screen.
+///
+/// # Notes
+///
+/// * Commands must be executed/queued for execution otherwise they do nothing.
+/// * Use [EnterAlternateScreen](./struct.EnterAlternateScreen.html) to enter the alternate screen.
+///
+/// # Examples
+///
+/// ```no_run
+/// use std::io::{stdout, Write};
+/// use crossterm::{execute, Result, terminal::{EnterAlternateScreen, LeaveAlternateScreen}};
+///
+/// fn main() -&gt; Result&lt;()&gt; {
+///     execute!(stdout(), EnterAlternateScreen)?;
+///
+///     // Do anything on the alternate screen
+///
+///     execute!(stdout(), LeaveAlternateScreen)
+/// }
+/// ```
+///
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>LeaveAlternateScreen;
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">LeaveAlternateScreen</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="macro">csi!</span>(<span class="string">&quot;?1049l&quot;</span>))
+<span class="kw">impl </span>Command <span class="kw">for </span>LeaveAlternateScreen {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?1049l&quot;</span>))
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">screen_buffer</span> <span class="op">=</span> <span class="ident">ScreenBuffer::from</span>(<span class="ident">Handle::current_out_handle</span>()<span class="question-mark">?</span>);
-        <span class="ident">screen_buffer</span>.<span class="ident">show</span>()<span class="question-mark">?</span>;
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>screen_buffer = ScreenBuffer::from(Handle::current_out_handle()<span class="question-mark">?</span>);
+        screen_buffer.show()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// Different ways to clear the terminal buffer.</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ClearType</span> {
-    <span class="doccomment">/// All cells.</span>
-    <span class="ident">All</span>,
-    <span class="doccomment">/// All plus history</span>
-    <span class="ident">Purge</span>,
-    <span class="doccomment">/// All cells from the cursor position downwards.</span>
-    <span class="ident">FromCursorDown</span>,
-    <span class="doccomment">/// All cells from the cursor position upwards.</span>
-    <span class="ident">FromCursorUp</span>,
-    <span class="doccomment">/// All cells at the cursor row.</span>
-    <span class="ident">CurrentLine</span>,
-    <span class="doccomment">/// All cells from the cursor position until the new line.</span>
-    <span class="ident">UntilNewLine</span>,
+<span class="doccomment">/// Different ways to clear the terminal buffer.
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="attribute">#[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]</span>
+<span class="kw">pub enum </span>ClearType {
+    <span class="doccomment">/// All cells.
+    </span>All,
+    <span class="doccomment">/// All plus history
+    </span>Purge,
+    <span class="doccomment">/// All cells from the cursor position downwards.
+    </span>FromCursorDown,
+    <span class="doccomment">/// All cells from the cursor position upwards.
+    </span>FromCursorUp,
+    <span class="doccomment">/// All cells at the cursor row.
+    </span>CurrentLine,
+    <span class="doccomment">/// All cells from the cursor position until the new line.
+    </span>UntilNewLine,
 }
 
-<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows up.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScrollUp</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
+<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows up.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>ScrollUp(<span class="kw">pub </span>u16);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">ScrollUp</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="number">0</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="macro">csi!</span>(<span class="string">&quot;{}S&quot;</span>), <span class="self">self</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
+<span class="kw">impl </span>Command <span class="kw">for </span>ScrollUp {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="kw">if </span><span class="self">self</span>.<span class="number">0 </span>!= <span class="number">0 </span>{
+            <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}S&quot;</span>), <span class="self">self</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::scroll_up</span>(<span class="self">self</span>.<span class="number">0</span>)
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::scroll_up(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
-<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows down.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ScrollDown</span>(<span class="kw">pub</span> <span class="ident">u16</span>);
+<span class="doccomment">/// A command that scrolls the terminal screen a given number of rows down.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>ScrollDown(<span class="kw">pub </span>u16);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">ScrollDown</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="number">0</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="macro">csi!</span>(<span class="string">&quot;{}T&quot;</span>), <span class="self">self</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
+<span class="kw">impl </span>Command <span class="kw">for </span>ScrollDown {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="kw">if </span><span class="self">self</span>.<span class="number">0 </span>!= <span class="number">0 </span>{
+            <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}T&quot;</span>), <span class="self">self</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::scroll_down</span>(<span class="self">self</span>.<span class="number">0</span>)
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::scroll_down(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
-<span class="doccomment">/// A command that clears the terminal screen buffer.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See the [`ClearType`](enum.ClearType.html) enum.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Clear</span>(<span class="kw">pub</span> <span class="ident">ClearType</span>);
+<span class="doccomment">/// A command that clears the terminal screen buffer.
+///
+/// See the [`ClearType`](enum.ClearType.html) enum.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>Clear(<span class="kw">pub </span>ClearType);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">Clear</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="ident">ClearType::All</span> =&gt; <span class="macro">csi!</span>(<span class="string">&quot;2J&quot;</span>),
-            <span class="ident">ClearType::Purge</span> =&gt; <span class="macro">csi!</span>(<span class="string">&quot;3J&quot;</span>),
-            <span class="ident">ClearType::FromCursorDown</span> =&gt; <span class="macro">csi!</span>(<span class="string">&quot;J&quot;</span>),
-            <span class="ident">ClearType::FromCursorUp</span> =&gt; <span class="macro">csi!</span>(<span class="string">&quot;1J&quot;</span>),
-            <span class="ident">ClearType::CurrentLine</span> =&gt; <span class="macro">csi!</span>(<span class="string">&quot;2K&quot;</span>),
-            <span class="ident">ClearType::UntilNewLine</span> =&gt; <span class="macro">csi!</span>(<span class="string">&quot;K&quot;</span>),
+<span class="kw">impl </span>Command <span class="kw">for </span>Clear {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        f.write_str(<span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
+            ClearType::All =&gt; <span class="macro">csi!</span>(<span class="string">&quot;2J&quot;</span>),
+            ClearType::Purge =&gt; <span class="macro">csi!</span>(<span class="string">&quot;3J&quot;</span>),
+            ClearType::FromCursorDown =&gt; <span class="macro">csi!</span>(<span class="string">&quot;J&quot;</span>),
+            ClearType::FromCursorUp =&gt; <span class="macro">csi!</span>(<span class="string">&quot;1J&quot;</span>),
+            ClearType::CurrentLine =&gt; <span class="macro">csi!</span>(<span class="string">&quot;2K&quot;</span>),
+            ClearType::UntilNewLine =&gt; <span class="macro">csi!</span>(<span class="string">&quot;K&quot;</span>),
         })
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::clear</span>(<span class="self">self</span>.<span class="number">0</span>)
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::clear(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
-<span class="doccomment">/// A command that sets the terminal buffer size `(columns, rows)`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetSize</span>(<span class="kw">pub</span> <span class="ident">u16</span>, <span class="kw">pub</span> <span class="ident">u16</span>);
+<span class="doccomment">/// A command that sets the terminal buffer size `(columns, rows)`.
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetSize(<span class="kw">pub </span>u16, <span class="kw">pub </span>u16);
 
-<span class="kw">impl</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetSize</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="macro">csi!</span>(<span class="string">&quot;8;{};{}t&quot;</span>), <span class="self">self</span>.<span class="number">1</span>, <span class="self">self</span>.<span class="number">0</span>)
+<span class="kw">impl </span>Command <span class="kw">for </span>SetSize {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;8;{};{}t&quot;</span>), <span class="self">self</span>.<span class="number">1</span>, <span class="self">self</span>.<span class="number">0</span>)
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::set_size</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
-    }
-}
-
-<span class="doccomment">/// A command that sets the terminal title</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Notes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Commands must be executed/queued for execution otherwise they do nothing.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SetTitle</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw">pub</span> <span class="ident">T</span>);
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">fmt::Display</span><span class="op">&gt;</span> <span class="ident">Command</span> <span class="kw">for</span> <span class="ident">SetTitle</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">write_ansi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">fmt::Write</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;\x1B]0;{}\x07&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_winapi</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="ident">sys::set_window_title</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::set_size(<span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
     }
 }
 
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">ScrollUp</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">ScrollDown</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">SetSize</span>);
-<span class="macro">impl_display!</span>(<span class="kw">for</span> <span class="ident">Clear</span>);
+<span class="doccomment">/// A command that sets the terminal title
+///
+/// # Notes
+///
+/// Commands must be executed/queued for execution otherwise they do nothing.
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
+<span class="kw">pub struct </span>SetTitle&lt;T&gt;(<span class="kw">pub </span>T);
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">io::stdout</span>, <span class="ident">thread</span>, <span class="ident">time</span>};
-
-    <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::execute</span>;
-
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-    <span class="comment">// Test is disabled, because it&#39;s failing on Travis CI</span>
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">ignore</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_resize_ansi</span>() {
-        <span class="kw">let</span> (<span class="ident">width</span>, <span class="ident">height</span>) <span class="op">=</span> <span class="ident">size</span>().<span class="ident">unwrap</span>();
-
-        <span class="macro">execute!</span>(<span class="ident">stdout</span>(), <span class="ident">SetSize</span>(<span class="number">35</span>, <span class="number">35</span>)).<span class="ident">unwrap</span>();
-
-        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11</span>
-        <span class="ident">thread::sleep</span>(<span class="ident">time::Duration::from_millis</span>(<span class="number">30</span>));
-
-        <span class="macro">assert_eq!</span>((<span class="number">35</span>, <span class="number">35</span>), <span class="ident">size</span>().<span class="ident">unwrap</span>());
-
-        <span class="comment">// reset to previous size</span>
-        <span class="macro">execute!</span>(<span class="ident">stdout</span>(), <span class="ident">SetSize</span>(<span class="ident">width</span>, <span class="ident">height</span>)).<span class="ident">unwrap</span>();
-
-        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11</span>
-        <span class="ident">thread::sleep</span>(<span class="ident">time::Duration::from_millis</span>(<span class="number">30</span>));
-
-        <span class="macro">assert_eq!</span>((<span class="ident">width</span>, <span class="ident">height</span>), <span class="ident">size</span>().<span class="ident">unwrap</span>());
+<span class="kw">impl</span>&lt;T: fmt::Display&gt; Command <span class="kw">for </span>SetTitle&lt;T&gt; {
+    <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">&quot;\x1B]0;{}\x07&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_raw_mode</span>() {
-        <span class="comment">// check we start from normal mode (may fail on some test harnesses)</span>
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">is_raw_mode_enabled</span>().<span class="ident">unwrap</span>());
+    <span class="attribute">#[cfg(windows)]</span>
+    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        sys::set_window_title(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
+    }
+}
 
-        <span class="comment">// enable the raw mode</span>
-        <span class="kw">if</span> <span class="ident">enable_raw_mode</span>().<span class="ident">is_err</span>() {
-            <span class="comment">// Enabling raw mode doesn&#39;t work on the ci</span>
-            <span class="comment">// So we just ignore it</span>
-            <span class="kw">return</span>;
+<span class="macro">impl_display!</span>(<span class="kw">for </span>ScrollUp);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>ScrollDown);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>SetSize);
+<span class="macro">impl_display!</span>(<span class="kw">for </span>Clear);
+
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use </span>std::{io::stdout, thread, time};
+
+    <span class="kw">use </span><span class="kw">crate</span>::execute;
+
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+    <span class="comment">// Test is disabled, because it&#39;s failing on Travis CI
+    </span><span class="attribute">#[test]</span>
+    <span class="attribute">#[ignore]</span>
+    <span class="kw">fn </span>test_resize_ansi() {
+        <span class="kw">let </span>(width, height) = size().unwrap();
+
+        <span class="macro">execute!</span>(stdout(), SetSize(<span class="number">35</span>, <span class="number">35</span>)).unwrap();
+
+        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11
+        </span>thread::sleep(time::Duration::from_millis(<span class="number">30</span>));
+
+        <span class="macro">assert_eq!</span>((<span class="number">35</span>, <span class="number">35</span>), size().unwrap());
+
+        <span class="comment">// reset to previous size
+        </span><span class="macro">execute!</span>(stdout(), SetSize(width, height)).unwrap();
+
+        <span class="comment">// see issue: https://github.com/eminence/terminal-size/issues/11
+        </span>thread::sleep(time::Duration::from_millis(<span class="number">30</span>));
+
+        <span class="macro">assert_eq!</span>((width, height), size().unwrap());
+    }
+
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_raw_mode() {
+        <span class="comment">// check we start from normal mode (may fail on some test harnesses)
+        </span><span class="macro">assert!</span>(!is_raw_mode_enabled().unwrap());
+
+        <span class="comment">// enable the raw mode
+        </span><span class="kw">if </span>enable_raw_mode().is_err() {
+            <span class="comment">// Enabling raw mode doesn&#39;t work on the ci
+            // So we just ignore it
+            </span><span class="kw">return</span>;
         }
 
-        <span class="comment">// check it worked (on unix it doesn&#39;t really check the underlying</span>
-        <span class="comment">// tty but rather check that the code is consistent)</span>
-        <span class="macro">assert!</span>(<span class="ident">is_raw_mode_enabled</span>().<span class="ident">unwrap</span>());
+        <span class="comment">// check it worked (on unix it doesn&#39;t really check the underlying
+        // tty but rather check that the code is consistent)
+        </span><span class="macro">assert!</span>(is_raw_mode_enabled().unwrap());
 
-        <span class="comment">// enable it again, this should not change anything</span>
-        <span class="ident">enable_raw_mode</span>().<span class="ident">unwrap</span>();
+        <span class="comment">// enable it again, this should not change anything
+        </span>enable_raw_mode().unwrap();
 
-        <span class="comment">// check we&#39;re still in raw mode</span>
-        <span class="macro">assert!</span>(<span class="ident">is_raw_mode_enabled</span>().<span class="ident">unwrap</span>());
+        <span class="comment">// check we&#39;re still in raw mode
+        </span><span class="macro">assert!</span>(is_raw_mode_enabled().unwrap());
 
-        <span class="comment">// now let&#39;s disable it</span>
-        <span class="ident">disable_raw_mode</span>().<span class="ident">unwrap</span>();
+        <span class="comment">// now let&#39;s disable it
+        </span>disable_raw_mode().unwrap();
 
-        <span class="comment">// check we&#39;re back to normal mode</span>
-        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">is_raw_mode_enabled</span>().<span class="ident">unwrap</span>());
+        <span class="comment">// check we&#39;re back to normal mode
+        </span><span class="macro">assert!</span>(!is_raw_mode_enabled().unwrap());
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

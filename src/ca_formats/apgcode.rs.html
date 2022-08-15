@@ -289,248 +289,248 @@
 <span id="289">289</span>
 <span id="290">290</span>
 <span id="291">291</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Parsers for [apgcode](https://www.conwaylife.com/wiki/Apgcode) format</span>
-<span class="doccomment">//! and [Extended Wechsler format](https://www.conwaylife.com/wiki/Apgcode#Extended_Wechsler_Format).</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Parsers for [apgcode](https://www.conwaylife.com/wiki/Apgcode) format
+//! and [Extended Wechsler format](https://www.conwaylife.com/wiki/Apgcode#Extended_Wechsler_Format).
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Coordinates</span>;
-<span class="kw">use</span> <span class="ident">displaydoc::Display</span>;
-<span class="kw">use</span> <span class="ident">std::str::Bytes</span>;
-<span class="kw">use</span> <span class="ident">thiserror::Error</span>;
+</span><span class="kw">use </span><span class="kw">crate</span>::Coordinates;
+<span class="kw">use </span>displaydoc::Display;
+<span class="kw">use </span>std::str::Bytes;
+<span class="kw">use </span>thiserror::Error;
 
-<span class="doccomment">/// Errors that can be returned when parsing a apgcode string.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Error</span>, <span class="ident">Display</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
-    <span class="doccomment">/// Unexpected character: {0}.</span>
-    <span class="ident">UnexpectedChar</span>(<span class="ident">char</span>),
-    <span class="doccomment">/// Pattern not encoded in extended Wechsler format</span>
-    <span class="ident">Unencodable</span>,
+<span class="doccomment">/// Errors that can be returned when parsing a apgcode string.
+</span><span class="attribute">#[derive(Clone, Debug, Eq, Error, Display, PartialEq)]</span>
+<span class="kw">pub enum </span>Error {
+    <span class="doccomment">/// Unexpected character: {0}.
+    </span>UnexpectedChar(char),
+    <span class="doccomment">/// Pattern not encoded in extended Wechsler format
+    </span>Unencodable,
 }
 
-<span class="doccomment">/// A parser for [Extended Wechsler format](https://www.conwaylife.com/wiki/Apgcode#Extended_Wechsler_Format).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Extended Wechsler format is the part of apgcode that encodes the cells in the pattern,</span>
-<span class="doccomment">/// e.g. `153` in `xq4_153`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// As an iterator, it iterates over the living cells.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Reading from files is not supported, since the format is usually short and not stored in a file.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use ca_formats::apgcode::Wechsler;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// const GLIDER: &amp;str = &quot;153&quot;;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let glider = Wechsler::new(GLIDER);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let cells = glider.map(|cell| cell.unwrap()).collect::&lt;Vec&lt;_&gt;&gt;();</span>
-<span class="doccomment">/// assert_eq!(cells, vec![(0, 0), (1, 0), (1, 2), (2, 0), (2, 1)]);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Wechsler</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// An iterator over bytes of the string.</span>
-    <span class="ident">bytes</span>: <span class="ident">Bytes</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A parser for [Extended Wechsler format](https://www.conwaylife.com/wiki/Apgcode#Extended_Wechsler_Format).
+///
+/// Extended Wechsler format is the part of apgcode that encodes the cells in the pattern,
+/// e.g. `153` in `xq4_153`.
+///
+/// As an iterator, it iterates over the living cells.
+///
+/// Reading from files is not supported, since the format is usually short and not stored in a file.
+///
+/// # Example
+///
+/// ```rust
+/// use ca_formats::apgcode::Wechsler;
+///
+/// const GLIDER: &amp;str = &quot;153&quot;;
+///
+/// let glider = Wechsler::new(GLIDER);
+///
+/// let cells = glider.map(|cell| cell.unwrap()).collect::&lt;Vec&lt;_&gt;&gt;();
+/// assert_eq!(cells, vec![(0, 0), (1, 0), (1, 2), (2, 0), (2, 1)]);
+/// ```
+</span><span class="attribute">#[must_use]</span>
+<span class="attribute">#[derive(Clone, Debug)]</span>
+<span class="kw">pub struct </span>Wechsler&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="doccomment">/// An iterator over bytes of the string.
+    </span>bytes: Bytes&lt;<span class="lifetime">&#39;a</span>&gt;,
 
-    <span class="doccomment">/// Coordinates of the current cell.</span>
-    <span class="ident">position</span>: <span class="ident">Coordinates</span>,
+    <span class="doccomment">/// Coordinates of the current cell.
+    </span>position: Coordinates,
 
-    <span class="doccomment">/// The current strip of 5 cells, represented by 1 character in Extended Wechsler format.</span>
-    <span class="ident">current_strip</span>: <span class="ident">u8</span>,
+    <span class="doccomment">/// The current strip of 5 cells, represented by 1 character in Extended Wechsler format.
+    </span>current_strip: u8,
 
-    <span class="doccomment">/// Index of the current cell in the current strip.</span>
-    <span class="ident">index</span>: <span class="ident">u8</span>,
+    <span class="doccomment">/// Index of the current cell in the current strip.
+    </span>index: u8,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Wechsler</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Creates a new parser instance from a string.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">string</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">Wechsler</span> {
-            <span class="ident">bytes</span>: <span class="ident">string</span>.<span class="ident">bytes</span>(),
-            <span class="ident">position</span>: (<span class="number">0</span>, <span class="number">0</span>),
-            <span class="ident">current_strip</span>: <span class="number">0</span>,
-            <span class="ident">index</span>: <span class="number">5</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Wechsler&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="doccomment">/// Creates a new parser instance from a string.
+    </span><span class="kw">pub fn </span>new(string: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; <span class="self">Self </span>{
+        Wechsler {
+            bytes: string.bytes(),
+            position: (<span class="number">0</span>, <span class="number">0</span>),
+            current_strip: <span class="number">0</span>,
+            index: <span class="number">5</span>,
         }
     }
 }
 
-<span class="doccomment">/// An iterator over living cells in a string in Extended Wechsler format.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">Wechsler</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coordinates</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+<span class="doccomment">/// An iterator over living cells in a string in Extended Wechsler format.
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>Wechsler&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">type </span>Item = <span class="prelude-ty">Result</span>&lt;Coordinates, Error&gt;;
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="kw">loop</span> {
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">index</span> <span class="op">&lt;</span> <span class="number">5</span> {
-                <span class="kw">loop</span> {
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">current_strip</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">index</span> <span class="op">==</span> <span class="number">0</span> {
-                        <span class="self">self</span>.<span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">index</span> <span class="op">==</span> <span class="number">5</span> {
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">loop </span>{
+            <span class="kw">if </span><span class="self">self</span>.index &lt; <span class="number">5 </span>{
+                <span class="kw">loop </span>{
+                    <span class="kw">if </span><span class="self">self</span>.current_strip &amp; <span class="number">1 </span>&lt;&lt; <span class="self">self</span>.index == <span class="number">0 </span>{
+                        <span class="self">self</span>.index += <span class="number">1</span>;
+                        <span class="kw">if </span><span class="self">self</span>.index == <span class="number">5 </span>{
+                            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">1</span>;
                             <span class="kw">break</span>;
                         }
-                    } <span class="kw">else</span> {
-                        <span class="kw">let</span> <span class="ident">cell</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="ident">position</span>.<span class="number">1</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">index</span> <span class="kw">as</span> <span class="ident">i64</span>);
-                        <span class="self">self</span>.<span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">index</span> <span class="op">==</span> <span class="number">5</span> {
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                    } <span class="kw">else </span>{
+                        <span class="kw">let </span>cell = (<span class="self">self</span>.position.<span class="number">0</span>, <span class="self">self</span>.position.<span class="number">1 </span>+ <span class="self">self</span>.index <span class="kw">as </span>i64);
+                        <span class="self">self</span>.index += <span class="number">1</span>;
+                        <span class="kw">if </span><span class="self">self</span>.index == <span class="number">5 </span>{
+                            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">1</span>;
                         }
-                        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">cell</span>));
+                        <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(cell));
                     }
                 }
-            } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">next</span>() {
-                <span class="kw">match</span> <span class="ident">c</span> {
-                    <span class="string">b&#39;0&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>,
-                    <span class="string">b&#39;1&#39;</span>..<span class="op">=</span><span class="string">b&#39;9&#39;</span> =&gt; {
-                        <span class="self">self</span>.<span class="ident">current_strip</span> <span class="op">=</span> <span class="ident">c</span> <span class="op">-</span> <span class="string">b&#39;0&#39;</span>;
-                        <span class="self">self</span>.<span class="ident">index</span> <span class="op">=</span> <span class="number">0</span>;
+            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(c) = <span class="self">self</span>.bytes.next() {
+                <span class="kw">match </span>c {
+                    <span class="string">b&#39;0&#39; </span>=&gt; <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">1</span>,
+                    <span class="string">b&#39;1&#39;</span>..=<span class="string">b&#39;9&#39; </span>=&gt; {
+                        <span class="self">self</span>.current_strip = c - <span class="string">b&#39;0&#39;</span>;
+                        <span class="self">self</span>.index = <span class="number">0</span>;
                     }
-                    <span class="string">b&#39;a&#39;</span>..<span class="op">=</span><span class="string">b&#39;v&#39;</span> =&gt; {
-                        <span class="self">self</span>.<span class="ident">current_strip</span> <span class="op">=</span> <span class="ident">c</span> <span class="op">-</span> <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="number">10</span>;
-                        <span class="self">self</span>.<span class="ident">index</span> <span class="op">=</span> <span class="number">0</span>;
+                    <span class="string">b&#39;a&#39;</span>..=<span class="string">b&#39;v&#39; </span>=&gt; {
+                        <span class="self">self</span>.current_strip = c - <span class="string">b&#39;a&#39; </span>+ <span class="number">10</span>;
+                        <span class="self">self</span>.index = <span class="number">0</span>;
                     }
-                    <span class="string">b&#39;w&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>,
-                    <span class="string">b&#39;x&#39;</span> =&gt; <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">3</span>,
-                    <span class="string">b&#39;y&#39;</span> =&gt; {
-                        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">next</span>() {
-                            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">c</span> {
-                                <span class="string">b&#39;0&#39;</span>..<span class="op">=</span><span class="string">b&#39;9&#39;</span> =&gt; <span class="ident">c</span> <span class="op">-</span> <span class="string">b&#39;0&#39;</span>,
-                                <span class="string">b&#39;a&#39;</span>..<span class="op">=</span><span class="string">b&#39;z&#39;</span> =&gt; <span class="ident">c</span> <span class="op">-</span> <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="number">10</span>,
-                                <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">Error::UnexpectedChar</span>(<span class="ident">char::from</span>(<span class="ident">c</span>)))),
+                    <span class="string">b&#39;w&#39; </span>=&gt; <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">2</span>,
+                    <span class="string">b&#39;x&#39; </span>=&gt; <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">3</span>,
+                    <span class="string">b&#39;y&#39; </span>=&gt; {
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="self">self</span>.bytes.next() {
+                            <span class="kw">let </span>n = <span class="kw">match </span>c {
+                                <span class="string">b&#39;0&#39;</span>..=<span class="string">b&#39;9&#39; </span>=&gt; c - <span class="string">b&#39;0&#39;</span>,
+                                <span class="string">b&#39;a&#39;</span>..=<span class="string">b&#39;z&#39; </span>=&gt; c - <span class="string">b&#39;a&#39; </span>+ <span class="number">10</span>,
+                                <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(Error::UnexpectedChar(char::from(c)))),
                             };
-                            <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">+</span><span class="op">=</span> <span class="number">4</span> <span class="op">+</span> <span class="ident">n</span> <span class="kw">as</span> <span class="ident">i64</span>
-                        } <span class="kw">else</span> {
-                            <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">Error::UnexpectedChar</span>(<span class="string">&#39;y&#39;</span>)));
+                            <span class="self">self</span>.position.<span class="number">0 </span>+= <span class="number">4 </span>+ n <span class="kw">as </span>i64
+                        } <span class="kw">else </span>{
+                            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(Error::UnexpectedChar(<span class="string">&#39;y&#39;</span>)));
                         }
                     }
-                    <span class="string">b&#39;z&#39;</span> =&gt; {
-                        <span class="self">self</span>.<span class="ident">position</span>.<span class="number">0</span> <span class="op">=</span> <span class="number">0</span>;
-                        <span class="self">self</span>.<span class="ident">position</span>.<span class="number">1</span> <span class="op">+</span><span class="op">=</span> <span class="number">5</span>;
+                    <span class="string">b&#39;z&#39; </span>=&gt; {
+                        <span class="self">self</span>.position.<span class="number">0 </span>= <span class="number">0</span>;
+                        <span class="self">self</span>.position.<span class="number">1 </span>+= <span class="number">5</span>;
                     }
-                    <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">Error::UnexpectedChar</span>(<span class="ident">char::from</span>(<span class="ident">c</span>)))),
+                    <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(Error::UnexpectedChar(char::from(c)))),
                 }
-            } <span class="kw">else</span> {
-                <span class="kw">return</span> <span class="prelude-val">None</span>;
+            } <span class="kw">else </span>{
+                <span class="kw">return </span><span class="prelude-val">None</span>;
             }
         }
     }
 }
 
-<span class="doccomment">/// Type of a pattern.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PatternType</span> {
-    <span class="doccomment">/// [Still life](https://conwaylife.com/wiki/Still_life).</span>
-    <span class="ident">StillLife</span>,
-    <span class="doccomment">/// [Oscillator](https://conwaylife.com/wiki/Oscillator).</span>
-    <span class="ident">Oscillator</span>,
-    <span class="doccomment">/// [Spaceship](https://conwaylife.com/wiki/Spaceship).</span>
-    <span class="ident">Spaceship</span>,
+<span class="doccomment">/// Type of a pattern.
+</span><span class="attribute">#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]</span>
+<span class="kw">pub enum </span>PatternType {
+    <span class="doccomment">/// [Still life](https://conwaylife.com/wiki/Still_life).
+    </span>StillLife,
+    <span class="doccomment">/// [Oscillator](https://conwaylife.com/wiki/Oscillator).
+    </span>Oscillator,
+    <span class="doccomment">/// [Spaceship](https://conwaylife.com/wiki/Spaceship).
+    </span>Spaceship,
 }
 
-<span class="doccomment">/// A parser for [apgcode](https://www.conwaylife.com/wiki/Apgcode) format.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Only supports patterns that are encoded in Extended Wechsler format,</span>
-<span class="doccomment">/// i.e., still lifes, oscillators, spaceships.</span>
-<span class="doccomment">/// Rules with more than 2 states are not yet supported.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// As an iterator, it iterates over the living cells.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Reading from files is not supported, since apgcode is usually short and not stored in a file.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Example</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust</span>
-<span class="doccomment">/// use ca_formats::apgcode::{ApgCode, PatternType};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// const GLIDER: &amp;str = &quot;xq4_153&quot;;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let glider = ApgCode::new(GLIDER).unwrap();</span>
-<span class="doccomment">/// assert_eq!(glider.pattern_type(), PatternType::Spaceship);</span>
-<span class="doccomment">/// assert_eq!(glider.period(), 4);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let cells = glider.map(|cell| cell.unwrap()).collect::&lt;Vec&lt;_&gt;&gt;();</span>
-<span class="doccomment">/// assert_eq!(cells, vec![(0, 0), (1, 0), (1, 2), (2, 0), (2, 1)]);</span>
-<span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">must_use</span>]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ApgCode</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">pattern_type</span>: <span class="ident">PatternType</span>,
-    <span class="ident">period</span>: <span class="ident">u64</span>,
-    <span class="ident">wechsler</span>: <span class="ident">Wechsler</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A parser for [apgcode](https://www.conwaylife.com/wiki/Apgcode) format.
+///
+/// Only supports patterns that are encoded in Extended Wechsler format,
+/// i.e., still lifes, oscillators, spaceships.
+/// Rules with more than 2 states are not yet supported.
+///
+/// As an iterator, it iterates over the living cells.
+///
+/// Reading from files is not supported, since apgcode is usually short and not stored in a file.
+///
+/// # Example
+///
+/// ```rust
+/// use ca_formats::apgcode::{ApgCode, PatternType};
+///
+/// const GLIDER: &amp;str = &quot;xq4_153&quot;;
+///
+/// let glider = ApgCode::new(GLIDER).unwrap();
+/// assert_eq!(glider.pattern_type(), PatternType::Spaceship);
+/// assert_eq!(glider.period(), 4);
+///
+/// let cells = glider.map(|cell| cell.unwrap()).collect::&lt;Vec&lt;_&gt;&gt;();
+/// assert_eq!(cells, vec![(0, 0), (1, 0), (1, 2), (2, 0), (2, 1)]);
+/// ```
+</span><span class="attribute">#[must_use]</span>
+<span class="attribute">#[derive(Clone, Debug)]</span>
+<span class="kw">pub struct </span>ApgCode&lt;<span class="lifetime">&#39;a</span>&gt; {
+    pattern_type: PatternType,
+    period: u64,
+    wechsler: Wechsler&lt;<span class="lifetime">&#39;a</span>&gt;,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ApgCode</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Creates a new parser instance from a string.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">string</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">split</span> <span class="op">=</span> <span class="ident">string</span>.<span class="ident">split</span>(<span class="string">&#39;_&#39;</span>);
-        <span class="kw">let</span> <span class="ident">prefix</span> <span class="op">=</span> <span class="ident">split</span>.<span class="ident">next</span>().<span class="ident">ok_or</span>(<span class="ident">Error::Unencodable</span>)<span class="question-mark">?</span>;
-        <span class="kw">if</span> <span class="ident">prefix</span>[<span class="number">2</span>..].<span class="ident">bytes</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="op">!</span><span class="ident">c</span>.<span class="ident">is_ascii_digit</span>()) {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Unencodable</span>);
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ApgCode&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="doccomment">/// Creates a new parser instance from a string.
+    </span><span class="kw">pub fn </span>new(string: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>split = string.split(<span class="string">&#39;_&#39;</span>);
+        <span class="kw">let </span>prefix = split.next().ok_or(Error::Unencodable)<span class="question-mark">?</span>;
+        <span class="kw">if </span>prefix[<span class="number">2</span>..].bytes().any(|c| !c.is_ascii_digit()) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::Unencodable);
         }
-        <span class="kw">let</span> <span class="ident">pattern_type</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">prefix</span>[..<span class="number">2</span>] {
-            <span class="string">&quot;xs&quot;</span> =&gt; <span class="ident">PatternType::StillLife</span>,
-            <span class="string">&quot;xp&quot;</span> =&gt; <span class="ident">PatternType::Oscillator</span>,
-            <span class="string">&quot;xq&quot;</span> =&gt; <span class="ident">PatternType::Spaceship</span>,
-            <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::Unencodable</span>),
+        <span class="kw">let </span>pattern_type = <span class="kw">match </span><span class="kw-2">&amp;</span>prefix[..<span class="number">2</span>] {
+            <span class="string">&quot;xs&quot; </span>=&gt; PatternType::StillLife,
+            <span class="string">&quot;xp&quot; </span>=&gt; PatternType::Oscillator,
+            <span class="string">&quot;xq&quot; </span>=&gt; PatternType::Spaceship,
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(Error::Unencodable),
         };
-        <span class="kw">let</span> <span class="ident">period</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">pattern_type</span> <span class="op">==</span> <span class="ident">PatternType::StillLife</span> {
-            <span class="number">1</span>
-        } <span class="kw">else</span> {
-            <span class="ident">prefix</span>[<span class="number">2</span>..].<span class="ident">parse</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::Unencodable</span>)<span class="question-mark">?</span>
-        };
-        <span class="kw">let</span> <span class="ident">wechsler_string</span> <span class="op">=</span> <span class="ident">split</span>.<span class="ident">next</span>().<span class="ident">ok_or</span>(<span class="ident">Error::Unencodable</span>)<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">wechsler</span> <span class="op">=</span> <span class="ident">Wechsler::new</span>(<span class="ident">wechsler_string</span>);
-        <span class="prelude-val">Ok</span>(<span class="ident">ApgCode</span> {
-            <span class="ident">pattern_type</span>,
-            <span class="ident">period</span>,
-            <span class="ident">wechsler</span>,
+        <span class="kw">let </span>period = <span class="kw">if </span>pattern_type == PatternType::StillLife {
+            <span class="number">1
+        </span>} <span class="kw">else </span>{
+            prefix[<span class="number">2</span>..].parse().map_err(|<span class="kw">_</span>| Error::Unencodable)<span class="question-mark">?
+        </span>};
+        <span class="kw">let </span>wechsler_string = split.next().ok_or(Error::Unencodable)<span class="question-mark">?</span>;
+        <span class="kw">let </span>wechsler = Wechsler::new(wechsler_string);
+        <span class="prelude-val">Ok</span>(ApgCode {
+            pattern_type,
+            period,
+            wechsler,
         })
     }
 
-    <span class="doccomment">/// Period of the pattern.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">period</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-        <span class="self">self</span>.<span class="ident">period</span>
+    <span class="doccomment">/// Period of the pattern.
+    </span><span class="kw">pub const fn </span>period(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+        <span class="self">self</span>.period
     }
 
-    <span class="doccomment">/// Type of the pattern.</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">pattern_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">PatternType</span> {
-        <span class="self">self</span>.<span class="ident">pattern_type</span>
-    }
-}
-
-<span class="doccomment">/// An iterator over living cells in an apgcode string.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">ApgCode</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coordinates</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">wechsler</span>.<span class="ident">next</span>()
+    <span class="doccomment">/// Type of the pattern.
+    </span><span class="kw">pub const fn </span>pattern_type(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PatternType {
+        <span class="self">self</span>.pattern_type
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="doccomment">/// An iterator over living cells in an apgcode string.
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>ApgCode&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">type </span>Item = <span class="prelude-ty">Result</span>&lt;Coordinates, Error&gt;;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">wechsler_glider</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">GLIDER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;153&quot;</span>;
-        <span class="kw">let</span> <span class="ident">glider</span> <span class="op">=</span> <span class="ident">Wechsler::new</span>(<span class="ident">GLIDER</span>);
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="self">self</span>.wechsler.next()
+    }
+}
 
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">glider</span>.<span class="ident">clone</span>();
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">glider</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">cells</span>, <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>)]);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>wechsler_glider() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>GLIDER: <span class="kw-2">&amp;</span>str = <span class="string">&quot;153&quot;</span>;
+        <span class="kw">let </span>glider = Wechsler::new(GLIDER);
+
+        <span class="kw">let _ </span>= glider.clone();
+
+        <span class="kw">let </span>cells = glider.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
+        <span class="macro">assert_eq!</span>(cells, <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>)]);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">wechsler_twin_bees_shuttle</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">TWIN_BEE_SHUTTLE</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;033y133zzzckgsxsgkczz0cc&quot;</span>;
-        <span class="kw">let</span> <span class="ident">twin_bees_shuttle</span> <span class="op">=</span> <span class="ident">Wechsler::new</span>(<span class="ident">TWIN_BEE_SHUTTLE</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>wechsler_twin_bees_shuttle() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>TWIN_BEE_SHUTTLE: <span class="kw-2">&amp;</span>str = <span class="string">&quot;033y133zzzckgsxsgkczz0cc&quot;</span>;
+        <span class="kw">let </span>twin_bees_shuttle = Wechsler::new(TWIN_BEE_SHUTTLE);
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">twin_bees_shuttle</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
+        <span class="kw">let </span>cells = twin_bees_shuttle.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
         <span class="macro">assert_eq!</span>(
-            <span class="ident">cells</span>,
+            cells,
             <span class="macro">vec!</span>[
                 (<span class="number">1</span>, <span class="number">0</span>),
                 (<span class="number">1</span>, <span class="number">1</span>),
@@ -565,20 +565,20 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">apgcode_glider</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">const</span> <span class="ident">GLIDER</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;xq4_153&quot;</span>;
-        <span class="kw">let</span> <span class="ident">glider</span> <span class="op">=</span> <span class="ident">ApgCode::new</span>(<span class="ident">GLIDER</span>)<span class="question-mark">?</span>;
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>apgcode_glider() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">const </span>GLIDER: <span class="kw-2">&amp;</span>str = <span class="string">&quot;xq4_153&quot;</span>;
+        <span class="kw">let </span>glider = ApgCode::new(GLIDER)<span class="question-mark">?</span>;
 
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">glider</span>.<span class="ident">clone</span>();
+        <span class="kw">let _ </span>= glider.clone();
 
-        <span class="macro">assert_eq!</span>(<span class="ident">glider</span>.<span class="ident">pattern_type</span>(), <span class="ident">PatternType::Spaceship</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">glider</span>.<span class="ident">period</span>(), <span class="number">4</span>);
+        <span class="macro">assert_eq!</span>(glider.pattern_type(), PatternType::Spaceship);
+        <span class="macro">assert_eq!</span>(glider.period(), <span class="number">4</span>);
 
-        <span class="kw">let</span> <span class="ident">cells</span> <span class="op">=</span> <span class="ident">glider</span>.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="macro">assert_eq!</span>(<span class="ident">cells</span>, <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>)]);
+        <span class="kw">let </span>cells = glider.collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
+        <span class="macro">assert_eq!</span>(cells, <span class="macro">vec!</span>[(<span class="number">0</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>)]);
         <span class="prelude-val">Ok</span>(())
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

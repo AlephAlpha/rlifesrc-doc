@@ -123,130 +123,130 @@
 <span id="123">123</span>
 <span id="124">124</span>
 <span id="125">125</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Cellular automata rules.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! For the notations of rule strings, please see</span>
-<span class="doccomment">//! [this article on LifeWiki](https://conwaylife.com/wiki/Rulestring).</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Cellular automata rules.
+//!
+//! For the notations of rule strings, please see
+//! [this article on LifeWiki](https://conwaylife.com/wiki/Rulestring).
 
-<span class="kw">mod</span> <span class="ident">life</span>;
-<span class="kw">mod</span> <span class="ident">ntlife</span>;
+</span><span class="kw">mod </span>life;
+<span class="kw">mod </span>ntlife;
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">cells</span>::{<span class="ident">CellRef</span>, <span class="ident">LifeCell</span>, <span class="ident">State</span>},
-    <span class="ident">config::Symmetry</span>,
-    <span class="ident">search::Algorithm</span>,
-    <span class="ident">world::World</span>,
+<span class="kw">use crate</span>::{
+    cells::{CellRef, LifeCell, State},
+    config::Symmetry,
+    search::Algorithm,
+    world::World,
 };
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">life</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ntlife</span>::{<span class="ident">NtLife</span>, <span class="ident">NtLifeGen</span>};
+<span class="kw">pub use </span>life::{Life, LifeGen};
+<span class="kw">pub use </span>ntlife::{NtLife, NtLifeGen};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cells::ALIVE</span>;
+<span class="attribute">#[cfg(doc)]</span>
+<span class="kw">use </span><span class="kw">crate</span>::cells::ALIVE;
 
-<span class="kw">use</span> <span class="ident">typebool::Bool</span>;
+<span class="kw">use </span>typebool::Bool;
 
-<span class="doccomment">/// Type level boolean values.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod</span> <span class="ident">typebool</span> {
-    <span class="doccomment">/// A type level boolean value.</span>
-    <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Bool</span> {
-        <span class="doccomment">/// The runtime boolean value.</span>
-        <span class="kw">const</span> <span class="ident">VALUE</span>: <span class="ident">bool</span>;
+<span class="doccomment">/// Type level boolean values.
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>typebool {
+    <span class="doccomment">/// A type level boolean value.
+    </span><span class="kw">pub trait </span>Bool {
+        <span class="doccomment">/// The runtime boolean value.
+        </span><span class="kw">const </span>VALUE: bool;
     }
 
-    <span class="doccomment">/// Type level `true`.</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">True</span>;
+    <span class="doccomment">/// Type level `true`.
+    </span><span class="attribute">#[derive(Debug, Clone, Copy)]</span>
+    <span class="kw">pub struct </span>True;
 
-    <span class="kw">impl</span> <span class="ident">Bool</span> <span class="kw">for</span> <span class="ident">True</span> {
-        <span class="kw">const</span> <span class="ident">VALUE</span>: <span class="ident">bool</span> <span class="op">=</span> <span class="bool-val">true</span>;
+    <span class="kw">impl </span>Bool <span class="kw">for </span>True {
+        <span class="kw">const </span>VALUE: bool = <span class="bool-val">true</span>;
     }
 
-    <span class="doccomment">/// Type level `false`.</span>
-    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">False</span>;
+    <span class="doccomment">/// Type level `false`.
+    </span><span class="attribute">#[derive(Debug, Clone, Copy)]</span>
+    <span class="kw">pub struct </span>False;
 
-    <span class="kw">impl</span> <span class="ident">Bool</span> <span class="kw">for</span> <span class="ident">False</span> {
-        <span class="kw">const</span> <span class="ident">VALUE</span>: <span class="ident">bool</span> <span class="op">=</span> <span class="bool-val">false</span>;
+    <span class="kw">impl </span>Bool <span class="kw">for </span>False {
+        <span class="kw">const </span>VALUE: bool = <span class="bool-val">false</span>;
     }
 }
 
-<span class="doccomment">/// A cellular automaton rule.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The following rules are supported:</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// - [`Life`]</span>
-<span class="doccomment">/// - [`LifeGen`]</span>
-<span class="doccomment">/// - [`NtLife`]</span>
-<span class="doccomment">/// - [`NtLifeGen`]</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This trait is sealed and cannot be implemented outside of this crate.</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;Some of its items are hidden in the doc.&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Rule</span>: <span class="ident">private::Sealed</span> {
-    <span class="doccomment">/// The type of neighborhood descriptor of the rule.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// It describes the states of the successor and neighbors of a cell,</span>
-    <span class="doccomment">/// and is used to determine the state of the cell in the next generation.</span>
-    <span class="kw">type</span> <span class="ident">Desc</span>: <span class="ident">Copy</span>;
+<span class="doccomment">/// A cellular automaton rule.
+///
+/// The following rules are supported:
+///
+/// - [`Life`]
+/// - [`LifeGen`]
+/// - [`NtLife`]
+/// - [`NtLifeGen`]
+///
+/// This trait is sealed and cannot be implemented outside of this crate.
+</span><span class="attribute">#[cfg_attr(not(github_io), doc = <span class="string">&quot;Some of its items are hidden in the doc.&quot;</span>)]</span>
+<span class="kw">pub trait </span>Rule: private::Sealed {
+    <span class="doccomment">/// The type of neighborhood descriptor of the rule.
+    ///
+    /// It describes the states of the successor and neighbors of a cell,
+    /// and is used to determine the state of the cell in the next generation.
+    </span><span class="kw">type </span>Desc: Copy;
 
-    <span class="doccomment">/// Whether the rule is a Generations rule.</span>
-    <span class="kw">type</span> <span class="ident">IsGen</span>: <span class="ident">Bool</span>;
+    <span class="doccomment">/// Whether the rule is a Generations rule.
+    </span><span class="kw">type </span>IsGen: Bool;
 
-    <span class="doccomment">/// Whether the rule contains `B0`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In other words, whether a dead cell would become [`ALIVE`] in the next</span>
-    <span class="doccomment">/// generation, if all its neighbors in this generation are dead.</span>
-    <span class="kw">fn</span> <span class="ident">has_b0</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span>;
+    <span class="doccomment">/// Whether the rule contains `B0`.
+    ///
+    /// In other words, whether a dead cell would become [`ALIVE`] in the next
+    /// generation, if all its neighbors in this generation are dead.
+    </span><span class="kw">fn </span>has_b0(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool;
 
-    <span class="doccomment">/// Whether the rule contains both `B0` and `S8`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In a rule that contains `B0`, a dead cell would become [`ALIVE`] in the next</span>
-    <span class="doccomment">/// generation, if all its neighbors in this generation are dead.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In a rule that contains `S8`, a living cell would stay [`ALIVE`] in the next</span>
-    <span class="doccomment">/// generation, if all its neighbors in this generation are alive.</span>
-    <span class="kw">fn</span> <span class="ident">has_b0_s8</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span>;
+    <span class="doccomment">/// Whether the rule contains both `B0` and `S8`.
+    ///
+    /// In a rule that contains `B0`, a dead cell would become [`ALIVE`] in the next
+    /// generation, if all its neighbors in this generation are dead.
+    ///
+    /// In a rule that contains `S8`, a living cell would stay [`ALIVE`] in the next
+    /// generation, if all its neighbors in this generation are alive.
+    </span><span class="kw">fn </span>has_b0_s8(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool;
 
-    <span class="doccomment">/// The number of states.</span>
-    <span class="kw">fn</span> <span class="ident">gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span>;
+    <span class="doccomment">/// The number of states.
+    </span><span class="kw">fn </span>gen(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
 
-    <span class="doccomment">/// The symmetry of the rule.</span>
-    <span class="kw">fn</span> <span class="ident">symmetry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Symmetry</span>;
+    <span class="doccomment">/// The symmetry of the rule.
+    </span><span class="kw">fn </span>symmetry(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Symmetry;
 
-    <span class="doccomment">/// Generates a neighborhood descriptor which says that all neighboring</span>
-    <span class="doccomment">/// cells have states `state`, and the successor has state `succ_state`.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">new_desc</span>(<span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">succ_state</span>: <span class="ident">State</span>) -&gt; <span class="ident"><span class="self">Self</span>::Desc</span>;
+    <span class="doccomment">/// Generates a neighborhood descriptor which says that all neighboring
+    /// cells have states `state`, and the successor has state `succ_state`.
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
+    <span class="kw">fn </span>new_desc(state: State, succ_state: State) -&gt; <span class="self">Self</span>::Desc;
 
-    <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor</span>
-    <span class="doccomment">/// when the state of one cell is changed.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The `state` is the new state of the cell when `new` is true,</span>
-    <span class="doccomment">/// the old state when `new` is false.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">update_desc</span>(<span class="ident">cell</span>: <span class="kw-2">&amp;</span><span class="ident">LifeCell</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">state</span>: <span class="ident">State</span>, <span class="ident">new</span>: <span class="ident">bool</span>);
+    <span class="doccomment">/// Updates the neighborhood descriptors of all neighbors and the predecessor
+    /// when the state of one cell is changed.
+    ///
+    /// The `state` is the new state of the cell when `new` is true,
+    /// the old state when `new` is false.
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
+    <span class="kw">fn </span>update_desc(cell: <span class="kw-2">&amp;</span>LifeCell&lt;<span class="self">Self</span>&gt;, state: State, new: bool);
 
-    <span class="doccomment">/// Consistifies a cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Examines the state and the neighborhood descriptor of the cell,</span>
-    <span class="doccomment">/// and makes sure that it can validly produce the cell in the next</span>
-    <span class="doccomment">/// generation. If possible, determines the states of some of the</span>
-    <span class="doccomment">/// cells involved.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns `false` if there is a conflict,</span>
-    <span class="doccomment">/// `true` if the cells are consistent.</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">hidden</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">consistify</span><span class="op">&lt;</span><span class="ident">A</span>: <span class="ident">Algorithm</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">world</span>: <span class="kw-2">&amp;mut</span> <span class="ident">World</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">A</span><span class="op">&gt;</span>,
-        <span class="ident">cell</span>: <span class="ident">CellRef</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">A::ConflReason</span><span class="op">&gt;</span>;
+    <span class="doccomment">/// Consistifies a cell.
+    ///
+    /// Examines the state and the neighborhood descriptor of the cell,
+    /// and makes sure that it can validly produce the cell in the next
+    /// generation. If possible, determines the states of some of the
+    /// cells involved.
+    ///
+    /// Returns `false` if there is a conflict,
+    /// `true` if the cells are consistent.
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
+    <span class="kw">fn </span>consistify&lt;A: Algorithm&lt;<span class="self">Self</span>&gt;&gt;(
+        world: <span class="kw-2">&amp;mut </span>World&lt;<span class="self">Self</span>, A&gt;,
+        cell: CellRef&lt;<span class="self">Self</span>&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), A::ConflReason&gt;;
 }
 
-<span class="doccomment">/// A helper mod for [sealing](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)</span>
-<span class="doccomment">/// the [`Rule`] trait.</span>
-<span class="kw">mod</span> <span class="ident">private</span> {
-    <span class="doccomment">/// A helper trait for [sealing](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)</span>
-    <span class="doccomment">/// the [`Rule`](super::Rule) trait.</span>
-    <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Sealed</span>: <span class="ident">Sized</span> {}
+<span class="doccomment">/// A helper mod for [sealing](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)
+/// the [`Rule`] trait.
+</span><span class="kw">mod </span>private {
+    <span class="doccomment">/// A helper trait for [sealing](https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed)
+    /// the [`Rule`](super::Rule) trait.
+    </span><span class="kw">pub trait </span>Sealed: Sized {}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

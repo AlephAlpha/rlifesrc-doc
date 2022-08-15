@@ -493,500 +493,500 @@
 <span id="493">493</span>
 <span id="494">494</span>
 <span id="495">495</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">proc_macro2</span>::{<span class="ident">Group</span>, <span class="ident">TokenStream</span>};
-<span class="kw">use</span> <span class="ident">quote::ToTokens</span>;
-<span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">parse_quote</span>, <span class="ident">token</span>,
-    <span class="ident">visit_mut</span>::{<span class="self">self</span>, <span class="ident">VisitMut</span>},
-    <span class="ident">Arm</span>, <span class="ident">Attribute</span>, <span class="ident">Expr</span>, <span class="ident">ExprMacro</span>, <span class="ident">ExprMatch</span>, <span class="ident">ExprReturn</span>, <span class="ident">ExprTry</span>, <span class="ident">Item</span>, <span class="ident">Local</span>, <span class="ident">Stmt</span>, <span class="ident">Token</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>proc_macro2::{Group, TokenStream};
+<span class="kw">use </span>quote::ToTokens;
+<span class="kw">use </span>syn::{
+    parse_quote, token,
+    visit_mut::{<span class="self">self</span>, VisitMut},
+    Arm, Attribute, Expr, ExprMacro, ExprMatch, ExprReturn, ExprTry, Item, Local, Stmt, Token,
 };
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Context</span>, <span class="ident">VisitMode</span>, <span class="ident">DEFAULT_MARKER</span>, <span class="ident">NAME</span>, <span class="ident">NESTED</span>, <span class="ident">NEVER</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils</span>::{<span class="ident">parse_as_empty</span>, <span class="ident">replace_expr</span>, <span class="ident">Attrs</span>, <span class="ident">VisitedNode</span>};
+<span class="kw">use super</span>::{Context, VisitMode, DEFAULT_MARKER, NAME, NESTED, NEVER};
+<span class="kw">use </span><span class="kw">crate</span>::utils::{parse_as_empty, replace_expr, Attrs, VisitedNode};
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Scope</span> {
-    <span class="doccomment">/// in closures</span>
-    <span class="ident">closure</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// in try blocks</span>
-    <span class="ident">try_block</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// in the other `auto_enum` attributes</span>
-    <span class="ident">foreign</span>: <span class="ident">bool</span>,
+<span class="attribute">#[derive(Clone, Copy, Default)]</span>
+<span class="kw">struct </span>Scope {
+    <span class="doccomment">/// in closures
+    </span>closure: bool,
+    <span class="doccomment">/// in try blocks
+    </span>try_block: bool,
+    <span class="doccomment">/// in the other `auto_enum` attributes
+    </span>foreign: bool,
 }
 
-<span class="kw">impl</span> <span class="ident">Scope</span> {
-    <span class="comment">// check this scope is in closures or try blocks.</span>
-    <span class="kw">fn</span> <span class="ident">check_expr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="ident">Expr</span>) {
-        <span class="kw">match</span> <span class="ident">expr</span> {
-            <span class="ident">Expr::Closure</span>(<span class="kw">_</span>) =&gt; <span class="self">self</span>.<span class="ident">closure</span> <span class="op">=</span> <span class="bool-val">true</span>,
-            <span class="comment">// `?` operator in try blocks are not supported.</span>
-            <span class="ident">Expr::TryBlock</span>(<span class="kw">_</span>) =&gt; <span class="self">self</span>.<span class="ident">try_block</span> <span class="op">=</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> =&gt; {}
+<span class="kw">impl </span>Scope {
+    <span class="comment">// check this scope is in closures or try blocks.
+    </span><span class="kw">fn </span>check_expr(<span class="kw-2">&amp;mut </span><span class="self">self</span>, expr: <span class="kw-2">&amp;</span>Expr) {
+        <span class="kw">match </span>expr {
+            Expr::Closure(<span class="kw">_</span>) =&gt; <span class="self">self</span>.closure = <span class="bool-val">true</span>,
+            <span class="comment">// `?` operator in try blocks are not supported.
+            </span>Expr::TryBlock(<span class="kw">_</span>) =&gt; <span class="self">self</span>.try_block = <span class="bool-val">true</span>,
+            <span class="kw">_ </span>=&gt; {}
         }
     }
 }
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// default visitor</span>
+<span class="comment">// =================================================================================================
+// default visitor
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">Context</span>,
-    <span class="ident">scope</span>: <span class="ident">Scope</span>,
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>Visitor&lt;<span class="lifetime">&#39;a</span>&gt; {
+    cx: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Context,
+    scope: Scope,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">Context</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">cx</span>, <span class="ident">scope</span>: <span class="ident">Scope::default</span>() }
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Visitor&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>new(cx: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Context) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ cx, scope: Scope::default() }
     }
 
-    <span class="kw">fn</span> <span class="ident">find_remove_attrs</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">attrs</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">Attrs</span>) {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attr</span>) <span class="op">=</span> <span class="ident">attrs</span>.<span class="ident">find_remove_attr</span>(<span class="ident">NEVER</span>) {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">parse_as_empty</span>(<span class="kw-2">&amp;</span><span class="ident">attr</span>.<span class="ident">tokens</span>) {
-                    <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>);
+    <span class="kw">fn </span>find_remove_attrs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, attrs: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>Attrs) {
+        <span class="kw">if </span>!<span class="self">self</span>.scope.foreign {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(attr) = attrs.find_remove_attr(NEVER) {
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = parse_as_empty(<span class="kw-2">&amp;</span>attr.tokens) {
+                    <span class="self">self</span>.cx.error(e);
                 }
             }
 
-            <span class="comment">// The old annotation `#[rec]` is replaced with `#[nested]`.</span>
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">old</span>) <span class="op">=</span> <span class="ident">attrs</span>.<span class="ident">find_remove_attr</span>(<span class="string">&quot;rec&quot;</span>) {
-                <span class="self">self</span>.<span class="ident">cx</span>
-                    .<span class="ident">error</span>(<span class="macro">error!</span>(<span class="ident">old</span>, <span class="string">&quot;#[rec] has been removed and replaced with #[{}]&quot;</span>, <span class="ident">NESTED</span>));
+            <span class="comment">// The old annotation `#[rec]` is replaced with `#[nested]`.
+            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(old) = attrs.find_remove_attr(<span class="string">&quot;rec&quot;</span>) {
+                <span class="self">self</span>.cx
+                    .error(<span class="macro">error!</span>(old, <span class="string">&quot;#[rec] has been removed and replaced with #[{}]&quot;</span>, NESTED));
             }
         }
     }
 
-    <span class="doccomment">/// `return` in functions or closures</span>
-    <span class="kw">fn</span> <span class="ident">visit_return</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>, <span class="ident">count</span>: <span class="ident">usize</span>) {
-        <span class="macro">debug_assert!</span>(<span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">visit_mode</span> <span class="op">==</span> <span class="ident">VisitMode::Return</span>(<span class="ident">count</span>));
+    <span class="doccomment">/// `return` in functions or closures
+    </span><span class="kw">fn </span>visit_return(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr, count: usize) {
+        <span class="macro">debug_assert!</span>(<span class="self">self</span>.cx.visit_mode == VisitMode::Return(count));
 
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">closure</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">node</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NEVER</span>) {
-            <span class="comment">// Desugar `return &lt;expr&gt;` into `return Enum::VariantN(&lt;expr&gt;)`.</span>
-            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Expr::Return</span>(<span class="ident">ExprReturn</span> { <span class="ident">expr</span>, .. }) <span class="op">=</span> <span class="ident">node</span> {
-                <span class="comment">// Skip if `&lt;expr&gt;` is a marker macro.</span>
-                <span class="kw">if</span> <span class="ident">expr</span>.<span class="ident">as_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">true</span>, <span class="op">|</span><span class="ident">expr</span><span class="op">|</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">is_marker_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span>)) {
-                    <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">replace_boxed_expr</span>(<span class="ident">expr</span>);
+        <span class="kw">if </span>!<span class="self">self</span>.scope.closure &amp;&amp; !node.any_empty_attr(NEVER) {
+            <span class="comment">// Desugar `return &lt;expr&gt;` into `return Enum::VariantN(&lt;expr&gt;)`.
+            </span><span class="kw">if let </span>Expr::Return(ExprReturn { expr, .. }) = node {
+                <span class="comment">// Skip if `&lt;expr&gt;` is a marker macro.
+                </span><span class="kw">if </span>expr.as_ref().map_or(<span class="bool-val">true</span>, |expr| !<span class="self">self</span>.cx.is_marker_expr(<span class="kw-2">&amp;**</span>expr)) {
+                    <span class="self">self</span>.cx.replace_boxed_expr(expr);
                 }
             }
         }
     }
 
-    <span class="doccomment">/// `?` operator in functions or closures</span>
-    <span class="kw">fn</span> <span class="ident">visit_try</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) {
-        <span class="macro">debug_assert!</span>(<span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">visit_mode</span> <span class="op">==</span> <span class="ident">VisitMode::Try</span>);
+    <span class="doccomment">/// `?` operator in functions or closures
+    </span><span class="kw">fn </span>visit_try(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr) {
+        <span class="macro">debug_assert!</span>(<span class="self">self</span>.cx.visit_mode == VisitMode::Try);
 
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">try_block</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">closure</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">node</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NEVER</span>) {
-            <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">node</span> {
-                <span class="comment">// https://github.com/rust-lang/rust/blob/1.35.0/src/librustc/hir/lowering.rs#L4578-L4682</span>
+        <span class="kw">if </span>!<span class="self">self</span>.scope.try_block &amp;&amp; !<span class="self">self</span>.scope.closure &amp;&amp; !node.any_empty_attr(NEVER) {
+            <span class="kw">match </span><span class="kw-2">&amp;</span>node {
+                <span class="comment">// https://github.com/rust-lang/rust/blob/1.35.0/src/librustc/hir/lowering.rs#L4578-L4682
 
-                <span class="comment">// Desugar `&lt;expr&gt;?`</span>
-                <span class="comment">// into:</span>
-                <span class="comment">//</span>
-                <span class="comment">// match &lt;expr&gt; {</span>
-                <span class="comment">//     Ok(val) =&gt; val,</span>
-                <span class="comment">//     Err(err) =&gt; return Err(Enum::VariantN(err)),</span>
-                <span class="comment">// }</span>
-                <span class="comment">//</span>
-                <span class="comment">// Skip if `&lt;expr&gt;` is a marker macro.</span>
-                <span class="ident">Expr::Try</span>(<span class="ident">ExprTry</span> { <span class="ident">expr</span>, .. }) <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">is_marker_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span>) =&gt; {
-                    <span class="ident">replace_expr</span>(<span class="ident">node</span>, <span class="op">|</span><span class="ident">expr</span><span class="op">|</span> {
-                        <span class="kw">let</span> <span class="ident">ExprTry</span> { <span class="ident">attrs</span>, <span class="ident">expr</span>, .. } <span class="op">=</span>
-                            <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Expr::Try</span>(<span class="ident">expr</span>) <span class="op">=</span> <span class="ident">expr</span> { <span class="ident">expr</span> } <span class="kw">else</span> { <span class="macro">unreachable!</span>() };
+                // Desugar `&lt;expr&gt;?`
+                // into:
+                //
+                // match &lt;expr&gt; {
+                //     Ok(val) =&gt; val,
+                //     Err(err) =&gt; return Err(Enum::VariantN(err)),
+                // }
+                //
+                // Skip if `&lt;expr&gt;` is a marker macro.
+                </span>Expr::Try(ExprTry { expr, .. }) <span class="kw">if </span>!<span class="self">self</span>.cx.is_marker_expr(<span class="kw-2">&amp;**</span>expr) =&gt; {
+                    replace_expr(node, |expr| {
+                        <span class="kw">let </span>ExprTry { attrs, expr, .. } =
+                            <span class="kw">if let </span>Expr::Try(expr) = expr { expr } <span class="kw">else </span>{ <span class="macro">unreachable!</span>() };
 
-                        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">arms</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="number">2</span>);
-                        <span class="ident">arms</span>.<span class="ident">push</span>(<span class="macro">parse_quote!</span> {
-                            <span class="ident">::core::result::Result::Ok</span>(<span class="ident">val</span>) =&gt; <span class="ident">val</span>,
+                        <span class="kw">let </span><span class="kw-2">mut </span>arms = Vec::with_capacity(<span class="number">2</span>);
+                        arms.push(<span class="macro">parse_quote!</span> {
+                            ::core::result::Result::Ok(val) =&gt; val,
                         });
 
-                        <span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">next_expr</span>(<span class="macro">parse_quote!</span>(<span class="ident">err</span>));
-                        <span class="ident">arms</span>.<span class="ident">push</span>(<span class="macro">parse_quote!</span> {
-                            <span class="ident">::core::result::Result::Err</span>(<span class="ident">err</span>) =&gt; {
-                                <span class="kw">return</span> <span class="ident">::core::result::Result::Err</span>(#<span class="ident">err</span>);
+                        <span class="kw">let </span>err = <span class="self">self</span>.cx.next_expr(<span class="macro">parse_quote!</span>(err));
+                        arms.push(<span class="macro">parse_quote!</span> {
+                            ::core::result::Result::Err(err) =&gt; {
+                                <span class="kw">return </span>::core::result::Result::Err(#err);
                             }
                         });
 
-                        <span class="ident">Expr::Match</span>(<span class="ident">ExprMatch</span> {
-                            <span class="ident">attrs</span>,
-                            <span class="ident">match_token</span>: <span class="op">&lt;</span><span class="macro">Token!</span>[<span class="kw">match</span>]<span class="op">&gt;</span><span class="ident">::default</span>(),
-                            <span class="ident">expr</span>,
-                            <span class="ident">brace_token</span>: <span class="ident">token::Brace::default</span>(),
-                            <span class="ident">arms</span>,
+                        Expr::Match(ExprMatch {
+                            attrs,
+                            match_token: &lt;<span class="macro">Token!</span>[<span class="kw">match</span>]&gt;::default(),
+                            expr,
+                            brace_token: token::Brace::default(),
+                            arms,
                         })
                     })
                 }
-                <span class="kw">_</span> =&gt; {}
+                <span class="kw">_ </span>=&gt; {}
             }
         }
     }
 
-    <span class="doccomment">/// `#[nested]`</span>
-    <span class="kw">fn</span> <span class="ident">visit_nested</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>, <span class="ident">attr</span>: <span class="kw-2">&amp;</span><span class="ident">Attribute</span>) {
-        <span class="macro">debug_assert!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span>);
+    <span class="doccomment">/// `#[nested]`
+    </span><span class="kw">fn </span>visit_nested(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr, attr: <span class="kw-2">&amp;</span>Attribute) {
+        <span class="macro">debug_assert!</span>(!<span class="self">self</span>.scope.foreign);
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span>
-            <span class="ident">parse_as_empty</span>(<span class="kw-2">&amp;</span><span class="ident">attr</span>.<span class="ident">tokens</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident"><span class="kw">super</span>::expr::child_expr</span>(<span class="self">self</span>.<span class="ident">cx</span>, <span class="ident">node</span>))
+        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) =
+            parse_as_empty(<span class="kw-2">&amp;</span>attr.tokens).and_then(|<span class="kw">_</span>| <span class="kw">super</span>::expr::child_expr(<span class="self">self</span>.cx, node))
         {
-            <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>);
+            <span class="self">self</span>.cx.error(e);
         }
     }
 
-    <span class="doccomment">/// Expression level marker (`marker!` macro)</span>
-    <span class="kw">fn</span> <span class="ident">visit_marker_macro</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) {
-        <span class="macro">debug_assert!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">marker</span> <span class="op">!</span><span class="op">=</span> <span class="ident">DEFAULT_MARKER</span>);
+    <span class="doccomment">/// Expression level marker (`marker!` macro)
+    </span><span class="kw">fn </span>visit_marker_macro(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr) {
+        <span class="macro">debug_assert!</span>(!<span class="self">self</span>.scope.foreign || <span class="self">self</span>.cx.marker != DEFAULT_MARKER);
 
-        <span class="kw">match</span> <span class="ident">node</span> {
-            <span class="comment">// Desugar `marker!(&lt;expr&gt;)` into `Enum::VariantN(&lt;expr&gt;)`.</span>
-            <span class="comment">// Skip if `marker!` is not a marker macro.</span>
-            <span class="ident">Expr::Macro</span>(<span class="ident">ExprMacro</span> { <span class="ident">mac</span>, .. }) <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">is_marker_macro_exact</span>(<span class="ident">mac</span>) =&gt; {
-                <span class="ident">replace_expr</span>(<span class="ident">node</span>, <span class="op">|</span><span class="ident">expr</span><span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">expr</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Expr::Macro</span>(<span class="ident">expr</span>) <span class="op">=</span> <span class="ident">expr</span> { <span class="ident">expr</span> } <span class="kw">else</span> { <span class="macro">unreachable!</span>() };
-                    <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">syn::parse2</span>(<span class="ident">expr</span>.<span class="ident">mac</span>.<span class="ident">tokens</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                        <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>);
-                        <span class="comment">// Generate an expression to fill in where the error occurred during the visit.</span>
-                        <span class="comment">// These will eventually need to be replaced with the original error message.</span>
-                        <span class="macro">parse_quote!</span>(<span class="macro">compile_error!</span>(
-                            <span class="string">&quot;#[auto_enum] failed to generate error message&quot;</span>
-                        ))
+        <span class="kw">match </span>node {
+            <span class="comment">// Desugar `marker!(&lt;expr&gt;)` into `Enum::VariantN(&lt;expr&gt;)`.
+            // Skip if `marker!` is not a marker macro.
+            </span>Expr::Macro(ExprMacro { mac, .. }) <span class="kw">if </span><span class="self">self</span>.cx.is_marker_macro_exact(mac) =&gt; {
+                replace_expr(node, |expr| {
+                    <span class="kw">let </span>expr = <span class="kw">if let </span>Expr::Macro(expr) = expr { expr } <span class="kw">else </span>{ <span class="macro">unreachable!</span>() };
+                    <span class="kw">let </span>args = syn::parse2(expr.mac.tokens).unwrap_or_else(|e| {
+                        <span class="self">self</span>.cx.error(e);
+                        <span class="comment">// Generate an expression to fill in where the error occurred during the visit.
+                        // These will eventually need to be replaced with the original error message.
+                        </span><span class="macro">parse_quote!</span>(<span class="macro">compile_error!</span>(
+                            <span class="string">&quot;#[auto_enum] failed to generate error message&quot;
+                        </span>))
                     });
 
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>() {
-                        <span class="ident">args</span>
-                    } <span class="kw">else</span> {
-                        <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">next_expr_with_attrs</span>(<span class="ident">expr</span>.<span class="ident">attrs</span>, <span class="ident">args</span>)
+                    <span class="kw">if </span><span class="self">self</span>.cx.has_error() {
+                        args
+                    } <span class="kw">else </span>{
+                        <span class="self">self</span>.cx.next_expr_with_attrs(expr.attrs, args)
                     }
                 })
             }
-            <span class="kw">_</span> =&gt; {}
+            <span class="kw">_ </span>=&gt; {}
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_expr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>, <span class="ident">has_semi</span>: <span class="ident">bool</span>) {
-        <span class="macro">debug_assert!</span>(<span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>());
+    <span class="kw">fn </span>visit_expr(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr, has_semi: bool) {
+        <span class="macro">debug_assert!</span>(!<span class="self">self</span>.cx.has_error());
 
-        <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">scope</span>;
+        <span class="kw">let </span>tmp = <span class="self">self</span>.scope;
 
-        <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-            <span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            <span class="comment">// Record whether other `auto_enum` attribute exists.</span>
-            <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">other_attr</span> <span class="op">=</span> <span class="bool-val">true</span>;
+        <span class="kw">if </span>node.any_attr(NAME) {
+            <span class="self">self</span>.scope.foreign = <span class="bool-val">true</span>;
+            <span class="comment">// Record whether other `auto_enum` attribute exists.
+            </span><span class="self">self</span>.cx.other_attr = <span class="bool-val">true</span>;
         }
-        <span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">check_expr</span>(<span class="ident">node</span>);
+        <span class="self">self</span>.scope.check_expr(node);
 
-        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">visit_mode</span> {
-            <span class="ident">VisitMode::Return</span>(<span class="ident">count</span>) =&gt; <span class="self">self</span>.<span class="ident">visit_return</span>(<span class="ident">node</span>, <span class="ident">count</span>),
-            <span class="ident">VisitMode::Try</span> =&gt; <span class="self">self</span>.<span class="ident">visit_try</span>(<span class="ident">node</span>),
-            <span class="ident">VisitMode::Default</span> =&gt; {}
+        <span class="kw">match </span><span class="self">self</span>.cx.visit_mode {
+            VisitMode::Return(count) =&gt; <span class="self">self</span>.visit_return(node, count),
+            VisitMode::Try =&gt; <span class="self">self</span>.visit_try(node),
+            VisitMode::Default =&gt; {}
         }
 
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attr</span>) <span class="op">=</span> <span class="ident">node</span>.<span class="ident">find_remove_attr</span>(<span class="ident">NESTED</span>) {
-                <span class="self">self</span>.<span class="ident">visit_nested</span>(<span class="ident">node</span>, <span class="kw-2">&amp;</span><span class="ident">attr</span>);
+        <span class="kw">if </span>!<span class="self">self</span>.scope.foreign {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(attr) = node.find_remove_attr(NESTED) {
+                <span class="self">self</span>.visit_nested(node, <span class="kw-2">&amp;</span>attr);
             }
         }
 
-        <span class="ident">VisitStmt::visit_expr</span>(<span class="self">self</span>, <span class="ident">node</span>, <span class="ident">has_semi</span>);
+        VisitStmt::visit_expr(<span class="self">self</span>, node, has_semi);
 
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">marker</span> <span class="op">!</span><span class="op">=</span> <span class="ident">DEFAULT_MARKER</span> {
-            <span class="self">self</span>.<span class="ident">visit_marker_macro</span>(<span class="ident">node</span>);
-            <span class="self">self</span>.<span class="ident">find_remove_attrs</span>(<span class="ident">node</span>);
+        <span class="kw">if </span>!<span class="self">self</span>.scope.foreign || <span class="self">self</span>.cx.marker != DEFAULT_MARKER {
+            <span class="self">self</span>.visit_marker_macro(node);
+            <span class="self">self</span>.find_remove_attrs(node);
         }
 
-        <span class="self">self</span>.<span class="ident">scope</span> <span class="op">=</span> <span class="ident">tmp</span>;
+        <span class="self">self</span>.scope = tmp;
     }
 }
 
-<span class="kw">impl</span> <span class="ident">VisitMut</span> <span class="kw">for</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">visit_expr_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>() {
-            <span class="self">self</span>.<span class="ident">visit_expr</span>(<span class="ident">node</span>, <span class="bool-val">false</span>);
+<span class="kw">impl </span>VisitMut <span class="kw">for </span>Visitor&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">fn </span>visit_expr_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr) {
+        <span class="kw">if </span>!<span class="self">self</span>.cx.has_error() {
+            <span class="self">self</span>.visit_expr(node, <span class="bool-val">false</span>);
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_arm_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Arm</span>) {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>() {
-            <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attr</span>) <span class="op">=</span> <span class="ident">node</span>.<span class="ident">find_remove_attr</span>(<span class="ident">NESTED</span>) {
-                    <span class="self">self</span>.<span class="ident">visit_nested</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="ident">node</span>.<span class="ident">body</span>, <span class="kw-2">&amp;</span><span class="ident">attr</span>);
+    <span class="kw">fn </span>visit_arm_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Arm) {
+        <span class="kw">if </span>!<span class="self">self</span>.cx.has_error() {
+            <span class="kw">if </span>!<span class="self">self</span>.scope.foreign {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(attr) = node.find_remove_attr(NESTED) {
+                    <span class="self">self</span>.visit_nested(<span class="kw-2">&amp;mut *</span>node.body, <span class="kw-2">&amp;</span>attr);
                 }
             }
 
-            <span class="ident">visit_mut::visit_arm_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
+            visit_mut::visit_arm_mut(<span class="self">self</span>, node);
 
-            <span class="self">self</span>.<span class="ident">find_remove_attrs</span>(<span class="ident">node</span>);
+            <span class="self">self</span>.find_remove_attrs(node);
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_local_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Local</span>) {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>() {
-            <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> {
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">attr</span>) <span class="op">=</span> <span class="ident">node</span>.<span class="ident">find_remove_attr</span>(<span class="ident">NESTED</span>) {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="kw">_</span>, <span class="ident">expr</span>)) <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">node</span>.<span class="ident">init</span> {
-                        <span class="self">self</span>.<span class="ident">visit_nested</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span>, <span class="kw-2">&amp;</span><span class="ident">attr</span>);
+    <span class="kw">fn </span>visit_local_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Local) {
+        <span class="kw">if </span>!<span class="self">self</span>.cx.has_error() {
+            <span class="kw">if </span>!<span class="self">self</span>.scope.foreign {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(attr) = node.find_remove_attr(NESTED) {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, expr)) = <span class="kw-2">&amp;mut </span>node.init {
+                        <span class="self">self</span>.visit_nested(<span class="kw-2">&amp;mut **</span>expr, <span class="kw-2">&amp;</span>attr);
                     }
                 }
             }
 
-            <span class="ident">visit_mut::visit_local_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
+            visit_mut::visit_local_mut(<span class="self">self</span>, node);
 
-            <span class="self">self</span>.<span class="ident">find_remove_attrs</span>(<span class="ident">node</span>);
+            <span class="self">self</span>.find_remove_attrs(node);
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_stmt_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Stmt</span>) {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>() {
-            <span class="kw">match</span> <span class="ident">node</span> {
-                <span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>) =&gt; <span class="self">self</span>.<span class="ident">visit_expr</span>(<span class="ident">expr</span>, <span class="bool-val">false</span>),
-                <span class="ident">Stmt::Semi</span>(<span class="ident">expr</span>, <span class="kw">_</span>) =&gt; <span class="self">self</span>.<span class="ident">visit_expr</span>(<span class="ident">expr</span>, <span class="bool-val">true</span>),
-                <span class="kw">_</span> =&gt; {
-                    <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">scope</span>;
+    <span class="kw">fn </span>visit_stmt_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Stmt) {
+        <span class="kw">if </span>!<span class="self">self</span>.cx.has_error() {
+            <span class="kw">match </span>node {
+                Stmt::Expr(expr) =&gt; <span class="self">self</span>.visit_expr(expr, <span class="bool-val">false</span>),
+                Stmt::Semi(expr, <span class="kw">_</span>) =&gt; <span class="self">self</span>.visit_expr(expr, <span class="bool-val">true</span>),
+                <span class="kw">_ </span>=&gt; {
+                    <span class="kw">let </span>tmp = <span class="self">self</span>.scope;
 
-                    <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-                        <span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                        <span class="comment">// Record whether other `auto_enum` attribute exists.</span>
-                        <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">other_attr</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                    <span class="kw">if </span>node.any_attr(NAME) {
+                        <span class="self">self</span>.scope.foreign = <span class="bool-val">true</span>;
+                        <span class="comment">// Record whether other `auto_enum` attribute exists.
+                        </span><span class="self">self</span>.cx.other_attr = <span class="bool-val">true</span>;
                     }
 
-                    <span class="ident">VisitStmt::visit_stmt</span>(<span class="self">self</span>, <span class="ident">node</span>);
+                    VisitStmt::visit_stmt(<span class="self">self</span>, node);
 
-                    <span class="self">self</span>.<span class="ident">scope</span> <span class="op">=</span> <span class="ident">tmp</span>;
+                    <span class="self">self</span>.scope = tmp;
                 }
             }
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_item_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Item</span>) {
-        <span class="comment">// Do not recurse into nested items.</span>
+    <span class="kw">fn </span>visit_item_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>Item) {
+        <span class="comment">// Do not recurse into nested items.
+    </span>}
+}
+
+<span class="kw">impl </span>VisitStmt <span class="kw">for </span>Visitor&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">fn </span>cx(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Context {
+        <span class="self">self</span>.cx
     }
 }
 
-<span class="kw">impl</span> <span class="ident">VisitStmt</span> <span class="kw">for</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">cx</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Context</span> {
-        <span class="self">self</span>.<span class="ident">cx</span>
+<span class="comment">// =================================================================================================
+// dummy visitor
+
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>Dummy&lt;<span class="lifetime">&#39;a</span>&gt; {
+    cx: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Context,
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Dummy&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>new(cx: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Context) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ cx }
     }
 }
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// dummy visitor</span>
-
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">Dummy</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">Context</span>,
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Dummy</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">Context</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">cx</span> }
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">VisitMut</span> <span class="kw">for</span> <span class="ident">Dummy</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">visit_stmt_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Stmt</span>) {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>() {
-            <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-                <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">other_attr</span> <span class="op">=</span> <span class="bool-val">true</span>;
+<span class="kw">impl </span>VisitMut <span class="kw">for </span>Dummy&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">fn </span>visit_stmt_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Stmt) {
+        <span class="kw">if </span>!<span class="self">self</span>.cx.has_error() {
+            <span class="kw">if </span>node.any_attr(NAME) {
+                <span class="self">self</span>.cx.other_attr = <span class="bool-val">true</span>;
             }
-            <span class="ident">VisitStmt::visit_stmt</span>(<span class="self">self</span>, <span class="ident">node</span>);
+            VisitStmt::visit_stmt(<span class="self">self</span>, node);
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_expr_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) {
-        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">has_error</span>() {
-            <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-                <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">other_attr</span> <span class="op">=</span> <span class="bool-val">true</span>;
+    <span class="kw">fn </span>visit_expr_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr) {
+        <span class="kw">if </span>!<span class="self">self</span>.cx.has_error() {
+            <span class="kw">if </span>node.any_attr(NAME) {
+                <span class="self">self</span>.cx.other_attr = <span class="bool-val">true</span>;
             }
-            <span class="ident">VisitStmt::visit_expr</span>(<span class="self">self</span>, <span class="ident">node</span>, <span class="bool-val">false</span>);
+            VisitStmt::visit_expr(<span class="self">self</span>, node, <span class="bool-val">false</span>);
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_item_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Item</span>) {
-        <span class="comment">// Do not recurse into nested items.</span>
+    <span class="kw">fn </span>visit_item_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>Item) {
+        <span class="comment">// Do not recurse into nested items.
+    </span>}
+}
+
+<span class="kw">impl </span>VisitStmt <span class="kw">for </span>Dummy&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="kw">fn </span>cx(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Context {
+        <span class="self">self</span>.cx
     }
 }
 
-<span class="kw">impl</span> <span class="ident">VisitStmt</span> <span class="kw">for</span> <span class="ident">Dummy</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">cx</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Context</span> {
-        <span class="self">self</span>.<span class="ident">cx</span>
-    }
-}
+<span class="comment">// =================================================================================================
+// VisitStmt
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// VisitStmt</span>
+</span><span class="kw">trait </span>VisitStmt: VisitMut {
+    <span class="kw">fn </span>cx(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Context;
 
-<span class="kw">trait</span> <span class="ident">VisitStmt</span>: <span class="ident">VisitMut</span> {
-    <span class="kw">fn</span> <span class="ident">cx</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Context</span>;
+    <span class="kw">fn </span>visit_expr(visitor: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, node: <span class="kw-2">&amp;mut </span>Expr, has_semi: bool) {
+        <span class="kw">let </span>attr = node.find_remove_attr(NAME);
 
-    <span class="kw">fn</span> <span class="ident">visit_expr</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="self">Self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>, <span class="ident">has_semi</span>: <span class="ident">bool</span>) {
-        <span class="kw">let</span> <span class="ident">attr</span> <span class="op">=</span> <span class="ident">node</span>.<span class="ident">find_remove_attr</span>(<span class="ident">NAME</span>);
-
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">attr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> {
-            <span class="ident">syn::parse2</span>::<span class="op">&lt;</span><span class="ident">Group</span><span class="op">&gt;</span>(<span class="ident">attr</span>.<span class="ident">tokens</span>)
-                .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">group</span><span class="op">|</span> <span class="ident">visitor</span>.<span class="ident">cx</span>().<span class="ident">make_child</span>(<span class="ident">node</span>.<span class="ident">to_token_stream</span>(), <span class="ident">group</span>.<span class="ident">stream</span>()))
+        <span class="kw">let </span>res = attr.map(|attr| {
+            syn::parse2::&lt;Group&gt;(attr.tokens)
+                .and_then(|group| visitor.cx().make_child(node.to_token_stream(), group.stream()))
         });
 
-        <span class="ident">visit_mut::visit_expr_mut</span>(<span class="ident">visitor</span>, <span class="ident">node</span>);
+        visit_mut::visit_expr_mut(visitor, node);
 
-        <span class="kw">match</span> <span class="ident">res</span> {
-            <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) =&gt; <span class="ident">visitor</span>.<span class="ident">cx</span>().<span class="ident">error</span>(<span class="ident">e</span>),
-            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">cx</span>)) =&gt; {
-                <span class="ident"><span class="kw">super</span>::expand_parent_expr</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cx</span>, <span class="ident">node</span>, <span class="ident">has_semi</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>));
-                <span class="ident">visitor</span>.<span class="ident">cx</span>().<span class="ident">join_child</span>(<span class="ident">cx</span>)
+        <span class="kw">match </span>res {
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(e)) =&gt; visitor.cx().error(e),
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>cx)) =&gt; {
+                <span class="kw">super</span>::expand_parent_expr(<span class="kw-2">&amp;mut </span>cx, node, has_semi).unwrap_or_else(|e| cx.error(e));
+                visitor.cx().join_child(cx)
             }
-            <span class="prelude-val">None</span> =&gt; {}
+            <span class="prelude-val">None </span>=&gt; {}
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">visit_stmt</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="self">Self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Stmt</span>) {
-        <span class="kw">let</span> <span class="ident">attr</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">node</span> {
-            <span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>) =&gt; {
-                <span class="ident"><span class="self">Self</span>::visit_expr</span>(<span class="ident">visitor</span>, <span class="ident">expr</span>, <span class="bool-val">false</span>);
+    <span class="kw">fn </span>visit_stmt(visitor: <span class="kw-2">&amp;mut </span><span class="self">Self</span>, node: <span class="kw-2">&amp;mut </span>Stmt) {
+        <span class="kw">let </span>attr = <span class="kw">match </span>node {
+            Stmt::Expr(expr) =&gt; {
+                <span class="self">Self</span>::visit_expr(visitor, expr, <span class="bool-val">false</span>);
                 <span class="kw">return</span>;
             }
-            <span class="ident">Stmt::Semi</span>(<span class="ident">expr</span>, <span class="kw">_</span>) =&gt; {
-                <span class="ident"><span class="self">Self</span>::visit_expr</span>(<span class="ident">visitor</span>, <span class="ident">expr</span>, <span class="bool-val">true</span>);
+            Stmt::Semi(expr, <span class="kw">_</span>) =&gt; {
+                <span class="self">Self</span>::visit_expr(visitor, expr, <span class="bool-val">true</span>);
                 <span class="kw">return</span>;
             }
-            <span class="ident">Stmt::Local</span>(<span class="ident">local</span>) =&gt; <span class="ident">local</span>.<span class="ident">find_remove_attr</span>(<span class="ident">NAME</span>),
-            <span class="comment">// Do not recurse into nested items.</span>
-            <span class="ident">Stmt::Item</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span>,
+            Stmt::Local(local) =&gt; local.find_remove_attr(NAME),
+            <span class="comment">// Do not recurse into nested items.
+            </span>Stmt::Item(<span class="kw">_</span>) =&gt; <span class="kw">return</span>,
         };
 
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">attr</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> {
-            <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">attr</span>.<span class="ident">tokens</span>.<span class="ident">is_empty</span>() {
-                <span class="ident">TokenStream::new</span>()
-            } <span class="kw">else</span> {
-                <span class="ident">syn::parse2</span>::<span class="op">&lt;</span><span class="ident">Group</span><span class="op">&gt;</span>(<span class="ident">attr</span>.<span class="ident">tokens</span>)<span class="question-mark">?</span>.<span class="ident">stream</span>()
+        <span class="kw">let </span>res = attr.map(|attr| {
+            <span class="kw">let </span>args = <span class="kw">if </span>attr.tokens.is_empty() {
+                TokenStream::new()
+            } <span class="kw">else </span>{
+                syn::parse2::&lt;Group&gt;(attr.tokens)<span class="question-mark">?</span>.stream()
             };
-            <span class="ident">visitor</span>.<span class="ident">cx</span>().<span class="ident">make_child</span>(<span class="ident">node</span>.<span class="ident">to_token_stream</span>(), <span class="ident">args</span>)
+            visitor.cx().make_child(node.to_token_stream(), args)
         });
 
-        <span class="ident">visit_mut::visit_stmt_mut</span>(<span class="ident">visitor</span>, <span class="ident">node</span>);
+        visit_mut::visit_stmt_mut(visitor, node);
 
-        <span class="kw">match</span> <span class="ident">res</span> {
-            <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">e</span>)) =&gt; <span class="ident">visitor</span>.<span class="ident">cx</span>().<span class="ident">error</span>(<span class="ident">e</span>),
-            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="kw-2">mut</span> <span class="ident">cx</span>)) =&gt; {
-                <span class="ident"><span class="kw">super</span>::expand_parent_stmt</span>(<span class="kw-2">&amp;mut</span> <span class="ident">cx</span>, <span class="ident">node</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">cx</span>.<span class="ident">error</span>(<span class="ident">e</span>));
-                <span class="ident">visitor</span>.<span class="ident">cx</span>().<span class="ident">join_child</span>(<span class="ident">cx</span>)
+        <span class="kw">match </span>res {
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(e)) =&gt; visitor.cx().error(e),
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>cx)) =&gt; {
+                <span class="kw">super</span>::expand_parent_stmt(<span class="kw-2">&amp;mut </span>cx, node).unwrap_or_else(|e| cx.error(e));
+                visitor.cx().join_child(cx)
             }
-            <span class="prelude-val">None</span> =&gt; {}
+            <span class="prelude-val">None </span>=&gt; {}
         }
     }
 }
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// FindNested</span>
+<span class="comment">// =================================================================================================
+// FindNested
 
-<span class="doccomment">/// Find `#[nested]` attribute.</span>
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">find_nested</span>(<span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitedNode</span>) -&gt; <span class="ident">bool</span> {
-    <span class="kw">struct</span> <span class="ident">FindNested</span> {
-        <span class="ident">has</span>: <span class="ident">bool</span>,
+</span><span class="doccomment">/// Find `#[nested]` attribute.
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>find_nested(node: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitedNode) -&gt; bool {
+    <span class="kw">struct </span>FindNested {
+        has: bool,
     }
 
-    <span class="kw">impl</span> <span class="ident">VisitMut</span> <span class="kw">for</span> <span class="ident">FindNested</span> {
-        <span class="kw">fn</span> <span class="ident">visit_expr_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-                <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NESTED</span>) {
-                    <span class="self">self</span>.<span class="ident">has</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                } <span class="kw">else</span> {
-                    <span class="ident">visit_mut::visit_expr_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
+    <span class="kw">impl </span>VisitMut <span class="kw">for </span>FindNested {
+        <span class="kw">fn </span>visit_expr_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr) {
+            <span class="kw">if </span>!node.any_attr(NAME) {
+                <span class="kw">if </span>node.any_empty_attr(NESTED) {
+                    <span class="self">self</span>.has = <span class="bool-val">true</span>;
+                } <span class="kw">else </span>{
+                    visit_mut::visit_expr_mut(<span class="self">self</span>, node);
                 }
             }
         }
 
-        <span class="kw">fn</span> <span class="ident">visit_arm_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Arm</span>) {
-            <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NESTED</span>) {
-                <span class="self">self</span>.<span class="ident">has</span> <span class="op">=</span> <span class="bool-val">true</span>;
-            } <span class="kw">else</span> {
-                <span class="ident">visit_mut::visit_arm_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
+        <span class="kw">fn </span>visit_arm_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Arm) {
+            <span class="kw">if </span>node.any_empty_attr(NESTED) {
+                <span class="self">self</span>.has = <span class="bool-val">true</span>;
+            } <span class="kw">else </span>{
+                visit_mut::visit_arm_mut(<span class="self">self</span>, node);
             }
         }
 
-        <span class="kw">fn</span> <span class="ident">visit_local_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Local</span>) {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-                <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NESTED</span>) {
-                    <span class="self">self</span>.<span class="ident">has</span> <span class="op">=</span> <span class="bool-val">true</span>;
-                } <span class="kw">else</span> {
-                    <span class="ident">visit_mut::visit_local_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
+        <span class="kw">fn </span>visit_local_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Local) {
+            <span class="kw">if </span>!node.any_attr(NAME) {
+                <span class="kw">if </span>node.any_empty_attr(NESTED) {
+                    <span class="self">self</span>.has = <span class="bool-val">true</span>;
+                } <span class="kw">else </span>{
+                    visit_mut::visit_local_mut(<span class="self">self</span>, node);
                 }
             }
         }
 
-        <span class="kw">fn</span> <span class="ident">visit_item_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Item</span>) {
-            <span class="comment">// Do not recurse into nested items.</span>
-        }
+        <span class="kw">fn </span>visit_item_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>Item) {
+            <span class="comment">// Do not recurse into nested items.
+        </span>}
     }
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">visitor</span> <span class="op">=</span> <span class="ident">FindNested</span> { <span class="ident">has</span>: <span class="bool-val">false</span> };
-    <span class="ident">node</span>.<span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="ident">visitor</span>);
-    <span class="ident">visitor</span>.<span class="ident">has</span>
+    <span class="kw">let </span><span class="kw-2">mut </span>visitor = FindNested { has: <span class="bool-val">false </span>};
+    node.visited(<span class="kw-2">&amp;mut </span>visitor);
+    visitor.has
 }
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// FnVisitor</span>
+<span class="comment">// =================================================================================================
+// FnVisitor
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">FnCount</span> {
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">try_</span>: <span class="ident">usize</span>,
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">return_</span>: <span class="ident">usize</span>,
+</span><span class="attribute">#[derive(Default)]</span>
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>FnCount {
+    <span class="kw">pub</span>(<span class="kw">super</span>) try_: usize,
+    <span class="kw">pub</span>(<span class="kw">super</span>) return_: usize,
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">visit_fn</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitedNode</span>) -&gt; <span class="ident">FnCount</span> {
-    <span class="kw">struct</span> <span class="ident">FnVisitor</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-        <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Context</span>,
-        <span class="ident">scope</span>: <span class="ident">Scope</span>,
-        <span class="ident">count</span>: <span class="ident">FnCount</span>,
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>visit_fn(cx: <span class="kw-2">&amp;</span>Context, node: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitedNode) -&gt; FnCount {
+    <span class="kw">struct </span>FnVisitor&lt;<span class="lifetime">&#39;a</span>&gt; {
+        cx: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Context,
+        scope: Scope,
+        count: FnCount,
     }
 
-    <span class="kw">impl</span> <span class="ident">VisitMut</span> <span class="kw">for</span> <span class="ident">FnVisitor</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">visit_expr_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) {
-            <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">scope</span>;
+    <span class="kw">impl </span>VisitMut <span class="kw">for </span>FnVisitor&lt;<span class="lifetime">&#39;_</span>&gt; {
+        <span class="kw">fn </span>visit_expr_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr) {
+            <span class="kw">let </span>tmp = <span class="self">self</span>.scope;
 
-            <span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">check_expr</span>(<span class="ident">node</span>);
+            <span class="self">self</span>.scope.check_expr(node);
 
-            <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">closure</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">node</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NEVER</span>) {
-                <span class="kw">match</span> <span class="ident">node</span> {
-                    <span class="ident">Expr::Try</span>(<span class="ident">ExprTry</span> { <span class="ident">expr</span>, .. }) =&gt; {
-                        <span class="comment">// Skip if `&lt;expr&gt;` is a marker macro.</span>
-                        <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">is_marker_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span>) {
-                            <span class="self">self</span>.<span class="ident">count</span>.<span class="ident">try_</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="kw">if </span>!<span class="self">self</span>.scope.closure &amp;&amp; !node.any_empty_attr(NEVER) {
+                <span class="kw">match </span>node {
+                    Expr::Try(ExprTry { expr, .. }) =&gt; {
+                        <span class="comment">// Skip if `&lt;expr&gt;` is a marker macro.
+                        </span><span class="kw">if </span>!<span class="self">self</span>.cx.is_marker_expr(<span class="kw-2">&amp;**</span>expr) {
+                            <span class="self">self</span>.count.try_ += <span class="number">1</span>;
                         }
                     }
-                    <span class="ident">Expr::Return</span>(<span class="ident">ExprReturn</span> { <span class="ident">expr</span>, .. }) =&gt; {
-                        <span class="comment">// Skip if `&lt;expr&gt;` is a marker macro.</span>
-                        <span class="kw">if</span> <span class="ident">expr</span>.<span class="ident">as_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">true</span>, <span class="op">|</span><span class="ident">expr</span><span class="op">|</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">is_marker_expr</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span>)) {
-                            <span class="self">self</span>.<span class="ident">count</span>.<span class="ident">return_</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                    Expr::Return(ExprReturn { expr, .. }) =&gt; {
+                        <span class="comment">// Skip if `&lt;expr&gt;` is a marker macro.
+                        </span><span class="kw">if </span>expr.as_ref().map_or(<span class="bool-val">true</span>, |expr| !<span class="self">self</span>.cx.is_marker_expr(<span class="kw-2">&amp;**</span>expr)) {
+                            <span class="self">self</span>.count.return_ += <span class="number">1</span>;
                         }
                     }
-                    <span class="kw">_</span> =&gt; {}
+                    <span class="kw">_ </span>=&gt; {}
                 }
             }
 
-            <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-                <span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="kw">if </span>node.any_attr(NAME) {
+                <span class="self">self</span>.scope.foreign = <span class="bool-val">true</span>;
             }
 
-            <span class="ident">visit_mut::visit_expr_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
+            visit_mut::visit_expr_mut(<span class="self">self</span>, node);
 
-            <span class="self">self</span>.<span class="ident">scope</span> <span class="op">=</span> <span class="ident">tmp</span>;
+            <span class="self">self</span>.scope = tmp;
         }
 
-        <span class="kw">fn</span> <span class="ident">visit_stmt_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Stmt</span>) {
-            <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">scope</span>;
+        <span class="kw">fn </span>visit_stmt_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Stmt) {
+            <span class="kw">let </span>tmp = <span class="self">self</span>.scope;
 
-            <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-                <span class="self">self</span>.<span class="ident">scope</span>.<span class="ident">foreign</span> <span class="op">=</span> <span class="bool-val">true</span>;
+            <span class="kw">if </span>node.any_attr(NAME) {
+                <span class="self">self</span>.scope.foreign = <span class="bool-val">true</span>;
             }
 
-            <span class="ident">visit_mut::visit_stmt_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
+            visit_mut::visit_stmt_mut(<span class="self">self</span>, node);
 
-            <span class="self">self</span>.<span class="ident">scope</span> <span class="op">=</span> <span class="ident">tmp</span>;
+            <span class="self">self</span>.scope = tmp;
         }
 
-        <span class="kw">fn</span> <span class="ident">visit_item_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Item</span>) {
-            <span class="comment">// Do not recurse into nested items.</span>
-        }
+        <span class="kw">fn </span>visit_item_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>Item) {
+            <span class="comment">// Do not recurse into nested items.
+        </span>}
     }
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">visitor</span> <span class="op">=</span> <span class="ident">FnVisitor</span> { <span class="ident">cx</span>, <span class="ident">scope</span>: <span class="ident">Scope::default</span>(), <span class="ident">count</span>: <span class="ident">FnCount::default</span>() };
-    <span class="ident">node</span>.<span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="ident">visitor</span>);
-    <span class="ident">visitor</span>.<span class="ident">count</span>
+    <span class="kw">let </span><span class="kw-2">mut </span>visitor = FnVisitor { cx, scope: Scope::default(), count: FnCount::default() };
+    node.visited(<span class="kw-2">&amp;mut </span>visitor);
+    visitor.count
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

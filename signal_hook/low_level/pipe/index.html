@@ -41,22 +41,22 @@ signals of the same kind together.</p>
 <p>This example waits for at last one <code>SIGUSR1</code> signal to come before continuing (and
 terminating). It sends the signal to itself, so it correctly terminates.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">std::io</span>::{<span class="ident">Error</span>, <span class="ident">Read</span>};
-<span class="kw">use</span> <span class="ident">std::os::unix::net::UnixStream</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::io::{Error, Read};
+<span class="kw">use </span>std::os::unix::net::UnixStream;
 
-<span class="kw">use</span> <span class="ident">signal_hook::consts::SIGUSR1</span>;
-<span class="kw">use</span> <span class="ident">signal_hook::low_level</span>::{<span class="ident">pipe</span>, <span class="ident">raise</span>};
+<span class="kw">use </span>signal_hook::consts::SIGUSR1;
+<span class="kw">use </span>signal_hook::low_level::{pipe, raise};
 
-<span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">read</span>, <span class="ident">write</span>) <span class="op">=</span> <span class="ident">UnixStream::pair</span>()<span class="question-mark">?</span>;
-    <span class="ident">pipe::register</span>(<span class="ident">SIGUSR1</span>, <span class="ident">write</span>)<span class="question-mark">?</span>;
-    <span class="comment">// This will write into the pipe write end through the signal handler</span>
-    <span class="ident">raise</span>(<span class="ident">SIGUSR1</span>).<span class="ident">unwrap</span>();
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buff</span> <span class="op">=</span> [<span class="number">0</span>];
-    <span class="ident">read</span>.<span class="ident">read_exact</span>(<span class="kw-2">&amp;mut</span> <span class="ident">buff</span>)<span class="question-mark">?</span>;
+<span class="kw">fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="kw">let </span>(<span class="kw-2">mut </span>read, write) = UnixStream::pair()<span class="question-mark">?</span>;
+    pipe::register(SIGUSR1, write)<span class="question-mark">?</span>;
+    <span class="comment">// This will write into the pipe write end through the signal handler
+    </span>raise(SIGUSR1).unwrap();
+    <span class="kw">let </span><span class="kw-2">mut </span>buff = [<span class="number">0</span>];
+    read.read_exact(<span class="kw-2">&amp;mut </span>buff)<span class="question-mark">?</span>;
     <span class="macro">println!</span>(<span class="string">&quot;Happily terminating&quot;</span>);
     <span class="prelude-val">Ok</span>(())
 }</code></pre></div>
 </div></details><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.register.html" title="signal_hook::low_level::pipe::register fn">register</a></div><div class="item-right docblock-short"><p>Registers a write to a self-pipe whenever there’s the signal.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.register_raw.html" title="signal_hook::low_level::pipe::register_raw fn">register_raw</a></div><div class="item-right docblock-short"><p>Registers a write to a self-pipe whenever there’s the signal.</p>
-</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="signal_hook" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

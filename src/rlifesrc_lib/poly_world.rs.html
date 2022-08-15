@@ -162,169 +162,169 @@
 <span id="162">162</span>
 <span id="163">163</span>
 <span id="164">164</span>
-</pre><pre class="rust"><code><span class="doccomment">//! A polymorphic world.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! A polymorphic world.
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>},
-    <span class="ident">config::Config</span>,
-    <span class="ident">rules</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>, <span class="ident">NtLife</span>, <span class="ident">NtLifeGen</span>},
-    <span class="ident">search</span>::{<span class="ident">Backjump</span>, <span class="ident">LifeSrc</span>, <span class="ident">Status</span>},
-    <span class="ident">world::World</span>,
+</span><span class="kw">use crate</span>::{
+    cells::{Coord, State},
+    config::Config,
+    rules::{Life, LifeGen, NtLife, NtLifeGen},
+    search::{Backjump, LifeSrc, Status},
+    world::World,
 };
-<span class="kw">use</span> <span class="ident">from_variants::FromVariants</span>;
+<span class="kw">use </span>from_variants::FromVariants;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">error::Error</span>, <span class="ident">save::WorldSer</span>};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="kw">use crate</span>::{error::Error, save::WorldSer};
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cells::ALIVE</span>;
+<span class="attribute">#[cfg(doc)]</span>
+<span class="kw">use </span><span class="kw">crate</span>::cells::ALIVE;
 
-<span class="doccomment">/// A polymorphic [`World`].</span>
-<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">FromVariants</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PolyWorld</span> {
-    <span class="doccomment">/// A [`World`] with [`Life`] rule and [`LifeSrc`] algorithm.</span>
-    <span class="ident">Life</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">Life</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// A [`World`] with [`LifeGen`] rule and [`LifeSrc`] algorithm.</span>
-    <span class="ident">LifeGen</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">LifeGen</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// A [`World`] with [`NtLife`] rule and [`LifeSrc`] algorithm.</span>
-    <span class="ident">NtLife</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">NtLife</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// A [`World`] with [`NtLifeGen`] rule and [`LifeSrc`] algorithm.</span>
-    <span class="ident">NtLifeGen</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">NtLifeGen</span>, <span class="ident">LifeSrc</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// A [`World`] with [`Life`] rule and [`Backjump`] algorithm.</span>
-    <span class="ident">LifeBackjump</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">Life</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="ident">Life</span><span class="op">&gt;</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// A [`World`] with [`NtLife`] rule and [`Backjump`] algorithm.</span>
-    <span class="ident">NtLifeBackjump</span>(<span class="ident">World</span><span class="op">&lt;</span><span class="ident">NtLife</span>, <span class="ident">Backjump</span><span class="op">&lt;</span><span class="ident">NtLife</span><span class="op">&gt;</span><span class="op">&gt;</span>),
+<span class="doccomment">/// A polymorphic [`World`].
+</span><span class="attribute">#[non_exhaustive]</span>
+<span class="attribute">#[derive(FromVariants)]</span>
+<span class="kw">pub enum </span>PolyWorld {
+    <span class="doccomment">/// A [`World`] with [`Life`] rule and [`LifeSrc`] algorithm.
+    </span>Life(World&lt;Life, LifeSrc&gt;),
+    <span class="doccomment">/// A [`World`] with [`LifeGen`] rule and [`LifeSrc`] algorithm.
+    </span>LifeGen(World&lt;LifeGen, LifeSrc&gt;),
+    <span class="doccomment">/// A [`World`] with [`NtLife`] rule and [`LifeSrc`] algorithm.
+    </span>NtLife(World&lt;NtLife, LifeSrc&gt;),
+    <span class="doccomment">/// A [`World`] with [`NtLifeGen`] rule and [`LifeSrc`] algorithm.
+    </span>NtLifeGen(World&lt;NtLifeGen, LifeSrc&gt;),
+    <span class="doccomment">/// A [`World`] with [`Life`] rule and [`Backjump`] algorithm.
+    </span>LifeBackjump(World&lt;Life, Backjump&lt;Life&gt;&gt;),
+    <span class="doccomment">/// A [`World`] with [`NtLife`] rule and [`Backjump`] algorithm.
+    </span>NtLifeBackjump(World&lt;NtLife, Backjump&lt;NtLife&gt;&gt;),
 }
 
-<span class="macro">macro_rules!</span> <span class="ident">dispatch</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>: <span class="ident">ident</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>: <span class="ident">expr</span>) =&gt; {
-        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span> {
-            <span class="ident">PolyWorld::Life</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
-            <span class="ident">PolyWorld::LifeGen</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
-            <span class="ident">PolyWorld::NtLife</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
-            <span class="ident">PolyWorld::NtLifeGen</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
-            <span class="ident">PolyWorld::LifeBackjump</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
-            <span class="ident">PolyWorld::NtLifeBackjump</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">world</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">action</span>,
+<span class="macro">macro_rules!</span> dispatch {
+    (<span class="macro-nonterminal">$self</span>: expr, <span class="macro-nonterminal">$world</span>: ident =&gt; <span class="macro-nonterminal">$action</span>: expr) =&gt; {
+        <span class="kw">match </span><span class="macro-nonterminal">$self </span>{
+            PolyWorld::Life(<span class="macro-nonterminal">$world</span>) =&gt; <span class="macro-nonterminal">$action</span>,
+            PolyWorld::LifeGen(<span class="macro-nonterminal">$world</span>) =&gt; <span class="macro-nonterminal">$action</span>,
+            PolyWorld::NtLife(<span class="macro-nonterminal">$world</span>) =&gt; <span class="macro-nonterminal">$action</span>,
+            PolyWorld::NtLifeGen(<span class="macro-nonterminal">$world</span>) =&gt; <span class="macro-nonterminal">$action</span>,
+            PolyWorld::LifeBackjump(<span class="macro-nonterminal">$world</span>) =&gt; <span class="macro-nonterminal">$action</span>,
+            PolyWorld::NtLifeBackjump(<span class="macro-nonterminal">$world</span>) =&gt; <span class="macro-nonterminal">$action</span>,
         }
     };
 }
 
-<span class="kw">impl</span> <span class="ident">PolyWorld</span> {
-    <span class="doccomment">/// The search function.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns [`Status::Found`] if a result is found,</span>
-    <span class="doccomment">/// [`Status::None`] if such pattern does not exist,</span>
-    <span class="doccomment">/// [`Status::Searching`] if the number of steps exceeds `max_step`</span>
-    <span class="doccomment">/// and no results are found.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">search</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">max_step</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>) -&gt; <span class="ident">Status</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">search</span>(<span class="ident">max_step</span>))
+<span class="kw">impl </span>PolyWorld {
+    <span class="doccomment">/// The search function.
+    ///
+    /// Returns [`Status::Found`] if a result is found,
+    /// [`Status::None`] if such pattern does not exist,
+    /// [`Status::Searching`] if the number of steps exceeds `max_step`
+    /// and no results are found.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>search(<span class="kw-2">&amp;mut </span><span class="self">self</span>, max_step: <span class="prelude-ty">Option</span>&lt;u64&gt;) -&gt; Status {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.search(max_step))
     }
 
-    <span class="doccomment">/// Gets the state of a cell. Returns `Err(())` if there is no such cell.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_cell_state</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">coord</span>: <span class="ident">Coord</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">get_cell_state</span>(<span class="ident">coord</span>))
+    <span class="doccomment">/// Gets the state of a cell. Returns `Err(())` if there is no such cell.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>get_cell_state(<span class="kw-2">&amp;</span><span class="self">self</span>, coord: Coord) -&gt; <span class="prelude-ty">Option</span>&lt;State&gt; {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.get_cell_state(coord))
     }
 
-    <span class="doccomment">/// World configuration.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">config</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">Config</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">config</span>())
+    <span class="doccomment">/// World configuration.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Config {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.config())
     }
 
-    <span class="doccomment">/// Whether the rule is a Generations rule.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_gen_rule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">is_gen_rule</span>())
+    <span class="doccomment">/// Whether the rule is a Generations rule.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>is_gen_rule(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.is_gen_rule())
     }
 
-    <span class="doccomment">/// Whether the rule contains `B0`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In other words, whether a cell would become [`ALIVE`] in the next</span>
-    <span class="doccomment">/// generation, if all its neighbors in this generation are dead.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_b0_rule</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">is_b0_rule</span>())
+    <span class="doccomment">/// Whether the rule contains `B0`.
+    ///
+    /// In other words, whether a cell would become [`ALIVE`] in the next
+    /// generation, if all its neighbors in this generation are dead.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>is_b0_rule(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.is_b0_rule())
     }
 
-    <span class="doccomment">/// Number of known living cells in some generation.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For Generations rules, dying cells are not counted.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cell_count_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) -&gt; <span class="ident">u32</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">cell_count_gen</span>(<span class="ident">t</span>))
+    <span class="doccomment">/// Number of known living cells in some generation.
+    ///
+    /// For Generations rules, dying cells are not counted.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>cell_count_gen(<span class="kw-2">&amp;</span><span class="self">self</span>, t: i32) -&gt; u32 {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.cell_count_gen(t))
     }
 
-    <span class="doccomment">/// Minimum number of known living cells in all generation.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For Generations rules, dying cells are not counted.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cell_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">cell_count</span>())
+    <span class="doccomment">/// Minimum number of known living cells in all generation.
+    ///
+    /// For Generations rules, dying cells are not counted.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>cell_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.cell_count())
     }
 
-    <span class="doccomment">/// Number of conflicts during the search.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">conflicts</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u64</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">conflicts</span>())
+    <span class="doccomment">/// Number of conflicts during the search.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>conflicts(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.conflicts())
     }
 
-    <span class="doccomment">/// Set the max cell counts.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Currently this is the only parameter that you can change</span>
-    <span class="doccomment">/// during the search.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_max_cell_count</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">max_cell_count</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>) {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">set_max_cell_count</span>(<span class="ident">max_cell_count</span>));
+    <span class="doccomment">/// Set the max cell counts.
+    ///
+    /// Currently this is the only parameter that you can change
+    /// during the search.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>set_max_cell_count(<span class="kw-2">&amp;mut </span><span class="self">self</span>, max_cell_count: <span class="prelude-ty">Option</span>&lt;u32&gt;) {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.set_max_cell_count(max_cell_count));
     }
 
-    <span class="doccomment">/// Displays the whole world in some generation,</span>
-    <span class="doccomment">/// in a mix of [Plaintext](https://conwaylife.com/wiki/Plaintext) and</span>
-    <span class="doccomment">/// [RLE](https://conwaylife.com/wiki/Rle) format.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * **Dead** cells are represented by `.`;</span>
-    <span class="doccomment">/// * **Living** cells are represented by `o` for rules with 2 states,</span>
-    <span class="doccomment">///   `A` for rules with more states;</span>
-    <span class="doccomment">/// * **Dying** cells are represented by uppercase letters starting from `B`;</span>
-    <span class="doccomment">/// * **Unknown** cells are represented by `?`;</span>
-    <span class="doccomment">/// * Each line is ended with `$`;</span>
-    <span class="doccomment">/// * The whole pattern is ended with `!`.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rle_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) -&gt; <span class="ident">String</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">rle_gen</span>(<span class="ident">t</span>))
+    <span class="doccomment">/// Displays the whole world in some generation,
+    /// in a mix of [Plaintext](https://conwaylife.com/wiki/Plaintext) and
+    /// [RLE](https://conwaylife.com/wiki/Rle) format.
+    ///
+    /// * **Dead** cells are represented by `.`;
+    /// * **Living** cells are represented by `o` for rules with 2 states,
+    ///   `A` for rules with more states;
+    /// * **Dying** cells are represented by uppercase letters starting from `B`;
+    /// * **Unknown** cells are represented by `?`;
+    /// * Each line is ended with `$`;
+    /// * The whole pattern is ended with `!`.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>rle_gen(<span class="kw-2">&amp;</span><span class="self">self</span>, t: i32) -&gt; String {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.rle_gen(t))
     }
 
-    <span class="doccomment">/// Displays the whole world in some generation in</span>
-    <span class="doccomment">/// [Plaintext](https://conwaylife.com/wiki/Plaintext) format.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Do not use this for Generations rules.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * **Dead** cells are represented by `.`;</span>
-    <span class="doccomment">/// * **Living** and **Dying** cells are represented by `o`;</span>
-    <span class="doccomment">/// * **Unknown** cells are represented by `?`.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">plaintext_gen</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">t</span>: <span class="ident">i32</span>) -&gt; <span class="ident">String</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">plaintext_gen</span>(<span class="ident">t</span>))
+    <span class="doccomment">/// Displays the whole world in some generation in
+    /// [Plaintext](https://conwaylife.com/wiki/Plaintext) format.
+    ///
+    /// Do not use this for Generations rules.
+    ///
+    /// * **Dead** cells are represented by `.`;
+    /// * **Living** and **Dying** cells are represented by `o`;
+    /// * **Unknown** cells are represented by `?`.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>plaintext_gen(<span class="kw-2">&amp;</span><span class="self">self</span>, t: i32) -&gt; String {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.plaintext_gen(t))
     }
 
-    <span class="doccomment">/// Saves the world as a [`WorldSer`],</span>
-    <span class="doccomment">/// which can be easily serialized.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ser</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">WorldSer</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">ser</span>())
+    <span class="doccomment">/// Saves the world as a [`WorldSer`],
+    /// which can be easily serialized.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>ser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; WorldSer {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.ser())
     }
 
-    <span class="doccomment">/// Restores the world from the [`WorldSer`].</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deser</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ser</span>: <span class="kw-2">&amp;</span><span class="ident">WorldSer</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">dispatch!</span>(<span class="self">self</span>, <span class="ident">world</span> =&gt; <span class="ident">world</span>.<span class="ident">deser</span>(<span class="ident">ser</span>))
+    <span class="doccomment">/// Restores the world from the [`WorldSer`].
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>deser(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ser: <span class="kw-2">&amp;</span>WorldSer) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="macro">dispatch!</span>(<span class="self">self</span>, world =&gt; world.deser(ser))
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

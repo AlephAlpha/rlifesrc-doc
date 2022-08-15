@@ -463,470 +463,470 @@
 <span id="463">463</span>
 <span id="464">464</span>
 <span id="465">465</span>
-</pre><pre class="rust"><code><span class="doccomment">//! World configuration.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! World configuration.
 
-<span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">cells</span>::{<span class="ident">Coord</span>, <span class="ident">State</span>},
-    <span class="ident">error::Error</span>,
-    <span class="ident">poly_world::PolyWorld</span>,
-    <span class="ident">rules</span>::{<span class="ident">Life</span>, <span class="ident">LifeGen</span>, <span class="ident">NtLife</span>, <span class="ident">NtLifeGen</span>, <span class="ident">Rule</span>},
-    <span class="ident">world::World</span>,
+</span><span class="kw">use crate</span>::{
+    cells::{Coord, State},
+    error::Error,
+    poly_world::PolyWorld,
+    rules::{Life, LifeGen, NtLife, NtLifeGen, Rule},
+    world::World,
 };
-<span class="kw">use</span> <span class="ident">educe::Educe</span>;
+<span class="kw">use </span>educe::Educe;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)))]</span>
-<span class="kw">use</span> <span class="ident">ca_formats</span>::{
-    <span class="ident">rle</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">RleError</span>, <span class="ident">Rle</span>},
-    <span class="ident">CellData</span>, <span class="ident">Input</span>,
+<span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]</span>
+<span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]</span>
+<span class="kw">use </span>ca_formats::{
+    rle::{Error <span class="kw">as </span>RleError, Rle},
+    CellData, Input,
 };
 
-<span class="kw">mod</span> <span class="ident">d8</span>;
-<span class="kw">mod</span> <span class="ident">search_order</span>;
+<span class="kw">mod </span>d8;
+<span class="kw">mod </span>search_order;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">d8</span>::{<span class="ident">Symmetry</span>, <span class="ident">Transform</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">search_order::SearchOrder</span>;
+<span class="kw">pub use </span>d8::{Symmetry, Transform};
+<span class="kw">pub use </span>search_order::SearchOrder;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">doc</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cells</span>::{<span class="ident">ALIVE</span>, <span class="ident">DEAD</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+<span class="attribute">#[cfg(doc)]</span>
+<span class="kw">use </span><span class="kw">crate</span>::cells::{ALIVE, DEAD};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="doccomment">/// How to choose a state for an unknown cell.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">NewState</span> {
-    <span class="doccomment">/// Chooses the background state.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For rules without `B0`, it always chooses [`DEAD`].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For rules with `B0`, the background changes periodically.</span>
-    <span class="doccomment">/// For example, for non-Generations rules,</span>
-    <span class="doccomment">/// it chooses [`DEAD`] on even generations,</span>
-    <span class="doccomment">/// [`ALIVE`] on odd generations.</span>
-    <span class="ident">ChooseDead</span>,
+<span class="doccomment">/// How to choose a state for an unknown cell.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Educe, PartialEq, Eq, Hash)]</span>
+<span class="attribute">#[educe(Default)]</span>
+<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="kw">pub enum </span>NewState {
+    <span class="doccomment">/// Chooses the background state.
+    ///
+    /// For rules without `B0`, it always chooses [`DEAD`].
+    ///
+    /// For rules with `B0`, the background changes periodically.
+    /// For example, for non-Generations rules,
+    /// it chooses [`DEAD`] on even generations,
+    /// [`ALIVE`] on odd generations.
+    </span>ChooseDead,
 
-    <span class="doccomment">/// Chooses the opposite of the background state.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For rules without `B0`, it always chooses [`ALIVE`].</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For rules with `B0`, the background changes periodically.</span>
-    <span class="doccomment">/// For example, for non-Generations rules,</span>
-    <span class="doccomment">/// it chooses [`ALIVE`] on even generations,</span>
-    <span class="doccomment">/// [`DEAD`] on odd generations.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
-    <span class="ident">ChooseAlive</span>,
+    <span class="doccomment">/// Chooses the opposite of the background state.
+    ///
+    /// For rules without `B0`, it always chooses [`ALIVE`].
+    ///
+    /// For rules with `B0`, the background changes periodically.
+    /// For example, for non-Generations rules,
+    /// it chooses [`ALIVE`] on even generations,
+    /// [`DEAD`] on odd generations.
+    </span><span class="attribute">#[educe(Default)]</span>
+    ChooseAlive,
 
-    <span class="doccomment">/// Random.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For non-Generations rules,</span>
-    <span class="doccomment">/// the probability of either state is `1/2`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For Generations rules with `n` states,</span>
-    <span class="doccomment">/// the probability of each state is `1/n`.</span>
-    <span class="ident">Random</span>,
+    <span class="doccomment">/// Random.
+    ///
+    /// For non-Generations rules,
+    /// the probability of either state is `1/2`.
+    ///
+    /// For Generations rules with `n` states,
+    /// the probability of each state is `1/n`.
+    </span>Random,
 }
 
-<span class="doccomment">/// A cell whose state is known before the search.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">KnownCell</span> {
-    <span class="doccomment">/// The coordinates of the set cell.</span>
-    <span class="kw">pub</span> <span class="ident">coord</span>: <span class="ident">Coord</span>,
+<span class="doccomment">/// A cell whose state is known before the search.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]</span>
+<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="kw">pub struct </span>KnownCell {
+    <span class="doccomment">/// The coordinates of the set cell.
+    </span><span class="kw">pub </span>coord: Coord,
 
-    <span class="doccomment">/// The state.</span>
-    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">State</span>,
+    <span class="doccomment">/// The state.
+    </span><span class="kw">pub </span>state: State,
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)))]</span>
-<span class="kw">impl</span> <span class="ident">KnownCell</span> {
-    <span class="doccomment">/// Convert a [`CellData`] to a [`KnownCell`].</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">from_cell_data</span>(<span class="ident">data</span>: <span class="ident">CellData</span>, <span class="ident">gen</span>: <span class="ident">i32</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">let</span> (<span class="ident">x</span>, <span class="ident">y</span>) <span class="op">=</span> <span class="ident">data</span>.<span class="ident">position</span>;
-        <span class="kw">let</span> <span class="ident">coord</span> <span class="op">=</span> (<span class="ident">x</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">y</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">gen</span>);
-        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span>(<span class="ident">data</span>.<span class="ident">state</span> <span class="kw">as</span> <span class="ident">usize</span>);
-        <span class="self">Self</span> { <span class="ident">coord</span>, <span class="ident">state</span> }
+<span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]</span>
+<span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]</span>
+<span class="kw">impl </span>KnownCell {
+    <span class="doccomment">/// Convert a [`CellData`] to a [`KnownCell`].
+    </span><span class="kw">pub const fn </span>from_cell_data(data: CellData, gen: i32) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>(x, y) = data.position;
+        <span class="kw">let </span>coord = (x <span class="kw">as </span>i32, y <span class="kw">as </span>i32, gen);
+        <span class="kw">let </span>state = State(data.state <span class="kw">as </span>usize);
+        <span class="self">Self </span>{ coord, state }
     }
 
-    <span class="doccomment">/// Get a list [`KnownCell`] from multiple RLE&#39;s in one string.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_rles</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span>(<span class="ident">input</span>: <span class="ident">I</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">RleError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
-        <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Get a list [`KnownCell`] from multiple RLE&#39;s in one string.
+    </span><span class="kw">pub fn </span>from_rles&lt;I, L&gt;(input: I) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>&gt;, RleError&gt;
+    <span class="kw">where
+        </span>I: Input&lt;Lines = L&gt;,
+        L: Input&lt;Lines = L&gt;,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">let</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">Rle::new</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>known_cells = Vec::new();
+        <span class="kw">let </span>rle = Rle::new(input)<span class="question-mark">?</span>;
 
-        <span class="ident"><span class="self">Self</span>::from_rles_iter</span>(<span class="ident">rle</span>, <span class="kw-2">&amp;mut</span> <span class="ident">known_cells</span>, <span class="number">0</span>)<span class="question-mark">?</span>;
+        <span class="self">Self</span>::from_rles_iter(rle, <span class="kw-2">&amp;mut </span>known_cells, <span class="number">0</span>)<span class="question-mark">?</span>;
 
-        <span class="prelude-val">Ok</span>(<span class="ident">known_cells</span>)
+        <span class="prelude-val">Ok</span>(known_cells)
     }
 
-    <span class="kw">fn</span> <span class="ident">from_rles_iter</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span>(
-        <span class="ident">rle</span>: <span class="ident">Rle</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>,
-        <span class="ident">known_cells</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
-        <span class="ident">gen</span>: <span class="ident">i32</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">RleError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
-        <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
+    <span class="kw">fn </span>from_rles_iter&lt;I, L&gt;(
+        rle: Rle&lt;I&gt;,
+        known_cells: <span class="kw-2">&amp;mut </span>Vec&lt;<span class="self">Self</span>&gt;,
+        gen: i32,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), RleError&gt;
+    <span class="kw">where
+        </span>I: Input&lt;Lines = L&gt;,
+        L: Input&lt;Lines = L&gt;,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rle</span> <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">with_unknown</span>();
+        <span class="kw">let </span><span class="kw-2">mut </span>rle = rle.with_unknown();
 
-        <span class="kw">for</span> <span class="ident">data</span> <span class="kw">in</span> <span class="kw-2">&amp;mut</span> <span class="ident">rle</span> {
-            <span class="ident">known_cells</span>.<span class="ident">push</span>(<span class="ident"><span class="self">Self</span>::from_cell_data</span>(<span class="ident">data</span><span class="question-mark">?</span>, <span class="ident">gen</span>));
+        <span class="kw">for </span>data <span class="kw">in </span><span class="kw-2">&amp;mut </span>rle {
+            known_cells.push(<span class="self">Self</span>::from_cell_data(data<span class="question-mark">?</span>, gen));
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">rle</span>) <span class="op">=</span> <span class="ident">rle</span>.<span class="ident">try_remains</span>()<span class="question-mark">?</span> {
-            <span class="ident"><span class="self">Self</span>::from_rles_iter</span>(<span class="ident">rle</span>, <span class="ident">known_cells</span>, <span class="ident">gen</span> <span class="op">+</span> <span class="number">1</span>)<span class="question-mark">?</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(rle) = rle.try_remains()<span class="question-mark">? </span>{
+            <span class="self">Self</span>::from_rles_iter(rle, known_cells, gen + <span class="number">1</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="doccomment">/// World configuration.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The world will be generated from this configuration.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Educe</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>)]</span>
-<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>))]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>, <span class="ident">serde</span>(<span class="ident">default</span>))]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Config</span> {
-    <span class="doccomment">/// Width.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="number">16</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">width</span>: <span class="ident">i32</span>,
+<span class="doccomment">/// World configuration.
+///
+/// The world will be generated from this configuration.
+</span><span class="attribute">#[derive(Clone, Debug, Educe, PartialEq, Eq, Hash)]</span>
+<span class="attribute">#[educe(Default)]</span>
+<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
+<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(default))]</span>
+<span class="kw">pub struct </span>Config {
+    <span class="doccomment">/// Width.
+    </span><span class="attribute">#[educe(Default = <span class="number">16</span>)]</span>
+    <span class="kw">pub </span>width: i32,
 
-    <span class="doccomment">/// Height.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="number">16</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">height</span>: <span class="ident">i32</span>,
+    <span class="doccomment">/// Height.
+    </span><span class="attribute">#[educe(Default = <span class="number">16</span>)]</span>
+    <span class="kw">pub </span>height: i32,
 
-    <span class="doccomment">/// Period.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="number">1</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">period</span>: <span class="ident">i32</span>,
+    <span class="doccomment">/// Period.
+    </span><span class="attribute">#[educe(Default = <span class="number">1</span>)]</span>
+    <span class="kw">pub </span>period: i32,
 
-    <span class="doccomment">/// Horizontal translation.</span>
-    <span class="kw">pub</span> <span class="ident">dx</span>: <span class="ident">i32</span>,
+    <span class="doccomment">/// Horizontal translation.
+    </span><span class="kw">pub </span>dx: i32,
 
-    <span class="doccomment">/// Vertical translation.</span>
-    <span class="kw">pub</span> <span class="ident">dy</span>: <span class="ident">i32</span>,
+    <span class="doccomment">/// Vertical translation.
+    </span><span class="kw">pub </span>dy: i32,
 
-    <span class="doccomment">/// Transformations (rotations and reflections) after the last generation</span>
-    <span class="doccomment">/// in a period.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// After the last generation in a period, the pattern will return to</span>
-    <span class="doccomment">/// the first generation, applying this transformation first,</span>
-    <span class="doccomment">/// and then the translation defined by `dx` and `dy`.</span>
-    <span class="kw">pub</span> <span class="ident">transform</span>: <span class="ident">Transform</span>,
+    <span class="doccomment">/// Transformations (rotations and reflections) after the last generation
+    /// in a period.
+    ///
+    /// After the last generation in a period, the pattern will return to
+    /// the first generation, applying this transformation first,
+    /// and then the translation defined by `dx` and `dy`.
+    </span><span class="kw">pub </span>transform: Transform,
 
-    <span class="doccomment">/// Symmetries of the pattern.</span>
-    <span class="kw">pub</span> <span class="ident">symmetry</span>: <span class="ident">Symmetry</span>,
+    <span class="doccomment">/// Symmetries of the pattern.
+    </span><span class="kw">pub </span>symmetry: Symmetry,
 
-    <span class="doccomment">/// The order to find a new unknown cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// It will always search all generations of one cell</span>
-    <span class="doccomment">/// before going to another cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `None` means that it will automatically choose a search order</span>
-    <span class="doccomment">/// according to the width and height of the world.</span>
-    <span class="kw">pub</span> <span class="ident">search_order</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SearchOrder</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The order to find a new unknown cell.
+    ///
+    /// It will always search all generations of one cell
+    /// before going to another cell.
+    ///
+    /// `None` means that it will automatically choose a search order
+    /// according to the width and height of the world.
+    </span><span class="kw">pub </span>search_order: <span class="prelude-ty">Option</span>&lt;SearchOrder&gt;,
 
-    <span class="doccomment">/// How to choose a state for an unknown cell.</span>
-    <span class="kw">pub</span> <span class="ident">new_state</span>: <span class="ident">NewState</span>,
+    <span class="doccomment">/// How to choose a state for an unknown cell.
+    </span><span class="kw">pub </span>new_state: NewState,
 
-    <span class="doccomment">/// The number of minimum living cells in all generations must not</span>
-    <span class="doccomment">/// exceed this number.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `None` means that there is no limit for the cell count.</span>
-    <span class="kw">pub</span> <span class="ident">max_cell_count</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// The number of minimum living cells in all generations must not
+    /// exceed this number.
+    ///
+    /// `None` means that there is no limit for the cell count.
+    </span><span class="kw">pub </span>max_cell_count: <span class="prelude-ty">Option</span>&lt;u32&gt;,
 
-    <span class="doccomment">/// Whether to automatically reduce the [`max_cell_count`](#structfield.max_cell_count)</span>
-    <span class="doccomment">/// when a result is found.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`max_cell_count`](#structfield.max_cell_count) will be set to the cell count of</span>
-    <span class="doccomment">/// the current result minus one.</span>
-    <span class="kw">pub</span> <span class="ident">reduce_max</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Whether to automatically reduce the [`max_cell_count`](#structfield.max_cell_count)
+    /// when a result is found.
+    ///
+    /// The [`max_cell_count`](#structfield.max_cell_count) will be set to the cell count of
+    /// the current result minus one.
+    </span><span class="kw">pub </span>reduce_max: bool,
 
-    <span class="doccomment">/// The rule string of the cellular automaton.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="string">&quot;B3/S23&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">rule_string</span>: <span class="ident">String</span>,
+    <span class="doccomment">/// The rule string of the cellular automaton.
+    </span><span class="attribute">#[educe(Default = <span class="string">&quot;B3/S23&quot;</span>)]</span>
+    <span class="kw">pub </span>rule_string: String,
 
-    <span class="doccomment">/// Diagonal width.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If the diagonal width is `n`, the cells at position `(x, y)`</span>
-    <span class="doccomment">/// where `abs(x - y) &gt;= n` are assumed to be dead.</span>
-    <span class="kw">pub</span> <span class="ident">diagonal_width</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Diagonal width.
+    ///
+    /// If the diagonal width is `n`, the cells at position `(x, y)`
+    /// where `abs(x - y) &gt;= n` are assumed to be dead.
+    </span><span class="kw">pub </span>diagonal_width: <span class="prelude-ty">Option</span>&lt;i32&gt;,
 
-    <span class="doccomment">/// Whether to skip patterns whose fundamental period are smaller than the given period.</span>
-    <span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="bool-val">true</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">skip_subperiod</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Whether to skip patterns whose fundamental period are smaller than the given period.
+    </span><span class="attribute">#[educe(Default = <span class="bool-val">true</span>)]</span>
+    <span class="kw">pub </span>skip_subperiod: bool,
 
-    <span class="doccomment">/// Whether to skip patterns which are invariant under more transformations than</span>
-    <span class="doccomment">/// required by the given symmetry.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// In another word, whether to skip patterns whose symmetry group properly contains</span>
-    <span class="doccomment">/// the given symmetry group.</span>
-    <span class="kw">pub</span> <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// Whether to skip patterns which are invariant under more transformations than
+    /// required by the given symmetry.
+    ///
+    /// In another word, whether to skip patterns whose symmetry group properly contains
+    /// the given symmetry group.
+    </span><span class="kw">pub </span>skip_subsymmetry: bool,
 
-    <span class="doccomment">/// Cells whose states are known before the search.</span>
-    <span class="kw">pub</span> <span class="ident">known_cells</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">KnownCell</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Cells whose states are known before the search.
+    </span><span class="kw">pub </span>known_cells: Vec&lt;KnownCell&gt;,
 
-    <span class="doccomment">/// __(Experimental)__ Whether to enable [backjumping](https://en.wikipedia.org/wiki/Backjumping).</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Backjumping will reduce the number of steps, but each step will takes</span>
-    <span class="doccomment">/// a much longer time. The current implementation is slower for most search,</span>
-    <span class="doccomment">/// only useful for large (e.g., 64x64) still lifes.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Currently it is only supported for non-Generations rules. Generations rules</span>
-    <span class="doccomment">/// will ignore this option.</span>
-    <span class="kw">pub</span> <span class="ident">backjump</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// __(Experimental)__ Whether to enable [backjumping](https://en.wikipedia.org/wiki/Backjumping).
+    ///
+    /// Backjumping will reduce the number of steps, but each step will takes
+    /// a much longer time. The current implementation is slower for most search,
+    /// only useful for large (e.g., 64x64) still lifes.
+    ///
+    /// Currently it is only supported for non-Generations rules. Generations rules
+    /// will ignore this option.
+    </span><span class="kw">pub </span>backjump: bool,
 }
 
-<span class="kw">impl</span> <span class="ident">Config</span> {
-    <span class="doccomment">/// Sets up a new configuration with given size.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">width</span>: <span class="ident">i32</span>, <span class="ident">height</span>: <span class="ident">i32</span>, <span class="ident">period</span>: <span class="ident">i32</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> {
-            <span class="ident">width</span>,
-            <span class="ident">height</span>,
-            <span class="ident">period</span>,
-            ..<span class="ident"><span class="self">Self</span>::default</span>()
+<span class="kw">impl </span>Config {
+    <span class="doccomment">/// Sets up a new configuration with given size.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>new(width: i32, height: i32, period: i32) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            width,
+            height,
+            period,
+            ..<span class="self">Self</span>::default()
         }
     }
 
-    <span class="doccomment">/// Sets the translations `(dx, dy)`.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_translate</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">dx</span>: <span class="ident">i32</span>, <span class="ident">dy</span>: <span class="ident">i32</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">dx</span> <span class="op">=</span> <span class="ident">dx</span>;
-        <span class="self">self</span>.<span class="ident">dy</span> <span class="op">=</span> <span class="ident">dy</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the translations `(dx, dy)`.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_translate(<span class="kw-2">mut </span><span class="self">self</span>, dx: i32, dy: i32) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.dx = dx;
+        <span class="self">self</span>.dy = dy;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets the transformation.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_transform</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">transform</span>: <span class="ident">Transform</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">transform</span> <span class="op">=</span> <span class="ident">transform</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the transformation.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_transform(<span class="kw-2">mut </span><span class="self">self</span>, transform: Transform) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.transform = transform;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets the symmetry.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_symmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">symmetry</span>: <span class="ident">Symmetry</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">symmetry</span> <span class="op">=</span> <span class="ident">symmetry</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the symmetry.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_symmetry(<span class="kw-2">mut </span><span class="self">self</span>, symmetry: Symmetry) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.symmetry = symmetry;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets the search order.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_search_order</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">SearchOrder</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">search_order</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">search_order</span> <span class="op">=</span> <span class="ident">search_order</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the search order.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>set_search_order&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;SearchOrder&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, search_order: T) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.search_order = search_order.into();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets how to choose a state for an unknown cell.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_new_state</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">new_state</span>: <span class="ident">NewState</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">new_state</span> <span class="op">=</span> <span class="ident">new_state</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets how to choose a state for an unknown cell.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_new_state(<span class="kw-2">mut </span><span class="self">self</span>, new_state: NewState) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.new_state = new_state;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets the maximal number of living cells.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_max_cell_count</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_cell_count</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">max_cell_count</span> <span class="op">=</span> <span class="ident">max_cell_count</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the maximal number of living cells.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>set_max_cell_count&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;u32&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, max_cell_count: T) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.max_cell_count = max_cell_count.into();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets whether to automatically reduce the `max_cell_count`</span>
-    <span class="doccomment">/// when a result is found.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_reduce_max</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reduce_max</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">reduce_max</span> <span class="op">=</span> <span class="ident">reduce_max</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets whether to automatically reduce the `max_cell_count`
+    /// when a result is found.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_reduce_max(<span class="kw-2">mut </span><span class="self">self</span>, reduce_max: bool) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.reduce_max = reduce_max;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets the rule string.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_rule_string</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">ToString</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">rule_string</span>: <span class="ident">S</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">rule_string</span> <span class="op">=</span> <span class="ident">rule_string</span>.<span class="ident">to_string</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the rule string.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>set_rule_string&lt;S: ToString&gt;(<span class="kw-2">mut </span><span class="self">self</span>, rule_string: S) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.rule_string = rule_string.to_string();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets the diagonal width.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_diagonal_width</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">diagonal_width</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">diagonal_width</span> <span class="op">=</span> <span class="ident">diagonal_width</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets the diagonal width.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>set_diagonal_width&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;i32&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, diagonal_width: T) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.diagonal_width = diagonal_width.into();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets whether to skip patterns whose fundamental period</span>
-    <span class="doccomment">/// is smaller than the given period.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_skip_subperiod</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subperiod</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">skip_subperiod</span> <span class="op">=</span> <span class="ident">skip_subperiod</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets whether to skip patterns whose fundamental period
+    /// is smaller than the given period.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_skip_subperiod(<span class="kw-2">mut </span><span class="self">self</span>, skip_subperiod: bool) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.skip_subperiod = skip_subperiod;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets whether to skip patterns which are invariant under</span>
-    <span class="doccomment">/// more transformations than required by the given symmetry.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_skip_subsymmetry</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">skip_subsymmetry</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">skip_subsymmetry</span> <span class="op">=</span> <span class="ident">skip_subsymmetry</span>;
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets whether to skip patterns which are invariant under
+    /// more transformations than required by the given symmetry.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_skip_subsymmetry(<span class="kw-2">mut </span><span class="self">self</span>, skip_subsymmetry: bool) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.skip_subsymmetry = skip_subsymmetry;
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets cells whose states are known before the search.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_known_cells</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">KnownCell</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">known_cells</span>: <span class="ident">T</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">known_cells</span>.<span class="ident">into</span>();
-        <span class="self">self</span>
-    }
+    <span class="doccomment">/// Sets cells whose states are known before the search.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>set_known_cells&lt;T: Into&lt;Vec&lt;KnownCell&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, known_cells: T) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.known_cells = known_cells.into();
+        <span class="self">self
+    </span>}
 
-    <span class="doccomment">/// Sets cells whose states are known before the search.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The cells are specified by a list of RLE strings.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">any</span>(<span class="ident">docs_rs</span>, <span class="ident">github_io</span>), <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;read-rle&quot;</span>)))]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_known_cells_from_rles</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">L</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">input</span>: <span class="ident">I</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">RleError</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
-        <span class="ident">L</span>: <span class="ident">Input</span><span class="op">&lt;</span><span class="ident">Lines</span> <span class="op">=</span> <span class="ident">L</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Sets cells whose states are known before the search.
+    ///
+    /// The cells are specified by a list of RLE strings.
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]</span>
+    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub fn </span>set_known_cells_from_rles&lt;I, L&gt;(<span class="kw-2">mut </span><span class="self">self</span>, input: I) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, RleError&gt;
+    <span class="kw">where
+        </span>I: Input&lt;Lines = L&gt;,
+        L: Input&lt;Lines = L&gt;,
     {
-        <span class="self">self</span>.<span class="ident">known_cells</span> <span class="op">=</span> <span class="ident">KnownCell::from_rles</span>(<span class="ident">input</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.known_cells = KnownCell::from_rles(input)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 
-    <span class="doccomment">/// Sets whether to enable backjumping.</span>
-    <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">set_backjump</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">backjump</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">self</span>.<span class="ident">backjump</span> <span class="op">=</span> <span class="ident">backjump</span>;
-        <span class="self">self</span>
+    <span class="doccomment">/// Sets whether to enable backjumping.
+    </span><span class="attribute">#[must_use]</span>
+    <span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>set_backjump(<span class="kw-2">mut </span><span class="self">self</span>, backjump: bool) -&gt; <span class="self">Self </span>{
+        <span class="self">self</span>.backjump = backjump;
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Whether the configuration requires the world to be square.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>require_square_world(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.symmetry.require_square_world()
+            || <span class="self">self</span>.transform.require_square_world()
+            || <span class="macro">matches!</span>(<span class="self">self</span>.search_order, <span class="prelude-val">Some</span>(SearchOrder::Diagonal))
     }
 
-    <span class="doccomment">/// Whether the configuration requires the world to be square.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_square_world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">symmetry</span>.<span class="ident">require_square_world</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">require_square_world</span>()
-            <span class="op">|</span><span class="op">|</span> <span class="macro">matches!</span>(<span class="self">self</span>.<span class="ident">search_order</span>, <span class="prelude-val">Some</span>(<span class="ident">SearchOrder::Diagonal</span>))
+    <span class="doccomment">/// Whether the configuration requires the world to have no diagonal width.
+    </span><span class="attribute">#[inline]</span>
+    <span class="kw">pub const fn </span>require_no_diagonal_width(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.symmetry.require_no_diagonal_width() || <span class="self">self</span>.transform.require_no_diagonal_width()
     }
 
-    <span class="doccomment">/// Whether the configuration requires the world to have no diagonal width.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">require_no_diagonal_width</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">symmetry</span>.<span class="ident">require_no_diagonal_width</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">transform</span>.<span class="ident">require_no_diagonal_width</span>()
-    }
-
-    <span class="doccomment">/// Whether the cell is contained in the world.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If `including_border` is true, this includes the cells at the border.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If `check_diagonal_width` is true, this excludes the cells outside of the diagonal_width.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">contains</span>(
+    <span class="doccomment">/// Whether the cell is contained in the world.
+    ///
+    /// If `including_border` is true, this includes the cells at the border.
+    ///
+    /// If `check_diagonal_width` is true, this excludes the cells outside of the diagonal_width.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>contains(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        (<span class="ident">x</span>, <span class="ident">y</span>, <span class="ident">t</span>): <span class="ident">Coord</span>,
-        <span class="ident">including_border</span>: <span class="ident">bool</span>,
-        <span class="ident">check_diagonal_width</span>: <span class="ident">bool</span>,
-    ) -&gt; <span class="ident">bool</span> {
-        <span class="kw">if</span> <span class="ident">including_border</span> {
-            <span class="ident">x</span> <span class="op">&gt;</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">width</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&gt;</span><span class="op">=</span> <span class="op">-</span><span class="number">1</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">period</span>
-                <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="ident">check_diagonal_width</span>
-                    <span class="op">|</span><span class="op">|</span> (<span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
-                        <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>() <span class="op">+</span> <span class="number">1</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">x</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">x</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">width</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">y</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">height</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>
-                <span class="op">&amp;&amp;</span> <span class="ident">t</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">period</span>
-                <span class="op">&amp;&amp;</span> (<span class="op">!</span><span class="ident">check_diagonal_width</span>
-                    <span class="op">|</span><span class="op">|</span> (<span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_none</span>()
-                        <span class="op">|</span><span class="op">|</span> (<span class="ident">x</span> <span class="op">-</span> <span class="ident">y</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">unwrap</span>()))
+        (x, y, t): Coord,
+        including_border: bool,
+        check_diagonal_width: bool,
+    ) -&gt; bool {
+        <span class="kw">if </span>including_border {
+            x &gt;= -<span class="number">1
+                </span>&amp;&amp; x &lt;= <span class="self">self</span>.width
+                &amp;&amp; y &gt;= -<span class="number">1
+                </span>&amp;&amp; y &lt;= <span class="self">self</span>.height
+                &amp;&amp; t &gt;= <span class="number">0
+                </span>&amp;&amp; t &lt; <span class="self">self</span>.period
+                &amp;&amp; (!check_diagonal_width
+                    || (<span class="self">self</span>.diagonal_width.is_none()
+                        || (x - y).abs() &lt;= <span class="self">self</span>.diagonal_width.unwrap() + <span class="number">1</span>))
+        } <span class="kw">else </span>{
+            x &gt;= <span class="number">0
+                </span>&amp;&amp; x &lt; <span class="self">self</span>.width
+                &amp;&amp; y &gt;= <span class="number">0
+                </span>&amp;&amp; y &lt; <span class="self">self</span>.height
+                &amp;&amp; t &gt;= <span class="number">0
+                </span>&amp;&amp; t &lt; <span class="self">self</span>.period
+                &amp;&amp; (!check_diagonal_width
+                    || (<span class="self">self</span>.diagonal_width.is_none()
+                        || (x - y).abs() &lt; <span class="self">self</span>.diagonal_width.unwrap()))
         }
     }
 
-    <span class="doccomment">/// Creates a new world from the configuration.</span>
-    <span class="doccomment">/// Returns an error if the rule string is invalid.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">world</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PolyWorld</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">macro_rules!</span> <span class="ident">new_world</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) =&gt; {{
-                <span class="kw">for</span> <span class="ident">known_cell</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">known_cells</span> {
-                    <span class="kw">if</span> <span class="ident">known_cell</span>.<span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
+    <span class="doccomment">/// Creates a new world from the configuration.
+    /// Returns an error if the rule string is invalid.
+    </span><span class="kw">pub fn </span>world(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;PolyWorld, Error&gt; {
+        <span class="macro">macro_rules!</span> new_world {
+            (<span class="macro-nonterminal">$rule</span>:expr) =&gt; {{
+                <span class="kw">for </span>known_cell <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.known_cells {
+                    <span class="kw">if </span>known_cell.state.<span class="number">0 </span>&gt;= <span class="number">2 </span>{
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(Error::InvalidState(known_cell.coord, known_cell.state));
                     }
                 }
-                <span class="kw">if</span> <span class="self">self</span>.<span class="ident">backjump</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">max_cell_count</span>.<span class="ident">is_none</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">World::new_backjump</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>).<span class="ident">into</span>())
-                } <span class="kw">else</span> {
-                    <span class="prelude-val">Ok</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>).<span class="ident">into</span>())
+                <span class="kw">if </span><span class="self">self</span>.backjump &amp;&amp; <span class="self">self</span>.max_cell_count.is_none() {
+                    <span class="prelude-val">Ok</span>(World::new_backjump(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$rule</span>).into())
+                } <span class="kw">else </span>{
+                    <span class="prelude-val">Ok</span>(World::new_lifesrc(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$rule</span>).into())
                 }
             }};
         }
 
-        <span class="macro">macro_rules!</span> <span class="ident">new_world_gen</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>:<span class="ident">expr</span>) =&gt; {{
-                <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">gen</span>() <span class="op">&gt;</span> <span class="number">2</span> {
-                    <span class="kw">for</span> <span class="ident">known_cell</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">known_cells</span> {
-                        <span class="kw">if</span> <span class="ident">known_cell</span>.<span class="ident">state</span>.<span class="number">0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">gen</span>() {
-                            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::InvalidState</span>(<span class="ident">known_cell</span>.<span class="ident">coord</span>, <span class="ident">known_cell</span>.<span class="ident">state</span>));
+        <span class="macro">macro_rules!</span> new_world_gen {
+            (<span class="macro-nonterminal">$rule</span>:expr) =&gt; {{
+                <span class="kw">if </span><span class="macro-nonterminal">$rule</span>.gen() &gt; <span class="number">2 </span>{
+                    <span class="kw">for </span>known_cell <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.known_cells {
+                        <span class="kw">if </span>known_cell.state.<span class="number">0 </span>&gt;= <span class="macro-nonterminal">$rule</span>.gen() {
+                            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::InvalidState(known_cell.coord, known_cell.state));
                         }
                     }
-                    <span class="prelude-val">Ok</span>(<span class="ident">World::new_lifesrc</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>).<span class="ident">into</span>())
-                } <span class="kw">else</span> {
-                    <span class="macro">new_world!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rule</span>.<span class="ident">non_gen</span>())
+                    <span class="prelude-val">Ok</span>(World::new_lifesrc(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="macro-nonterminal">$rule</span>).into())
+                } <span class="kw">else </span>{
+                    <span class="macro">new_world!</span>(<span class="macro-nonterminal">$rule</span>.non_gen())
                 }
             }};
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">height</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">period</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::NonPositiveError</span>);
+        <span class="kw">if </span><span class="self">self</span>.width &lt;= <span class="number">0 </span>|| <span class="self">self</span>.height &lt;= <span class="number">0 </span>|| <span class="self">self</span>.period &lt;= <span class="number">0 </span>{
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::NonPositiveError);
         }
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">diagonal_width</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">diagonal_width</span> {
-            <span class="kw">if</span> <span class="ident">diagonal_width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::NonPositiveError</span>);
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(diagonal_width) = <span class="self">self</span>.diagonal_width {
+            <span class="kw">if </span>diagonal_width &lt;= <span class="number">0 </span>{
+                <span class="kw">return </span><span class="prelude-val">Err</span>(Error::NonPositiveError);
             }
         }
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">require_square_world</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">width</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">height</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::SquareWorldError</span>);
+        <span class="kw">if </span><span class="self">self</span>.require_square_world() &amp;&amp; <span class="self">self</span>.width != <span class="self">self</span>.height {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::SquareWorldError);
         }
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">require_no_diagonal_width</span>() <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">diagonal_width</span>.<span class="ident">is_some</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error::DiagonalWidthError</span>);
+        <span class="kw">if </span><span class="self">self</span>.require_no_diagonal_width() &amp;&amp; <span class="self">self</span>.diagonal_width.is_some() {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::DiagonalWidthError);
         }
 
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">Life</span><span class="op">&gt;</span>() {
-            <span class="macro">new_world!</span>(<span class="ident">rule</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">NtLife</span><span class="op">&gt;</span>() {
-            <span class="macro">new_world!</span>(<span class="ident">rule</span>)
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">rule</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">LifeGen</span><span class="op">&gt;</span>() {
-            <span class="macro">new_world_gen!</span>(<span class="ident">rule</span>)
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">rule</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">rule_string</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">NtLifeGen</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-            <span class="macro">new_world_gen!</span>(<span class="ident">rule</span>)
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(rule) = <span class="self">self</span>.rule_string.parse::&lt;Life&gt;() {
+            <span class="macro">new_world!</span>(rule)
+        } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(rule) = <span class="self">self</span>.rule_string.parse::&lt;NtLife&gt;() {
+            <span class="macro">new_world!</span>(rule)
+        } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(rule) = <span class="self">self</span>.rule_string.parse::&lt;LifeGen&gt;() {
+            <span class="macro">new_world_gen!</span>(rule)
+        } <span class="kw">else </span>{
+            <span class="kw">let </span>rule = <span class="self">self</span>.rule_string.parse::&lt;NtLifeGen&gt;()<span class="question-mark">?</span>;
+            <span class="macro">new_world_gen!</span>(rule)
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

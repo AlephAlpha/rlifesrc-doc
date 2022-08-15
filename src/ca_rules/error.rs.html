@@ -26,33 +26,33 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Errors that can be returned when parsing rule strings.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Errors that can be returned when parsing rule strings.
 
-<span class="comment">// use std::fmt::{self, Display, Formatter};</span>
-<span class="kw">use</span> <span class="ident">displaydoc::Display</span>;
-<span class="kw">use</span> <span class="ident">thiserror::Error</span>;
+</span><span class="comment">// use std::fmt::{self, Display, Formatter};
+</span><span class="kw">use </span>displaydoc::Display;
+<span class="kw">use </span>thiserror::Error;
 
-<span class="doccomment">/// Errors that can be returned when parsing rule strings.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Error</span>, <span class="ident">Display</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ParseRuleError</span> {
-    <span class="doccomment">/// Missing expected {0:?}</span>
-    <span class="ident">Missing</span>(<span class="ident">char</span>),
-    <span class="doccomment">/// Missing expected number</span>
-    <span class="ident">MissingNumber</span>,
-    <span class="doccomment">/// Unexpected {0:?}</span>
-    <span class="ident">Unexpected</span>(<span class="ident">char</span>),
-    <span class="doccomment">/// Extra unparsed junk at the end of the rule string</span>
-    <span class="ident">ExtraJunk</span>,
-    <span class="doccomment">/// Number of states less than 2 in Generations rule</span>
-    <span class="ident">GenLessThan2</span>,
-    <span class="doccomment">/// Not a MAP rule</span>
-    <span class="ident">NotMapRule</span>,
-    <span class="doccomment">/// Invalid Base64 encoding for MAP rule</span>
-    <span class="ident">Base64Error</span>,
-    <span class="doccomment">/// Invalid length for MAP rule</span>
-    <span class="ident">InvalidLength</span>,
-    <span class="doccomment">/// Generations number overflow for Generations rule</span>
-    <span class="ident">GenOverflow</span>,
+<span class="doccomment">/// Errors that can be returned when parsing rule strings.
+</span><span class="attribute">#[derive(Clone, Debug, PartialEq, Eq, Error, Display)]</span>
+<span class="kw">pub enum </span>ParseRuleError {
+    <span class="doccomment">/// Missing expected {0:?}
+    </span>Missing(char),
+    <span class="doccomment">/// Missing expected number
+    </span>MissingNumber,
+    <span class="doccomment">/// Unexpected {0:?}
+    </span>Unexpected(char),
+    <span class="doccomment">/// Extra unparsed junk at the end of the rule string
+    </span>ExtraJunk,
+    <span class="doccomment">/// Number of states less than 2 in Generations rule
+    </span>GenLessThan2,
+    <span class="doccomment">/// Not a MAP rule
+    </span>NotMapRule,
+    <span class="doccomment">/// Invalid Base64 encoding for MAP rule
+    </span>Base64Error,
+    <span class="doccomment">/// Invalid length for MAP rule
+    </span>InvalidLength,
+    <span class="doccomment">/// Generations number overflow for Generations rule
+    </span>GenOverflow,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

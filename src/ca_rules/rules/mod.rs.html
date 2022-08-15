@@ -20,27 +20,27 @@
 <span id="20">20</span>
 <span id="21">21</span>
 <span id="22">22</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Parsers for different types of rules.mod hex;</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Parsers for different types of rules.mod hex;
 
-<span class="kw">mod</span> <span class="ident">hex</span>;
-<span class="kw">mod</span> <span class="ident">life</span>;
-<span class="kw">mod</span> <span class="ident">neumann</span>;
-<span class="kw">mod</span> <span class="ident">nthex</span>;
-<span class="kw">mod</span> <span class="ident">ntlife</span>;
-<span class="kw">mod</span> <span class="ident">ntneumann</span>;
+</span><span class="kw">mod </span>hex;
+<span class="kw">mod </span>life;
+<span class="kw">mod </span>neumann;
+<span class="kw">mod </span>nthex;
+<span class="kw">mod </span>ntlife;
+<span class="kw">mod </span>ntneumann;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">hex</span>::{<span class="ident">ParseHex</span>, <span class="ident">ParseHexGen</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">life</span>::{<span class="ident">ParseLife</span>, <span class="ident">ParseLifeGen</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">neumann</span>::{<span class="ident">ParseNeumann</span>, <span class="ident">ParseNeumannGen</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">nthex</span>::{<span class="ident">ParseNtHex</span>, <span class="ident">ParseNtHexGen</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ntlife</span>::{<span class="ident">ParseNtLife</span>, <span class="ident">ParseNtLifeGen</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">ntneumann</span>::{<span class="ident">ParseNtNeumann</span>, <span class="ident">ParseNtNeumannGen</span>};
+<span class="kw">pub use </span>hex::{ParseHex, ParseHexGen};
+<span class="kw">pub use </span>life::{ParseLife, ParseLifeGen};
+<span class="kw">pub use </span>neumann::{ParseNeumann, ParseNeumannGen};
+<span class="kw">pub use </span>nthex::{ParseNtHex, ParseNtHexGen};
+<span class="kw">pub use </span>ntlife::{ParseNtLife, ParseNtLifeGen};
+<span class="kw">pub use </span>ntneumann::{ParseNtNeumann, ParseNtNeumannGen};
 
-<span class="doccomment">/// A helper struct to represent Generations rules.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">struct</span> <span class="ident">Gen</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="ident">rule</span>: <span class="ident">T</span>,
-    <span class="ident">gen</span>: <span class="ident">usize</span>,
+<span class="doccomment">/// A helper struct to represent Generations rules.
+</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]</span>
+<span class="kw">struct </span>Gen&lt;T&gt; {
+    rule: T,
+    gen: usize,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

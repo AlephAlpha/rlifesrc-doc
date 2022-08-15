@@ -3,117 +3,117 @@
 <p><a href="macro.quick_derive.html" title="quick_derive!"><code>quick_derive!</code></a> macro make easy to write <a href="https://doc.rust-lang.org/reference/procedural-macros.html#derive-macros"><code>proc_macro_derive</code></a>
 like deriving trait to enum so long as all variants are implemented that trait.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">derive_utils::quick_derive</span>;
-<span class="kw">use</span> <span class="ident">proc_macro::TokenStream</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>derive_utils::quick_derive;
+<span class="kw">use </span>proc_macro::TokenStream;
 
-<span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">Iterator</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">derive_iterator</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
+<span class="attribute">#[proc_macro_derive(Iterator)]</span>
+<span class="kw">pub fn </span>derive_iterator(input: TokenStream) -&gt; TokenStream {
     <span class="macro">quick_derive!</span> {
-        <span class="ident">input</span>,
-        <span class="comment">// trait path</span>
-        <span class="ident">std::iter::Iterator</span>,
-        <span class="comment">// trait definition</span>
-        <span class="kw">trait</span> <span class="ident">Iterator</span> {
-            <span class="kw">type</span> <span class="ident">Item</span>;
-            <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span>;
-            <span class="kw">fn</span> <span class="ident">size_hint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="ident">usize</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>);
+        input,
+        <span class="comment">// trait path
+        </span>std::iter::Iterator,
+        <span class="comment">// trait definition
+        </span><span class="kw">trait </span>Iterator {
+            <span class="kw">type </span>Item;
+            <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt;;
+            <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;);
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">ExactSizeIterator</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">derive_exact_size_iterator</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
+<span class="attribute">#[proc_macro_derive(ExactSizeIterator)]</span>
+<span class="kw">pub fn </span>derive_exact_size_iterator(input: TokenStream) -&gt; TokenStream {
     <span class="macro">quick_derive!</span> {
-        <span class="ident">input</span>,
-        <span class="comment">// trait path</span>
-        <span class="ident">std::iter::ExactSizeIterator</span>,
-        <span class="comment">// super trait&#39;s associated types</span>
-        <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>,
-        <span class="comment">// trait definition</span>
-        <span class="kw">trait</span> <span class="ident">ExactSizeIterator</span>: <span class="ident">Iterator</span> {
-            <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span>;
+        input,
+        <span class="comment">// trait path
+        </span>std::iter::ExactSizeIterator,
+        <span class="comment">// super trait&#39;s associated types
+        </span>&lt;Item&gt;,
+        <span class="comment">// trait definition
+        </span><span class="kw">trait </span>ExactSizeIterator: Iterator {
+            <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
         }
     }
 }
 
-<span class="attribute">#[<span class="ident">proc_macro_derive</span>(<span class="ident">Future</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">derive_future</span>(<span class="ident">input</span>: <span class="ident">TokenStream</span>) -&gt; <span class="ident">TokenStream</span> {
+<span class="attribute">#[proc_macro_derive(Future)]</span>
+<span class="kw">pub fn </span>derive_future(input: TokenStream) -&gt; TokenStream {
     <span class="macro">quick_derive!</span> {
-        <span class="ident">input</span>,
-        <span class="comment">// trait path</span>
-        <span class="ident">std::future::Future</span>,
-        <span class="comment">// trait definition</span>
-        <span class="kw">trait</span> <span class="ident">Future</span> {
-            <span class="kw">type</span> <span class="ident">Output</span>;
-            <span class="kw">fn</span> <span class="ident">poll</span>(
-                <span class="self">self</span>: <span class="ident">std::pin::Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
-                <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::task::Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-            ) -&gt; <span class="ident">std::task::Poll</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span><span class="op">&gt;</span>;
+        input,
+        <span class="comment">// trait path
+        </span>std::future::Future,
+        <span class="comment">// trait definition
+        </span><span class="kw">trait </span>Future {
+            <span class="kw">type </span>Output;
+            <span class="kw">fn </span>poll(
+                <span class="self">self</span>: std::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
+                cx: <span class="kw-2">&amp;mut </span>std::task::Context&lt;<span class="lifetime">&#39;_</span>&gt;,
+            ) -&gt; std::task::Poll&lt;<span class="self">Self</span>::Output&gt;;
         }
     }
 }</code></pre></div>
 <h4 id="generated-code"><a href="#generated-code">Generated code</a></h4>
 <p>When deriving for enum like the following:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Iterator</span>, <span class="ident">ExactSizeIterator</span>, <span class="ident">Future</span>)]</span>
-<span class="kw">enum</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="ident">A</span>(<span class="ident">A</span>),
-    <span class="ident">B</span>(<span class="ident">B</span>),
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attribute">#[derive(Iterator, ExactSizeIterator, Future)]</span>
+<span class="kw">enum </span>Enum&lt;A, B&gt; {
+    A(A),
+    B(B),
 }</code></pre></div>
 <p>Code like this will be generated:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">enum</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="ident">A</span>(<span class="ident">A</span>),
-    <span class="ident">B</span>(<span class="ident">B</span>),
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">enum </span>Enum&lt;A, B&gt; {
+    A(A),
+    B(B),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">std::iter::Iterator</span> <span class="kw">for</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">A</span>: <span class="ident">std::iter::Iterator</span>,
-    <span class="ident">B</span>: <span class="ident">std::iter::Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">std::iter::Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;A, B&gt; std::iter::Iterator <span class="kw">for </span>Enum&lt;A, B&gt;
+<span class="kw">where
+    </span>A: std::iter::Iterator,
+    B: std::iter::Iterator&lt;Item = &lt;A <span class="kw">as </span>std::iter::Iterator&gt;::Item&gt;,
 {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">std::iter::Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span>;
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Enum::A</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">next</span>(),
-            <span class="ident">Enum::B</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">next</span>(),
+    <span class="kw">type </span>Item = &lt;A <span class="kw">as </span>std::iter::Iterator&gt;::Item;
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            Enum::A(x) =&gt; x.next(),
+            Enum::B(x) =&gt; x.next(),
         }
     }
-    <span class="kw">fn</span> <span class="ident">size_hint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="ident">usize</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Enum::A</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">size_hint</span>(),
-            <span class="ident">Enum::B</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">size_hint</span>(),
-        }
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">std::iter::ExactSizeIterator</span> <span class="kw">for</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">A</span>: <span class="ident">std::iter::ExactSizeIterator</span>,
-    <span class="ident">B</span>: <span class="ident">std::iter::ExactSizeIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">Iterator</span><span class="op">&gt;</span><span class="ident">::Item</span><span class="op">&gt;</span>,
-{
-    <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Enum::A</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">len</span>(),
-            <span class="ident">Enum::B</span>(<span class="ident">x</span>) =&gt; <span class="ident">x</span>.<span class="ident">len</span>(),
+    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+        <span class="kw">match </span><span class="self">self </span>{
+            Enum::A(x) =&gt; x.size_hint(),
+            Enum::B(x) =&gt; x.size_hint(),
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span> <span class="ident">std::future::Future</span> <span class="kw">for</span> <span class="ident">Enum</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="ident">B</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">A</span>: <span class="ident">std::future::Future</span>,
-    <span class="ident">B</span>: <span class="ident">std::future::Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">std::future::Future</span><span class="op">&gt;</span><span class="ident">::Output</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;A, B&gt; std::iter::ExactSizeIterator <span class="kw">for </span>Enum&lt;A, B&gt;
+<span class="kw">where
+    </span>A: std::iter::ExactSizeIterator,
+    B: std::iter::ExactSizeIterator&lt;Item = &lt;A <span class="kw">as </span>Iterator&gt;::Item&gt;,
 {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">std::future::Future</span><span class="op">&gt;</span><span class="ident">::Output</span>;
-    <span class="kw">fn</span> <span class="ident">poll</span>(
-        <span class="self">self</span>: <span class="ident">std::pin::Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
-        <span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::task::Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="ident">std::task::Poll</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Output</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="self">self</span>.<span class="ident">get_unchecked_mut</span>() {
-                <span class="ident">Enum::A</span>(<span class="ident">x</span>) =&gt; <span class="ident">std::pin::Pin::new_unchecked</span>(<span class="ident">x</span>).<span class="ident">poll</span>(<span class="ident">cx</span>),
-                <span class="ident">Enum::B</span>(<span class="ident">x</span>) =&gt; <span class="ident">std::pin::Pin::new_unchecked</span>(<span class="ident">x</span>).<span class="ident">poll</span>(<span class="ident">cx</span>),
+    <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="kw">match </span><span class="self">self </span>{
+            Enum::A(x) =&gt; x.len(),
+            Enum::B(x) =&gt; x.len(),
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;A, B&gt; std::future::Future <span class="kw">for </span>Enum&lt;A, B&gt;
+<span class="kw">where
+    </span>A: std::future::Future,
+    B: std::future::Future&lt;Output = &lt;A <span class="kw">as </span>std::future::Future&gt;::Output&gt;,
+{
+    <span class="kw">type </span>Output = &lt;A <span class="kw">as </span>std::future::Future&gt;::Output;
+    <span class="kw">fn </span>poll(
+        <span class="self">self</span>: std::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
+        cx: <span class="kw-2">&amp;mut </span>std::task::Context&lt;<span class="lifetime">&#39;_</span>&gt;,
+    ) -&gt; std::task::Poll&lt;<span class="self">Self</span>::Output&gt; {
+        <span class="kw">unsafe </span>{
+            <span class="kw">match </span><span class="self">self</span>.get_unchecked_mut() {
+                Enum::A(x) =&gt; std::pin::Pin::new_unchecked(x).poll(cx),
+                Enum::B(x) =&gt; std::pin::Pin::new_unchecked(x).poll(cx),
             }
         }
     }
@@ -124,4 +124,4 @@ enum so long as all variants are implemented that trait.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.EnumImpl.html" title="derive_utils::EnumImpl struct">EnumImpl</a></div><div class="item-right docblock-short"><p>A builder for implementing a trait for enums.</p>
 </div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.derive_trait.html" title="derive_utils::derive_trait fn">derive_trait</a></div><div class="item-right docblock-short"><p>A function for creating <code>proc_macro_derive</code> like deriving trait to enum so
 long as all variants are implemented that trait.</p>
-</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="derive_utils" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

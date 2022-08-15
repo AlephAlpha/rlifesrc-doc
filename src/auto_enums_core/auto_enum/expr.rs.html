@@ -194,201 +194,201 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">visit_mut</span>::{<span class="self">self</span>, <span class="ident">VisitMut</span>},
-    <span class="ident">Arm</span>, <span class="ident">Block</span>, <span class="ident">Expr</span>, <span class="ident">ExprBlock</span>, <span class="ident">ExprBreak</span>, <span class="ident">ExprCall</span>, <span class="ident">ExprIf</span>, <span class="ident">ExprLoop</span>, <span class="ident">ExprMacro</span>, <span class="ident">ExprMatch</span>,
-    <span class="ident">ExprMethodCall</span>, <span class="ident">ExprParen</span>, <span class="ident">ExprPath</span>, <span class="ident">ExprTry</span>, <span class="ident">ExprType</span>, <span class="ident">ExprUnsafe</span>, <span class="ident">Item</span>, <span class="ident">Label</span>, <span class="ident">Lifetime</span>,
-    <span class="prelude-ty">Result</span>, <span class="ident">Stmt</span>, <span class="ident">Token</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>syn::{
+    visit_mut::{<span class="self">self</span>, VisitMut},
+    Arm, Block, Expr, ExprBlock, ExprBreak, ExprCall, ExprIf, ExprLoop, ExprMacro, ExprMatch,
+    ExprMethodCall, ExprParen, ExprPath, ExprTry, ExprType, ExprUnsafe, Item, Label, Lifetime,
+    <span class="prelude-ty">Result</span>, Stmt, Token,
 };
 
-<span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">visitor</span>, <span class="ident">Context</span>, <span class="ident">NAME</span>, <span class="ident">NESTED</span>, <span class="ident">NEVER</span>};
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::utils</span>::{<span class="ident">expr_block</span>, <span class="ident">replace_block</span>, <span class="ident">replace_expr</span>, <span class="ident">Attrs</span>};
+<span class="kw">use super</span>::{visitor, Context, NAME, NESTED, NEVER};
+<span class="kw">use </span><span class="kw">crate</span>::utils::{expr_block, replace_block, replace_expr, Attrs};
 
-<span class="doccomment">/// Visits last expression.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Note that do not use this after `cx.visitor()`.</span>
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">child_expr</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">cx</span>.<span class="ident">visit_last</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">is_unreachable</span>(<span class="ident">cx</span>, <span class="ident">expr</span>) {
-        <span class="kw">return</span> <span class="prelude-val">Ok</span>(());
+<span class="doccomment">/// Visits last expression.
+///
+/// Note that do not use this after `cx.visitor()`.
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>child_expr(cx: <span class="kw-2">&amp;mut </span>Context, expr: <span class="kw-2">&amp;mut </span>Expr) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">if </span>!cx.visit_last() || is_unreachable(cx, expr) {
+        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
     }
 
-    <span class="kw">match</span> <span class="ident">expr</span> {
-        <span class="ident">Expr::Block</span>(<span class="ident">ExprBlock</span> { <span class="ident">block</span>, .. }) <span class="op">|</span> <span class="ident">Expr::Unsafe</span>(<span class="ident">ExprUnsafe</span> { <span class="ident">block</span>, .. }) =&gt; {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>)) <span class="op">=</span> <span class="ident">block</span>.<span class="ident">stmts</span>.<span class="ident">last_mut</span>() {
-                <span class="ident">child_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)<span class="question-mark">?</span>;
+    <span class="kw">match </span>expr {
+        Expr::Block(ExprBlock { block, .. }) | Expr::Unsafe(ExprUnsafe { block, .. }) =&gt; {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(Stmt::Expr(expr)) = block.stmts.last_mut() {
+                child_expr(cx, expr)<span class="question-mark">?</span>;
             }
         }
 
-        <span class="ident">Expr::Match</span>(<span class="ident">expr</span>) =&gt; <span class="ident">visit_last_expr_match</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)<span class="question-mark">?</span>,
-        <span class="ident">Expr::If</span>(<span class="ident">expr</span>) =&gt; <span class="ident">visit_last_expr_if</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)<span class="question-mark">?</span>,
-        <span class="ident">Expr::Loop</span>(<span class="ident">expr</span>) =&gt; <span class="ident">visit_last_expr_loop</span>(<span class="ident">cx</span>, <span class="ident">expr</span>),
+        Expr::Match(expr) =&gt; visit_last_expr_match(cx, expr)<span class="question-mark">?</span>,
+        Expr::If(expr) =&gt; visit_last_expr_if(cx, expr)<span class="question-mark">?</span>,
+        Expr::Loop(expr) =&gt; visit_last_expr_loop(cx, expr),
 
-        <span class="comment">// Search recursively</span>
-        <span class="ident">Expr::MethodCall</span>(<span class="ident">ExprMethodCall</span> { <span class="ident">receiver</span>: <span class="ident">expr</span>, .. })
-        <span class="op">|</span> <span class="ident">Expr::Paren</span>(<span class="ident">ExprParen</span> { <span class="ident">expr</span>, .. })
-        <span class="op">|</span> <span class="ident">Expr::Type</span>(<span class="ident">ExprType</span> { <span class="ident">expr</span>, .. }) =&gt; <span class="ident">child_expr</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)<span class="question-mark">?</span>,
+        <span class="comment">// Search recursively
+        </span>Expr::MethodCall(ExprMethodCall { receiver: expr, .. })
+        | Expr::Paren(ExprParen { expr, .. })
+        | Expr::Type(ExprType { expr, .. }) =&gt; child_expr(cx, expr)<span class="question-mark">?</span>,
 
-        <span class="kw">_</span> =&gt; {}
+        <span class="kw">_ </span>=&gt; {}
     }
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">is_unreachable</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;</span><span class="ident">Expr</span>) -&gt; <span class="ident">bool</span> {
-    <span class="kw">const</span> <span class="ident">UNREACHABLE_MACROS</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">str</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[<span class="string">&quot;unreachable&quot;</span>, <span class="string">&quot;panic&quot;</span>];
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>is_unreachable(cx: <span class="kw-2">&amp;</span>Context, expr: <span class="kw-2">&amp;</span>Expr) -&gt; bool {
+    <span class="kw">const </span>UNREACHABLE_MACROS: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;unreachable&quot;</span>, <span class="string">&quot;panic&quot;</span>];
 
-    <span class="kw">if</span> <span class="ident">expr</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NEVER</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">expr</span>.<span class="ident">any_attr</span>(<span class="ident">NAME</span>) {
-        <span class="kw">return</span> <span class="bool-val">true</span>;
+    <span class="kw">if </span>expr.any_empty_attr(NEVER) || expr.any_attr(NAME) {
+        <span class="kw">return </span><span class="bool-val">true</span>;
     }
 
-    <span class="kw">match</span> <span class="ident">expr</span> {
-        <span class="ident">Expr::Block</span>(<span class="ident">ExprBlock</span> { <span class="ident">block</span>, .. }) <span class="op">|</span> <span class="ident">Expr::Unsafe</span>(<span class="ident">ExprUnsafe</span> { <span class="ident">block</span>, .. }) =&gt; {
-            <span class="ident">is_unreachable_stmt</span>(<span class="ident">cx</span>, <span class="ident">block</span>.<span class="ident">stmts</span>.<span class="ident">last</span>())
+    <span class="kw">match </span>expr {
+        Expr::Block(ExprBlock { block, .. }) | Expr::Unsafe(ExprUnsafe { block, .. }) =&gt; {
+            is_unreachable_stmt(cx, block.stmts.last())
         }
 
-        <span class="ident">Expr::Break</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Continue</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Return</span>(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
+        Expr::Break(<span class="kw">_</span>) | Expr::Continue(<span class="kw">_</span>) | Expr::Return(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
 
-        <span class="comment">// `unreachable!`, `panic!` or an expression level marker (`marker!` macro).</span>
-        <span class="ident">Expr::Macro</span>(<span class="ident">ExprMacro</span> { <span class="ident">mac</span>, .. }) =&gt; {
-            <span class="ident">UNREACHABLE_MACROS</span>.<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="ident">mac</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="ident">i</span>)) <span class="op">|</span><span class="op">|</span> <span class="ident">cx</span>.<span class="ident">is_marker_macro</span>(<span class="ident">mac</span>)
+        <span class="comment">// `unreachable!`, `panic!` or an expression level marker (`marker!` macro).
+        </span>Expr::Macro(ExprMacro { mac, .. }) =&gt; {
+            UNREACHABLE_MACROS.iter().any(|i| mac.path.is_ident(i)) || cx.is_marker_macro(mac)
         }
 
-        <span class="ident">Expr::Match</span>(<span class="ident">ExprMatch</span> { <span class="ident">arms</span>, .. }) =&gt; {
-            <span class="ident">arms</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="ident">arm</span><span class="op">|</span> <span class="ident">arm</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NEVER</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">is_unreachable</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">arm</span>.<span class="ident">body</span>))
+        Expr::Match(ExprMatch { arms, .. }) =&gt; {
+            arms.iter().all(|arm| arm.any_empty_attr(NEVER) || is_unreachable(cx, <span class="kw-2">&amp;*</span>arm.body))
         }
 
-        <span class="comment">// `Err(expr)?` or `None?`.</span>
-        <span class="ident">Expr::Try</span>(<span class="ident">ExprTry</span> { <span class="ident">expr</span>, .. }) =&gt; <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span> {
-            <span class="ident">Expr::Path</span>(<span class="ident">ExprPath</span> { <span class="ident">path</span>, <span class="ident">qself</span>: <span class="prelude-val">None</span>, .. }) =&gt; <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;None&quot;</span>),
-            <span class="ident">Expr::Call</span>(<span class="ident">ExprCall</span> { <span class="ident">args</span>, <span class="ident">func</span>, .. }) <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> =&gt; <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">func</span> {
-                <span class="ident">Expr::Path</span>(<span class="ident">ExprPath</span> { <span class="ident">path</span>, <span class="ident">qself</span>: <span class="prelude-val">None</span>, .. }) =&gt; <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;Err&quot;</span>),
-                <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
+        <span class="comment">// `Err(expr)?` or `None?`.
+        </span>Expr::Try(ExprTry { expr, .. }) =&gt; <span class="kw">match </span><span class="kw-2">&amp;**</span>expr {
+            Expr::Path(ExprPath { path, qself: <span class="prelude-val">None</span>, .. }) =&gt; path.is_ident(<span class="string">&quot;None&quot;</span>),
+            Expr::Call(ExprCall { args, func, .. }) <span class="kw">if </span>args.len() == <span class="number">1 </span>=&gt; <span class="kw">match </span><span class="kw-2">&amp;**</span>func {
+                Expr::Path(ExprPath { path, qself: <span class="prelude-val">None</span>, .. }) =&gt; path.is_ident(<span class="string">&quot;Err&quot;</span>),
+                <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
             },
-            <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
+            <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
         },
 
-        <span class="comment">// Search recursively</span>
-        <span class="ident">Expr::MethodCall</span>(<span class="ident">ExprMethodCall</span> { <span class="ident">receiver</span>: <span class="ident">expr</span>, .. })
-        <span class="op">|</span> <span class="ident">Expr::Paren</span>(<span class="ident">ExprParen</span> { <span class="ident">expr</span>, .. })
-        <span class="op">|</span> <span class="ident">Expr::Type</span>(<span class="ident">ExprType</span> { <span class="ident">expr</span>, .. }) =&gt; <span class="ident">is_unreachable</span>(<span class="ident">cx</span>, <span class="ident">expr</span>),
+        <span class="comment">// Search recursively
+        </span>Expr::MethodCall(ExprMethodCall { receiver: expr, .. })
+        | Expr::Paren(ExprParen { expr, .. })
+        | Expr::Type(ExprType { expr, .. }) =&gt; is_unreachable(cx, expr),
 
-        <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
+        <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
     }
 }
 
-<span class="kw">fn</span> <span class="ident">is_unreachable_stmt</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="ident">Context</span>, <span class="ident">stmt</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Stmt</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
-    <span class="kw">match</span> <span class="ident">stmt</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>)) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="ident">Stmt::Semi</span>(<span class="ident">expr</span>, <span class="kw">_</span>)) =&gt; <span class="ident">is_unreachable</span>(<span class="ident">cx</span>, <span class="ident">expr</span>),
-        <span class="prelude-val">Some</span>(<span class="ident">Stmt::Local</span>(<span class="ident">local</span>)) =&gt; {
-            <span class="ident">local</span>.<span class="ident">init</span>.<span class="ident">as_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span>(<span class="kw">_</span>, <span class="ident">expr</span>)<span class="op">|</span> <span class="ident">is_unreachable</span>(<span class="ident">cx</span>, <span class="ident">expr</span>))
+<span class="kw">fn </span>is_unreachable_stmt(cx: <span class="kw-2">&amp;</span>Context, stmt: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Stmt&gt;) -&gt; bool {
+    <span class="kw">match </span>stmt {
+        <span class="prelude-val">Some</span>(Stmt::Expr(expr)) | <span class="prelude-val">Some</span>(Stmt::Semi(expr, <span class="kw">_</span>)) =&gt; is_unreachable(cx, expr),
+        <span class="prelude-val">Some</span>(Stmt::Local(local)) =&gt; {
+            local.init.as_ref().map_or(<span class="bool-val">false</span>, |(<span class="kw">_</span>, expr)| is_unreachable(cx, expr))
         }
-        <span class="prelude-val">Some</span>(<span class="ident">Stmt::Item</span>(<span class="kw">_</span>)) =&gt; <span class="bool-val">true</span>,
-        <span class="prelude-val">None</span> =&gt; <span class="bool-val">false</span>,
+        <span class="prelude-val">Some</span>(Stmt::Item(<span class="kw">_</span>)) =&gt; <span class="bool-val">true</span>,
+        <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
     }
 }
 
-<span class="kw">fn</span> <span class="ident">visit_last_expr_match</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ExprMatch</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">skip</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span>, <span class="ident">arm</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Arm</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident">arm</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NEVER</span>)
-            <span class="op">|</span><span class="op">|</span> <span class="ident">arm</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NESTED</span>)
-            <span class="op">|</span><span class="op">|</span> <span class="ident">is_unreachable</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">arm</span>.<span class="ident">body</span>)
-            <span class="op">|</span><span class="op">|</span> <span class="ident">visitor::find_nested</span>(<span class="ident">arm</span>)
+<span class="kw">fn </span>visit_last_expr_match(cx: <span class="kw-2">&amp;mut </span>Context, expr: <span class="kw-2">&amp;mut </span>ExprMatch) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">fn </span>skip(cx: <span class="kw-2">&amp;mut </span>Context, arm: <span class="kw-2">&amp;mut </span>Arm) -&gt; bool {
+        arm.any_empty_attr(NEVER)
+            || arm.any_empty_attr(NESTED)
+            || is_unreachable(cx, <span class="kw-2">&amp;*</span>arm.body)
+            || visitor::find_nested(arm)
     }
 
-    <span class="ident">expr</span>.<span class="ident">arms</span>.<span class="ident">iter_mut</span>().<span class="ident">try_for_each</span>(<span class="op">|</span><span class="ident">arm</span><span class="op">|</span> {
-        <span class="kw">if</span> <span class="op">!</span><span class="ident">skip</span>(<span class="ident">cx</span>, <span class="ident">arm</span>) {
-            <span class="ident">arm</span>.<span class="ident">comma</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="op">&lt;</span><span class="macro">Token!</span>[,]<span class="op">&gt;</span><span class="ident">::default</span>());
-            <span class="ident">replace_expr</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="ident">arm</span>.<span class="ident">body</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">cx</span>.<span class="ident">next_expr</span>(<span class="ident">x</span>));
+    expr.arms.iter_mut().try_for_each(|arm| {
+        <span class="kw">if </span>!skip(cx, arm) {
+            arm.comma = <span class="prelude-val">Some</span>(&lt;<span class="macro">Token!</span>[,]&gt;::default());
+            replace_expr(<span class="kw-2">&amp;mut *</span>arm.body, |x| cx.next_expr(x));
         }
         <span class="prelude-val">Ok</span>(())
     })
 }
 
-<span class="kw">fn</span> <span class="ident">visit_last_expr_if</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ExprIf</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">skip</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span>, <span class="ident">block</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Block</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">match</span> <span class="ident">block</span>.<span class="ident">stmts</span>.<span class="ident">last_mut</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>)) =&gt; {
-                <span class="ident">expr</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NESTED</span>)
-                    <span class="op">|</span><span class="op">|</span> <span class="ident">is_unreachable</span>(<span class="ident">cx</span>, <span class="ident">expr</span>)
-                    <span class="op">|</span><span class="op">|</span> <span class="ident">visitor::find_nested</span>(<span class="ident">block</span>)
+<span class="kw">fn </span>visit_last_expr_if(cx: <span class="kw-2">&amp;mut </span>Context, expr: <span class="kw-2">&amp;mut </span>ExprIf) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">fn </span>skip(cx: <span class="kw-2">&amp;mut </span>Context, block: <span class="kw-2">&amp;mut </span>Block) -&gt; bool {
+        <span class="kw">match </span>block.stmts.last_mut() {
+            <span class="prelude-val">Some</span>(Stmt::Expr(expr)) =&gt; {
+                expr.any_empty_attr(NESTED)
+                    || is_unreachable(cx, expr)
+                    || visitor::find_nested(block)
             }
-            <span class="kw">_</span> =&gt; <span class="ident">is_unreachable_stmt</span>(<span class="ident">cx</span>, <span class="ident">block</span>.<span class="ident">stmts</span>.<span class="ident">last</span>()),
+            <span class="kw">_ </span>=&gt; is_unreachable_stmt(cx, block.stmts.last()),
         }
     }
 
-    <span class="kw">if</span> <span class="op">!</span><span class="ident">skip</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;mut</span> <span class="ident">expr</span>.<span class="ident">then_branch</span>) {
-        <span class="ident">replace_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">expr</span>.<span class="ident">then_branch</span>, <span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">cx</span>.<span class="ident">next_expr</span>(<span class="ident">expr_block</span>(<span class="ident">b</span>)));
+    <span class="kw">if </span>!skip(cx, <span class="kw-2">&amp;mut </span>expr.then_branch) {
+        replace_block(<span class="kw-2">&amp;mut </span>expr.then_branch, |b| cx.next_expr(expr_block(b)));
     }
 
-    <span class="kw">match</span> <span class="ident">expr</span>.<span class="ident">else_branch</span>.<span class="ident">as_mut</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">expr</span>)<span class="op">|</span> <span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">expr</span>) {
-        <span class="prelude-val">Some</span>(<span class="ident">Expr::Block</span>(<span class="ident">expr</span>)) =&gt; {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">skip</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;mut</span> <span class="ident">expr</span>.<span class="ident">block</span>) {
-                <span class="ident">replace_block</span>(<span class="kw-2">&amp;mut</span> <span class="ident">expr</span>.<span class="ident">block</span>, <span class="op">|</span><span class="ident">b</span><span class="op">|</span> <span class="ident">cx</span>.<span class="ident">next_expr</span>(<span class="ident">expr_block</span>(<span class="ident">b</span>)));
+    <span class="kw">match </span>expr.else_branch.as_mut().map(|(<span class="kw">_</span>, expr)| <span class="kw-2">&amp;mut **</span>expr) {
+        <span class="prelude-val">Some</span>(Expr::Block(expr)) =&gt; {
+            <span class="kw">if </span>!skip(cx, <span class="kw-2">&amp;mut </span>expr.block) {
+                replace_block(<span class="kw-2">&amp;mut </span>expr.block, |b| cx.next_expr(expr_block(b)));
             }
             <span class="prelude-val">Ok</span>(())
         }
-        <span class="prelude-val">Some</span>(<span class="ident">Expr::If</span>(<span class="ident">expr</span>)) =&gt; <span class="ident">visit_last_expr_if</span>(<span class="ident">cx</span>, <span class="ident">expr</span>),
+        <span class="prelude-val">Some</span>(Expr::If(expr)) =&gt; visit_last_expr_if(cx, expr),
 
-        <span class="comment">// TODO: https://docs.rs/proc-macro2/1/proc_macro2/struct.Span.html#method.join</span>
-        <span class="comment">// `expr.span().join(expr.then_branch.span()).unwrap_or_else(|| expr.span())``</span>
-        <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Err</span>(<span class="macro">error!</span>(<span class="ident">expr</span>.<span class="ident">if_token</span>, <span class="string">&quot;`if` expression missing an else clause&quot;</span>)),
+        <span class="comment">// TODO: https://docs.rs/proc-macro2/1/proc_macro2/struct.Span.html#method.join
+        // `expr.span().join(expr.then_branch.span()).unwrap_or_else(|| expr.span())``
+        </span><span class="prelude-val">None </span>=&gt; <span class="prelude-val">Err</span>(<span class="macro">error!</span>(expr.if_token, <span class="string">&quot;`if` expression missing an else clause&quot;</span>)),
 
         <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">&quot;wrong_if&quot;</span>),
     }
 }
 
-<span class="kw">fn</span> <span class="ident">visit_last_expr_loop</span>(<span class="ident">cx</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Context</span>, <span class="ident">expr</span>: <span class="kw-2">&amp;mut</span> <span class="ident">ExprLoop</span>) {
-    <span class="kw">struct</span> <span class="ident">LoopVisitor</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-        <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">Context</span>,
-        <span class="ident">label</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Label</span><span class="op">&gt;</span>,
-        <span class="ident">nested</span>: <span class="ident">bool</span>,
+<span class="kw">fn </span>visit_last_expr_loop(cx: <span class="kw-2">&amp;mut </span>Context, expr: <span class="kw-2">&amp;mut </span>ExprLoop) {
+    <span class="kw">struct </span>LoopVisitor&lt;<span class="lifetime">&#39;a</span>&gt; {
+        cx: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Context,
+        label: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Label&gt;,
+        nested: bool,
     }
 
-    <span class="kw">impl</span> <span class="ident">LoopVisitor</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">compare_labels</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Lifetime</span><span class="op">&gt;</span>) -&gt; <span class="ident">bool</span> {
-            <span class="kw">match</span> (<span class="self">self</span>.<span class="ident">label</span>, <span class="ident">other</span>) {
+    <span class="kw">impl </span>LoopVisitor&lt;<span class="lifetime">&#39;_</span>&gt; {
+        <span class="kw">fn </span>compare_labels(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Lifetime&gt;) -&gt; bool {
+            <span class="kw">match </span>(<span class="self">self</span>.label, other) {
                 (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="bool-val">true</span>,
-                (<span class="prelude-val">Some</span>(<span class="ident">this</span>), <span class="prelude-val">Some</span>(<span class="ident">other</span>)) =&gt; <span class="ident">this</span>.<span class="ident">name</span>.<span class="ident">ident</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">ident</span>,
-                <span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
+                (<span class="prelude-val">Some</span>(this), <span class="prelude-val">Some</span>(other)) =&gt; this.name.ident == other.ident,
+                <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
             }
         }
     }
 
-    <span class="kw">impl</span> <span class="ident">VisitMut</span> <span class="kw">for</span> <span class="ident">LoopVisitor</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">visit_expr_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>) {
-            <span class="kw">if</span> <span class="ident">node</span>.<span class="ident">any_empty_attr</span>(<span class="ident">NEVER</span>) {
+    <span class="kw">impl </span>VisitMut <span class="kw">for </span>LoopVisitor&lt;<span class="lifetime">&#39;_</span>&gt; {
+        <span class="kw">fn </span>visit_expr_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, node: <span class="kw-2">&amp;mut </span>Expr) {
+            <span class="kw">if </span>node.any_empty_attr(NEVER) {
                 <span class="kw">return</span>;
             }
 
-            <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">nested</span>;
-            <span class="kw">match</span> <span class="ident">node</span> {
-                <span class="comment">// Stop at closure / async block bounds</span>
-                <span class="ident">Expr::Closure</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::Async</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span>,
-                <span class="comment">// Other loop bounds</span>
-                <span class="ident">Expr::Loop</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::ForLoop</span>(<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Expr::While</span>(<span class="kw">_</span>) =&gt; {
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">label</span>.<span class="ident">is_none</span>() {
+            <span class="kw">let </span>tmp = <span class="self">self</span>.nested;
+            <span class="kw">match </span>node {
+                <span class="comment">// Stop at closure / async block bounds
+                </span>Expr::Closure(<span class="kw">_</span>) | Expr::Async(<span class="kw">_</span>) =&gt; <span class="kw">return</span>,
+                <span class="comment">// Other loop bounds
+                </span>Expr::Loop(<span class="kw">_</span>) | Expr::ForLoop(<span class="kw">_</span>) | Expr::While(<span class="kw">_</span>) =&gt; {
+                    <span class="kw">if </span><span class="self">self</span>.label.is_none() {
                         <span class="kw">return</span>;
                     }
-                    <span class="self">self</span>.<span class="ident">nested</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                    <span class="self">self</span>.nested = <span class="bool-val">true</span>;
                 }
-                <span class="comment">// Desugar `break &lt;expr&gt;` into `break Enum::VariantN(&lt;expr&gt;)`.</span>
-                <span class="ident">Expr::Break</span>(<span class="ident">ExprBreak</span> { <span class="ident">label</span>, <span class="ident">expr</span>, .. }) =&gt; {
-                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">nested</span> <span class="op">&amp;&amp;</span> <span class="ident">label</span>.<span class="ident">is_none</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">compare_labels</span>(<span class="ident">label</span>.<span class="ident">as_ref</span>()) {
-                        <span class="self">self</span>.<span class="ident">cx</span>.<span class="ident">replace_boxed_expr</span>(<span class="ident">expr</span>);
+                <span class="comment">// Desugar `break &lt;expr&gt;` into `break Enum::VariantN(&lt;expr&gt;)`.
+                </span>Expr::Break(ExprBreak { label, expr, .. }) =&gt; {
+                    <span class="kw">if </span>!<span class="self">self</span>.nested &amp;&amp; label.is_none() || <span class="self">self</span>.compare_labels(label.as_ref()) {
+                        <span class="self">self</span>.cx.replace_boxed_expr(expr);
                     }
                 }
-                <span class="kw">_</span> =&gt; {}
+                <span class="kw">_ </span>=&gt; {}
             }
 
-            <span class="ident">visit_mut::visit_expr_mut</span>(<span class="self">self</span>, <span class="ident">node</span>);
-            <span class="self">self</span>.<span class="ident">nested</span> <span class="op">=</span> <span class="ident">tmp</span>;
+            visit_mut::visit_expr_mut(<span class="self">self</span>, node);
+            <span class="self">self</span>.nested = tmp;
         }
 
-        <span class="kw">fn</span> <span class="ident">visit_item_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Item</span>) {
-            <span class="comment">// Do not recurse into nested items.</span>
-        }
+        <span class="kw">fn </span>visit_item_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>Item) {
+            <span class="comment">// Do not recurse into nested items.
+        </span>}
     }
 
-    <span class="ident">LoopVisitor</span> { <span class="ident">cx</span>, <span class="ident">label</span>: <span class="ident">expr</span>.<span class="ident">label</span>.<span class="ident">as_ref</span>(), <span class="ident">nested</span>: <span class="bool-val">false</span> }.<span class="ident">visit_block_mut</span>(<span class="kw-2">&amp;mut</span> <span class="ident">expr</span>.<span class="ident">body</span>);
+    LoopVisitor { cx, label: expr.label.as_ref(), nested: <span class="bool-val">false </span>}.visit_block_mut(<span class="kw-2">&amp;mut </span>expr.body);
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

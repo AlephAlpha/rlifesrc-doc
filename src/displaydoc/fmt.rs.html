@@ -157,164 +157,164 @@
 <span id="157">157</span>
 <span id="158">158</span>
 <span id="159">159</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::attr::Display</span>;
-<span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote::quote_spanned</span>;
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">Ident</span>, <span class="ident">LitStr</span>};
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::attr::Display;
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::quote_spanned;
+<span class="kw">use </span>syn::{Ident, LitStr};
 
-<span class="macro">macro_rules!</span> <span class="ident">peek_next</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">read</span>:<span class="ident">ident</span>) =&gt; {
-        <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">read</span>.<span class="ident">chars</span>().<span class="ident">next</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">next</span>) =&gt; <span class="ident">next</span>,
-            <span class="prelude-val">None</span> =&gt; <span class="kw">return</span>,
+<span class="macro">macro_rules!</span> peek_next {
+    (<span class="macro-nonterminal">$read</span>:ident) =&gt; {
+        <span class="kw">match </span><span class="macro-nonterminal">$read</span>.chars().next() {
+            <span class="prelude-val">Some</span>(next) =&gt; next,
+            <span class="prelude-val">None </span>=&gt; <span class="kw">return</span>,
         }
     };
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> {
-    <span class="comment">// Transform `&quot;error {var}&quot;` to `&quot;error {}&quot;, var`.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">expand_shorthand</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">let</span> <span class="ident">span</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fmt</span>.<span class="ident">span</span>();
-        <span class="kw">let</span> <span class="ident">fmt</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fmt</span>.<span class="ident">value</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">read</span> <span class="op">=</span> <span class="ident">fmt</span>.<span class="ident">as_str</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">out</span> <span class="op">=</span> <span class="ident">String::new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">TokenStream::new</span>();
+<span class="kw">impl </span>Display {
+    <span class="comment">// Transform `&quot;error {var}&quot;` to `&quot;error {}&quot;, var`.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>expand_shorthand(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">let </span>span = <span class="self">self</span>.fmt.span();
+        <span class="kw">let </span>fmt = <span class="self">self</span>.fmt.value();
+        <span class="kw">let </span><span class="kw-2">mut </span>read = fmt.as_str();
+        <span class="kw">let </span><span class="kw-2">mut </span>out = String::new();
+        <span class="kw">let </span><span class="kw-2">mut </span>args = TokenStream::new();
 
-        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">brace</span>) <span class="op">=</span> <span class="ident">read</span>.<span class="ident">find</span>(<span class="string">&#39;{&#39;</span>) {
-            <span class="ident">out</span> <span class="op">+</span><span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">read</span>[..<span class="op">=</span><span class="ident">brace</span>];
-            <span class="ident">read</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">read</span>[<span class="ident">brace</span> <span class="op">+</span> <span class="number">1</span>..];
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(brace) = read.find(<span class="string">&#39;{&#39;</span>) {
+            out += <span class="kw-2">&amp;</span>read[..=brace];
+            read = <span class="kw-2">&amp;</span>read[brace + <span class="number">1</span>..];
 
-            <span class="comment">// skip cases where we find a {{</span>
-            <span class="kw">if</span> <span class="ident">read</span>.<span class="ident">starts_with</span>(<span class="string">&#39;{&#39;</span>) {
-                <span class="ident">out</span>.<span class="ident">push</span>(<span class="string">&#39;{&#39;</span>);
-                <span class="ident">read</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">read</span>[<span class="number">1</span>..];
+            <span class="comment">// skip cases where we find a {{
+            </span><span class="kw">if </span>read.starts_with(<span class="string">&#39;{&#39;</span>) {
+                out.push(<span class="string">&#39;{&#39;</span>);
+                read = <span class="kw-2">&amp;</span>read[<span class="number">1</span>..];
                 <span class="kw">continue</span>;
             }
 
-            <span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> <span class="macro">peek_next!</span>(<span class="ident">read</span>);
+            <span class="kw">let </span>next = <span class="macro">peek_next!</span>(read);
 
-            <span class="kw">let</span> <span class="ident">var</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">next</span> {
-                <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> =&gt; <span class="ident">take_int</span>(<span class="kw-2">&amp;mut</span> <span class="ident">read</span>),
-                <span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span> <span class="op">|</span> <span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span> <span class="op">|</span> <span class="string">&#39;_&#39;</span> =&gt; <span class="ident">take_ident</span>(<span class="kw-2">&amp;mut</span> <span class="ident">read</span>),
-                <span class="kw">_</span> =&gt; <span class="kw">return</span>,
+            <span class="kw">let </span>var = <span class="kw">match </span>next {
+                <span class="string">&#39;0&#39;</span>..=<span class="string">&#39;9&#39; </span>=&gt; take_int(<span class="kw-2">&amp;mut </span>read),
+                <span class="string">&#39;a&#39;</span>..=<span class="string">&#39;z&#39; </span>| <span class="string">&#39;A&#39;</span>..=<span class="string">&#39;Z&#39; </span>| <span class="string">&#39;_&#39; </span>=&gt; take_ident(<span class="kw-2">&amp;mut </span>read),
+                <span class="kw">_ </span>=&gt; <span class="kw">return</span>,
             };
 
-            <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">Ident::new</span>(<span class="kw-2">&amp;</span><span class="ident">var</span>, <span class="ident">span</span>);
+            <span class="kw">let </span>ident = Ident::new(<span class="kw-2">&amp;</span>var, span);
 
-            <span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> <span class="macro">peek_next!</span>(<span class="ident">read</span>);
+            <span class="kw">let </span>next = <span class="macro">peek_next!</span>(read);
 
-            <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">next</span> <span class="op">==</span> <span class="string">&#39;}&#39;</span> {
-                <span class="macro">quote_spanned!</span>(<span class="ident">span</span>=&gt; , #<span class="ident">ident</span>.<span class="ident">__displaydoc_display</span>())
-            } <span class="kw">else</span> {
-                <span class="macro">quote_spanned!</span>(<span class="ident">span</span>=&gt; , #<span class="ident">ident</span>)
+            <span class="kw">let </span>arg = <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;std&quot;</span>) &amp;&amp; next == <span class="string">&#39;}&#39; </span>{
+                <span class="macro">quote_spanned!</span>(span=&gt; , #ident.__displaydoc_display())
+            } <span class="kw">else </span>{
+                <span class="macro">quote_spanned!</span>(span=&gt; , #ident)
             };
 
-            <span class="ident">args</span>.<span class="ident">extend</span>(<span class="ident">arg</span>);
+            args.extend(arg);
         }
 
-        <span class="ident">out</span> <span class="op">+</span><span class="op">=</span> <span class="ident">read</span>;
-        <span class="self">self</span>.<span class="ident">fmt</span> <span class="op">=</span> <span class="ident">LitStr::new</span>(<span class="kw-2">&amp;</span><span class="ident">out</span>, <span class="self">self</span>.<span class="ident">fmt</span>.<span class="ident">span</span>());
-        <span class="self">self</span>.<span class="ident">args</span> <span class="op">=</span> <span class="ident">args</span>;
+        out += read;
+        <span class="self">self</span>.fmt = LitStr::new(<span class="kw-2">&amp;</span>out, <span class="self">self</span>.fmt.span());
+        <span class="self">self</span>.args = args;
     }
 }
 
-<span class="kw">fn</span> <span class="ident">take_int</span>(<span class="ident">read</span>: <span class="kw-2">&amp;mut</span> <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">String</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">int</span> <span class="op">=</span> <span class="ident">String::new</span>();
-    <span class="ident">int</span>.<span class="ident">push</span>(<span class="string">&#39;_&#39;</span>);
-    <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">ch</span>) <span class="kw">in</span> <span class="ident">read</span>.<span class="ident">char_indices</span>() {
-        <span class="kw">match</span> <span class="ident">ch</span> {
-            <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> =&gt; <span class="ident">int</span>.<span class="ident">push</span>(<span class="ident">ch</span>),
-            <span class="kw">_</span> =&gt; {
-                <span class="kw-2">*</span><span class="ident">read</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">read</span>[<span class="ident">i</span>..];
+<span class="kw">fn </span>take_int(read: <span class="kw-2">&amp;mut &amp;</span>str) -&gt; String {
+    <span class="kw">let </span><span class="kw-2">mut </span>int = String::new();
+    int.push(<span class="string">&#39;_&#39;</span>);
+    <span class="kw">for </span>(i, ch) <span class="kw">in </span>read.char_indices() {
+        <span class="kw">match </span>ch {
+            <span class="string">&#39;0&#39;</span>..=<span class="string">&#39;9&#39; </span>=&gt; int.push(ch),
+            <span class="kw">_ </span>=&gt; {
+                <span class="kw-2">*</span>read = <span class="kw-2">&amp;</span>read[i..];
                 <span class="kw">break</span>;
             }
         }
     }
-    <span class="ident">int</span>
+    int
 }
 
-<span class="kw">fn</span> <span class="ident">take_ident</span>(<span class="ident">read</span>: <span class="kw-2">&amp;mut</span> <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">String</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">String::new</span>();
-    <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">ch</span>) <span class="kw">in</span> <span class="ident">read</span>.<span class="ident">char_indices</span>() {
-        <span class="kw">match</span> <span class="ident">ch</span> {
-            <span class="string">&#39;a&#39;</span>..<span class="op">=</span><span class="string">&#39;z&#39;</span> <span class="op">|</span> <span class="string">&#39;A&#39;</span>..<span class="op">=</span><span class="string">&#39;Z&#39;</span> <span class="op">|</span> <span class="string">&#39;0&#39;</span>..<span class="op">=</span><span class="string">&#39;9&#39;</span> <span class="op">|</span> <span class="string">&#39;_&#39;</span> =&gt; <span class="ident">ident</span>.<span class="ident">push</span>(<span class="ident">ch</span>),
-            <span class="kw">_</span> =&gt; {
-                <span class="kw-2">*</span><span class="ident">read</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">read</span>[<span class="ident">i</span>..];
+<span class="kw">fn </span>take_ident(read: <span class="kw-2">&amp;mut &amp;</span>str) -&gt; String {
+    <span class="kw">let </span><span class="kw-2">mut </span>ident = String::new();
+    <span class="kw">for </span>(i, ch) <span class="kw">in </span>read.char_indices() {
+        <span class="kw">match </span>ch {
+            <span class="string">&#39;a&#39;</span>..=<span class="string">&#39;z&#39; </span>| <span class="string">&#39;A&#39;</span>..=<span class="string">&#39;Z&#39; </span>| <span class="string">&#39;0&#39;</span>..=<span class="string">&#39;9&#39; </span>| <span class="string">&#39;_&#39; </span>=&gt; ident.push(ch),
+            <span class="kw">_ </span>=&gt; {
+                <span class="kw-2">*</span>read = <span class="kw-2">&amp;</span>read[i..];
                 <span class="kw">break</span>;
             }
         }
     }
-    <span class="ident">ident</span>
+    ident
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">pretty_assertions::assert_eq</span>;
-    <span class="kw">use</span> <span class="ident">proc_macro2::Span</span>;
+<span class="attribute">#[cfg(test)]</span>
+<span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>pretty_assertions::assert_eq;
+    <span class="kw">use </span>proc_macro2::Span;
 
-    <span class="kw">fn</span> <span class="ident">assert</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">fmt</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">args</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">display</span> <span class="op">=</span> <span class="ident">Display</span> {
-            <span class="ident">fmt</span>: <span class="ident">LitStr::new</span>(<span class="ident">input</span>, <span class="ident">Span::call_site</span>()),
-            <span class="ident">args</span>: <span class="ident">TokenStream::new</span>(),
+    <span class="kw">fn </span>assert(input: <span class="kw-2">&amp;</span>str, fmt: <span class="kw-2">&amp;</span>str, args: <span class="kw-2">&amp;</span>str) {
+        <span class="kw">let </span><span class="kw-2">mut </span>display = Display {
+            fmt: LitStr::new(input, Span::call_site()),
+            args: TokenStream::new(),
         };
-        <span class="ident">display</span>.<span class="ident">expand_shorthand</span>();
-        <span class="macro">assert_eq!</span>(<span class="ident">fmt</span>, <span class="ident">display</span>.<span class="ident">fmt</span>.<span class="ident">value</span>());
-        <span class="macro">assert_eq!</span>(<span class="ident">args</span>, <span class="ident">display</span>.<span class="ident">args</span>.<span class="ident">to_string</span>());
+        display.expand_shorthand();
+        <span class="macro">assert_eq!</span>(fmt, display.fmt.value());
+        <span class="macro">assert_eq!</span>(args, display.args.to_string());
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">test_expand</span>() {
-        <span class="ident">assert</span>(<span class="string">&quot;fn main() {{ }}&quot;</span>, <span class="string">&quot;fn main() {{ }}&quot;</span>, <span class="string">&quot;&quot;</span>);
+    <span class="attribute">#[test]</span>
+    <span class="kw">fn </span>test_expand() {
+        assert(<span class="string">&quot;fn main() {{ }}&quot;</span>, <span class="string">&quot;fn main() {{ }}&quot;</span>, <span class="string">&quot;&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>), <span class="ident">ignore</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">test_std_expand</span>() {
-        <span class="ident">assert</span>(
+    <span class="attribute">#[test]</span>
+    <span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), ignore)]</span>
+    <span class="kw">fn </span>test_std_expand() {
+        assert(
             <span class="string">&quot;{v} {v:?} {0} {0:?}&quot;</span>,
             <span class="string">&quot;{} {:?} {} {:?}&quot;</span>,
             <span class="string">&quot;, v . __displaydoc_display () , v , _0 . __displaydoc_display () , _0&quot;</span>,
         );
-        <span class="ident">assert</span>(<span class="string">&quot;error {var}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var . __displaydoc_display ()&quot;</span>);
+        assert(<span class="string">&quot;error {var}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var . __displaydoc_display ()&quot;</span>);
 
-        <span class="ident">assert</span>(
+        assert(
             <span class="string">&quot;error {var1}&quot;</span>,
             <span class="string">&quot;error {}&quot;</span>,
             <span class="string">&quot;, var1 . __displaydoc_display ()&quot;</span>,
         );
 
-        <span class="ident">assert</span>(
+        assert(
             <span class="string">&quot;error {var1var}&quot;</span>,
             <span class="string">&quot;error {}&quot;</span>,
             <span class="string">&quot;, var1var . __displaydoc_display ()&quot;</span>,
         );
 
-        <span class="ident">assert</span>(
+        assert(
             <span class="string">&quot;The path {0}&quot;</span>,
             <span class="string">&quot;The path {}&quot;</span>,
             <span class="string">&quot;, _0 . __displaydoc_display ()&quot;</span>,
         );
-        <span class="ident">assert</span>(<span class="string">&quot;The path {0:?}&quot;</span>, <span class="string">&quot;The path {:?}&quot;</span>, <span class="string">&quot;, _0&quot;</span>);
+        assert(<span class="string">&quot;The path {0:?}&quot;</span>, <span class="string">&quot;The path {:?}&quot;</span>, <span class="string">&quot;, _0&quot;</span>);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>, <span class="ident">ignore</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">test_nostd_expand</span>() {
-        <span class="ident">assert</span>(
+    <span class="attribute">#[test]</span>
+    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;std&quot;</span>, ignore)]</span>
+    <span class="kw">fn </span>test_nostd_expand() {
+        assert(
             <span class="string">&quot;{v} {v:?} {0} {0:?}&quot;</span>,
             <span class="string">&quot;{} {:?} {} {:?}&quot;</span>,
             <span class="string">&quot;, v , v , _0 , _0&quot;</span>,
         );
-        <span class="ident">assert</span>(<span class="string">&quot;error {var}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var&quot;</span>);
+        assert(<span class="string">&quot;error {var}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var&quot;</span>);
 
-        <span class="ident">assert</span>(<span class="string">&quot;The path {0}&quot;</span>, <span class="string">&quot;The path {}&quot;</span>, <span class="string">&quot;, _0&quot;</span>);
-        <span class="ident">assert</span>(<span class="string">&quot;The path {0:?}&quot;</span>, <span class="string">&quot;The path {:?}&quot;</span>, <span class="string">&quot;, _0&quot;</span>);
+        assert(<span class="string">&quot;The path {0}&quot;</span>, <span class="string">&quot;The path {}&quot;</span>, <span class="string">&quot;, _0&quot;</span>);
+        assert(<span class="string">&quot;The path {0:?}&quot;</span>, <span class="string">&quot;The path {:?}&quot;</span>, <span class="string">&quot;, _0&quot;</span>);
 
-        <span class="ident">assert</span>(<span class="string">&quot;error {var1}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var1&quot;</span>);
+        assert(<span class="string">&quot;error {var1}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var1&quot;</span>);
 
-        <span class="ident">assert</span>(<span class="string">&quot;error {var1var}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var1var&quot;</span>);
+        assert(<span class="string">&quot;error {var1var}&quot;</span>, <span class="string">&quot;error {}&quot;</span>, <span class="string">&quot;, var1var&quot;</span>);
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="displaydoc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="displaydoc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

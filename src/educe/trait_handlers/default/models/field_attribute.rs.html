@@ -229,236 +229,236 @@
 <span id="229">229</span>
 <span id="230">230</span>
 <span id="231">231</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::create_expr_string_from_lit_str</span>;
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::create_expr_string_from_lit_str;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::panic</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Trait</span>;
+<span class="kw">use </span><span class="kw">crate</span>::panic;
+<span class="kw">use </span><span class="kw">crate</span>::Trait;
 
-<span class="kw">use</span> <span class="ident">quote::ToTokens</span>;
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">Attribute</span>, <span class="ident">Lit</span>, <span class="ident">Meta</span>, <span class="ident">NestedMeta</span>};
+<span class="kw">use </span>quote::ToTokens;
+<span class="kw">use </span>syn::{Attribute, Lit, Meta, NestedMeta};
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FieldAttribute</span> {
-    <span class="kw">pub</span> <span class="ident">flag</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">literal</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Lit</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">expression</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Clone)]</span>
+<span class="kw">pub struct </span>FieldAttribute {
+    <span class="kw">pub </span>flag: bool,
+    <span class="kw">pub </span>literal: <span class="prelude-ty">Option</span>&lt;Lit&gt;,
+    <span class="kw">pub </span>expression: <span class="prelude-ty">Option</span>&lt;String&gt;,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FieldAttributeBuilder</span> {
-    <span class="kw">pub</span> <span class="ident">enable_flag</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">enable_literal</span>: <span class="ident">bool</span>,
-    <span class="kw">pub</span> <span class="ident">enable_expression</span>: <span class="ident">bool</span>,
+<span class="attribute">#[derive(Debug, Clone)]</span>
+<span class="kw">pub struct </span>FieldAttributeBuilder {
+    <span class="kw">pub </span>enable_flag: bool,
+    <span class="kw">pub </span>enable_literal: bool,
+    <span class="kw">pub </span>enable_expression: bool,
 }
 
-<span class="kw">impl</span> <span class="ident">FieldAttributeBuilder</span> {
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::wrong_self_convention</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_default_meta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">meta</span>: <span class="kw-2">&amp;</span><span class="ident">Meta</span>) -&gt; <span class="ident">FieldAttribute</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flag</span> <span class="op">=</span> <span class="bool-val">false</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Lit</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">expression</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+<span class="kw">impl </span>FieldAttributeBuilder {
+    <span class="attribute">#[allow(clippy::wrong_self_convention)]</span>
+    <span class="kw">pub fn </span>from_default_meta(<span class="kw-2">&amp;</span><span class="self">self</span>, meta: <span class="kw-2">&amp;</span>Meta) -&gt; FieldAttribute {
+        <span class="kw">let </span><span class="kw-2">mut </span>flag = <span class="bool-val">false</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>value: <span class="prelude-ty">Option</span>&lt;Lit&gt; = <span class="prelude-val">None</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>expression: <span class="prelude-ty">Option</span>&lt;String&gt; = <span class="prelude-val">None</span>;
 
-        <span class="kw">let</span> <span class="ident">correct_usage_for_default_attribute</span> <span class="op">=</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">usage</span> <span class="op">=</span> <span class="macro">vec!</span>[];
+        <span class="kw">let </span>correct_usage_for_default_attribute = {
+            <span class="kw">let </span><span class="kw-2">mut </span>usage = <span class="macro">vec!</span>[];
 
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">enable_flag</span> {
-                <span class="ident">usage</span>.<span class="ident">push</span>(<span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>)]</span>));
+            <span class="kw">if </span><span class="self">self</span>.enable_flag {
+                usage.push(<span class="macro">stringify!</span>(<span class="attribute">#[educe(Default)]</span>));
             }
 
-            <span class="kw">if</span> <span class="self">self</span>.<span class="ident">enable_literal</span> {
-                <span class="ident">usage</span>.<span class="ident">push</span>(<span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span> <span class="op">=</span> <span class="ident">literal</span>)]</span>));
-                <span class="ident">usage</span>.<span class="ident">push</span>(<span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>(<span class="ident">literal</span>))]</span>));
+            <span class="kw">if </span><span class="self">self</span>.enable_literal {
+                usage.push(<span class="macro">stringify!</span>(<span class="attribute">#[educe(Default = literal)]</span>));
+                usage.push(<span class="macro">stringify!</span>(<span class="attribute">#[educe(Default(literal))]</span>));
             }
 
-            <span class="ident">usage</span>
+            usage
         };
 
-        <span class="kw">let</span> <span class="ident">correct_usage_for_expression</span> <span class="op">=</span> {
-            <span class="kw">let</span> <span class="ident">usage</span> <span class="op">=</span> <span class="macro">vec!</span>[
-                <span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>(<span class="ident">expression</span> <span class="op">=</span> <span class="string">&quot;expression&quot;</span>))]</span>),
-                <span class="macro">stringify!</span>(<span class="attribute">#[<span class="ident">educe</span>(<span class="ident">Default</span>(<span class="ident">expression</span>(<span class="string">&quot;expression&quot;</span>)))]</span>),
+        <span class="kw">let </span>correct_usage_for_expression = {
+            <span class="kw">let </span>usage = <span class="macro">vec!</span>[
+                <span class="macro">stringify!</span>(<span class="attribute">#[educe(Default(expression = <span class="string">&quot;expression&quot;</span>))]</span>),
+                <span class="macro">stringify!</span>(<span class="attribute">#[educe(Default(expression(<span class="string">&quot;expression&quot;</span>)))]</span>),
             ];
 
-            <span class="ident">usage</span>
+            usage
         };
 
-        <span class="kw">match</span> <span class="ident">meta</span> {
-            <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
-                <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span>.<span class="ident">iter</span>() {
-                    <span class="kw">match</span> <span class="ident">p</span> {
-                        <span class="ident">NestedMeta::Meta</span>(<span class="ident">meta</span>) =&gt; {
-                            <span class="kw">let</span> <span class="ident">meta_name</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">path</span>().<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>();
+        <span class="kw">match </span>meta {
+            Meta::List(list) =&gt; {
+                <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
+                    <span class="kw">match </span>p {
+                        NestedMeta::Meta(meta) =&gt; {
+                            <span class="kw">let </span>meta_name = meta.path().into_token_stream().to_string();
 
-                            <span class="kw">match</span> <span class="ident">meta_name</span>.<span class="ident">as_str</span>() {
-                                <span class="string">&quot;expression&quot;</span> <span class="op">|</span> <span class="string">&quot;expr&quot;</span> =&gt; {
-                                    <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">enable_expression</span> {
-                                        <span class="ident">panic::unknown_parameter</span>(<span class="string">&quot;Default&quot;</span>, <span class="ident">meta_name</span>.<span class="ident">as_str</span>());
+                            <span class="kw">match </span>meta_name.as_str() {
+                                <span class="string">&quot;expression&quot; </span>| <span class="string">&quot;expr&quot; </span>=&gt; {
+                                    <span class="kw">if </span>!<span class="self">self</span>.enable_expression {
+                                        panic::unknown_parameter(<span class="string">&quot;Default&quot;</span>, meta_name.as_str());
                                     }
 
-                                    <span class="kw">match</span> <span class="ident">meta</span> {
-                                        <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
-                                            <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span>.<span class="ident">iter</span>() {
-                                                <span class="kw">match</span> <span class="ident">p</span> {
-                                                    <span class="ident">NestedMeta::Lit</span>(<span class="ident">Lit::Str</span>(<span class="ident">s</span>)) =&gt; {
-                                                        <span class="kw">if</span> <span class="ident">expression</span>.<span class="ident">is_some</span>() {
-                                                            <span class="ident">panic::reset_parameter</span>(
-                                                                <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
+                                    <span class="kw">match </span>meta {
+                                        Meta::List(list) =&gt; {
+                                            <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
+                                                <span class="kw">match </span>p {
+                                                    NestedMeta::Lit(Lit::Str(s)) =&gt; {
+                                                        <span class="kw">if </span>expression.is_some() {
+                                                            panic::reset_parameter(
+                                                                meta_name.as_str(),
                                                             );
                                                         }
 
-                                                        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">create_expr_string_from_lit_str</span>(<span class="ident">s</span>);
+                                                        <span class="kw">let </span>s = create_expr_string_from_lit_str(s);
 
-                                                        <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">is_some</span>() {
-                                                            <span class="ident">expression</span> <span class="op">=</span> <span class="ident">s</span>;
-                                                        } <span class="kw">else</span> {
-                                                            <span class="ident">panic::empty_parameter</span>(
-                                                                <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
+                                                        <span class="kw">if </span>s.is_some() {
+                                                            expression = s;
+                                                        } <span class="kw">else </span>{
+                                                            panic::empty_parameter(
+                                                                meta_name.as_str(),
                                                             )
                                                         }
                                                     }
-                                                    <span class="kw">_</span> =&gt; {
-                                                        <span class="ident">panic::parameter_incorrect_format</span>(
-                                                            <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                            <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_expression</span>,
+                                                    <span class="kw">_ </span>=&gt; {
+                                                        panic::parameter_incorrect_format(
+                                                            meta_name.as_str(),
+                                                            <span class="kw-2">&amp;</span>correct_usage_for_expression,
                                                         )
                                                     }
                                                 }
                                             }
                                         }
-                                        <span class="ident">Meta::NameValue</span>(<span class="ident">named_value</span>) =&gt; {
-                                            <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">named_value</span>.<span class="ident">lit</span>;
+                                        Meta::NameValue(named_value) =&gt; {
+                                            <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>named_value.lit;
 
-                                            <span class="kw">match</span> <span class="ident">lit</span> {
-                                                <span class="ident">Lit::Str</span>(<span class="ident">s</span>) =&gt; {
-                                                    <span class="kw">if</span> <span class="ident">expression</span>.<span class="ident">is_some</span>() {
-                                                        <span class="ident">panic::reset_parameter</span>(<span class="ident">meta_name</span>.<span class="ident">as_str</span>());
+                                            <span class="kw">match </span>lit {
+                                                Lit::Str(s) =&gt; {
+                                                    <span class="kw">if </span>expression.is_some() {
+                                                        panic::reset_parameter(meta_name.as_str());
                                                     }
 
-                                                    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">create_expr_string_from_lit_str</span>(<span class="ident">s</span>);
+                                                    <span class="kw">let </span>s = create_expr_string_from_lit_str(s);
 
-                                                    <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">is_some</span>() {
-                                                        <span class="ident">expression</span> <span class="op">=</span> <span class="ident">s</span>;
-                                                    } <span class="kw">else</span> {
-                                                        <span class="ident">panic::empty_parameter</span>(<span class="ident">meta_name</span>.<span class="ident">as_str</span>())
+                                                    <span class="kw">if </span>s.is_some() {
+                                                        expression = s;
+                                                    } <span class="kw">else </span>{
+                                                        panic::empty_parameter(meta_name.as_str())
                                                     }
                                                 }
-                                                <span class="kw">_</span> =&gt; {
-                                                    <span class="ident">panic::parameter_incorrect_format</span>(
-                                                        <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                        <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_expression</span>,
+                                                <span class="kw">_ </span>=&gt; {
+                                                    panic::parameter_incorrect_format(
+                                                        meta_name.as_str(),
+                                                        <span class="kw-2">&amp;</span>correct_usage_for_expression,
                                                     )
                                                 }
                                             }
                                         }
-                                        <span class="kw">_</span> =&gt; {
-                                            <span class="ident">panic::parameter_incorrect_format</span>(
-                                                <span class="ident">meta_name</span>.<span class="ident">as_str</span>(),
-                                                <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_expression</span>,
+                                        <span class="kw">_ </span>=&gt; {
+                                            panic::parameter_incorrect_format(
+                                                meta_name.as_str(),
+                                                <span class="kw-2">&amp;</span>correct_usage_for_expression,
                                             )
                                         }
                                     }
                                 }
-                                <span class="kw">_</span> =&gt; <span class="ident">panic::unknown_parameter</span>(<span class="string">&quot;Default&quot;</span>, <span class="ident">meta_name</span>.<span class="ident">as_str</span>()),
+                                <span class="kw">_ </span>=&gt; panic::unknown_parameter(<span class="string">&quot;Default&quot;</span>, meta_name.as_str()),
                             }
                         }
-                        <span class="ident">NestedMeta::Lit</span>(<span class="ident">lit</span>) =&gt; {
-                            <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">enable_literal</span> {
-                                <span class="ident">panic::attribute_incorrect_format</span>(
+                        NestedMeta::Lit(lit) =&gt; {
+                            <span class="kw">if </span>!<span class="self">self</span>.enable_literal {
+                                panic::attribute_incorrect_format(
                                     <span class="string">&quot;Default&quot;</span>,
-                                    <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_default_attribute</span>,
+                                    <span class="kw-2">&amp;</span>correct_usage_for_default_attribute,
                                 )
                             }
 
-                            <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">is_some</span>() {
-                                <span class="ident">panic::reset_parameter</span>(<span class="string">&quot;value&quot;</span>);
+                            <span class="kw">if </span>value.is_some() {
+                                panic::reset_parameter(<span class="string">&quot;value&quot;</span>);
                             }
 
-                            <span class="ident">value</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">lit</span>.<span class="ident">clone</span>());
+                            value = <span class="prelude-val">Some</span>(lit.clone());
                         }
                     }
                 }
             }
-            <span class="ident">Meta::NameValue</span>(<span class="ident">named_value</span>) =&gt; {
-                <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">enable_literal</span> {
-                    <span class="ident">panic::attribute_incorrect_format</span>(
+            Meta::NameValue(named_value) =&gt; {
+                <span class="kw">if </span>!<span class="self">self</span>.enable_literal {
+                    panic::attribute_incorrect_format(
                         <span class="string">&quot;Default&quot;</span>,
-                        <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_default_attribute</span>,
+                        <span class="kw-2">&amp;</span>correct_usage_for_default_attribute,
                     )
                 }
 
-                <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">named_value</span>.<span class="ident">lit</span>;
+                <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>named_value.lit;
 
-                <span class="ident">value</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">lit</span>.<span class="ident">clone</span>());
+                value = <span class="prelude-val">Some</span>(lit.clone());
             }
-            <span class="ident">Meta::Path</span>(<span class="kw">_</span>) =&gt; {
-                <span class="kw">if</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">enable_flag</span> {
-                    <span class="ident">panic::attribute_incorrect_format</span>(
+            Meta::Path(<span class="kw">_</span>) =&gt; {
+                <span class="kw">if </span>!<span class="self">self</span>.enable_flag {
+                    panic::attribute_incorrect_format(
                         <span class="string">&quot;Default&quot;</span>,
-                        <span class="kw-2">&amp;</span><span class="ident">correct_usage_for_default_attribute</span>,
+                        <span class="kw-2">&amp;</span>correct_usage_for_default_attribute,
                     );
                 }
 
-                <span class="ident">flag</span> <span class="op">=</span> <span class="bool-val">true</span>;
+                flag = <span class="bool-val">true</span>;
             }
         }
 
-        <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">is_some</span>() <span class="op">&amp;&amp;</span> <span class="ident">expression</span>.<span class="ident">is_some</span>() {
-            <span class="ident">panic::set_value_expression</span>();
+        <span class="kw">if </span>value.is_some() &amp;&amp; expression.is_some() {
+            panic::set_value_expression();
         }
 
-        <span class="ident">FieldAttribute</span> {
-            <span class="ident">flag</span>,
-            <span class="ident">literal</span>: <span class="ident">value</span>,
-            <span class="ident">expression</span>,
+        FieldAttribute {
+            flag,
+            literal: value,
+            expression,
         }
     }
 
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::wrong_self_convention</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_attributes</span>(<span class="self">self</span>, <span class="ident">attributes</span>: <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>], <span class="ident">traits</span>: <span class="kw-2">&amp;</span>[<span class="ident">Trait</span>]) -&gt; <span class="ident">FieldAttribute</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+    <span class="attribute">#[allow(clippy::wrong_self_convention)]</span>
+    <span class="kw">pub fn </span>from_attributes(<span class="self">self</span>, attributes: <span class="kw-2">&amp;</span>[Attribute], traits: <span class="kw-2">&amp;</span>[Trait]) -&gt; FieldAttribute {
+        <span class="kw">let </span><span class="kw-2">mut </span>result = <span class="prelude-val">None</span>;
 
-        <span class="kw">for</span> <span class="ident">attribute</span> <span class="kw">in</span> <span class="ident">attributes</span>.<span class="ident">iter</span>() {
-            <span class="kw">let</span> <span class="ident">meta</span> <span class="op">=</span> <span class="ident">attribute</span>.<span class="ident">parse_meta</span>().<span class="ident">unwrap</span>();
+        <span class="kw">for </span>attribute <span class="kw">in </span>attributes.iter() {
+            <span class="kw">let </span>meta = attribute.parse_meta().unwrap();
 
-            <span class="kw">let</span> <span class="ident">meta_name</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">path</span>().<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>();
+            <span class="kw">let </span>meta_name = meta.path().into_token_stream().to_string();
 
-            <span class="kw">if</span> <span class="ident">meta_name</span>.<span class="ident">as_str</span>() <span class="op">==</span> <span class="string">&quot;educe&quot;</span> {
-                <span class="kw">match</span> <span class="ident">meta</span> {
-                    <span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; {
-                        <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">list</span>.<span class="ident">nested</span>.<span class="ident">iter</span>() {
-                            <span class="kw">match</span> <span class="ident">p</span> {
-                                <span class="ident">NestedMeta::Meta</span>(<span class="ident">meta</span>) =&gt; {
-                                    <span class="kw">let</span> <span class="ident">meta_name</span> <span class="op">=</span> <span class="ident">meta</span>.<span class="ident">path</span>().<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>();
+            <span class="kw">if </span>meta_name.as_str() == <span class="string">&quot;educe&quot; </span>{
+                <span class="kw">match </span>meta {
+                    Meta::List(list) =&gt; {
+                        <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
+                            <span class="kw">match </span>p {
+                                NestedMeta::Meta(meta) =&gt; {
+                                    <span class="kw">let </span>meta_name = meta.path().into_token_stream().to_string();
 
-                                    <span class="kw">let</span> <span class="ident">t</span> <span class="op">=</span> <span class="ident">Trait::from_str</span>(<span class="ident">meta_name</span>);
+                                    <span class="kw">let </span>t = Trait::from_str(meta_name);
 
-                                    <span class="kw">if</span> <span class="ident">traits</span>.<span class="ident">binary_search</span>(<span class="kw-2">&amp;</span><span class="ident">t</span>).<span class="ident">is_err</span>() {
-                                        <span class="ident">panic::trait_not_used</span>(<span class="ident">t</span>);
+                                    <span class="kw">if </span>traits.binary_search(<span class="kw-2">&amp;</span>t).is_err() {
+                                        panic::trait_not_used(t);
                                     }
 
-                                    <span class="kw">if</span> <span class="ident">t</span> <span class="op">==</span> <span class="ident">Trait::Default</span> {
-                                        <span class="kw">if</span> <span class="ident">result</span>.<span class="ident">is_some</span>() {
-                                            <span class="ident">panic::reuse_a_trait</span>(<span class="ident">t</span>);
+                                    <span class="kw">if </span>t == Trait::Default {
+                                        <span class="kw">if </span>result.is_some() {
+                                            panic::reuse_a_trait(t);
                                         }
 
-                                        <span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">from_default_meta</span>(<span class="ident">meta</span>));
+                                        result = <span class="prelude-val">Some</span>(<span class="self">self</span>.from_default_meta(meta));
                                     }
                                 }
-                                <span class="kw">_</span> =&gt; <span class="ident">panic::educe_format_incorrect</span>(),
+                                <span class="kw">_ </span>=&gt; panic::educe_format_incorrect(),
                             }
                         }
                     }
-                    <span class="kw">_</span> =&gt; <span class="ident">panic::educe_format_incorrect</span>(),
+                    <span class="kw">_ </span>=&gt; panic::educe_format_incorrect(),
                 }
             }
         }
 
-        <span class="ident">result</span>.<span class="ident">unwrap_or</span>(<span class="ident">FieldAttribute</span> {
-            <span class="ident">flag</span>: <span class="bool-val">false</span>,
-            <span class="ident">literal</span>: <span class="prelude-val">None</span>,
-            <span class="ident">expression</span>: <span class="prelude-val">None</span>,
+        result.unwrap_or(FieldAttribute {
+            flag: <span class="bool-val">false</span>,
+            literal: <span class="prelude-val">None</span>,
+            expression: <span class="prelude-val">None</span>,
         })
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

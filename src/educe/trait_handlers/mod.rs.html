@@ -121,128 +121,128 @@
 <span id="121">121</span>
 <span id="122">122</span>
 <span id="123">123</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;default&quot;</span>), <span class="ident">allow</span>(<span class="ident">dead_code</span>))]</span>
+</pre><pre class="rust"><code><span class="attribute">#![cfg_attr(not(feature = <span class="string">&quot;default&quot;</span>), allow(dead_code))]</span>
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Clone&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">clone</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Copy&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">copy</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Debug&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">debug</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Default&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">default</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Deref&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">deref</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;DerefMut&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">deref_mut</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Eq&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">eq</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Hash&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">hash</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;Ord&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ord</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialEq&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">partial_eq</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;PartialOrd&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">partial_ord</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Clone&quot;</span>)]</span>
+<span class="kw">pub mod </span>clone;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Copy&quot;</span>)]</span>
+<span class="kw">pub mod </span>copy;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Debug&quot;</span>)]</span>
+<span class="kw">pub mod </span>debug;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Default&quot;</span>)]</span>
+<span class="kw">pub mod </span>default;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Deref&quot;</span>)]</span>
+<span class="kw">pub mod </span>deref;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;DerefMut&quot;</span>)]</span>
+<span class="kw">pub mod </span>deref_mut;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Eq&quot;</span>)]</span>
+<span class="kw">pub mod </span>eq;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Hash&quot;</span>)]</span>
+<span class="kw">pub mod </span>hash;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;Ord&quot;</span>)]</span>
+<span class="kw">pub mod </span>ord;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;PartialEq&quot;</span>)]</span>
+<span class="kw">pub mod </span>partial_eq;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;PartialOrd&quot;</span>)]</span>
+<span class="kw">pub mod </span>partial_ord;
 
-<span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
+<span class="kw">use </span>std::str::FromStr;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Trait</span>;
+<span class="kw">use </span><span class="kw">crate</span>::Trait;
 
-<span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">quote</span>, <span class="ident">ToTokens</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="self">self</span>, <span class="ident">punctuated::Punctuated</span>, <span class="ident">token::Comma</span>, <span class="ident">DeriveInput</span>, <span class="ident">Expr</span>, <span class="ident">GenericParam</span>, <span class="ident">LitStr</span>, <span class="ident">Meta</span>,
-    <span class="ident">Path</span>, <span class="ident">WhereClause</span>, <span class="ident">WherePredicate</span>,
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::{quote, ToTokens};
+<span class="kw">use </span>syn::{
+    <span class="self">self</span>, punctuated::Punctuated, token::Comma, DeriveInput, Expr, GenericParam, LitStr, Meta,
+    Path, WhereClause, WherePredicate,
 };
 
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">TraitHandler</span> {
-    <span class="kw">fn</span> <span class="ident">trait_meta_handler</span>(
-        <span class="ident">ast</span>: <span class="kw-2">&amp;</span><span class="ident">DeriveInput</span>,
-        <span class="ident">tokens</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream</span>,
-        <span class="ident">traits</span>: <span class="kw-2">&amp;</span>[<span class="ident">Trait</span>],
-        <span class="ident">meta</span>: <span class="kw-2">&amp;</span><span class="ident">Meta</span>,
+<span class="kw">pub trait </span>TraitHandler {
+    <span class="kw">fn </span>trait_meta_handler(
+        ast: <span class="kw-2">&amp;</span>DeriveInput,
+        tokens: <span class="kw-2">&amp;mut </span>TokenStream,
+        traits: <span class="kw-2">&amp;</span>[Trait],
+        meta: <span class="kw-2">&amp;</span>Meta,
     );
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_path_from_lit_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">LitStr</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">value</span>();
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>create_path_from_lit_str(s: <span class="kw-2">&amp;</span>LitStr) -&gt; <span class="prelude-ty">Option</span>&lt;Path&gt; {
+    <span class="kw">let </span>s = s.value();
 
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">trim</span>();
+    <span class="kw">let </span>s = s.trim();
 
-    <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">is_empty</span>() {
-        <span class="prelude-val">None</span>
-    } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">tokens</span> <span class="op">=</span> <span class="ident">TokenStream::from_str</span>(<span class="ident">s</span>).<span class="ident">unwrap</span>();
+    <span class="kw">if </span>s.is_empty() {
+        <span class="prelude-val">None
+    </span>} <span class="kw">else </span>{
+        <span class="kw">let </span>tokens = TokenStream::from_str(s).unwrap();
 
-        <span class="prelude-val">Some</span>(<span class="ident">syn::parse2</span>(<span class="ident">tokens</span>).<span class="ident">unwrap</span>())
+        <span class="prelude-val">Some</span>(syn::parse2(tokens).unwrap())
     }
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_path_string_from_lit_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">LitStr</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-    <span class="ident">create_path_from_lit_str</span>(<span class="ident">s</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">path</span><span class="op">|</span> <span class="ident">path</span>.<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>().<span class="ident">replace</span>(<span class="string">&#39; &#39;</span>, <span class="string">&quot;&quot;</span>))
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>create_path_string_from_lit_str(s: <span class="kw-2">&amp;</span>LitStr) -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
+    create_path_from_lit_str(s).map(|path| path.into_token_stream().to_string().replace(<span class="string">&#39; &#39;</span>, <span class="string">&quot;&quot;</span>))
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_expr_from_lit_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">LitStr</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">value</span>();
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>create_expr_from_lit_str(s: <span class="kw-2">&amp;</span>LitStr) -&gt; <span class="prelude-ty">Option</span>&lt;Expr&gt; {
+    <span class="kw">let </span>s = s.value();
 
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">trim</span>();
+    <span class="kw">let </span>s = s.trim();
 
-    <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">is_empty</span>() {
-        <span class="prelude-val">None</span>
-    } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">tokens</span> <span class="op">=</span> <span class="ident">TokenStream::from_str</span>(<span class="ident">s</span>).<span class="ident">unwrap</span>();
+    <span class="kw">if </span>s.is_empty() {
+        <span class="prelude-val">None
+    </span>} <span class="kw">else </span>{
+        <span class="kw">let </span>tokens = TokenStream::from_str(s).unwrap();
 
-        <span class="prelude-val">Some</span>(<span class="ident">syn::parse2</span>(<span class="ident">tokens</span>).<span class="ident">unwrap</span>())
+        <span class="prelude-val">Some</span>(syn::parse2(tokens).unwrap())
     }
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_expr_string_from_lit_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">LitStr</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-    <span class="ident">create_expr_from_lit_str</span>(<span class="ident">s</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">expr</span><span class="op">|</span> <span class="ident">expr</span>.<span class="ident">into_token_stream</span>().<span class="ident">to_string</span>().<span class="ident">replace</span>(<span class="string">&#39; &#39;</span>, <span class="string">&quot;&quot;</span>))
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>create_expr_string_from_lit_str(s: <span class="kw-2">&amp;</span>LitStr) -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
+    create_expr_from_lit_str(s).map(|expr| expr.into_token_stream().to_string().replace(<span class="string">&#39; &#39;</span>, <span class="string">&quot;&quot;</span>))
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_where_predicates_from_lit_str</span>(
-    <span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">LitStr</span>,
-) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">WherePredicate</span>, <span class="ident">Comma</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">value</span>();
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>create_where_predicates_from_lit_str(
+    s: <span class="kw-2">&amp;</span>LitStr,
+) -&gt; <span class="prelude-ty">Option</span>&lt;Punctuated&lt;WherePredicate, Comma&gt;&gt; {
+    <span class="kw">let </span>s = s.value();
 
-    <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">s</span>.<span class="ident">trim</span>();
+    <span class="kw">let </span>s = s.trim();
 
-    <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">is_empty</span>() {
-        <span class="prelude-val">None</span>
-    } <span class="kw">else</span> {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;where {}&quot;</span>, <span class="ident">s</span>);
+    <span class="kw">if </span>s.is_empty() {
+        <span class="prelude-val">None
+    </span>} <span class="kw">else </span>{
+        <span class="kw">let </span>s = <span class="macro">format!</span>(<span class="string">&quot;where {}&quot;</span>, s);
 
-        <span class="kw">let</span> <span class="ident">tokens</span> <span class="op">=</span> <span class="ident">TokenStream::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let </span>tokens = TokenStream::from_str(<span class="kw-2">&amp;</span>s).unwrap();
 
-        <span class="kw">let</span> <span class="ident">where_clause</span>: <span class="ident">WhereClause</span> <span class="op">=</span> <span class="ident">syn::parse2</span>(<span class="ident">tokens</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let </span>where_clause: WhereClause = syn::parse2(tokens).unwrap();
 
-        <span class="prelude-val">Some</span>(<span class="ident">where_clause</span>.<span class="ident">predicates</span>)
+        <span class="prelude-val">Some</span>(where_clause.predicates)
     }
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">create_where_predicates_from_generic_parameters</span>(
-    <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">GenericParam</span>, <span class="ident">Comma</span><span class="op">&gt;</span>,
-    <span class="ident">bound_trait</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>,
-) -&gt; <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">WherePredicate</span>, <span class="ident">Comma</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">where_predicates</span> <span class="op">=</span> <span class="ident">Punctuated::new</span>();
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>create_where_predicates_from_generic_parameters(
+    p: <span class="kw-2">&amp;</span>Punctuated&lt;GenericParam, Comma&gt;,
+    bound_trait: <span class="kw-2">&amp;</span>Path,
+) -&gt; Punctuated&lt;WherePredicate, Comma&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>where_predicates = Punctuated::new();
 
-    <span class="kw">for</span> <span class="ident">param</span> <span class="kw">in</span> <span class="ident">p</span>.<span class="ident">iter</span>() {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">GenericParam::Type</span>(<span class="ident">typ</span>) <span class="op">=</span> <span class="ident">param</span> {
-            <span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">typ</span>.<span class="ident">ident</span>;
+    <span class="kw">for </span>param <span class="kw">in </span>p.iter() {
+        <span class="kw">if let </span>GenericParam::Type(typ) = param {
+            <span class="kw">let </span>ident = <span class="kw-2">&amp;</span>typ.ident;
 
-            <span class="ident">where_predicates</span>.<span class="ident">push</span>(<span class="ident">syn::parse2</span>(<span class="macro">quote!</span> { #<span class="ident">ident</span>: #<span class="ident">bound_trait</span> }).<span class="ident">unwrap</span>());
+            where_predicates.push(syn::parse2(<span class="macro">quote!</span> { #ident: #bound_trait }).unwrap());
         }
     }
 
-    <span class="ident">where_predicates</span>
+    where_predicates
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

@@ -26,33 +26,33 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
-</pre><pre class="rust"><code><span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_enum</span>() -&gt; <span class="op">!</span> {
+</pre><pre class="rust"><code><span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>not_enum() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;Only enums can be ordinalized.&quot;</span>)
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_unit_variant</span>() -&gt; <span class="op">!</span> {
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>not_unit_variant() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;An ordinalized enum can only have unit variants.&quot;</span>)
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_variant</span>() -&gt; <span class="op">!</span> {
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>no_variant() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;An ordinalized enum needs to have at least one variant.&quot;</span>)
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unsupported_discriminant</span>() -&gt; <span class="op">!</span> {
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>unsupported_discriminant() -&gt; ! {
     <span class="macro">panic!</span>(
-        <span class="string">&quot;The discriminant of a variant of an ordinalized enum needs to be a legal literal integer, a constant variable/function or a constant expression.&quot;</span>
-    )
+        <span class="string">&quot;The discriminant of a variant of an ordinalized enum needs to be a legal literal integer, a constant variable/function or a constant expression.&quot;
+    </span>)
 }
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">constant_variable_on_non_determined_size_enum</span>() -&gt; <span class="op">!</span> {
+<span class="attribute">#[inline]</span>
+<span class="kw">pub fn </span>constant_variable_on_non_determined_size_enum() -&gt; ! {
     <span class="macro">panic!</span>(
-        <span class="string">&quot;The discriminant of a variant can be assigned not to a literal integer only when the ordinalized enum is using the `repr` attribute to determine it&#39;s size before compilation.&quot;</span>
-    )
+        <span class="string">&quot;The discriminant of a variant can be assigned not to a literal integer only when the ordinalized enum is using the `repr` attribute to determine it&#39;s size before compilation.&quot;
+    </span>)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="enum_ordinalize" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="enum_ordinalize" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

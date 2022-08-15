@@ -416,423 +416,423 @@
 <span id="416">416</span>
 <span id="417">417</span>
 <span id="418">418</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">macro_use</span>]</span>
+</pre><pre class="rust"><code><span class="attribute">#![macro_use]</span>
 
-<span class="doccomment">/// A macro to define a helper struct that represents the rule.</span>
-<span class="macro">macro_rules!</span> <span class="ident">rule_struct</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ident</span>) =&gt; {
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
-        <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
-            <span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-            <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A macro to define a helper struct that represents the rule.
+</span><span class="macro">macro_rules!</span> rule_struct {
+    (<span class="macro-nonterminal">$name</span>: ident) =&gt; {
+        <span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]</span>
+        <span class="kw">struct </span><span class="macro-nonterminal">$name </span>{
+            b: Vec&lt;u8&gt;,
+            s: Vec&lt;u8&gt;,
         }
 
-        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
-            <span class="doccomment">/// Construct the struct from `b` / `s` data.</span>
-            <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> { <span class="ident">b</span>, <span class="ident">s</span> }
+        <span class="kw">impl </span><span class="macro-nonterminal">$name </span>{
+            <span class="doccomment">/// Construct the struct from `b` / `s` data.
+            </span><span class="kw">fn </span>from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+                <span class="macro-nonterminal">$name </span>{ b, s }
             }
 
-            <span class="doccomment">/// Construct the Generations struct from `b` / `s` data and the number of states.</span>
-            <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-                <span class="ident">Gen</span> {
-                    <span class="ident">rule</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> { <span class="ident">b</span>, <span class="ident">s</span> },
-                    <span class="ident">gen</span>,
+            <span class="doccomment">/// Construct the Generations struct from `b` / `s` data and the number of states.
+            </span><span class="kw">fn </span>from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; Gen&lt;<span class="self">Self</span>&gt; {
+                Gen {
+                    rule: <span class="macro-nonterminal">$name </span>{ b, s },
+                    gen,
                 }
             }
 
-            <span class="doccomment">/// A parser for numbers.</span>
-            <span class="kw">fn</span> <span class="ident">parse_num</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">usize</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
-            <span class="kw">where</span>
-                <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">char</span><span class="op">&gt;</span>,
+            <span class="doccomment">/// A parser for numbers.
+            </span><span class="kw">fn </span>parse_num&lt;I&gt;(chars: <span class="kw-2">&amp;mut </span>std::iter::Peekable&lt;I&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;usize, ParseRuleError&gt;
+            <span class="kw">where
+                </span>I: Iterator&lt;Item = char&gt;,
             {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">n</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">0</span>;
-                <span class="kw">if</span> <span class="ident">chars</span>.<span class="ident">peek</span>().<span class="ident">is_none</span>() <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">chars</span>.<span class="ident">peek</span>().<span class="ident">unwrap</span>().<span class="ident">is_digit</span>(<span class="number">10</span>) {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::MissingNumber</span>);
+                <span class="kw">let </span><span class="kw-2">mut </span>n: usize = <span class="number">0</span>;
+                <span class="kw">if </span>chars.peek().is_none() || !chars.peek().unwrap().is_digit(<span class="number">10</span>) {
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::MissingNumber);
                 }
-                <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                    <span class="kw">match</span> <span class="ident">c</span> {
-                        <span class="ident">c</span> <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_digit</span>(<span class="number">10</span>) =&gt; {
-                            <span class="ident">chars</span>.<span class="ident">next</span>();
-                            <span class="ident">n</span> <span class="op">=</span> <span class="ident">n</span>
-                                .<span class="ident">checked_mul</span>(<span class="number">10</span>)
-                                .<span class="ident">ok_or</span>(<span class="ident">ParseRuleError::GenOverflow</span>)<span class="question-mark">?</span>
-                                .<span class="ident">checked_add</span>(<span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="number">10</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">usize</span>)
-                                .<span class="ident">ok_or</span>(<span class="ident">ParseRuleError::GenOverflow</span>)<span class="question-mark">?</span>;
+                <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>c) = chars.peek() {
+                    <span class="kw">match </span>c {
+                        c <span class="kw">if </span>c.is_digit(<span class="number">10</span>) =&gt; {
+                            chars.next();
+                            n = n
+                                .checked_mul(<span class="number">10</span>)
+                                .ok_or(ParseRuleError::GenOverflow)<span class="question-mark">?
+                                </span>.checked_add(c.to_digit(<span class="number">10</span>).unwrap() <span class="kw">as </span>usize)
+                                .ok_or(ParseRuleError::GenOverflow)<span class="question-mark">?</span>;
                         }
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">n</span>),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(n),
                     }
                 }
-                <span class="prelude-val">Ok</span>(<span class="ident">n</span>)
+                <span class="prelude-val">Ok</span>(n)
             }
         }
     };
 }
 
-<span class="doccomment">/// A macro to define a function to parse the helper struct.</span>
-<span class="macro">macro_rules!</span> <span class="ident">parse_rule</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>: <span class="ident">expr</span>)<span class="question-mark">?</span>) =&gt; {
-        <span class="doccomment">/// A parser for the struct.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">chars</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">chars</span>().<span class="ident">peekable</span>();
-            <span class="kw">let</span> (<span class="ident">b</span>, <span class="ident">s</span>);
+<span class="doccomment">/// A macro to define a function to parse the helper struct.
+</span><span class="macro">macro_rules!</span> parse_rule {
+    ($(<span class="macro-nonterminal">$suffix</span>: expr)<span class="question-mark">?</span>) =&gt; {
+        <span class="doccomment">/// A parser for the struct.
+        </span><span class="kw">fn </span>parse_rule(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParseRuleError&gt; {
+            <span class="kw">let </span><span class="kw-2">mut </span>chars = input.chars().peekable();
+            <span class="kw">let </span>(b, s);
 
-            <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; {
-                    <span class="comment">// Rule strings using B/S notation</span>
-                    <span class="ident">chars</span>.<span class="ident">next</span>();
-                    <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                        <span class="ident">chars</span>.<span class="ident">next</span>();
+            <span class="kw">match </span>chars.peek() {
+                <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; {
+                    <span class="comment">// Rule strings using B/S notation
+                    </span>chars.next();
+                    b = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) = chars.peek() {
+                        chars.next();
                     }
-                    <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
+                    <span class="kw">match </span>chars.next() {
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>)),
                     }
-                    <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
+                    s = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
                 }
-                <span class="kw">_</span> =&gt; {
-                    <span class="comment">// Rule strings using S/B notation</span>
-                    <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
+                <span class="kw">_ </span>=&gt; {
+                    <span class="comment">// Rule strings using S/B notation
+                    </span>s = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">match </span>chars.next() {
                         <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) =&gt; (),
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>)),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="string">&#39;/&#39;</span>)),
                     }
-                    <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
+                    b = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
                 }
             }
 
             $(
-                <span class="comment">// Suffix</span>
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                    <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>.<span class="ident">to_lowercase</span>().<span class="ident">chain</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>.<span class="ident">to_uppercase</span>()).<span class="ident">all</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span> <span class="op">!</span><span class="op">=</span> <span class="ident">c</span>) {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>));
+                <span class="comment">// Suffix
+                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(c) = chars.next() {
+                    <span class="kw">if </span><span class="macro-nonterminal">$suffix</span>.to_lowercase().chain(<span class="macro-nonterminal">$suffix</span>.to_uppercase()).all(|s| s != c) {
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="macro-nonterminal">$suffix</span>));
                     }
-                } <span class="kw">else</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>));
+                } <span class="kw">else </span>{
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="macro-nonterminal">$suffix</span>));
                 }
-            )<span class="question-mark">?</span>
+            )<span class="question-mark">?
 
-            <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bs</span>(<span class="ident">b</span>, <span class="ident">s</span>)),
-                <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::ExtraJunk</span>),
+            </span><span class="kw">match </span>chars.next() {
+                <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bs(b, s)),
+                <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(ParseRuleError::ExtraJunk),
             }
         }
 
-        <span class="doccomment">/// A parser for the Generations struct.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule_gen</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">chars</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">chars</span>().<span class="ident">peekable</span>();
-            <span class="kw">let</span> (<span class="ident">b</span>, <span class="ident">s</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gen</span> <span class="op">=</span> <span class="number">2</span>;
+        <span class="doccomment">/// A parser for the Generations struct.
+        </span><span class="kw">fn </span>parse_rule_gen(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Gen&lt;<span class="self">Self</span>&gt;, ParseRuleError&gt; {
+            <span class="kw">let </span><span class="kw-2">mut </span>chars = input.chars().peekable();
+            <span class="kw">let </span>(b, s);
+            <span class="kw">let </span><span class="kw-2">mut </span>gen = <span class="number">2</span>;
 
-            <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                <span class="comment">// Rule strings using B/S/G notation</span>
-                <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; {
-                    <span class="ident">chars</span>.<span class="ident">next</span>();
-                    <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                        <span class="ident">chars</span>.<span class="ident">next</span>();
+            <span class="kw">match </span>chars.peek() {
+                <span class="comment">// Rule strings using B/S/G notation
+                </span><span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; {
+                    chars.next();
+                    b = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) = chars.peek() {
+                        chars.next();
                     }
-                    <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
+                    <span class="kw">match </span>chars.next() {
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>)),
                     }
-                    <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
+                    s = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">match </span>chars.peek() {
                         <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) =&gt; {
-                            <span class="ident">chars</span>.<span class="ident">next</span>();
-                            <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                                <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
-                                    <span class="ident">chars</span>.<span class="ident">next</span>();
+                            chars.next();
+                            <span class="kw">match </span>chars.peek() {
+                                <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
+                                    chars.next();
                                 }
-                                <span class="kw">_</span> =&gt; (),
+                                <span class="kw">_ </span>=&gt; (),
                             }
-                            <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
+                            gen = <span class="self">Self</span>::parse_num(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
                         }
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
-                            <span class="ident">chars</span>.<span class="ident">next</span>();
-                            <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
+                            chars.next();
+                            gen = <span class="self">Self</span>::parse_num(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
                         }
-                        <span class="kw">_</span> =&gt; (),
+                        <span class="kw">_ </span>=&gt; (),
                     }
                 }
 
-                <span class="comment">// Rule strings using G/B/S notation</span>
-                <span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
-                    <span class="ident">chars</span>.<span class="ident">next</span>();
-                    <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                        <span class="ident">chars</span>.<span class="ident">next</span>();
+                <span class="comment">// Rule strings using G/B/S notation
+                </span><span class="prelude-val">Some</span>(<span class="string">&#39;C&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;c&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;G&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;g&#39;</span>) =&gt; {
+                    chars.next();
+                    gen = <span class="self">Self</span>::parse_num(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) = chars.peek() {
+                        chars.next();
                     }
-                    <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; (),
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;B&#39;</span>)),
+                    <span class="kw">match </span>chars.next() {
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;B&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;b&#39;</span>) =&gt; (),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="string">&#39;B&#39;</span>)),
                     }
-                    <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                        <span class="ident">chars</span>.<span class="ident">next</span>();
+                    b = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) = chars.peek() {
+                        chars.next();
                     }
-                    <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) <span class="op">|</span> <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;S&#39;</span>)),
+                    <span class="kw">match </span>chars.next() {
+                        <span class="prelude-val">Some</span>(<span class="string">&#39;S&#39;</span>) | <span class="prelude-val">Some</span>(<span class="string">&#39;s&#39;</span>) =&gt; (),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="string">&#39;S&#39;</span>)),
                     }
-                    <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
+                    s = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
                 }
 
-                <span class="comment">// Rule strings using S/B/G notation</span>
-                <span class="kw">_</span> =&gt; {
-                    <span class="ident">s</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
+                <span class="comment">// Rule strings using S/B/G notation
+                </span><span class="kw">_ </span>=&gt; {
+                    s = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">match </span>chars.next() {
                         <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) =&gt; (),
-                        <span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="string">&#39;/&#39;</span>)),
+                        <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="string">&#39;/&#39;</span>)),
                     }
-                    <span class="ident">b</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_bs</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                        <span class="ident">chars</span>.<span class="ident">next</span>();
-                        <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
+                    b = <span class="self">Self</span>::parse_bs(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="string">&#39;/&#39;</span>) = chars.peek() {
+                        chars.next();
+                        gen = <span class="self">Self</span>::parse_num(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
                     }
                 }
             }
 
             $(
-                <span class="comment">// Suffix</span>
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                    <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>.<span class="ident">to_lowercase</span>().<span class="ident">chain</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>.<span class="ident">to_uppercase</span>()).<span class="ident">all</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span> <span class="op">!</span><span class="op">=</span> <span class="ident">c</span>) {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>));
+                <span class="comment">// Suffix
+                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(c) = chars.next() {
+                    <span class="kw">if </span><span class="macro-nonterminal">$suffix</span>.to_lowercase().chain(<span class="macro-nonterminal">$suffix</span>.to_uppercase()).all(|s| s != c) {
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="macro-nonterminal">$suffix</span>));
                     }
-                } <span class="kw">else</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::Missing</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">suffix</span>));
+                } <span class="kw">else </span>{
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::Missing(<span class="macro-nonterminal">$suffix</span>));
                 }
-            )<span class="question-mark">?</span>
+            )<span class="question-mark">?
 
-            <span class="kw">if</span> <span class="ident">gen</span> <span class="op">&lt;</span> <span class="number">2</span> {
-                <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::GenLessThan2</span>)
-            } <span class="kw">else</span> {
-                <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">next</span>() {
-                    <span class="prelude-val">None</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bsg</span>(<span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span>)),
-                    <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::ExtraJunk</span>),
+            </span><span class="kw">if </span>gen &lt; <span class="number">2 </span>{
+                <span class="prelude-val">Err</span>(ParseRuleError::GenLessThan2)
+            } <span class="kw">else </span>{
+                <span class="kw">match </span>chars.next() {
+                    <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bsg(b, s, gen)),
+                    <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(ParseRuleError::ExtraJunk),
                 }
             }
         }
     };
 }
 
-<span class="doccomment">/// A macro to define a function to parse `b` / `s` data.</span>
-<span class="macro">macro_rules!</span> <span class="ident">parse_bs</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span>) =&gt; {
-        <span class="doccomment">/// A parser for `b` / `s` data.</span>
-        <span class="kw">fn</span> <span class="ident">parse_bs</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
-        <span class="kw">where</span>
-            <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">char</span><span class="op">&gt;</span>,
+<span class="doccomment">/// A macro to define a function to parse `b` / `s` data.
+</span><span class="macro">macro_rules!</span> parse_bs {
+    (<span class="macro-nonterminal">$n</span>: expr) =&gt; {
+        <span class="doccomment">/// A parser for `b` / `s` data.
+        </span><span class="kw">fn </span>parse_bs&lt;I&gt;(chars: <span class="kw-2">&amp;mut </span>std::iter::Peekable&lt;I&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, ParseRuleError&gt;
+        <span class="kw">where
+            </span>I: Iterator&lt;Item = char&gt;,
         {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bs</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+            <span class="kw">let </span><span class="kw-2">mut </span>bs = Vec::new();
 
-            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                <span class="kw">match</span> <span class="ident">c</span> {
-                    <span class="ident">c</span> <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">is_digit</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">+</span> <span class="number">1</span>) =&gt; {
-                        <span class="ident">chars</span>.<span class="ident">next</span>();
-                        <span class="ident">bs</span>.<span class="ident">push</span>(<span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">u8</span>);
+            <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>c) = chars.peek() {
+                <span class="kw">match </span>c {
+                    c <span class="kw">if </span>c.is_digit(<span class="macro-nonterminal">$n </span>+ <span class="number">1</span>) =&gt; {
+                        chars.next();
+                        bs.push(c.to_digit(<span class="macro-nonterminal">$n </span>+ <span class="number">1</span>).unwrap() <span class="kw">as </span>u8);
                     }
-                    <span class="kw">_</span> =&gt; <span class="kw">break</span>,
+                    <span class="kw">_ </span>=&gt; <span class="kw">break</span>,
                 }
             }
 
-            <span class="ident">bs</span>.<span class="ident">sort_unstable</span>();
-            <span class="prelude-val">Ok</span>(<span class="ident">bs</span>)
+            bs.sort_unstable();
+            <span class="prelude-val">Ok</span>(bs)
         }
     };
 
-    { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span>: <span class="ident">expr</span> =&gt; { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>: <span class="ident">expr</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>: <span class="ident">expr</span>),<span class="op">*</span> $(,)<span class="question-mark">?</span> }),<span class="op">*</span>  $(,)<span class="question-mark">?</span> } =&gt; {
-        <span class="doccomment">/// A parser for `b` / `s` data.</span>
-        <span class="kw">fn</span> <span class="ident">parse_bs</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">chars</span>: <span class="kw-2">&amp;mut</span> <span class="ident">std::iter::Peekable</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span>
-        <span class="kw">where</span>
-            <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">char</span><span class="op">&gt;</span>,
+    { $(<span class="macro-nonterminal">$count</span>: expr =&gt; { $(<span class="macro-nonterminal">$key</span>: expr =&gt; <span class="macro-nonterminal">$value</span>: expr),* $(,)<span class="question-mark">? </span>}),*  $(,)<span class="question-mark">? </span>} =&gt; {
+        <span class="doccomment">/// A parser for `b` / `s` data.
+        </span><span class="kw">fn </span>parse_bs&lt;I&gt;(chars: <span class="kw-2">&amp;mut </span>std::iter::Peekable&lt;I&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;u8&gt;, ParseRuleError&gt;
+        <span class="kw">where
+            </span>I: Iterator&lt;Item = char&gt;,
         {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bs</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
+            <span class="kw">let </span><span class="kw-2">mut </span>bs = Vec::new();
 
-            <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                <span class="kw">match</span> <span class="ident">c</span> {
+            <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>c) = chars.peek() {
+                <span class="kw">match </span>c {
                     $(
-                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">count</span> =&gt; {
-                            <span class="ident">chars</span>.<span class="ident">next</span>();
-                            <span class="kw">let</span> <span class="ident">all_keys</span> <span class="op">=</span> <span class="macro">vec!</span>[$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span>),<span class="kw-2">*</span>];
-                            <span class="kw">let</span> <span class="ident">keys</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
+                        <span class="macro-nonterminal">$count </span>=&gt; {
+                            chars.next();
+                            <span class="kw">let </span>all_keys = <span class="macro">vec!</span>[$(<span class="macro-nonterminal">$key</span>),<span class="kw-2">*</span>];
+                            <span class="kw">let </span>keys = <span class="kw">match </span>chars.peek() {
                                 <span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) =&gt; {
-                                    <span class="ident">chars</span>.<span class="ident">next</span>();
-                                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-                                    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                                        <span class="kw">if</span> <span class="ident">all_keys</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) {
-                                            <span class="ident">chars</span>.<span class="ident">next</span>();
-                                            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">c</span>);
-                                        } <span class="kw">else</span> {
+                                    chars.next();
+                                    <span class="kw">let </span><span class="kw-2">mut </span>keys = Vec::new();
+                                    <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>c) = chars.peek() {
+                                        <span class="kw">if </span>all_keys.contains(<span class="kw-2">&amp;</span>c) {
+                                            chars.next();
+                                            keys.push(c);
+                                        } <span class="kw">else </span>{
                                             <span class="kw">break</span>;
                                         }
                                     }
-                                    <span class="ident">all_keys</span>.<span class="ident">into_iter</span>().<span class="ident">filter</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="op">!</span><span class="ident">keys</span>.<span class="ident">contains</span>(<span class="ident">c</span>)).<span class="ident">collect</span>()
+                                    all_keys.into_iter().filter(|c| !keys.contains(c)).collect()
                                 }
-                                <span class="prelude-val">Some</span>(<span class="ident">c</span>) <span class="kw">if</span> <span class="ident">all_keys</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) =&gt; {
-                                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-                                    <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) <span class="op">=</span> <span class="ident">chars</span>.<span class="ident">peek</span>() {
-                                        <span class="kw">if</span> <span class="ident">all_keys</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">c</span>) {
-                                            <span class="ident">chars</span>.<span class="ident">next</span>();
-                                            <span class="ident">keys</span>.<span class="ident">push</span>(<span class="ident">c</span>);
-                                        } <span class="kw">else</span> {
+                                <span class="prelude-val">Some</span>(c) <span class="kw">if </span>all_keys.contains(<span class="kw-2">&amp;</span>c) =&gt; {
+                                    <span class="kw">let </span><span class="kw-2">mut </span>keys = Vec::new();
+                                    <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>c) = chars.peek() {
+                                        <span class="kw">if </span>all_keys.contains(<span class="kw-2">&amp;</span>c) {
+                                            chars.next();
+                                            keys.push(c);
+                                        } <span class="kw">else </span>{
                                             <span class="kw">break</span>;
                                         }
                                     }
-                                    <span class="ident">keys</span>
+                                    keys
                                 }
                                 <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; {
-                                    <span class="ident">all_keys</span>
+                                    all_keys
                                 }
-                                <span class="prelude-val">None</span> =&gt; <span class="ident">all_keys</span>
+                                <span class="prelude-val">None </span>=&gt; all_keys
                             };
-                            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">c</span> <span class="kw">in</span> <span class="ident">keys</span>.<span class="ident">iter</span>() {
-                                <span class="kw">match</span> <span class="ident">c</span> {
+                            <span class="kw">for </span><span class="kw-2">&amp;</span>c <span class="kw">in </span>keys.iter() {
+                                <span class="kw">match </span>c {
                                     $(
-                                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">key</span> =&gt; <span class="ident">bs</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>)),
-                                    )<span class="op">*</span>
-                                    <span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>(),
+                                        <span class="macro-nonterminal">$key </span>=&gt; bs.extend_from_slice(<span class="kw-2">&amp;</span>(<span class="macro-nonterminal">$value</span>)),
+                                    )*
+                                    <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
                                 }
                             }
                         }
-                    ),<span class="op">*</span>
-                    <span class="kw">_</span> =&gt; <span class="kw">break</span>,
+                    ),*
+                    <span class="kw">_ </span>=&gt; <span class="kw">break</span>,
                 }
             }
 
-            <span class="ident">bs</span>.<span class="ident">sort_unstable</span>();
-            <span class="prelude-val">Ok</span>(<span class="ident">bs</span>)
+            bs.sort_unstable();
+            <span class="prelude-val">Ok</span>(bs)
         }
     };
 }
 
-<span class="doccomment">/// A macro to define a function to parse MAP strings.</span>
-<span class="macro">macro_rules!</span> <span class="ident">parse_rule_map</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span>) =&gt; {
-        <span class="doccomment">/// A parser for the struct that parses MAP strings.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule_map</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-            <span class="kw">const</span> <span class="ident">CENTER_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span>);
-            <span class="kw">const</span> <span class="ident">RIGHT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">CENTER_MARK</span> <span class="op">-</span> <span class="number">1</span>;
-            <span class="kw">const</span> <span class="ident">LEFT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">RIGHT_MARK</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>);
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">input</span>.<span class="ident">starts_with</span>(<span class="string">&quot;MAP&quot;</span>) {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::NotMapRule</span>);
+<span class="doccomment">/// A macro to define a function to parse MAP strings.
+</span><span class="macro">macro_rules!</span> parse_rule_map {
+    (<span class="macro-nonterminal">$n</span>: expr) =&gt; {
+        <span class="doccomment">/// A parser for the struct that parses MAP strings.
+        </span><span class="kw">fn </span>parse_rule_map(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ParseRuleError&gt; {
+            <span class="kw">const </span>CENTER_MARK: usize = <span class="number">1 </span>&lt;&lt; (<span class="macro-nonterminal">$n </span>/ <span class="number">2</span>);
+            <span class="kw">const </span>RIGHT_MARK: usize = CENTER_MARK - <span class="number">1</span>;
+            <span class="kw">const </span>LEFT_MARK: usize = RIGHT_MARK &lt;&lt; (<span class="macro-nonterminal">$n </span>/ <span class="number">2 </span>+ <span class="number">1</span>);
+            <span class="kw">if </span>!input.starts_with(<span class="string">&quot;MAP&quot;</span>) {
+                <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::NotMapRule);
             }
-            <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">base64::decode</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>[<span class="number">3</span>..]).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseRuleError::Base64Error</span>)<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">*</span> <span class="number">8</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::InvalidLength</span>);
+            <span class="kw">let </span>bytes = base64::decode(<span class="kw-2">&amp;</span>input[<span class="number">3</span>..]).map_err(|<span class="kw">_</span>| ParseRuleError::Base64Error)<span class="question-mark">?</span>;
+            <span class="kw">if </span>bytes.len() * <span class="number">8 </span>!= <span class="number">2 </span>&lt;&lt; <span class="macro-nonterminal">$n </span>{
+                <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::InvalidLength);
             }
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-            <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">x</span>) <span class="kw">in</span> <span class="ident">bytes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">reverse_bits</span>()).<span class="ident">enumerate</span>() {
-                <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">8</span> {
-                    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">j</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-                        <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">*</span> <span class="number">8</span> <span class="op">+</span> <span class="ident">j</span>;
-                        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> ((<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">LEFT_MARK</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span> <span class="op">|</span> (<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">RIGHT_MARK</span>)) <span class="kw">as</span> <span class="ident">u8</span>;
-                        <span class="kw">if</span> <span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">CENTER_MARK</span> <span class="op">==</span> <span class="number">0</span> {
-                            <span class="ident">b</span>.<span class="ident">push</span>(<span class="ident">n</span>);
-                        } <span class="kw">else</span> {
-                            <span class="ident">s</span>.<span class="ident">push</span>(<span class="ident">n</span>);
+            <span class="kw">let </span><span class="kw-2">mut </span>b = Vec::new();
+            <span class="kw">let </span><span class="kw-2">mut </span>s = Vec::new();
+            <span class="kw">for </span>(i, x) <span class="kw">in </span>bytes.iter().map(|x| x.reverse_bits()).enumerate() {
+                <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..<span class="number">8 </span>{
+                    <span class="kw">if </span>x &amp; (<span class="number">1 </span>&lt;&lt; j) != <span class="number">0 </span>{
+                        <span class="kw">let </span>k = i * <span class="number">8 </span>+ j;
+                        <span class="kw">let </span>n = ((k &amp; LEFT_MARK) &gt;&gt; <span class="number">1 </span>| (k &amp; RIGHT_MARK)) <span class="kw">as </span>u8;
+                        <span class="kw">if </span>k &amp; CENTER_MARK == <span class="number">0 </span>{
+                            b.push(n);
+                        } <span class="kw">else </span>{
+                            s.push(n);
                         }
                     }
                 }
             }
-            <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bs</span>(<span class="ident">b</span>, <span class="ident">s</span>))
+            <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bs(b, s))
         }
 
-        <span class="doccomment">/// A parser for the Generations struct that parses MAP strings.</span>
-        <span class="kw">fn</span> <span class="ident">parse_rule_gen_map</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Gen</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">ParseRuleError</span><span class="op">&gt;</span> {
-            <span class="kw">const</span> <span class="ident">CENTER_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span>);
-            <span class="kw">const</span> <span class="ident">RIGHT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">CENTER_MARK</span> <span class="op">-</span> <span class="number">1</span>;
-            <span class="kw">const</span> <span class="ident">LEFT_MARK</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="ident">RIGHT_MARK</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> <span class="op">/</span> <span class="number">2</span> <span class="op">+</span> <span class="number">1</span>);
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">gen</span> <span class="op">=</span> <span class="number">2</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">slash</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">len</span>();
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">input</span>.<span class="ident">starts_with</span>(<span class="string">&quot;MAP&quot;</span>) {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::NotMapRule</span>);
+        <span class="doccomment">/// A parser for the Generations struct that parses MAP strings.
+        </span><span class="kw">fn </span>parse_rule_gen_map(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Gen&lt;<span class="self">Self</span>&gt;, ParseRuleError&gt; {
+            <span class="kw">const </span>CENTER_MARK: usize = <span class="number">1 </span>&lt;&lt; (<span class="macro-nonterminal">$n </span>/ <span class="number">2</span>);
+            <span class="kw">const </span>RIGHT_MARK: usize = CENTER_MARK - <span class="number">1</span>;
+            <span class="kw">const </span>LEFT_MARK: usize = RIGHT_MARK &lt;&lt; (<span class="macro-nonterminal">$n </span>/ <span class="number">2 </span>+ <span class="number">1</span>);
+            <span class="kw">let </span><span class="kw-2">mut </span>gen = <span class="number">2</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>slash = input.len();
+            <span class="kw">if </span>!input.starts_with(<span class="string">&quot;MAP&quot;</span>) {
+                <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::NotMapRule);
             }
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">n</span>) <span class="op">=</span> <span class="ident">input</span>.<span class="ident">rfind</span>(<span class="string">&#39;/&#39;</span>) {
-                <span class="kw">if</span> (<span class="ident">n</span> <span class="op">-</span> <span class="number">3</span>) <span class="op">*</span> <span class="number">6</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> {
-                    <span class="ident">slash</span> <span class="op">=</span> <span class="ident">n</span>;
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">chars</span> <span class="op">=</span> <span class="ident">input</span>[<span class="ident">n</span> <span class="op">+</span> <span class="number">1</span>..].<span class="ident">chars</span>().<span class="ident">peekable</span>();
-                    <span class="kw">if</span> <span class="ident">chars</span>.<span class="ident">peek</span>().<span class="ident">is_some</span>() {
-                        <span class="ident">gen</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::parse_num</span>(<span class="kw-2">&amp;mut</span> <span class="ident">chars</span>)<span class="question-mark">?</span>;
-                        <span class="kw">if</span> <span class="ident">chars</span>.<span class="ident">next</span>().<span class="ident">is_some</span>() {
-                            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::ExtraJunk</span>);
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(n) = input.rfind(<span class="string">&#39;/&#39;</span>) {
+                <span class="kw">if </span>(n - <span class="number">3</span>) * <span class="number">6 </span>&gt;= <span class="number">2 </span>&lt;&lt; <span class="macro-nonterminal">$n </span>{
+                    slash = n;
+                    <span class="kw">let </span><span class="kw-2">mut </span>chars = input[n + <span class="number">1</span>..].chars().peekable();
+                    <span class="kw">if </span>chars.peek().is_some() {
+                        gen = <span class="self">Self</span>::parse_num(<span class="kw-2">&amp;mut </span>chars)<span class="question-mark">?</span>;
+                        <span class="kw">if </span>chars.next().is_some() {
+                            <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::ExtraJunk);
                         }
                     }
                 }
             }
-            <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span>
-                <span class="ident">base64::decode</span>(<span class="kw-2">&amp;</span><span class="ident">input</span>[<span class="number">3</span>..<span class="ident">slash</span>]).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ParseRuleError::Base64Error</span>)<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">*</span> <span class="number">8</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseRuleError::InvalidLength</span>);
+            <span class="kw">let </span>bytes =
+                base64::decode(<span class="kw-2">&amp;</span>input[<span class="number">3</span>..slash]).map_err(|<span class="kw">_</span>| ParseRuleError::Base64Error)<span class="question-mark">?</span>;
+            <span class="kw">if </span>bytes.len() * <span class="number">8 </span>!= <span class="number">2 </span>&lt;&lt; <span class="macro-nonterminal">$n </span>{
+                <span class="kw">return </span><span class="prelude-val">Err</span>(ParseRuleError::InvalidLength);
             }
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-            <span class="kw">for</span> (<span class="ident">i</span>, <span class="ident">x</span>) <span class="kw">in</span> <span class="ident">bytes</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">reverse_bits</span>()).<span class="ident">enumerate</span>() {
-                <span class="kw">for</span> <span class="ident">j</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">8</span> {
-                    <span class="kw">if</span> <span class="ident">x</span> <span class="op">&amp;</span> (<span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">j</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-                        <span class="kw">let</span> <span class="ident">k</span> <span class="op">=</span> <span class="ident">i</span> <span class="op">*</span> <span class="number">8</span> <span class="op">+</span> <span class="ident">j</span>;
-                        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> ((<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">LEFT_MARK</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span> <span class="op">|</span> (<span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">RIGHT_MARK</span>)) <span class="kw">as</span> <span class="ident">u8</span>;
-                        <span class="kw">if</span> <span class="ident">k</span> <span class="op">&amp;</span> <span class="ident">CENTER_MARK</span> <span class="op">==</span> <span class="number">0</span> {
-                            <span class="ident">b</span>.<span class="ident">push</span>(<span class="ident">n</span>);
-                        } <span class="kw">else</span> {
-                            <span class="ident">s</span>.<span class="ident">push</span>(<span class="ident">n</span>);
+            <span class="kw">let </span><span class="kw-2">mut </span>b = Vec::new();
+            <span class="kw">let </span><span class="kw-2">mut </span>s = Vec::new();
+            <span class="kw">for </span>(i, x) <span class="kw">in </span>bytes.iter().map(|x| x.reverse_bits()).enumerate() {
+                <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..<span class="number">8 </span>{
+                    <span class="kw">if </span>x &amp; (<span class="number">1 </span>&lt;&lt; j) != <span class="number">0 </span>{
+                        <span class="kw">let </span>k = i * <span class="number">8 </span>+ j;
+                        <span class="kw">let </span>n = ((k &amp; LEFT_MARK) &gt;&gt; <span class="number">1 </span>| (k &amp; RIGHT_MARK)) <span class="kw">as </span>u8;
+                        <span class="kw">if </span>k &amp; CENTER_MARK == <span class="number">0 </span>{
+                            b.push(n);
+                        } <span class="kw">else </span>{
+                            s.push(n);
                         }
                     }
                 }
             }
-            <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::from_bsg</span>(<span class="ident">b</span>, <span class="ident">s</span>, <span class="ident">gen</span>))
+            <span class="prelude-val">Ok</span>(<span class="self">Self</span>::from_bsg(b, s, gen))
         }
     };
 }
 
-<span class="doccomment">/// A macro for implementing traits for helper structs.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// `$f` is a function that converts the `b` / `s` data of the struct to those of the trait.</span>
-<span class="doccomment">/// `$n` is the upper bound of `b` / `s` data of the struct.</span>
-<span class="macro">macro_rules!</span> <span class="ident">impl_parser</span> {
+<span class="doccomment">/// A macro for implementing traits for helper structs.
+///
+/// `$f` is a function that converts the `b` / `s` data of the struct to those of the trait.
+/// `$n` is the upper bound of `b` / `s` data of the struct.
+</span><span class="macro">macro_rules!</span> impl_parser {
     (
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name</span>: <span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name_gen</span>: <span class="ident">ident</span>) <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name</span>: <span class="ident">ident</span>,
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>: <span class="ident">expr</span>,
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span>: <span class="ident">expr</span> $(,)<span class="question-mark">?</span>
-    ) =&gt; {
-        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name</span> {
-            <span class="kw">fn</span> <span class="ident">from_bs</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_b</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_s</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-                <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>;
-                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0_u8</span>..<span class="op">=</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> {
-                    <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="ident">f</span>(<span class="ident">i</span>);
-                    <span class="kw">if</span> <span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">j</span>) {
-                        <span class="ident">new_b</span>.<span class="ident">push</span>(<span class="ident">i</span>);
+        (<span class="macro-nonterminal">$trait_name</span>: ident, <span class="macro-nonterminal">$trait_name_gen</span>: ident) <span class="kw">for </span><span class="macro-nonterminal">$struct_name</span>: ident,
+        <span class="macro-nonterminal">$f</span>: expr,
+        <span class="macro-nonterminal">$n</span>: expr $(,)<span class="question-mark">?
+    </span>) =&gt; {
+        <span class="kw">impl </span><span class="macro-nonterminal">$trait_name </span><span class="kw">for </span><span class="macro-nonterminal">$struct_name </span>{
+            <span class="kw">fn </span>from_bs(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
+                <span class="kw">let </span><span class="kw-2">mut </span>new_b = Vec::new();
+                <span class="kw">let </span><span class="kw-2">mut </span>new_s = Vec::new();
+                <span class="kw">let </span>f = <span class="macro-nonterminal">$f</span>;
+                <span class="kw">for </span>i <span class="kw">in </span><span class="number">0_u8</span>..=<span class="macro-nonterminal">$n </span>{
+                    <span class="kw">let </span>j = f(i);
+                    <span class="kw">if </span>b.contains(<span class="kw-2">&amp;</span>j) {
+                        new_b.push(i);
                     }
-                    <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">j</span>) {
-                        <span class="ident">new_s</span>.<span class="ident">push</span>(<span class="ident">i</span>);
+                    <span class="kw">if </span>s.contains(<span class="kw-2">&amp;</span>j) {
+                        new_s.push(i);
                     }
                 }
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name::from_bs</span>(<span class="ident">new_b</span>, <span class="ident">new_s</span>)
+                <span class="macro-nonterminal">$struct_name::from_bs</span>(new_b, new_s)
             }
         }
 
-        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">trait_name_gen</span> <span class="kw">for</span> <span class="ident">Gen</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">from_bsg</span>(<span class="ident">b</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">s</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">gen</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_b</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_s</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-                <span class="kw">let</span> <span class="ident">f</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">f</span>;
-                <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0_u8</span>..<span class="op">=</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">n</span> {
-                    <span class="kw">let</span> <span class="ident">j</span> <span class="op">=</span> <span class="ident">f</span>(<span class="ident">i</span>);
-                    <span class="kw">if</span> <span class="ident">b</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">j</span>) {
-                        <span class="ident">new_b</span>.<span class="ident">push</span>(<span class="ident">i</span>);
+        <span class="kw">impl </span><span class="macro-nonterminal">$trait_name_gen </span><span class="kw">for </span>Gen&lt;<span class="macro-nonterminal">$struct_name</span>&gt; {
+            <span class="kw">fn </span>from_bsg(b: Vec&lt;u8&gt;, s: Vec&lt;u8&gt;, gen: usize) -&gt; <span class="self">Self </span>{
+                <span class="kw">let </span><span class="kw-2">mut </span>new_b = Vec::new();
+                <span class="kw">let </span><span class="kw-2">mut </span>new_s = Vec::new();
+                <span class="kw">let </span>f = <span class="macro-nonterminal">$f</span>;
+                <span class="kw">for </span>i <span class="kw">in </span><span class="number">0_u8</span>..=<span class="macro-nonterminal">$n </span>{
+                    <span class="kw">let </span>j = f(i);
+                    <span class="kw">if </span>b.contains(<span class="kw-2">&amp;</span>j) {
+                        new_b.push(i);
                     }
-                    <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">j</span>) {
-                        <span class="ident">new_s</span>.<span class="ident">push</span>(<span class="ident">i</span>);
+                    <span class="kw">if </span>s.contains(<span class="kw-2">&amp;</span>j) {
+                        new_s.push(i);
                     }
                 }
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">struct_name::from_bsg</span>(<span class="ident">new_b</span>, <span class="ident">new_s</span>, <span class="ident">gen</span>)
+                <span class="macro-nonterminal">$struct_name::from_bsg</span>(new_b, new_s, gen)
             }
         }
     };
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_rules" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

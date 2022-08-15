@@ -241,202 +241,202 @@
 <span id="241">241</span>
 <span id="242">242</span>
 <span id="243">243</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">iter</span>, <span class="ident">mem</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">punctuated::Punctuated</span>, <span class="ident">token</span>, <span class="ident">visit_mut::VisitMut</span>, <span class="ident">Arm</span>, <span class="ident">Attribute</span>, <span class="ident">Block</span>, <span class="ident">Expr</span>, <span class="ident">ExprBlock</span>,
-    <span class="ident">ExprCall</span>, <span class="ident">ExprPath</span>, <span class="ident">ExprTuple</span>, <span class="ident">ItemFn</span>, <span class="ident">Local</span>, <span class="ident">Path</span>, <span class="ident">PathSegment</span>, <span class="prelude-ty">Result</span>, <span class="ident">Stmt</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>std::{iter, mem};
+<span class="kw">use </span>syn::{
+    punctuated::Punctuated, token, visit_mut::VisitMut, Arm, Attribute, Block, Expr, ExprBlock,
+    ExprCall, ExprPath, ExprTuple, ItemFn, Local, Path, PathSegment, <span class="prelude-ty">Result</span>, Stmt,
 };
 
-<span class="macro">macro_rules!</span> <span class="ident">error</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">msg</span>:<span class="ident">expr</span>) =&gt; {
-        <span class="ident">syn::Error::new_spanned</span>(<span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">msg</span>)
+<span class="macro">macro_rules!</span> error {
+    (<span class="macro-nonterminal">$span</span>:expr, <span class="macro-nonterminal">$msg</span>:expr) =&gt; {
+        syn::Error::new_spanned(<span class="kw-2">&amp;</span><span class="macro-nonterminal">$span</span>, <span class="macro-nonterminal">$msg</span>)
     };
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>:<span class="ident">expr</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) =&gt; {
-        <span class="macro">error!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">span</span>, <span class="macro">format!</span>($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tt</span>)<span class="kw-2">*</span>))
+    (<span class="macro-nonterminal">$span</span>:expr, $(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {
+        <span class="macro">error!</span>(<span class="macro-nonterminal">$span</span>, <span class="macro">format!</span>($(<span class="macro-nonterminal">$tt</span>)<span class="kw-2">*</span>))
     };
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">path</span>(<span class="ident">segments</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">PathSegment</span><span class="op">&gt;</span>) -&gt; <span class="ident">Path</span> {
-    <span class="ident">Path</span> { <span class="ident">leading_colon</span>: <span class="prelude-val">None</span>, <span class="ident">segments</span>: <span class="ident">segments</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>() }
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>path(segments: <span class="kw">impl </span>IntoIterator&lt;Item = PathSegment&gt;) -&gt; Path {
+    Path { leading_colon: <span class="prelude-val">None</span>, segments: segments.into_iter().collect() }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">block</span>(<span class="ident">stmts</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Stmt</span><span class="op">&gt;</span>) -&gt; <span class="ident">Block</span> {
-    <span class="ident">Block</span> { <span class="ident">brace_token</span>: <span class="ident">token::Brace::default</span>(), <span class="ident">stmts</span> }
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>block(stmts: Vec&lt;Stmt&gt;) -&gt; Block {
+    Block { brace_token: token::Brace::default(), stmts }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">expr_block</span>(<span class="ident">block</span>: <span class="ident">Block</span>) -&gt; <span class="ident">Expr</span> {
-    <span class="ident">Expr::Block</span>(<span class="ident">ExprBlock</span> { <span class="ident">attrs</span>: <span class="ident">Vec::new</span>(), <span class="ident">label</span>: <span class="prelude-val">None</span>, <span class="ident">block</span> })
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>expr_block(block: Block) -&gt; Expr {
+    Expr::Block(ExprBlock { attrs: Vec::new(), label: <span class="prelude-val">None</span>, block })
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">expr_call</span>(<span class="ident">attrs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span>, <span class="ident">path</span>: <span class="ident">Path</span>, <span class="ident">arg</span>: <span class="ident">Expr</span>) -&gt; <span class="ident">Expr</span> {
-    <span class="ident">Expr::Call</span>(<span class="ident">ExprCall</span> {
-        <span class="ident">attrs</span>,
-        <span class="ident">func</span>: <span class="ident">Box::new</span>(<span class="ident">Expr::Path</span>(<span class="ident">ExprPath</span> { <span class="ident">attrs</span>: <span class="ident">Vec::new</span>(), <span class="ident">qself</span>: <span class="prelude-val">None</span>, <span class="ident">path</span> })),
-        <span class="ident">paren_token</span>: <span class="ident">token::Paren::default</span>(),
-        <span class="ident">args</span>: <span class="ident">iter::once</span>(<span class="ident">arg</span>).<span class="ident">collect</span>(),
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>expr_call(attrs: Vec&lt;Attribute&gt;, path: Path, arg: Expr) -&gt; Expr {
+    Expr::Call(ExprCall {
+        attrs,
+        func: Box::new(Expr::Path(ExprPath { attrs: Vec::new(), qself: <span class="prelude-val">None</span>, path })),
+        paren_token: token::Paren::default(),
+        args: iter::once(arg).collect(),
     })
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">unit</span>() -&gt; <span class="ident">Expr</span> {
-    <span class="ident">Expr::Tuple</span>(<span class="ident">ExprTuple</span> {
-        <span class="ident">attrs</span>: <span class="ident">Vec::new</span>(),
-        <span class="ident">paren_token</span>: <span class="ident">token::Paren::default</span>(),
-        <span class="ident">elems</span>: <span class="ident">Punctuated::new</span>(),
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>unit() -&gt; Expr {
+    Expr::Tuple(ExprTuple {
+        attrs: Vec::new(),
+        paren_token: token::Paren::default(),
+        elems: Punctuated::new(),
     })
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">replace_expr</span>(<span class="ident">this</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Expr</span>, <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="ident">Expr</span>) -&gt; <span class="ident">Expr</span>) {
-    <span class="kw-2">*</span><span class="ident">this</span> <span class="op">=</span> <span class="ident">f</span>(<span class="ident">mem::replace</span>(<span class="ident">this</span>, <span class="ident">Expr::Verbatim</span>(<span class="ident">TokenStream::new</span>())));
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>replace_expr(this: <span class="kw-2">&amp;mut </span>Expr, f: <span class="kw">impl </span>FnOnce(Expr) -&gt; Expr) {
+    <span class="kw-2">*</span>this = f(mem::replace(this, Expr::Verbatim(TokenStream::new())));
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">replace_block</span>(<span class="ident">this</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Block</span>, <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="ident">Block</span>) -&gt; <span class="ident">Expr</span>) {
-    <span class="comment">// `brace_token` of the block that passed to `f` should have `call_site` span.</span>
-    <span class="comment">// If `f` generates unused braces containing the span of `this.brace_token`,</span>
-    <span class="comment">// this will cause confusing warnings: https://github.com/rust-lang/rust/issues/71080</span>
-    <span class="kw">let</span> <span class="ident">stmts</span> <span class="op">=</span> <span class="ident">mem::replace</span>(<span class="kw-2">&amp;mut</span> <span class="ident">this</span>.<span class="ident">stmts</span>, <span class="ident">Vec::new</span>());
-    <span class="ident">this</span>.<span class="ident">stmts</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="ident">Stmt::Expr</span>(<span class="ident">f</span>(<span class="ident">block</span>(<span class="ident">stmts</span>)))];
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>replace_block(this: <span class="kw-2">&amp;mut </span>Block, f: <span class="kw">impl </span>FnOnce(Block) -&gt; Expr) {
+    <span class="comment">// `brace_token` of the block that passed to `f` should have `call_site` span.
+    // If `f` generates unused braces containing the span of `this.brace_token`,
+    // this will cause confusing warnings: https://github.com/rust-lang/rust/issues/71080
+    </span><span class="kw">let </span>stmts = mem::replace(<span class="kw-2">&amp;mut </span>this.stmts, Vec::new());
+    this.stmts = <span class="macro">vec!</span>[Stmt::Expr(f(block(stmts)))];
 }
 
-<span class="doccomment">/// Checks if `tokens` is an empty `TokenStream`.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// This is almost equivalent to `syn::parse2::&lt;Nothing&gt;()`, but produces</span>
-<span class="doccomment">/// a better error message and does not require ownership of `tokens`.</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">parse_as_empty</span>(<span class="ident">tokens</span>: <span class="kw-2">&amp;</span><span class="ident">TokenStream</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">tokens</span>.<span class="ident">is_empty</span>() { <span class="prelude-val">Ok</span>(()) } <span class="kw">else</span> { <span class="prelude-val">Err</span>(<span class="macro">error!</span>(<span class="ident">tokens</span>, <span class="string">&quot;unexpected token: {}&quot;</span>, <span class="ident">tokens</span>)) }
+<span class="doccomment">/// Checks if `tokens` is an empty `TokenStream`.
+///
+/// This is almost equivalent to `syn::parse2::&lt;Nothing&gt;()`, but produces
+/// a better error message and does not require ownership of `tokens`.
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>parse_as_empty(tokens: <span class="kw-2">&amp;</span>TokenStream) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">if </span>tokens.is_empty() { <span class="prelude-val">Ok</span>(()) } <span class="kw">else </span>{ <span class="prelude-val">Err</span>(<span class="macro">error!</span>(tokens, <span class="string">&quot;unexpected token: {}&quot;</span>, tokens)) }
 }
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// extension traits</span>
+<span class="comment">// =================================================================================================
+// extension traits
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">VecExt</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">find_remove</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">predicate</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait </span>VecExt&lt;T&gt; {
+    <span class="kw">fn </span>find_remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, predicate: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; bool) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt;;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">VecExt</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">find_remove</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">predicate</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">iter</span>().<span class="ident">position</span>(<span class="ident">predicate</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">remove</span>(<span class="ident">i</span>))
+<span class="kw">impl</span>&lt;T&gt; VecExt&lt;T&gt; <span class="kw">for </span>Vec&lt;T&gt; {
+    <span class="kw">fn </span>find_remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, predicate: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; bool) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+        <span class="self">self</span>.iter().position(predicate).map(|i| <span class="self">self</span>.remove(i))
     }
 }
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// visited node</span>
+<span class="comment">// =================================================================================================
+// visited node
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">VisitedNode</span> {
-    <span class="kw">fn</span> <span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitMut</span>);
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait </span>VisitedNode {
+    <span class="kw">fn </span>visited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitMut);
 }
 
-<span class="kw">impl</span> <span class="ident">VisitedNode</span> <span class="kw">for</span> <span class="ident">Stmt</span> {
-    <span class="kw">fn</span> <span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitMut</span>) {
-        <span class="ident">visitor</span>.<span class="ident">visit_stmt_mut</span>(<span class="self">self</span>);
-    }
-}
-
-<span class="kw">impl</span> <span class="ident">VisitedNode</span> <span class="kw">for</span> <span class="ident">Local</span> {
-    <span class="kw">fn</span> <span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitMut</span>) {
-        <span class="ident">visitor</span>.<span class="ident">visit_local_mut</span>(<span class="self">self</span>);
+<span class="kw">impl </span>VisitedNode <span class="kw">for </span>Stmt {
+    <span class="kw">fn </span>visited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitMut) {
+        visitor.visit_stmt_mut(<span class="self">self</span>);
     }
 }
 
-<span class="kw">impl</span> <span class="ident">VisitedNode</span> <span class="kw">for</span> <span class="ident">Expr</span> {
-    <span class="kw">fn</span> <span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitMut</span>) {
-        <span class="ident">visitor</span>.<span class="ident">visit_expr_mut</span>(<span class="self">self</span>);
+<span class="kw">impl </span>VisitedNode <span class="kw">for </span>Local {
+    <span class="kw">fn </span>visited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitMut) {
+        visitor.visit_local_mut(<span class="self">self</span>);
     }
 }
 
-<span class="kw">impl</span> <span class="ident">VisitedNode</span> <span class="kw">for</span> <span class="ident">Arm</span> {
-    <span class="kw">fn</span> <span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitMut</span>) {
-        <span class="ident">visitor</span>.<span class="ident">visit_arm_mut</span>(<span class="self">self</span>);
+<span class="kw">impl </span>VisitedNode <span class="kw">for </span>Expr {
+    <span class="kw">fn </span>visited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitMut) {
+        visitor.visit_expr_mut(<span class="self">self</span>);
     }
 }
 
-<span class="kw">impl</span> <span class="ident">VisitedNode</span> <span class="kw">for</span> <span class="ident">Block</span> {
-    <span class="kw">fn</span> <span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitMut</span>) {
-        <span class="ident">visitor</span>.<span class="ident">visit_block_mut</span>(<span class="self">self</span>);
+<span class="kw">impl </span>VisitedNode <span class="kw">for </span>Arm {
+    <span class="kw">fn </span>visited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitMut) {
+        visitor.visit_arm_mut(<span class="self">self</span>);
     }
 }
 
-<span class="kw">impl</span> <span class="ident">VisitedNode</span> <span class="kw">for</span> <span class="ident">ItemFn</span> {
-    <span class="kw">fn</span> <span class="ident">visited</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">VisitMut</span>) {
-        <span class="ident">visitor</span>.<span class="ident">visit_item_fn_mut</span>(<span class="self">self</span>);
+<span class="kw">impl </span>VisitedNode <span class="kw">for </span>Block {
+    <span class="kw">fn </span>visited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitMut) {
+        visitor.visit_block_mut(<span class="self">self</span>);
     }
 }
 
-<span class="comment">// =================================================================================================</span>
-<span class="comment">// helper for handling attributes</span>
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait</span> <span class="ident">Attrs</span> {
-    <span class="kw">fn</span> <span class="ident">attrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>];
-
-    <span class="kw">fn</span> <span class="ident">any_attr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">attrs</span>().<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> <span class="ident">attr</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="ident">ident</span>))
-    }
-
-    <span class="kw">fn</span> <span class="ident">any_empty_attr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">attrs</span>().<span class="ident">iter</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> <span class="ident">attr</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="ident">ident</span>) <span class="op">&amp;&amp;</span> <span class="ident">attr</span>.<span class="ident">tokens</span>.<span class="ident">is_empty</span>())
-    }
-
-    <span class="kw">fn</span> <span class="ident">attrs_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span><span class="op">&gt;</span>;
-
-    <span class="kw">fn</span> <span class="ident">find_remove_attr</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">attrs_mut</span>()<span class="question-mark">?</span>.<span class="ident">find_remove</span>(<span class="op">|</span><span class="ident">attr</span><span class="op">|</span> <span class="ident">attr</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="ident">ident</span>))
+<span class="kw">impl </span>VisitedNode <span class="kw">for </span>ItemFn {
+    <span class="kw">fn </span>visited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>VisitMut) {
+        visitor.visit_item_fn_mut(<span class="self">self</span>);
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Attrs</span> <span class="kw">for</span> <span class="ident">Arm</span> {
-    <span class="kw">fn</span> <span class="ident">attrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>] {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">attrs</span>
+<span class="comment">// =================================================================================================
+// helper for handling attributes
+
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">trait </span>Attrs {
+    <span class="kw">fn </span>attrs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Attribute];
+
+    <span class="kw">fn </span>any_attr(<span class="kw-2">&amp;</span><span class="self">self</span>, ident: <span class="kw-2">&amp;</span>str) -&gt; bool {
+        <span class="self">self</span>.attrs().iter().any(|attr| attr.path.is_ident(ident))
     }
 
-    <span class="kw">fn</span> <span class="ident">attrs_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">attrs</span>)
+    <span class="kw">fn </span>any_empty_attr(<span class="kw-2">&amp;</span><span class="self">self</span>, ident: <span class="kw-2">&amp;</span>str) -&gt; bool {
+        <span class="self">self</span>.attrs().iter().any(|attr| attr.path.is_ident(ident) &amp;&amp; attr.tokens.is_empty())
+    }
+
+    <span class="kw">fn </span>attrs_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Vec&lt;Attribute&gt;&gt;;
+
+    <span class="kw">fn </span>find_remove_attr(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ident: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;Attribute&gt; {
+        <span class="self">self</span>.attrs_mut()<span class="question-mark">?</span>.find_remove(|attr| attr.path.is_ident(ident))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Attrs</span> <span class="kw">for</span> <span class="ident">Local</span> {
-    <span class="kw">fn</span> <span class="ident">attrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>] {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">attrs</span>
+<span class="kw">impl </span>Attrs <span class="kw">for </span>Arm {
+    <span class="kw">fn </span>attrs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Attribute] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.attrs
     }
 
-    <span class="kw">fn</span> <span class="ident">attrs_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">attrs</span>)
+    <span class="kw">fn </span>attrs_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Vec&lt;Attribute&gt;&gt; {
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="self">self</span>.attrs)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Attrs</span> <span class="kw">for</span> <span class="ident">Stmt</span> {
-    <span class="kw">fn</span> <span class="ident">attrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>] {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>) <span class="op">|</span> <span class="ident">Stmt::Semi</span>(<span class="ident">expr</span>, <span class="kw">_</span>) =&gt; <span class="ident">expr</span>.<span class="ident">attrs</span>(),
-            <span class="ident">Stmt::Local</span>(<span class="ident">local</span>) =&gt; <span class="ident">local</span>.<span class="ident">attrs</span>(),
-            <span class="comment">// Ignore nested items.</span>
-            <span class="ident">Stmt::Item</span>(<span class="kw">_</span>) =&gt; <span class="kw-2">&amp;</span>[],
+<span class="kw">impl </span>Attrs <span class="kw">for </span>Local {
+    <span class="kw">fn </span>attrs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Attribute] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.attrs
+    }
+
+    <span class="kw">fn </span>attrs_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Vec&lt;Attribute&gt;&gt; {
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="self">self</span>.attrs)
+    }
+}
+
+<span class="kw">impl </span>Attrs <span class="kw">for </span>Stmt {
+    <span class="kw">fn </span>attrs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Attribute] {
+        <span class="kw">match </span><span class="self">self </span>{
+            Stmt::Expr(expr) | Stmt::Semi(expr, <span class="kw">_</span>) =&gt; expr.attrs(),
+            Stmt::Local(local) =&gt; local.attrs(),
+            <span class="comment">// Ignore nested items.
+            </span>Stmt::Item(<span class="kw">_</span>) =&gt; <span class="kw-2">&amp;</span>[],
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">attrs_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Stmt::Expr</span>(<span class="ident">expr</span>) <span class="op">|</span> <span class="ident">Stmt::Semi</span>(<span class="ident">expr</span>, <span class="kw">_</span>) =&gt; <span class="ident">expr</span>.<span class="ident">attrs_mut</span>(),
-            <span class="ident">Stmt::Local</span>(<span class="ident">local</span>) =&gt; <span class="ident">local</span>.<span class="ident">attrs_mut</span>(),
-            <span class="comment">// Ignore nested items.</span>
-            <span class="ident">Stmt::Item</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
+    <span class="kw">fn </span>attrs_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Vec&lt;Attribute&gt;&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            Stmt::Expr(expr) | Stmt::Semi(expr, <span class="kw">_</span>) =&gt; expr.attrs_mut(),
+            Stmt::Local(local) =&gt; local.attrs_mut(),
+            <span class="comment">// Ignore nested items.
+            </span>Stmt::Item(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
         }
     }
 }
 
-<span class="macro">macro_rules!</span> <span class="ident">attrs_impl</span> {
-    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Expr</span>:<span class="ident">ident</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Struct</span>:<span class="ident">ident</span>),)<span class="kw-2">*</span>) =&gt; {
-        <span class="kw">impl</span> <span class="ident">Attrs</span> <span class="kw">for</span> <span class="ident">Expr</span> {
-            <span class="kw">fn</span> <span class="ident">attrs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[<span class="ident">Attribute</span>] {
-                <span class="kw">match</span> <span class="self">self</span> {
-                    $(<span class="ident">Expr</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Expr</span>(<span class="ident">syn</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Struct</span> { <span class="ident">attrs</span>, .. }))<span class="op">|</span><span class="op">*</span> =&gt; <span class="kw-2">&amp;</span><span class="ident">attrs</span>,
-                    <span class="kw">_</span> =&gt; <span class="kw-2">&amp;</span>[],
+<span class="macro">macro_rules!</span> attrs_impl {
+    ($(<span class="macro-nonterminal">$Expr</span>:ident(<span class="macro-nonterminal">$Struct</span>:ident),)<span class="kw-2">*</span>) =&gt; {
+        <span class="kw">impl </span>Attrs <span class="kw">for </span>Expr {
+            <span class="kw">fn </span>attrs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[Attribute] {
+                <span class="kw">match </span><span class="self">self </span>{
+                    $(Expr::<span class="macro-nonterminal">$Expr</span>(syn::<span class="macro-nonterminal">$Struct </span>{ attrs, .. }))|* =&gt; <span class="kw-2">&amp;</span>attrs,
+                    <span class="kw">_ </span>=&gt; <span class="kw-2">&amp;</span>[],
                 }
             }
 
-            <span class="kw">fn</span> <span class="ident">attrs_mut</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;mut</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attribute</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-                <span class="kw">match</span> <span class="self">self</span> {
-                    $(<span class="ident">Expr</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Expr</span>(<span class="ident">syn</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">Struct</span> { <span class="ident">attrs</span>, .. }))<span class="op">|</span><span class="op">*</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">attrs</span>),
-                    <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
+            <span class="kw">fn </span>attrs_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Vec&lt;Attribute&gt;&gt; {
+                <span class="kw">match </span><span class="self">self </span>{
+                    $(Expr::<span class="macro-nonterminal">$Expr</span>(syn::<span class="macro-nonterminal">$Struct </span>{ attrs, .. }))|* =&gt; <span class="prelude-val">Some</span>(attrs),
+                    <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
                 }
             }
         }
@@ -444,45 +444,45 @@
 }
 
 <span class="macro">attrs_impl!</span> {
-    <span class="ident">Array</span>(<span class="ident">ExprArray</span>),
-    <span class="ident">Assign</span>(<span class="ident">ExprAssign</span>),
-    <span class="ident">AssignOp</span>(<span class="ident">ExprAssignOp</span>),
-    <span class="ident">Async</span>(<span class="ident">ExprAsync</span>),
-    <span class="ident">Await</span>(<span class="ident">ExprAwait</span>),
-    <span class="ident">Binary</span>(<span class="ident">ExprBinary</span>),
-    <span class="ident">Block</span>(<span class="ident">ExprBlock</span>),
-    <span class="ident">Box</span>(<span class="ident">ExprBox</span>),
-    <span class="ident">Break</span>(<span class="ident">ExprBreak</span>),
-    <span class="ident">Call</span>(<span class="ident">ExprCall</span>),
-    <span class="ident">Cast</span>(<span class="ident">ExprCast</span>),
-    <span class="ident">Closure</span>(<span class="ident">ExprClosure</span>),
-    <span class="ident">Continue</span>(<span class="ident">ExprContinue</span>),
-    <span class="ident">Field</span>(<span class="ident">ExprField</span>),
-    <span class="ident">ForLoop</span>(<span class="ident">ExprForLoop</span>),
-    <span class="ident">Group</span>(<span class="ident">ExprGroup</span>),
-    <span class="ident">If</span>(<span class="ident">ExprIf</span>),
-    <span class="ident">Index</span>(<span class="ident">ExprIndex</span>),
-    <span class="ident">Let</span>(<span class="ident">ExprLet</span>),
-    <span class="ident">Lit</span>(<span class="ident">ExprLit</span>),
-    <span class="ident">Loop</span>(<span class="ident">ExprLoop</span>),
-    <span class="ident">Macro</span>(<span class="ident">ExprMacro</span>),
-    <span class="ident">Match</span>(<span class="ident">ExprMatch</span>),
-    <span class="ident">MethodCall</span>(<span class="ident">ExprMethodCall</span>),
-    <span class="ident">Paren</span>(<span class="ident">ExprParen</span>),
-    <span class="ident">Path</span>(<span class="ident">ExprPath</span>),
-    <span class="ident">Range</span>(<span class="ident">ExprRange</span>),
-    <span class="ident">Reference</span>(<span class="ident">ExprReference</span>),
-    <span class="ident">Repeat</span>(<span class="ident">ExprRepeat</span>),
-    <span class="ident">Return</span>(<span class="ident">ExprReturn</span>),
-    <span class="ident">Struct</span>(<span class="ident">ExprStruct</span>),
-    <span class="ident">Try</span>(<span class="ident">ExprTry</span>),
-    <span class="ident">TryBlock</span>(<span class="ident">ExprTryBlock</span>),
-    <span class="ident">Tuple</span>(<span class="ident">ExprTuple</span>),
-    <span class="ident">Type</span>(<span class="ident">ExprType</span>),
-    <span class="ident">Unary</span>(<span class="ident">ExprUnary</span>),
-    <span class="ident">Unsafe</span>(<span class="ident">ExprUnsafe</span>),
-    <span class="ident">While</span>(<span class="ident">ExprWhile</span>),
-    <span class="ident">Yield</span>(<span class="ident">ExprYield</span>),
+    Array(ExprArray),
+    Assign(ExprAssign),
+    AssignOp(ExprAssignOp),
+    Async(ExprAsync),
+    Await(ExprAwait),
+    Binary(ExprBinary),
+    Block(ExprBlock),
+    Box(ExprBox),
+    Break(ExprBreak),
+    Call(ExprCall),
+    Cast(ExprCast),
+    Closure(ExprClosure),
+    Continue(ExprContinue),
+    Field(ExprField),
+    ForLoop(ExprForLoop),
+    Group(ExprGroup),
+    If(ExprIf),
+    Index(ExprIndex),
+    Let(ExprLet),
+    Lit(ExprLit),
+    Loop(ExprLoop),
+    Macro(ExprMacro),
+    Match(ExprMatch),
+    MethodCall(ExprMethodCall),
+    Paren(ExprParen),
+    Path(ExprPath),
+    Range(ExprRange),
+    Reference(ExprReference),
+    Repeat(ExprRepeat),
+    Return(ExprReturn),
+    Struct(ExprStruct),
+    Try(ExprTry),
+    TryBlock(ExprTryBlock),
+    Tuple(ExprTuple),
+    Type(ExprType),
+    Unary(ExprUnary),
+    Unsafe(ExprUnsafe),
+    While(ExprWhile),
+    Yield(ExprYield),
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="auto_enums_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

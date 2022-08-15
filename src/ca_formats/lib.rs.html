@@ -139,38 +139,38 @@ assert_eq!(sirrobin.count(), 282);
     by René Perschon - Parsers for [Life 1.05](https://www.conwaylife.com/wiki/Life_1.05)
     and [Life 1.06](https://www.conwaylife.com/wiki/Life_1.06) format.
 
-*/</span>
+*/
 
-<span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">docs_rs</span>, <span class="ident">feature</span>(<span class="ident">doc_cfg</span>))]</span>
+</span><span class="attribute">#![cfg_attr(docs_rs, feature(doc_cfg))]</span>
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">apgcode</span>;
-<span class="kw">mod</span> <span class="ident">input</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">macrocell</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">plaintext</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">rle</span>;
+<span class="kw">pub mod </span>apgcode;
+<span class="kw">mod </span>input;
+<span class="kw">pub mod </span>macrocell;
+<span class="kw">pub mod </span>plaintext;
+<span class="kw">pub mod </span>rle;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">input::Input</span>;
+<span class="kw">pub use </span>input::Input;
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Coordinates</span> <span class="op">=</span> (<span class="ident">i64</span>, <span class="ident">i64</span>);
+<span class="kw">pub type </span>Coordinates = (i64, i64);
 
-<span class="doccomment">/// Position and state of a cell.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Rules with more than 256 states are not supported.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">Default</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CellData</span> {
-    <span class="doccomment">/// Coordinates of the cell.</span>
-    <span class="kw">pub</span> <span class="ident">position</span>: <span class="ident">Coordinates</span>,
-    <span class="doccomment">/// State of the cell.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For rules with only 2 states, `0` means dead and `1` means alive.</span>
-    <span class="kw">pub</span> <span class="ident">state</span>: <span class="ident">u8</span>,
+<span class="doccomment">/// Position and state of a cell.
+///
+/// Rules with more than 256 states are not supported.
+</span><span class="attribute">#[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Default, Hash)]</span>
+<span class="kw">pub struct </span>CellData {
+    <span class="doccomment">/// Coordinates of the cell.
+    </span><span class="kw">pub </span>position: Coordinates,
+    <span class="doccomment">/// State of the cell.
+    ///
+    /// For rules with only 2 states, `0` means dead and `1` means alive.
+    </span><span class="kw">pub </span>state: u8,
 }
 
-<span class="doccomment">/// Convert the coordinates into a [`CellData`] with state `1`.</span>
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Coordinates</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CellData</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">position</span>: <span class="ident">Coordinates</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">position</span>, <span class="ident">state</span>: <span class="number">1</span> }
+<span class="doccomment">/// Convert the coordinates into a [`CellData`] with state `1`.
+</span><span class="kw">impl </span>From&lt;Coordinates&gt; <span class="kw">for </span>CellData {
+    <span class="kw">fn </span>from(position: Coordinates) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ position, state: <span class="number">1 </span>}
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="ca_formats" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

@@ -46,53 +46,53 @@
 <span id="46">46</span>
 <span id="47">47</span>
 <span id="48">48</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">ToTokens</span>, <span class="ident">TokenStreamExt</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::{ToTokens, TokenStreamExt};
 
-<span class="doccomment">/// Declares the local variable into which errors will be accumulated.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ErrorDeclaration</span> {
-    <span class="ident">__hidden</span>: (),
+<span class="doccomment">/// Declares the local variable into which errors will be accumulated.
+</span><span class="attribute">#[derive(Default)]</span>
+<span class="kw">pub struct </span>ErrorDeclaration {
+    __hidden: (),
 }
 
-<span class="kw">impl</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">ErrorDeclaration</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tokens</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream</span>) {
-        <span class="ident">tokens</span>.<span class="ident">append_all</span>(<span class="macro">quote!</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">__errors</span> <span class="op">=</span> <span class="ident">::darling::export::Vec::new</span>();
+<span class="kw">impl </span>ToTokens <span class="kw">for </span>ErrorDeclaration {
+    <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
+        tokens.append_all(<span class="macro">quote!</span> {
+            <span class="kw">let </span><span class="kw-2">mut </span>__errors = ::darling::export::Vec::new();
         })
     }
 }
 
-<span class="doccomment">/// Returns early if attribute or body parsing has caused any errors.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ErrorCheck</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">location</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span>,
-    <span class="ident">__hidden</span>: (),
+<span class="doccomment">/// Returns early if attribute or body parsing has caused any errors.
+</span><span class="attribute">#[derive(Default)]</span>
+<span class="kw">pub struct </span>ErrorCheck&lt;<span class="lifetime">&#39;a</span>&gt; {
+    location: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt;,
+    __hidden: (),
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ErrorCheck</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_location</span>(<span class="ident">location</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">ErrorCheck</span> {
-            <span class="ident">location</span>: <span class="prelude-val">Some</span>(<span class="ident">location</span>),
-            <span class="ident">__hidden</span>: (),
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ErrorCheck&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">pub fn </span>with_location(location: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; <span class="self">Self </span>{
+        ErrorCheck {
+            location: <span class="prelude-val">Some</span>(location),
+            __hidden: (),
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ToTokens</span> <span class="kw">for</span> <span class="ident">ErrorCheck</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">to_tokens</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tokens</span>: <span class="kw-2">&amp;mut</span> <span class="ident">TokenStream</span>) {
-        <span class="kw">let</span> <span class="ident">at_call</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">location</span> {
-            <span class="macro">quote!</span>(.<span class="ident">at</span>(#<span class="ident">s</span>))
-        } <span class="kw">else</span> {
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ToTokens <span class="kw">for </span>ErrorCheck&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
+        <span class="kw">let </span>at_call = <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>s) = <span class="self">self</span>.location {
+            <span class="macro">quote!</span>(.at(#s))
+        } <span class="kw">else </span>{
             <span class="macro">quote!</span>()
         };
 
-        <span class="ident">tokens</span>.<span class="ident">append_all</span>(<span class="macro">quote!</span> {
-            <span class="kw">if</span> <span class="op">!</span><span class="ident">__errors</span>.<span class="ident">is_empty</span>() {
-                <span class="kw">return</span> <span class="ident">::darling::export::Err</span>(<span class="ident">::darling::Error::multiple</span>(<span class="ident">__errors</span>) #<span class="ident">at_call</span>);
+        tokens.append_all(<span class="macro">quote!</span> {
+            <span class="kw">if </span>!__errors.is_empty() {
+                <span class="kw">return </span>::darling::export::Err(::darling::Error::multiple(__errors) #at_call);
             }
         })
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="darling_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>

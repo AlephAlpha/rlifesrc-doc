@@ -44,51 +44,51 @@
 <span id="44">44</span>
 <span id="45">45</span>
 <span id="46">46</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">syn</span>::{
-    <span class="ident">parse</span>::{<span class="ident">Parse</span>, <span class="ident">ParseStream</span>, <span class="prelude-ty">Result</span>},
-    <span class="ident">Expr</span>, <span class="ident">ExprClosure</span>, <span class="ident">LitStr</span>, <span class="ident">Token</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>syn::{
+    parse::{Parse, ParseStream, <span class="prelude-ty">Result</span>},
+    Expr, ExprClosure, LitStr, Token,
 };
 
-<span class="doccomment">/// Wrapping of the two arguments given to one of the</span>
-<span class="doccomment">/// `regex_is_match`, `regex_find`, or `regex_captures`</span>
-<span class="doccomment">/// macros</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">RexValArgs</span> {
-    <span class="kw">pub</span> <span class="ident">regex_str</span>: <span class="ident">LitStr</span>,
-    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">Expr</span>, <span class="comment">// this expression is (or produces) the text to search or check</span>
-}
+<span class="doccomment">/// Wrapping of the two arguments given to one of the
+/// `regex_is_match`, `regex_find`, or `regex_captures`
+/// macros
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>RexValArgs {
+    <span class="kw">pub </span>regex_str: LitStr,
+    <span class="kw">pub </span>value: Expr, <span class="comment">// this expression is (or produces) the text to search or check
+</span>}
 
-<span class="kw">impl</span> <span class="ident">Parse</span> <span class="kw">for</span> <span class="ident">RexValArgs</span> {
-    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">input</span>: <span class="ident">ParseStream</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">regex_str</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="macro">Token!</span>[,]<span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="macro">Token!</span>[,]<span class="op">&gt;</span>(); <span class="comment">// allow a trailing comma</span>
-        <span class="prelude-val">Ok</span>(<span class="ident">RexValArgs</span> { <span class="ident">regex_str</span>, <span class="ident">value</span> })
+<span class="kw">impl </span>Parse <span class="kw">for </span>RexValArgs {
+    <span class="kw">fn </span>parse(input: ParseStream&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>regex_str = input.parse::&lt;LitStr&gt;()<span class="question-mark">?</span>;
+        input.parse::&lt;<span class="macro">Token!</span>[,]&gt;()<span class="question-mark">?</span>;
+        <span class="kw">let </span>value = input.parse::&lt;Expr&gt;()<span class="question-mark">?</span>;
+        <span class="kw">let _ </span>= input.parse::&lt;<span class="macro">Token!</span>[,]&gt;(); <span class="comment">// allow a trailing comma
+        </span><span class="prelude-val">Ok</span>(RexValArgs { regex_str, value })
     }
 }
 
-<span class="doccomment">/// Wrapping of the three arguments given to the</span>
-<span class="doccomment">/// ``regex_replace` and regex_replace_all` macros</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">RexValFunArgs</span> {
-    <span class="kw">pub</span> <span class="ident">regex_str</span>: <span class="ident">LitStr</span>,
-    <span class="kw">pub</span> <span class="ident">value</span>: <span class="ident">Expr</span>,
-    <span class="kw">pub</span> <span class="ident">fun</span>: <span class="ident">ExprClosure</span>,
+<span class="doccomment">/// Wrapping of the three arguments given to the
+/// ``regex_replace` and regex_replace_all` macros
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>RexValFunArgs {
+    <span class="kw">pub </span>regex_str: LitStr,
+    <span class="kw">pub </span>value: Expr,
+    <span class="kw">pub </span>fun: ExprClosure,
 }
-<span class="kw">impl</span> <span class="ident">Parse</span> <span class="kw">for</span> <span class="ident">RexValFunArgs</span> {
-    <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">input</span>: <span class="ident">ParseStream</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">regex_str</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="macro">Token!</span>[,]<span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">Expr</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="macro">Token!</span>[,]<span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">fun</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ExprClosure</span><span class="op">&gt;</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="macro">Token!</span>[,]<span class="op">&gt;</span>(); <span class="comment">// allow a trailing comma</span>
-        <span class="prelude-val">Ok</span>(<span class="ident">RexValFunArgs</span> {
-            <span class="ident">regex_str</span>,
-            <span class="ident">value</span>,
-            <span class="ident">fun</span>,
+<span class="kw">impl </span>Parse <span class="kw">for </span>RexValFunArgs {
+    <span class="kw">fn </span>parse(input: ParseStream&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>regex_str = input.parse::&lt;LitStr&gt;()<span class="question-mark">?</span>;
+        input.parse::&lt;<span class="macro">Token!</span>[,]&gt;()<span class="question-mark">?</span>;
+        <span class="kw">let </span>value = input.parse::&lt;Expr&gt;()<span class="question-mark">?</span>;
+        input.parse::&lt;<span class="macro">Token!</span>[,]&gt;()<span class="question-mark">?</span>;
+        <span class="kw">let </span>fun = input.parse::&lt;ExprClosure&gt;()<span class="question-mark">?</span>;
+        <span class="kw">let _ </span>= input.parse::&lt;<span class="macro">Token!</span>[,]&gt;(); <span class="comment">// allow a trailing comma
+        </span><span class="prelude-val">Ok</span>(RexValFunArgs {
+            regex_str,
+            value,
+            fun,
         })
     }
 }
 
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="lazy_regex_proc_macros" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (affe0d3a0 2022-08-05)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="lazy_regex_proc_macros" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
