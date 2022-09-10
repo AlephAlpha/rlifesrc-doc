@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/search/backjump.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>backjump.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/search/backjump.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>backjump.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -498,11 +498,11 @@
 };
 <span class="kw">use </span>educe::Educe;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use crate</span>::{error::Error, save::ReasonSer};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">use crate</span>::{error::Error, save::ReasonSer};
 
-<span class="attribute">#[cfg(doc)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::cells::LifeCell;
+<span class="attribute">#[cfg(doc)]
+</span><span class="kw">use </span><span class="kw">crate</span>::cells::LifeCell;
 
 <span class="doccomment">/// __(Experimental)__ Adding [Backjumping](https://en.wikipedia.org/wiki/Backjumping)
 /// to the original lifesrc algorithm.
@@ -512,8 +512,8 @@
 /// only useful for large (e.g., 64x64) still lifes.
 ///
 /// Currently it is only supported for non-Generations rules.
-</span><span class="attribute">#[derive(Clone, Debug, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>Backjump&lt;R: Rule&gt; {
+</span><span class="attribute">#[derive(Clone, Debug, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>Backjump&lt;R: Rule&gt; {
     <span class="doccomment">/// The global decision level for assigning the cell state.
     </span>level: u32,
 
@@ -527,8 +527,8 @@
 <span class="kw">impl</span>&lt;R: Rule&gt; Sealed <span class="kw">for </span>Backjump&lt;R&gt; {}
 
 <span class="kw">impl</span>&lt;R: Rule&lt;IsGen = False&gt;&gt; Default <span class="kw">for </span>Backjump&lt;R&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::new()
     }
 }
@@ -538,8 +538,8 @@
 
     <span class="kw">type </span>ConflReason = ConflReason&lt;R&gt;;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             level: <span class="number">0</span>,
             front: Vec::new(),
@@ -547,18 +547,18 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>confl_from_cell(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>confl_from_cell(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason {
         ConflReason::Rule(cell)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>confl_from_sym(cell: CellRef&lt;R&gt;, sym: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>confl_from_sym(cell: CellRef&lt;R&gt;, sym: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason {
         ConflReason::Sym(cell, sym)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>init_front(<span class="kw-2">mut </span>world: World&lt;R, <span class="self">Self</span>&gt;) -&gt; World&lt;R, <span class="self">Self</span>&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>init_front(<span class="kw-2">mut </span>world: World&lt;R, <span class="self">Self</span>&gt;) -&gt; World&lt;R, <span class="self">Self</span>&gt; {
         world
             .algo_data
             .front
@@ -583,8 +583,8 @@
         world
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_cell(
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_cell(
         world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;,
         cell: CellRef&lt;R&gt;,
         state: State,
@@ -593,20 +593,20 @@
         world.set_cell_impl(cell, state, reason)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>go(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;, step: <span class="kw-2">&amp;mut </span>u64) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>go(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;, step: <span class="kw-2">&amp;mut </span>u64) -&gt; bool {
         world.go(step)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>retreat(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>retreat(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;) -&gt; bool {
         world.retreat_impl()
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>deser_reason(world: <span class="kw-2">&amp;</span>World&lt;R, <span class="self">Self</span>&gt;, ser: <span class="kw-2">&amp;</span>ReasonSer) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Reason, Error&gt; {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+    #[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]
+    #[inline]
+    </span><span class="kw">fn </span>deser_reason(world: <span class="kw-2">&amp;</span>World&lt;R, <span class="self">Self</span>&gt;, ser: <span class="kw-2">&amp;</span>ReasonSer) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Reason, Error&gt; {
         <span class="prelude-val">Ok</span>(<span class="kw">match </span><span class="kw-2">*</span>ser {
             ReasonSer::Known =&gt; Reason::Known,
             ReasonSer::Decide =&gt; Reason::Decide,
@@ -631,9 +631,9 @@
 }
 
 <span class="doccomment">/// Reasons for setting a cell, with informations for backjumping.
-</span><span class="attribute">#[derive(Educe)]</span>
-<span class="attribute">#[educe(Clone, Debug, PartialEq, Eq)]</span>
-<span class="kw">pub enum </span>Reason&lt;R: Rule&gt; {
+</span><span class="attribute">#[derive(Educe)]
+#[educe(Clone, Debug, PartialEq, Eq)]
+</span><span class="kw">pub enum </span>Reason&lt;R: Rule&gt; {
     <span class="doccomment">/// Known before the search starts,
     </span>Known,
 
@@ -659,7 +659,7 @@
     <span class="doccomment">/// Cells involved in the reason.
     </span><span class="kw">fn </span>cells(<span class="self">self</span>) -&gt; Vec&lt;CellRef&lt;R&gt;&gt; {
         <span class="kw">match </span><span class="self">self </span>{
-            Reason::Rule(cell) =&gt; {
+            <span class="self">Self</span>::Rule(cell) =&gt; {
                 <span class="kw">let </span><span class="kw-2">mut </span>cells = Vec::with_capacity(<span class="number">10</span>);
                 cells.push(cell);
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(succ) = cell.succ {
@@ -672,8 +672,8 @@
                 }
                 cells
             }
-            Reason::Sym(cell) =&gt; <span class="macro">vec!</span>[cell],
-            Reason::Clause(clause) =&gt; clause,
+            <span class="self">Self</span>::Sym(cell) =&gt; <span class="macro">vec!</span>[cell],
+            <span class="self">Self</span>::Clause(clause) =&gt; clause,
             <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
         }
     }
@@ -683,25 +683,25 @@
     <span class="kw">const </span>KNOWN: <span class="self">Self </span>= <span class="self">Self</span>::Known;
     <span class="kw">const </span>DECIDED: <span class="self">Self </span>= <span class="self">Self</span>::Decide;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_cell(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_cell(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::Rule(cell)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_sym(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_sym(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::Sym(cell)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_decided(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_decided(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="macro">matches!</span>(<span class="self">self</span>, <span class="self">Self</span>::Decide)
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>ser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReasonSer {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+    #[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]
+    #[inline]
+    </span><span class="kw">fn </span>ser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReasonSer {
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Known =&gt; ReasonSer::Known,
             <span class="self">Self</span>::Decide =&gt; ReasonSer::Decide,
@@ -714,9 +714,9 @@
 }
 
 <span class="doccomment">/// Reasons for a conflict.
-</span><span class="attribute">#[derive(Educe)]</span>
-<span class="attribute">#[educe(Clone, Copy, Debug, PartialEq, Eq)]</span>
-<span class="kw">pub enum </span>ConflReason&lt;R: Rule&gt; {
+</span><span class="attribute">#[derive(Educe)]
+#[educe(Clone, Copy, Debug, PartialEq, Eq)]
+</span><span class="kw">pub enum </span>ConflReason&lt;R: Rule&gt; {
     <span class="doccomment">/// Conflict from the rule when constitifying another cell.
     </span>Rule(CellRef&lt;R&gt;),
 
@@ -734,8 +734,8 @@
 
 <span class="kw">impl</span>&lt;R: Rule&gt; ConflReason&lt;R&gt; {
     <span class="doccomment">/// Whether this reason should be analyzed before retreating.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">const fn </span>should_analyze(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">const fn </span>should_analyze(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         !<span class="macro">matches!</span>(<span class="self">self</span>, <span class="self">Self</span>::Deduce)
     }
 }
@@ -981,4 +981,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-util-0.3.23/src/fns.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>fns.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../futures_util/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-util-0.3.24/src/fns.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>fns.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../futures_util/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -402,8 +402,8 @@
 }
 
 <span class="comment">// Not used, but present for completeness
-</span><span class="attribute">#[allow(unreachable_pub)]</span>
-<span class="kw">pub trait </span>Fn1&lt;A&gt;: FnMut1&lt;A&gt; {
+</span><span class="attribute">#[allow(unreachable_pub)]
+</span><span class="kw">pub trait </span>Fn1&lt;A&gt;: FnMut1&lt;A&gt; {
     <span class="kw">fn </span>call(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: A) -&gt; <span class="self">Self</span>::Output;
 }
 
@@ -416,7 +416,7 @@
     }
 }
 
-<span class="macro">macro_rules!</span> trivial_fn_impls {
+<span class="macro">macro_rules! </span>trivial_fn_impls {
     (<span class="macro-nonterminal">$name</span>:ident &lt;$(<span class="macro-nonterminal">$arg</span>:ident),<span class="kw-2">*</span>&gt; <span class="macro-nonterminal">$t</span>:ty = <span class="macro-nonterminal">$debug</span>:literal) =&gt; {
         <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; Copy <span class="kw">for </span><span class="macro-nonterminal">$t </span>{}
         <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; Clone <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
@@ -460,8 +460,8 @@
 
 <span class="macro">trivial_fn_impls!</span>(ok_fn &lt;T&gt; OkFn&lt;T&gt; = <span class="string">&quot;Ok&quot;</span>);
 
-<span class="attribute">#[derive(Debug, Copy, Clone, Default)]</span>
-<span class="kw">pub struct </span>ChainFn&lt;F, G&gt;(F, G);
+<span class="attribute">#[derive(Debug, Copy, Clone, Default)]
+</span><span class="kw">pub struct </span>ChainFn&lt;F, G&gt;(F, G);
 
 <span class="kw">impl</span>&lt;F, G, A&gt; FnOnce1&lt;A&gt; <span class="kw">for </span>ChainFn&lt;F, G&gt;
 <span class="kw">where
@@ -495,8 +495,8 @@
     ChainFn(f, g)
 }
 
-<span class="attribute">#[derive(Default)]</span>
-<span class="kw">pub struct </span>MergeResultFn;
+<span class="attribute">#[derive(Default)]
+</span><span class="kw">pub struct </span>MergeResultFn;
 
 <span class="kw">impl</span>&lt;T&gt; FnOnce1&lt;<span class="prelude-ty">Result</span>&lt;T, T&gt;&gt; <span class="kw">for </span>MergeResultFn {
     <span class="kw">type </span>Output = T;
@@ -509,10 +509,10 @@
 }
 <span class="macro">trivial_fn_impls!</span>(merge_result_fn &lt;&gt; MergeResultFn = <span class="string">&quot;merge_result&quot;</span>);
 
-<span class="attribute">#[derive(Debug, Copy, Clone, Default)]</span>
-<span class="kw">pub struct </span>InspectFn&lt;F&gt;(F);
+<span class="attribute">#[derive(Debug, Copy, Clone, Default)]
+</span><span class="kw">pub struct </span>InspectFn&lt;F&gt;(F);
 
-<span class="attribute">#[allow(single_use_lifetimes)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/55058
+<span class="attribute">#[allow(single_use_lifetimes)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/55058
 </span><span class="kw">impl</span>&lt;F, A&gt; FnOnce1&lt;A&gt; <span class="kw">for </span>InspectFn&lt;F&gt;
 <span class="kw">where
     </span>F: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; FnOnce1&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>A, Output = ()&gt;,
@@ -523,7 +523,7 @@
         arg
     }
 }
-<span class="attribute">#[allow(single_use_lifetimes)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/55058
+<span class="attribute">#[allow(single_use_lifetimes)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/55058
 </span><span class="kw">impl</span>&lt;F, A&gt; FnMut1&lt;A&gt; <span class="kw">for </span>InspectFn&lt;F&gt;
 <span class="kw">where
     </span>F: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; FnMut1&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>A, Output = ()&gt;,
@@ -533,7 +533,7 @@
         arg
     }
 }
-<span class="attribute">#[allow(single_use_lifetimes)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/55058
+<span class="attribute">#[allow(single_use_lifetimes)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/55058
 </span><span class="kw">impl</span>&lt;F, A&gt; Fn1&lt;A&gt; <span class="kw">for </span>InspectFn&lt;F&gt;
 <span class="kw">where
     </span>F: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; Fn1&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>A, Output = ()&gt;,
@@ -547,8 +547,8 @@
     InspectFn(f)
 }
 
-<span class="attribute">#[derive(Debug, Copy, Clone, Default)]</span>
-<span class="kw">pub struct </span>MapOkFn&lt;F&gt;(F);
+<span class="attribute">#[derive(Debug, Copy, Clone, Default)]
+</span><span class="kw">pub struct </span>MapOkFn&lt;F&gt;(F);
 
 <span class="kw">impl</span>&lt;F, T, E&gt; FnOnce1&lt;<span class="prelude-ty">Result</span>&lt;T, E&gt;&gt; <span class="kw">for </span>MapOkFn&lt;F&gt;
 <span class="kw">where
@@ -579,8 +579,8 @@
     MapOkFn(f)
 }
 
-<span class="attribute">#[derive(Debug, Copy, Clone, Default)]</span>
-<span class="kw">pub struct </span>MapErrFn&lt;F&gt;(F);
+<span class="attribute">#[derive(Debug, Copy, Clone, Default)]
+</span><span class="kw">pub struct </span>MapErrFn&lt;F&gt;(F);
 
 <span class="kw">impl</span>&lt;F, T, E&gt; FnOnce1&lt;<span class="prelude-ty">Result</span>&lt;T, E&gt;&gt; <span class="kw">for </span>MapErrFn&lt;F&gt;
 <span class="kw">where
@@ -611,8 +611,8 @@
     MapErrFn(f)
 }
 
-<span class="attribute">#[derive(Debug, Copy, Clone)]</span>
-<span class="kw">pub struct </span>InspectOkFn&lt;F&gt;(F);
+<span class="attribute">#[derive(Debug, Copy, Clone)]
+</span><span class="kw">pub struct </span>InspectOkFn&lt;F&gt;(F);
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, F, T, E&gt; FnOnce1&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="prelude-ty">Result</span>&lt;T, E&gt;&gt; <span class="kw">for </span>InspectOkFn&lt;F&gt;
 <span class="kw">where
@@ -649,8 +649,8 @@
     InspectOkFn(f)
 }
 
-<span class="attribute">#[derive(Debug, Copy, Clone)]</span>
-<span class="kw">pub struct </span>InspectErrFn&lt;F&gt;(F);
+<span class="attribute">#[derive(Debug, Copy, Clone)]
+</span><span class="kw">pub struct </span>InspectErrFn&lt;F&gt;(F);
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, F, T, E&gt; FnOnce1&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="prelude-ty">Result</span>&lt;T, E&gt;&gt; <span class="kw">for </span>InspectErrFn&lt;F&gt;
 <span class="kw">where
@@ -692,8 +692,8 @@
     chain_fn(map_ok_fn(f), chain_fn(map_err_fn(g), merge_result_fn()))
 }
 
-<span class="attribute">#[derive(Debug, Copy, Clone, Default)]</span>
-<span class="kw">pub struct </span>UnwrapOrElseFn&lt;F&gt;(F);
+<span class="attribute">#[derive(Debug, Copy, Clone, Default)]
+</span><span class="kw">pub struct </span>UnwrapOrElseFn&lt;F&gt;(F);
 
 <span class="kw">impl</span>&lt;F, T, E&gt; FnOnce1&lt;<span class="prelude-ty">Result</span>&lt;T, E&gt;&gt; <span class="kw">for </span>UnwrapOrElseFn&lt;F&gt;
 <span class="kw">where
@@ -743,4 +743,4 @@
 
 <span class="macro">trivial_fn_impls!</span>(into_fn &lt;T&gt; IntoFn&lt;T&gt; = <span class="string">&quot;Into::into&quot;</span>);
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="futures_util" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="futures_util" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

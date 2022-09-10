@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.17/src/builder/value_parser.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>value_parser.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.20/src/builder/value_parser.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>value_parser.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../clap/index.html">
                         <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -2103,7 +2103,7 @@
 /// use within an application.
 ///
 /// See
-/// - [`value_parser!`] for automatically selecting an implementation for a given type
+/// - [`value_parser!`][crate::value_parser] for automatically selecting an implementation for a given type
 /// - [`ValueParser::new`] for additional [`TypedValueParser`] that can be used
 ///
 /// # Example
@@ -2259,9 +2259,9 @@
     ///
     /// # Example
     ///
-    </span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(unix, doc = <span class="string">&quot; ```rust&quot;</span>)]</span>
-    <span class="doccomment">/// # use clap::{Command, Arg, builder::ValueParser};
+    </span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+    #[cfg_attr(unix, doc = <span class="string">&quot; ```rust&quot;</span>)]
+    </span><span class="doccomment">/// # use clap::{Command, Arg, builder::ValueParser};
     /// use std::ffi::OsString;
     /// use std::os::unix::ffi::{OsStrExt,OsStringExt};
     /// let r = Command::new(&quot;myprog&quot;)
@@ -2762,9 +2762,9 @@
 <span class="doccomment">/// Implementation for [`ValueParser::string`]
 ///
 /// Useful for composing new [`TypedValueParser`]s
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>StringValueParser {}
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>StringValueParser {}
 
 <span class="kw">impl </span>StringValueParser {
     <span class="doccomment">/// Implementation for [`ValueParser::string`]
@@ -2810,9 +2810,9 @@
 <span class="doccomment">/// Implementation for [`ValueParser::os_string`]
 ///
 /// Useful for composing new [`TypedValueParser`]s
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>OsStringValueParser {}
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>OsStringValueParser {}
 
 <span class="kw">impl </span>OsStringValueParser {
     <span class="doccomment">/// Implementation for [`ValueParser::os_string`]
@@ -2852,9 +2852,9 @@
 <span class="doccomment">/// Implementation for [`ValueParser::path_buf`]
 ///
 /// Useful for composing new [`TypedValueParser`]s
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>PathBufValueParser {}
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>PathBufValueParser {}
 
 <span class="kw">impl </span>PathBufValueParser {
     <span class="doccomment">/// Implementation for [`ValueParser::path_buf`]
@@ -2956,8 +2956,8 @@
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;auto&quot;)).unwrap(), ColorChoice::Auto);
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;never&quot;)).unwrap(), ColorChoice::Never);
 /// ```
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>EnumValueParser&lt;E: <span class="kw">crate</span>::ValueEnum + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>EnumValueParser&lt;E: <span class="kw">crate</span>::ValueEnum + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
     std::marker::PhantomData&lt;E&gt;,
 );
 
@@ -3069,8 +3069,8 @@
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;auto&quot;)).unwrap(), &quot;auto&quot;);
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;never&quot;)).unwrap(), &quot;never&quot;);
 /// ```
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>PossibleValuesParser(Vec&lt;<span class="kw">super</span>::PossibleValue&lt;<span class="lifetime">&#39;static</span>&gt;&gt;);
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>PossibleValuesParser(Vec&lt;<span class="kw">super</span>::PossibleValue&lt;<span class="lifetime">&#39;static</span>&gt;&gt;);
 
 <span class="kw">impl </span>PossibleValuesParser {
     <span class="doccomment">/// Verify the value is from an enumerated set pf [`PossibleValue`][crate::PossibleValue].
@@ -3178,8 +3178,8 @@
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;0&quot;)).unwrap(), 0);
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;50&quot;)).unwrap(), 50);
 /// ```
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="kw">pub struct </span>RangedI64ValueParser&lt;T: std::convert::TryFrom&lt;i64&gt; + Clone + Send + Sync = i64&gt; {
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+</span><span class="kw">pub struct </span>RangedI64ValueParser&lt;T: std::convert::TryFrom&lt;i64&gt; + Clone + Send + Sync = i64&gt; {
     bounds: (std::ops::Bound&lt;i64&gt;, std::ops::Bound&lt;i64&gt;),
     target: std::marker::PhantomData&lt;T&gt;,
 }
@@ -3376,8 +3376,8 @@
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;0&quot;)).unwrap(), 0);
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;50&quot;)).unwrap(), 50);
 /// ```
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="kw">pub struct </span>RangedU64ValueParser&lt;T: std::convert::TryFrom&lt;u64&gt; = u64&gt; {
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+</span><span class="kw">pub struct </span>RangedU64ValueParser&lt;T: std::convert::TryFrom&lt;u64&gt; = u64&gt; {
     bounds: (std::ops::Bound&lt;u64&gt;, std::ops::Bound&lt;u64&gt;),
     target: std::marker::PhantomData&lt;T&gt;,
 }
@@ -3539,9 +3539,9 @@
 <span class="doccomment">/// Implementation for [`ValueParser::bool`]
 ///
 /// Useful for composing new [`TypedValueParser`]s
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>BoolValueParser {}
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>BoolValueParser {}
 
 <span class="kw">impl </span>BoolValueParser {
     <span class="doccomment">/// Implementation for [`ValueParser::bool`]
@@ -3638,9 +3638,9 @@
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;oFF&quot;)).unwrap(), false);
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;0&quot;)).unwrap(), false);
 /// ```
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>FalseyValueParser {}
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>FalseyValueParser {}
 
 <span class="kw">impl </span>FalseyValueParser {
     <span class="doccomment">/// Parse false-like string values, everything else is `true`
@@ -3735,9 +3735,9 @@
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;oFF&quot;)).unwrap(), false);
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;0&quot;)).unwrap(), false);
 /// ```
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>BoolishValueParser {}
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>BoolishValueParser {}
 
 <span class="kw">impl </span>BoolishValueParser {
     <span class="doccomment">/// Parse bool-like string values, everything else is `true`
@@ -3824,9 +3824,9 @@
 /// assert_eq!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;random&quot;)).unwrap(), &quot;random&quot;);
 /// assert!(value_parser.parse_ref(&amp;cmd, arg, OsStr::new(&quot;&quot;)).is_err());
 /// ```
-</span><span class="attribute">#[derive(Copy, Clone, Debug)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>NonEmptyStringValueParser {}
+</span><span class="attribute">#[derive(Copy, Clone, Debug)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>NonEmptyStringValueParser {}
 
 <span class="kw">impl </span>NonEmptyStringValueParser {
     <span class="doccomment">/// Parse non-empty string values
@@ -3997,14 +3997,14 @@
     }
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[derive(Debug)]</span>
-<span class="kw">pub struct </span>_AutoValueParser&lt;T&gt;(std::marker::PhantomData&lt;T&gt;);
+<span class="attribute">#[doc(hidden)]
+#[derive(Debug)]
+</span><span class="kw">pub struct </span>_AutoValueParser&lt;T&gt;(std::marker::PhantomData&lt;T&gt;);
 
 <span class="kw">impl</span>&lt;T&gt; _AutoValueParser&lt;T&gt; {
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[allow(clippy::new_without_default)]</span>
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[doc(hidden)]
+    #[allow(clippy::new_without_default)]
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>(Default::default())
     }
 }
@@ -4012,16 +4012,16 @@
 <span class="doccomment">/// Unstable [`ValueParser`]
 ///
 /// Implementation may change to more specific instance in the future
-</span><span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[derive(Debug)]</span>
-<span class="kw">pub struct </span>_AnonymousValueParser(ValueParser);
+</span><span class="attribute">#[doc(hidden)]
+#[derive(Debug)]
+</span><span class="kw">pub struct </span>_AnonymousValueParser(ValueParser);
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="kw">pub mod </span>via_prelude {
+<span class="attribute">#[doc(hidden)]
+</span><span class="kw">pub mod </span>via_prelude {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub trait </span>_ValueParserViaFactory: private::_ValueParserViaFactorySealed {
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">pub trait </span>_ValueParserViaFactory: private::_ValueParserViaFactorySealed {
         <span class="kw">type </span>Parser;
         <span class="kw">fn </span>value_parser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Parser;
     }
@@ -4032,8 +4032,8 @@
         }
     }
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub trait </span>_ValueParserViaValueEnum: private::_ValueParserViaValueEnumSealed {
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">pub trait </span>_ValueParserViaValueEnum: private::_ValueParserViaValueEnumSealed {
         <span class="kw">type </span>Output;
 
         <span class="kw">fn </span>value_parser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Output;
@@ -4048,8 +4048,8 @@
         }
     }
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub trait </span>_ValueParserViaFromStr: private::_ValueParserViaFromStrSealed {
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">pub trait </span>_ValueParserViaFromStr: private::_ValueParserViaFromStrSealed {
         <span class="kw">fn </span>value_parser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; _AnonymousValueParser;
     }
     <span class="kw">impl</span>&lt;FromStr&gt; _ValueParserViaFromStr <span class="kw">for </span>_AutoValueParser&lt;FromStr&gt;
@@ -4130,8 +4130,8 @@
 /// let parser = clap::value_parser!(ColorChoice);
 /// assert_eq!(format!(&quot;{:?}&quot;, parser), &quot;EnumValueParser(PhantomData)&quot;);
 /// ```
-</span><span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> value_parser {
+</span><span class="attribute">#[macro_export]
+</span><span class="macro">macro_rules! </span>value_parser {
     (<span class="macro-nonterminal">$name</span>:ty) =&gt; {{
         <span class="kw">use </span><span class="macro-nonterminal">$crate::builder::via_prelude</span>::<span class="kw-2">*</span>;
         <span class="kw">let </span>auto = <span class="macro-nonterminal">$crate::builder::_AutoValueParser</span>::&lt;<span class="macro-nonterminal">$name</span>&gt;::new();
@@ -4161,12 +4161,12 @@
     }
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>test {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>ensure_typed_applies_to_parse() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>ensure_typed_applies_to_parse() {
         <span class="kw">fn </span>parse(<span class="kw">_</span>: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;usize, std::io::Error&gt; {
             <span class="prelude-val">Ok</span>(<span class="number">10</span>)
         }
@@ -4179,4 +4179,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.8.5/src/seq/index.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>index.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://www.rust-lang.org/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container"><img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.8.5/src/seq/index.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>index.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://www.rust-lang.org/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container"><img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container">
                     <img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rand/index.html">
                         <img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -688,39 +688,39 @@
 
 </span><span class="doccomment">//! Low-level API for sampling indices
 
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span> <span class="kw">use </span>core::slice;
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)] </span><span class="kw">use </span>core::slice;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span> <span class="kw">use </span>alloc::vec::{<span class="self">self</span>, Vec};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)] </span><span class="kw">use </span>alloc::vec::{<span class="self">self</span>, Vec};
 <span class="comment">// BTreeMap is not as fast in tests, but better than nothing.
-</span><span class="attribute">#[cfg(all(feature = <span class="string">&quot;alloc&quot;</span>, not(feature = <span class="string">&quot;std&quot;</span>)))]</span>
-<span class="kw">use </span>alloc::collections::BTreeSet;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span> <span class="kw">use </span>std::collections::HashSet;
+</span><span class="attribute">#[cfg(all(feature = <span class="string">&quot;alloc&quot;</span>, not(feature = <span class="string">&quot;std&quot;</span>)))]
+</span><span class="kw">use </span>alloc::collections::BTreeSet;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)] </span><span class="kw">use </span>std::collections::HashSet;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::distributions::WeightedError;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::distributions::WeightedError;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">use crate</span>::{Rng, distributions::{uniform::SampleUniform, Distribution, Uniform}};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">use crate</span>::{Rng, distributions::{uniform::SampleUniform, Distribution, Uniform}};
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde1&quot;</span>)]</span>
-<span class="kw">use </span>serde::{Serialize, Deserialize};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde1&quot;</span>)]
+</span><span class="kw">use </span>serde::{Serialize, Deserialize};
 
 <span class="doccomment">/// A vector of indices.
 ///
 /// Multiple internal representations are possible.
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde1&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub enum </span>IndexVec {
-    <span class="attribute">#[doc(hidden)]</span>
-    U32(Vec&lt;u32&gt;),
-    <span class="attribute">#[doc(hidden)]</span>
-    USize(Vec&lt;usize&gt;),
+</span><span class="attribute">#[derive(Clone, Debug)]
+#[cfg_attr(feature = <span class="string">&quot;serde1&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub enum </span>IndexVec {
+    <span class="attribute">#[doc(hidden)]
+    </span>U32(Vec&lt;u32&gt;),
+    <span class="attribute">#[doc(hidden)]
+    </span>USize(Vec&lt;usize&gt;),
 }
 
 <span class="kw">impl </span>IndexVec {
     <span class="doccomment">/// Returns the number of indices
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IndexVec::U32(<span class="kw-2">ref </span>v) =&gt; v.len(),
             IndexVec::USize(<span class="kw-2">ref </span>v) =&gt; v.len(),
@@ -728,8 +728,8 @@
     }
 
     <span class="doccomment">/// Returns `true` if the length is 0.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IndexVec::U32(<span class="kw-2">ref </span>v) =&gt; v.is_empty(),
             IndexVec::USize(<span class="kw-2">ref </span>v) =&gt; v.is_empty(),
@@ -740,8 +740,8 @@
     ///
     /// (Note: we cannot implement [`std::ops::Index`] because of lifetime
     /// restrictions.)
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, index: usize) -&gt; usize {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, index: usize) -&gt; usize {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IndexVec::U32(<span class="kw-2">ref </span>v) =&gt; v[index] <span class="kw">as </span>usize,
             IndexVec::USize(<span class="kw-2">ref </span>v) =&gt; v[index],
@@ -749,8 +749,8 @@
     }
 
     <span class="doccomment">/// Return result as a `Vec&lt;usize&gt;`. Conversion may or may not be trivial.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>into_vec(<span class="self">self</span>) -&gt; Vec&lt;usize&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>into_vec(<span class="self">self</span>) -&gt; Vec&lt;usize&gt; {
         <span class="kw">match </span><span class="self">self </span>{
             IndexVec::U32(v) =&gt; v.into_iter().map(|i| i <span class="kw">as </span>usize).collect(),
             IndexVec::USize(v) =&gt; v,
@@ -758,8 +758,8 @@
     }
 
     <span class="doccomment">/// Iterate over the indices as a sequence of `usize` values
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; IndexVecIter&lt;<span class="lifetime">&#39;_</span>&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; IndexVecIter&lt;<span class="lifetime">&#39;_</span>&gt; {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IndexVec::U32(<span class="kw-2">ref </span>v) =&gt; IndexVecIter::U32(v.iter()),
             IndexVec::USize(<span class="kw-2">ref </span>v) =&gt; IndexVecIter::USize(v.iter()),
@@ -772,8 +772,8 @@
     <span class="kw">type </span>IntoIter = IndexVecIntoIter;
 
     <span class="doccomment">/// Convert into an iterator over the indices as a sequence of `usize` values
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; IndexVecIntoIter {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; IndexVecIntoIter {
         <span class="kw">match </span><span class="self">self </span>{
             IndexVec::U32(v) =&gt; IndexVecIntoIter::U32(v.into_iter()),
             IndexVec::USize(v) =&gt; IndexVecIntoIter::USize(v.into_iter()),
@@ -798,33 +798,33 @@
 }
 
 <span class="kw">impl </span>From&lt;Vec&lt;u32&gt;&gt; <span class="kw">for </span>IndexVec {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from(v: Vec&lt;u32&gt;) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from(v: Vec&lt;u32&gt;) -&gt; <span class="self">Self </span>{
         IndexVec::U32(v)
     }
 }
 
 <span class="kw">impl </span>From&lt;Vec&lt;usize&gt;&gt; <span class="kw">for </span>IndexVec {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from(v: Vec&lt;usize&gt;) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from(v: Vec&lt;usize&gt;) -&gt; <span class="self">Self </span>{
         IndexVec::USize(v)
     }
 }
 
 <span class="doccomment">/// Return type of `IndexVec::iter`.
-</span><span class="attribute">#[derive(Debug)]</span>
-<span class="kw">pub enum </span>IndexVecIter&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[doc(hidden)]</span>
-    U32(slice::Iter&lt;<span class="lifetime">&#39;a</span>, u32&gt;),
-    <span class="attribute">#[doc(hidden)]</span>
-    USize(slice::Iter&lt;<span class="lifetime">&#39;a</span>, usize&gt;),
+</span><span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub enum </span>IndexVecIter&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="attribute">#[doc(hidden)]
+    </span>U32(slice::Iter&lt;<span class="lifetime">&#39;a</span>, u32&gt;),
+    <span class="attribute">#[doc(hidden)]
+    </span>USize(slice::Iter&lt;<span class="lifetime">&#39;a</span>, usize&gt;),
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>IndexVecIter&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">type </span>Item = usize;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">use </span><span class="self">self</span>::IndexVecIter::<span class="kw-2">*</span>;
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             U32(<span class="kw-2">ref mut </span>iter) =&gt; iter.next().map(|i| <span class="kw-2">*</span>i <span class="kw">as </span>usize),
@@ -832,8 +832,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IndexVecIter::U32(<span class="kw-2">ref </span>v) =&gt; v.size_hint(),
             IndexVecIter::USize(<span class="kw-2">ref </span>v) =&gt; v.size_hint(),
@@ -844,19 +844,19 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ExactSizeIterator <span class="kw">for </span>IndexVecIter&lt;<span class="lifetime">&#39;a</span>&gt; {}
 
 <span class="doccomment">/// Return type of `IndexVec::into_iter`.
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub enum </span>IndexVecIntoIter {
-    <span class="attribute">#[doc(hidden)]</span>
-    U32(vec::IntoIter&lt;u32&gt;),
-    <span class="attribute">#[doc(hidden)]</span>
-    USize(vec::IntoIter&lt;usize&gt;),
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub enum </span>IndexVecIntoIter {
+    <span class="attribute">#[doc(hidden)]
+    </span>U32(vec::IntoIter&lt;u32&gt;),
+    <span class="attribute">#[doc(hidden)]
+    </span>USize(vec::IntoIter&lt;usize&gt;),
 }
 
 <span class="kw">impl </span>Iterator <span class="kw">for </span>IndexVecIntoIter {
     <span class="kw">type </span>Item = usize;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="kw">use </span><span class="self">self</span>::IndexVecIntoIter::<span class="kw-2">*</span>;
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             U32(<span class="kw-2">ref mut </span>v) =&gt; v.next().map(|i| i <span class="kw">as </span>usize),
@@ -864,8 +864,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
         <span class="kw">use </span><span class="self">self</span>::IndexVecIntoIter::<span class="kw-2">*</span>;
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             U32(<span class="kw-2">ref </span>v) =&gt; v.size_hint(),
@@ -952,9 +952,9 @@
 /// `O(length + amount * log length)` time otherwise.
 ///
 /// Panics if `amount &gt; length`.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;std&quot;</span>)))]</span>
-<span class="kw">pub fn </span>sample_weighted&lt;R, F, X&gt;(
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;std&quot;</span>)))]
+</span><span class="kw">pub fn </span>sample_weighted&lt;R, F, X&gt;(
     rng: <span class="kw-2">&amp;mut </span>R, length: usize, weight: F, amount: usize,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;IndexVec, WeightedError&gt;
 <span class="kw">where
@@ -985,8 +985,8 @@
 /// + amount * log length)` time otherwise.
 ///
 /// Panics if `amount &gt; length`.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">fn </span>sample_efraimidis_spirakis&lt;R, F, X, N&gt;(
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">fn </span>sample_efraimidis_spirakis&lt;R, F, X, N&gt;(
     rng: <span class="kw-2">&amp;mut </span>R, length: N, weight: F, amount: N,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;IndexVec, WeightedError&gt;
 <span class="kw">where
@@ -1027,8 +1027,8 @@
     }
     <span class="kw">impl</span>&lt;N&gt; Eq <span class="kw">for </span>Element&lt;N&gt; {}
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;nightly&quot;</span>)]</span>
-    {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;nightly&quot;</span>)]
+    </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>candidates = Vec::with_capacity(length.as_usize());
         <span class="kw">let </span><span class="kw-2">mut </span>index = N::zero();
         <span class="kw">while </span>index &lt; length {
@@ -1058,8 +1058,8 @@
         <span class="prelude-val">Ok</span>(IndexVec::from(result))
     }
 
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;nightly&quot;</span>))]</span>
-    {
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;nightly&quot;</span>))]
+    </span>{
         <span class="kw">use </span>alloc::collections::BinaryHeap;
 
         <span class="comment">// Partially sort the array such that the `amount` elements with the largest
@@ -1157,34 +1157,34 @@
     <span class="kw">fn </span>as_usize(<span class="self">self</span>) -&gt; usize;
 }
 <span class="kw">impl </span>UInt <span class="kw">for </span>u32 {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>zero() -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>zero() -&gt; <span class="self">Self </span>{
         <span class="number">0
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>one() -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>one() -&gt; <span class="self">Self </span>{
         <span class="number">1
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>as_usize(<span class="self">self</span>) -&gt; usize {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>as_usize(<span class="self">self</span>) -&gt; usize {
         <span class="self">self </span><span class="kw">as </span>usize
     }
 }
 <span class="kw">impl </span>UInt <span class="kw">for </span>usize {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>zero() -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>zero() -&gt; <span class="self">Self </span>{
         <span class="number">0
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>one() -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>one() -&gt; <span class="self">Self </span>{
         <span class="number">1
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>as_usize(<span class="self">self</span>) -&gt; usize {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>as_usize(<span class="self">self</span>) -&gt; usize {
         <span class="self">self
     </span>}
 }
@@ -1204,10 +1204,10 @@
     IndexVec: From&lt;Vec&lt;X&gt;&gt;,
 {
     <span class="macro">debug_assert!</span>(amount &lt; length);
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-    <span class="kw">let </span><span class="kw-2">mut </span>cache = HashSet::with_capacity(amount.as_usize());
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">let </span><span class="kw-2">mut </span>cache = BTreeSet::new();
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+    </span><span class="kw">let </span><span class="kw-2">mut </span>cache = HashSet::with_capacity(amount.as_usize());
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">let </span><span class="kw-2">mut </span>cache = BTreeSet::new();
     <span class="kw">let </span>distr = Uniform::new(X::zero(), length);
     <span class="kw">let </span><span class="kw-2">mut </span>indices = Vec::with_capacity(amount.as_usize());
     <span class="kw">for _ in </span><span class="number">0</span>..amount.as_usize() {
@@ -1222,13 +1222,13 @@
     IndexVec::from(indices)
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>test {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde1&quot;</span>)]</span>
-    <span class="kw">fn </span>test_serialization_index_vec() {
+    <span class="attribute">#[test]
+    #[cfg(feature = <span class="string">&quot;serde1&quot;</span>)]
+    </span><span class="kw">fn </span>test_serialization_index_vec() {
         <span class="kw">let </span>some_index_vec = IndexVec::from(<span class="macro">vec!</span>[<span class="number">254_usize</span>, <span class="number">234</span>, <span class="number">2</span>, <span class="number">1</span>]);
         <span class="kw">let </span>de_some_index_vec: IndexVec = bincode::deserialize(<span class="kw-2">&amp;</span>bincode::serialize(<span class="kw-2">&amp;</span>some_index_vec).unwrap()).unwrap();
         <span class="kw">match </span>(some_index_vec, de_some_index_vec) {
@@ -1242,10 +1242,10 @@
         }
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span> <span class="kw">use </span>alloc::vec;
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)] </span><span class="kw">use </span>alloc::vec;
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_sample_boundaries() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_sample_boundaries() {
         <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="kw">crate</span>::test::rng(<span class="number">404</span>);
 
         <span class="macro">assert_eq!</span>(sample_inplace(<span class="kw-2">&amp;mut </span>r, <span class="number">0</span>, <span class="number">0</span>).len(), <span class="number">0</span>);
@@ -1266,8 +1266,8 @@
         <span class="macro">assert!</span>(<span class="number">1 </span>&lt;&lt; <span class="number">25 </span>&lt; sum &amp;&amp; sum &lt; (<span class="number">1 </span>&lt;&lt; <span class="number">25</span>) * <span class="number">25</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg_attr(miri, ignore)]</span> <span class="comment">// Miri is too slow
+    <span class="attribute">#[test]
+    #[cfg_attr(miri, ignore)] </span><span class="comment">// Miri is too slow
     </span><span class="kw">fn </span>test_sample_alg() {
         <span class="kw">let </span>seed_rng = <span class="kw">crate</span>::test::rng;
 
@@ -1301,9 +1301,9 @@
         <span class="macro">assert_eq!</span>(v1, v2);
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_sample_weighted() {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+    #[test]
+    </span><span class="kw">fn </span>test_sample_weighted() {
         <span class="kw">let </span>seed_rng = <span class="kw">crate</span>::test::rng;
         <span class="kw">for </span><span class="kw-2">&amp;</span>(amount, len) <span class="kw">in </span><span class="kw-2">&amp;</span>[(<span class="number">0</span>, <span class="number">10</span>), (<span class="number">5</span>, <span class="number">10</span>), (<span class="number">10</span>, <span class="number">10</span>)] {
             <span class="kw">let </span>v = sample_weighted(<span class="kw-2">&amp;mut </span>seed_rng(<span class="number">423</span>), len, |i| i <span class="kw">as </span>f64, amount).unwrap();
@@ -1322,8 +1322,8 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>value_stability_sample() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>value_stability_sample() {
         <span class="kw">let </span>do_test = |length, amount, values: <span class="kw-2">&amp;</span>[u32]| {
             <span class="kw">let </span><span class="kw-2">mut </span>buf = [<span class="number">0u32</span>; <span class="number">8</span>];
             <span class="kw">let </span><span class="kw-2">mut </span>rng = <span class="kw">crate</span>::test::rng(<span class="number">410</span>);
@@ -1357,4 +1357,4 @@
     </span>}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rand" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rand" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

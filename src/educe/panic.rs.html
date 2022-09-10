@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/educe-0.4.19/src/panic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>panic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../educe/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../educe/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../educe/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/educe-0.4.19/src/panic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>panic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../educe/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../educe/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../educe/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -227,27 +227,27 @@
 <span id="227">227</span>
 <span id="228">228</span>
 <span id="229">229</span>
-</pre><pre class="rust"><code><span class="attribute">#![cfg_attr(not(feature = <span class="string">&quot;default&quot;</span>), allow(dead_code))]</span>
+</pre><pre class="rust"><code><span class="attribute">#![cfg_attr(not(feature = <span class="string">&quot;default&quot;</span>), allow(dead_code))]
 
-<span class="kw">use </span><span class="kw">crate</span>::Trait;
+</span><span class="kw">use </span><span class="kw">crate</span>::Trait;
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>reuse_a_trait(t: Trait) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>reuse_a_trait(t: Trait) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The trait `{:?}` is repeatedly used.&quot;</span>, t)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>trait_not_used(t: Trait) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>trait_not_used(t: Trait) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The `{:?}` trait is not used.&quot;</span>, t)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>trait_not_support_union(t: Trait) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>trait_not_support_union(t: Trait) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The `{:?}` trait does not support to a union.&quot;</span>, t)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>attribute_incorrect_format(attribute_name: <span class="kw-2">&amp;</span>str, correct_usage: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>attribute_incorrect_format(attribute_name: <span class="kw-2">&amp;</span>str, correct_usage: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; ! {
     <span class="macro">panic!</span>(
         <span class="string">&quot;You are using an incorrect format of the `{}` attribute.{}&quot;</span>,
         attribute_name,
@@ -255,8 +255,8 @@
     )
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>parameter_incorrect_format(parameter_name: <span class="kw-2">&amp;</span>str, correct_usage: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>parameter_incorrect_format(parameter_name: <span class="kw-2">&amp;</span>str, correct_usage: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; ! {
     <span class="macro">panic!</span>(
         <span class="string">&quot;You are using an incorrect format of the `{}` parameter.{}&quot;</span>,
         parameter_name,
@@ -264,160 +264,160 @@
     )
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>derive_attribute_not_set_up_yet(attribute_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>derive_attribute_not_set_up_yet(attribute_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(
         <span class="string">&quot;You are using `{}` in the `derive` attribute, but it has not been set up yet.&quot;</span>,
         attribute_name
     )
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>reset_parameter(parameter_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>reset_parameter(parameter_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;Try to reset the `{}` parameter.&quot;</span>, parameter_name)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>unknown_parameter(attribute_name: <span class="kw-2">&amp;</span>str, parameter_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>unknown_parameter(attribute_name: <span class="kw-2">&amp;</span>str, parameter_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;Unknown parameter `{}` used in the `{}` attribute.&quot;</span>, parameter_name, attribute_name)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>set_value_expression() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>set_value_expression() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The default value and the expression parameter can not be set at the same time.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>set_expression_bound() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>set_expression_bound() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;You don&#39;t need to set the expression and the bound at the same time.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>no_default_field() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>no_default_field() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;There is no field set as default.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>multiple_default_fields() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>multiple_default_fields() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;Multiple default fields are set.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>no_default_variant() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>no_default_variant() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;There is no variant set as default.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>multiple_default_variants() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>multiple_default_variants() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;Multiple default variants are set.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>no_deref_field() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>no_deref_field() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;There is no field which is assigned for `Deref`.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>no_deref_field_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>no_deref_field_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(
         <span class="string">&quot;There is no field for the `{variant_name}` variant which is assigned for `Deref`.&quot;</span>,
         variant_name = variant_name
     )
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>multiple_deref_fields() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>multiple_deref_fields() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;Multiple fields are set for `Deref`.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>multiple_deref_fields_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>multiple_deref_fields_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(
         <span class="string">&quot;Multiple fields of the `{variant_name}` variant are set for deref.&quot;</span>,
         variant_name = variant_name
     )
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>deref_cannot_support_unit_variant() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>deref_cannot_support_unit_variant() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The `Deref` trait cannot be implemented for an enum which has unit variants.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>no_deref_mut_field() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>no_deref_mut_field() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;There is no field which is assigned for `DerefMut`.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>no_deref_mut_field_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>no_deref_mut_field_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(
         <span class="string">&quot;There is no field for the `{variant_name}` variant which is assigned for `DerefMut`.&quot;</span>,
         variant_name = variant_name
     )
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>multiple_deref_mut_fields() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>multiple_deref_mut_fields() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;Multiple fields are set for `DerefMut`.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>multiple_deref_mut_fields_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>multiple_deref_mut_fields_of_variant(variant_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(
         <span class="string">&quot;Multiple fields of the `{variant_name}` variant are set for `DerefMut`.&quot;</span>,
         variant_name = variant_name
     )
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>deref_mut_cannot_support_unit_variant() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>deref_mut_cannot_support_unit_variant() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The `DerefMut` trait cannot be implemented for an enum which has unit variants.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>disable_named_field_name() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>disable_named_field_name() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;You can&#39;t disable the name of a named field.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>empty_parameter(parameter_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>empty_parameter(parameter_name: <span class="kw-2">&amp;</span>str) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;You can&#39;t set the `{}` parameter to empty.&quot;</span>, parameter_name)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>unit_struct_need_name() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>unit_struct_need_name() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;A unit struct needs to have a name.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>unit_enum_need_name() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>unit_enum_need_name() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;A unit enum needs to have a name.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>unit_variant_need_name() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>unit_variant_need_name() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;A unit variant which doesn&#39;t use an enum name needs to have a name.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>ignore_ranked_field() -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>ignore_ranked_field() -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;You can&#39;t ignore a ranked field.&quot;</span>)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>reuse_a_rank(rank: isize) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>reuse_a_rank(rank: isize) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The rank `{}` is repeatedly used.&quot;</span>, rank)
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>reuse_a_value(value: isize) -&gt; ! {
+<span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>reuse_a_value(value: isize) -&gt; ! {
     <span class="macro">panic!</span>(<span class="string">&quot;The value `{}` is repeatedly used.&quot;</span>, value)
 }
 
 <span class="comment">// TODO patterns
 
-</span><span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>educe_format_incorrect() -&gt; ! {
+</span><span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>educe_format_incorrect() -&gt; ! {
     attribute_incorrect_format(<span class="string">&quot;educe&quot;</span>, <span class="kw-2">&amp;</span>[<span class="macro">stringify!</span>(<span class="attribute">#[educe(Trait1, Trait2, ..., TraitN)]</span>)])
 }
 
@@ -457,4 +457,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="educe" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

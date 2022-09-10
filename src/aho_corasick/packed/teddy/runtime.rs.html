@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/aho-corasick-0.7.18/src/packed/teddy/runtime.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>runtime.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../aho_corasick/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../aho_corasick/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../aho_corasick/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/aho-corasick-0.7.19/src/packed/teddy/runtime.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>runtime.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../aho_corasick/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../aho_corasick/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../aho_corasick/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1275,8 +1275,8 @@
 /// patterns used to construct the Teddy matcher. Violating this will result
 /// in either a panic or incorrect results, but will never sacrifice memory
 /// safety.
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>Teddy {
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>Teddy {
     <span class="doccomment">/// The allocation of patterns in buckets. This only contains the IDs of
     /// patterns. In order to do full verification, callers must provide the
     /// actual patterns when using Teddy.
@@ -1406,8 +1406,8 @@
     /// This is not safe to call unless the SSSE3 target feature is enabled.
     /// The `target_feature` attribute is not applied since this function is
     /// always forcefully inlined.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>verify128(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>verify128(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1438,8 +1438,8 @@
     /// This is not safe to call unless the AVX2 target feature is enabled.
     /// The `target_feature` attribute is not applied since this function is
     /// always forcefully inlined.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>verify256(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>verify256(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1471,8 +1471,8 @@
     /// This is not safe to call unless the AVX2 target feature is enabled.
     /// The `target_feature` attribute is not applied since this function is
     /// always forcefully inlined.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>verify_fat256(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>verify_fat256(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1530,8 +1530,8 @@
     <span class="doccomment">/// Verify whether there are any matches starting at or after `at` in the
     /// given `haystack`. The candidate given should correspond to either 8-bit
     /// (for 8 buckets) or 16-bit (16 buckets) bitsets.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>verify64(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>verify64(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         bucket_count: usize,
@@ -1558,8 +1558,8 @@
 
     <span class="doccomment">/// Verify whether there are any matches starting at `at` in the given
     /// `haystack` corresponding only to patterns in the given bucket.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>verify_bucket(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>verify_bucket(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1571,9 +1571,9 @@
         // 16% boost in the sherlock/packed/teddy/name/alt1 benchmark (among
         // others). Overall, this seems like a problem with codegen, since
         // creating the Match itself is a very small amount of code.
-        </span><span class="attribute">#[cold]</span>
-        <span class="attribute">#[inline(never)]</span>
-        <span class="kw">fn </span>match_from_span(
+        </span><span class="attribute">#[cold]
+        #[inline(never)]
+        </span><span class="kw">fn </span>match_from_span(
             pati: PatternID,
             start: usize,
             end: usize,
@@ -1610,8 +1610,8 @@
 /// construct a variant in this enum if it is safe to execute its corresponding
 /// target features on the current CPU. The 128-bit searchers require SSSE3,
 /// while the 256-bit searchers require AVX2.
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub enum </span>Exec {
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub enum </span>Exec {
     TeddySlim1Mask128(TeddySlim1Mask128),
     TeddySlim1Mask256(TeddySlim1Mask256),
     TeddyFat1Mask256(TeddyFat1Mask256),
@@ -1627,14 +1627,14 @@
 // repeated versions of themselves. The general structure is described in the
 // README and in the comments above.
 
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddySlim1Mask128 {
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddySlim1Mask128 {
     <span class="kw">pub </span>mask1: Mask128,
 }
 
 <span class="kw">impl </span>TeddySlim1Mask128 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -1668,8 +1668,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], at: usize) -&gt; __m128i {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], at: usize) -&gt; __m128i {
         <span class="macro">debug_assert!</span>(haystack[at..].len() &gt;= <span class="number">16</span>);
 
         <span class="kw">let </span>chunk = loadu128(haystack, at);
@@ -1677,14 +1677,14 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddySlim1Mask256 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddySlim1Mask256 {
     <span class="kw">pub </span>mask1: Mask256,
 }
 
 <span class="kw">impl </span>TeddySlim1Mask256 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -1718,8 +1718,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], at: usize) -&gt; __m256i {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], at: usize) -&gt; __m256i {
         <span class="macro">debug_assert!</span>(haystack[at..].len() &gt;= <span class="number">32</span>);
 
         <span class="kw">let </span>chunk = loadu256(haystack, at);
@@ -1727,14 +1727,14 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddyFat1Mask256 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddyFat1Mask256 {
     <span class="kw">pub </span>mask1: Mask256,
 }
 
 <span class="kw">impl </span>TeddyFat1Mask256 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -1768,8 +1768,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], at: usize) -&gt; __m256i {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], at: usize) -&gt; __m256i {
         <span class="macro">debug_assert!</span>(haystack[at..].len() &gt;= <span class="number">16</span>);
 
         <span class="kw">let </span>chunk = _mm256_broadcastsi128_si256(loadu128(haystack, at));
@@ -1777,15 +1777,15 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddySlim2Mask128 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddySlim2Mask128 {
     <span class="kw">pub </span>mask1: Mask128,
     <span class="kw">pub </span>mask2: Mask128,
 }
 
 <span class="kw">impl </span>TeddySlim2Mask128 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -1823,8 +1823,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         at: usize,
@@ -1839,15 +1839,15 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddySlim2Mask256 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddySlim2Mask256 {
     <span class="kw">pub </span>mask1: Mask256,
     <span class="kw">pub </span>mask2: Mask256,
 }
 
 <span class="kw">impl </span>TeddySlim2Mask256 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -1885,8 +1885,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         at: usize,
@@ -1903,15 +1903,15 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddyFat2Mask256 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddyFat2Mask256 {
     <span class="kw">pub </span>mask1: Mask256,
     <span class="kw">pub </span>mask2: Mask256,
 }
 
 <span class="kw">impl </span>TeddyFat2Mask256 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -1951,8 +1951,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         at: usize,
@@ -1969,16 +1969,16 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddySlim3Mask128 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddySlim3Mask128 {
     <span class="kw">pub </span>mask1: Mask128,
     <span class="kw">pub </span>mask2: Mask128,
     <span class="kw">pub </span>mask3: Mask128,
 }
 
 <span class="kw">impl </span>TeddySlim3Mask128 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -2017,8 +2017,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         at: usize,
@@ -2039,16 +2039,16 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddySlim3Mask256 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddySlim3Mask256 {
     <span class="kw">pub </span>mask1: Mask256,
     <span class="kw">pub </span>mask2: Mask256,
     <span class="kw">pub </span>mask3: Mask256,
 }
 
 <span class="kw">impl </span>TeddySlim3Mask256 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -2087,8 +2087,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         at: usize,
@@ -2110,16 +2110,16 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>TeddyFat3Mask256 {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>TeddyFat3Mask256 {
     <span class="kw">pub </span>mask1: Mask256,
     <span class="kw">pub </span>mask2: Mask256,
     <span class="kw">pub </span>mask3: Mask256,
 }
 
 <span class="kw">impl </span>TeddyFat3Mask256 {
-    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-    <span class="kw">unsafe fn </span>find_at(
+    <span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+    </span><span class="kw">unsafe fn </span>find_at(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pats: <span class="kw-2">&amp;</span>Patterns,
         teddy: <span class="kw-2">&amp;</span>Teddy,
@@ -2160,8 +2160,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">unsafe fn </span>candidate(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">unsafe fn </span>candidate(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         at: usize,
@@ -2186,8 +2186,8 @@
 <span class="doccomment">/// A 128-bit mask for the low and high nybbles in a set of patterns. Each
 /// lane `j` corresponds to a bitset where the `i`th bit is set if and only if
 /// the nybble `j` is in the bucket `i` at a particular position.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">pub struct </span>Mask128 {
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">pub struct </span>Mask128 {
     lo: __m128i,
     hi: __m128i,
 }
@@ -2220,8 +2220,8 @@
 /// bits correspond to buckets 8-15. So that a bitset `00100010` has buckets
 /// 1 and 5 set if it&#39;s in the lower 128 bits, but has buckets 9 and 13 set
 /// if it&#39;s in the higher 128 bits.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">pub struct </span>Mask256 {
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">pub struct </span>Mask256 {
     lo: __m256i,
     hi: __m256i,
 }
@@ -2255,8 +2255,8 @@
 /// 16-byte window of the haystack (where the least significant byte
 /// corresponds to the start of the window), and `mask1` corresponds to a
 /// low/high mask for the first byte of all patterns that are being searched.
-</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]</span>
-<span class="kw">unsafe fn </span>members1m128(chunk: __m128i, mask1: Mask128) -&gt; __m128i {
+</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]
+</span><span class="kw">unsafe fn </span>members1m128(chunk: __m128i, mask1: Mask128) -&gt; __m128i {
     <span class="kw">let </span>lomask = _mm_set1_epi8(<span class="number">0xF</span>);
     <span class="kw">let </span>hlo = _mm_and_si128(chunk, lomask);
     <span class="kw">let </span>hhi = _mm_and_si128(_mm_srli_epi16(chunk, <span class="number">4</span>), lomask);
@@ -2274,8 +2274,8 @@
 /// Note that this can also be used for Fat Teddy, where the high 128 bits in
 /// `chunk` is the same as the low 128 bits, which corresponds to a 16 byte
 /// window in the haystack.
-</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-<span class="kw">unsafe fn </span>members1m256(chunk: __m256i, mask1: Mask256) -&gt; __m256i {
+</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+</span><span class="kw">unsafe fn </span>members1m256(chunk: __m256i, mask1: Mask256) -&gt; __m256i {
     <span class="kw">let </span>lomask = _mm256_set1_epi8(<span class="number">0xF</span>);
     <span class="kw">let </span>hlo = _mm256_and_si256(chunk, lomask);
     <span class="kw">let </span>hhi = _mm256_and_si256(_mm256_srli_epi16(chunk, <span class="number">4</span>), lomask);
@@ -2291,8 +2291,8 @@
 /// low/high mask for the first and second bytes of all patterns that are being
 /// searched. The vectors returned correspond to candidates for the first and
 /// second bytes in the patterns represented by the masks.
-</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]</span>
-<span class="kw">unsafe fn </span>members2m128(
+</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]
+</span><span class="kw">unsafe fn </span>members2m128(
     chunk: __m128i,
     mask1: Mask128,
     mask2: Mask128,
@@ -2321,8 +2321,8 @@
 /// Note that this can also be used for Fat Teddy, where the high 128 bits in
 /// `chunk` is the same as the low 128 bits, which corresponds to a 16 byte
 /// window in the haystack.
-</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-<span class="kw">unsafe fn </span>members2m256(
+</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+</span><span class="kw">unsafe fn </span>members2m256(
     chunk: __m256i,
     mask1: Mask256,
     mask2: Mask256,
@@ -2347,8 +2347,8 @@
 /// low/high mask for the first, second and third bytes of all patterns that
 /// are being searched. The vectors returned correspond to candidates for the
 /// first, second and third bytes in the patterns represented by the masks.
-</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]</span>
-<span class="kw">unsafe fn </span>members3m128(
+</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;ssse3&quot;</span>)]
+</span><span class="kw">unsafe fn </span>members3m128(
     chunk: __m128i,
     mask1: Mask128,
     mask2: Mask128,
@@ -2382,8 +2382,8 @@
 /// Note that this can also be used for Fat Teddy, where the high 128 bits in
 /// `chunk` is the same as the low 128 bits, which corresponds to a 16 byte
 /// window in the haystack.
-</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]</span>
-<span class="kw">unsafe fn </span>members3m256(
+</span><span class="attribute">#[target_feature(enable = <span class="string">&quot;avx2&quot;</span>)]
+</span><span class="kw">unsafe fn </span>members3m256(
     chunk: __m256i,
     mask1: Mask256,
     mask2: Mask256,
@@ -2407,4 +2407,4 @@
     (res0, res1, res2)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="aho_corasick" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="aho_corasick" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

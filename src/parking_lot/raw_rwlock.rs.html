@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/parking_lot-0.12.1/src/raw_rwlock.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>raw_rwlock.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../parking_lot/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../parking_lot/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../parking_lot/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/parking_lot-0.12.1/src/raw_rwlock.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>raw_rwlock.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../parking_lot/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../parking_lot/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../parking_lot/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1212,8 +1212,8 @@
 
     <span class="kw">type </span>GuardMarker = <span class="kw">crate</span>::GuardMarker;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>lock_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>lock_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span><span class="self">self
             </span>.state
             .compare_exchange_weak(<span class="number">0</span>, WRITER_BIT, Ordering::Acquire, Ordering::Relaxed)
@@ -1225,8 +1225,8 @@
         <span class="self">self</span>.deadlock_acquire();
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">if </span><span class="self">self
             </span>.state
             .compare_exchange(<span class="number">0</span>, WRITER_BIT, Ordering::Acquire, Ordering::Relaxed)
@@ -1239,8 +1239,8 @@
         </span>}
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>unlock_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>unlock_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.deadlock_release();
         <span class="kw">if </span><span class="self">self
             </span>.state
@@ -1252,8 +1252,8 @@
         <span class="self">self</span>.unlock_exclusive_slow(<span class="bool-val">false</span>);
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>lock_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>lock_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span>!<span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">false</span>) {
             <span class="kw">let </span>result = <span class="self">self</span>.lock_shared_slow(<span class="bool-val">false</span>, <span class="prelude-val">None</span>);
             <span class="macro">debug_assert!</span>(result);
@@ -1261,8 +1261,8 @@
         <span class="self">self</span>.deadlock_acquire();
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">false</span>) {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1274,8 +1274,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>unlock_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>unlock_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.deadlock_release();
         <span class="kw">let </span>state = <span class="kw">if </span>have_elision() {
             <span class="self">self</span>.state.elision_fetch_sub_release(ONE_READER)
@@ -1287,28 +1287,28 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_locked(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_locked(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         state &amp; (WRITER_BIT | READERS_MASK) != <span class="number">0
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_locked_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_locked_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         state &amp; (WRITER_BIT) != <span class="number">0
     </span>}
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockFair <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>unlock_shared_fair(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>unlock_shared_fair(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="comment">// Shared unlocking is always fair in this implementation.
         </span><span class="self">self</span>.unlock_shared();
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>unlock_exclusive_fair(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>unlock_exclusive_fair(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.deadlock_release();
         <span class="kw">if </span><span class="self">self
             </span>.state
@@ -1320,8 +1320,8 @@
         <span class="self">self</span>.unlock_exclusive_slow(<span class="bool-val">true</span>);
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>bump_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>bump_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span><span class="self">self</span>.state.load(Ordering::Relaxed) &amp; (READERS_MASK | WRITER_BIT)
             == ONE_READER | WRITER_BIT
         {
@@ -1329,8 +1329,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>bump_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>bump_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span><span class="self">self</span>.state.load(Ordering::Relaxed) &amp; PARKED_BIT != <span class="number">0 </span>{
             <span class="self">self</span>.bump_exclusive_slow();
         }
@@ -1338,8 +1338,8 @@
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockDowngrade <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>state = <span class="self">self
             </span>.state
             .fetch_add(ONE_READER - WRITER_BIT, Ordering::Release);
@@ -1355,8 +1355,8 @@
     <span class="kw">type </span>Duration = Duration;
     <span class="kw">type </span>Instant = Instant;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_shared_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Duration) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_shared_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Duration) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">false</span>) {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1368,8 +1368,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_shared_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Instant) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_shared_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Instant) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">false</span>) {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1381,8 +1381,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_exclusive_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Duration) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_exclusive_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Duration) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self
             </span>.state
             .compare_exchange_weak(<span class="number">0</span>, WRITER_BIT, Ordering::Acquire, Ordering::Relaxed)
@@ -1398,8 +1398,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_exclusive_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Instant) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_exclusive_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Instant) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self
             </span>.state
             .compare_exchange_weak(<span class="number">0</span>, WRITER_BIT, Ordering::Acquire, Ordering::Relaxed)
@@ -1417,8 +1417,8 @@
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockRecursive <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>lock_shared_recursive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>lock_shared_recursive(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span>!<span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">true</span>) {
             <span class="kw">let </span>result = <span class="self">self</span>.lock_shared_slow(<span class="bool-val">true</span>, <span class="prelude-val">None</span>);
             <span class="macro">debug_assert!</span>(result);
@@ -1426,8 +1426,8 @@
         <span class="self">self</span>.deadlock_acquire();
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_shared_recursive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_shared_recursive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">true</span>) {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1441,8 +1441,8 @@
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockRecursiveTimed <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_shared_recursive_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Duration) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_shared_recursive_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Duration) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">true</span>) {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1454,8 +1454,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_shared_recursive_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Instant) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_shared_recursive_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="self">Self</span>::Instant) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_shared_fast(<span class="bool-val">true</span>) {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1469,8 +1469,8 @@
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockUpgrade <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>lock_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>lock_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span>!<span class="self">self</span>.try_lock_upgradable_fast() {
             <span class="kw">let </span>result = <span class="self">self</span>.lock_upgradable_slow(<span class="prelude-val">None</span>);
             <span class="macro">debug_assert!</span>(result);
@@ -1478,8 +1478,8 @@
         <span class="self">self</span>.deadlock_acquire();
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_upgradable_fast() {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1491,8 +1491,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>unlock_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>unlock_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.deadlock_release();
         <span class="kw">let </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         <span class="kw">if </span>state &amp; PARKED_BIT == <span class="number">0 </span>{
@@ -1512,8 +1512,8 @@
         <span class="self">self</span>.unlock_upgradable_slow(<span class="bool-val">false</span>);
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>upgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>upgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>state = <span class="self">self</span>.state.fetch_sub(
             (ONE_READER | UPGRADABLE_BIT) - WRITER_BIT,
             Ordering::Acquire,
@@ -1524,8 +1524,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>try_upgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>try_upgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">if </span><span class="self">self
             </span>.state
             .compare_exchange_weak(
@@ -1544,8 +1544,8 @@
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockUpgradeFair <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>unlock_upgradable_fair(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>unlock_upgradable_fair(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.deadlock_release();
         <span class="kw">let </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         <span class="kw">if </span>state &amp; PARKED_BIT == <span class="number">0 </span>{
@@ -1565,8 +1565,8 @@
         <span class="self">self</span>.unlock_upgradable_slow(<span class="bool-val">false</span>);
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>bump_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>bump_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span><span class="self">self</span>.state.load(Ordering::Relaxed) == ONE_READER | UPGRADABLE_BIT | PARKED_BIT {
             <span class="self">self</span>.bump_upgradable_slow();
         }
@@ -1574,8 +1574,8 @@
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockUpgradeDowngrade <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>downgrade_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>downgrade_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>state = <span class="self">self</span>.state.fetch_sub(UPGRADABLE_BIT, Ordering::Relaxed);
 
         <span class="comment">// Wake up parked upgradable threads if there are any
@@ -1584,8 +1584,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>downgrade_to_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>downgrade_to_upgradable(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>state = <span class="self">self</span>.state.fetch_add(
             (ONE_READER | UPGRADABLE_BIT) - WRITER_BIT,
             Ordering::Release,
@@ -1599,8 +1599,8 @@
 }
 
 <span class="kw">unsafe impl </span>lock_api::RawRwLockUpgradeTimed <span class="kw">for </span>RawRwLock {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_upgradable_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Instant) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_upgradable_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Instant) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_upgradable_fast() {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1612,8 +1612,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_lock_upgradable_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Duration) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_lock_upgradable_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Duration) -&gt; bool {
         <span class="kw">let </span>result = <span class="kw">if </span><span class="self">self</span>.try_lock_upgradable_fast() {
             <span class="bool-val">true
         </span>} <span class="kw">else </span>{
@@ -1625,8 +1625,8 @@
         result
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>try_upgrade_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Instant) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>try_upgrade_until(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Instant) -&gt; bool {
         <span class="kw">let </span>state = <span class="self">self</span>.state.fetch_sub(
             (ONE_READER | UPGRADABLE_BIT) - WRITER_BIT,
             Ordering::Relaxed,
@@ -1638,8 +1638,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>try_upgrade_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Duration) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>try_upgrade_for(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: Duration) -&gt; bool {
         <span class="kw">let </span>state = <span class="self">self</span>.state.fetch_sub(
             (ONE_READER | UPGRADABLE_BIT) - WRITER_BIT,
             Ordering::Relaxed,
@@ -1653,8 +1653,8 @@
 }
 
 <span class="kw">impl </span>RawRwLock {
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>try_lock_shared_fast(<span class="kw-2">&amp;</span><span class="self">self</span>, recursive: bool) -&gt; bool {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>try_lock_shared_fast(<span class="kw-2">&amp;</span><span class="self">self</span>, recursive: bool) -&gt; bool {
         <span class="kw">let </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
 
         <span class="comment">// We can&#39;t allow grabbing a shared lock if there is a writer, even if
@@ -1684,8 +1684,8 @@
         </span>}
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>try_lock_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, recursive: bool) -&gt; bool {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>try_lock_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, recursive: bool) -&gt; bool {
         <span class="kw">let </span><span class="kw-2">mut </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         <span class="kw">loop </span>{
             <span class="comment">// This mirrors the condition in try_lock_shared_fast
@@ -1715,8 +1715,8 @@
         }
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>try_lock_upgradable_fast(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>try_lock_upgradable_fast(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
 
         <span class="comment">// We can&#39;t grab an upgradable lock if there is already a writer or
@@ -1734,8 +1734,8 @@
         </span>}
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>try_lock_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>try_lock_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span><span class="kw-2">mut </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         <span class="kw">loop </span>{
             <span class="comment">// This mirrors the condition in try_lock_upgradable_fast
@@ -1757,8 +1757,8 @@
         }
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>lock_exclusive_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>lock_exclusive_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
         <span class="kw">let </span>try_lock = |state: <span class="kw-2">&amp;mut </span>usize| {
             <span class="kw">loop </span>{
                 <span class="kw">if </span><span class="kw-2">*</span>state &amp; (WRITER_BIT | UPGRADABLE_BIT) != <span class="number">0 </span>{
@@ -1793,8 +1793,8 @@
         </span><span class="self">self</span>.wait_for_readers(timeout, <span class="number">0</span>)
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>unlock_exclusive_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, force_fair: bool) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>unlock_exclusive_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, force_fair: bool) {
         <span class="comment">// There are threads to unpark. Try to unpark as many as we can.
         </span><span class="kw">let </span>callback = |<span class="kw-2">mut </span>new_state, result: UnparkResult| {
             <span class="comment">// If we are using a fair unlock then we should keep the
@@ -1821,8 +1821,8 @@
         }
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>lock_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, recursive: bool, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>lock_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, recursive: bool, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
         <span class="kw">let </span>try_lock = |state: <span class="kw-2">&amp;mut </span>usize| {
             <span class="kw">let </span><span class="kw-2">mut </span>spinwait_shared = SpinWait::new();
             <span class="kw">loop </span>{
@@ -1868,8 +1868,8 @@
         <span class="self">self</span>.lock_common(timeout, TOKEN_SHARED, try_lock, WRITER_BIT)
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>unlock_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>unlock_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="comment">// At this point WRITER_PARKED_BIT is set and READER_MASK is empty. We
         // just need to wake up a potentially sleeping pending writer.
         // Using the 2nd key at addr + 1
@@ -1888,8 +1888,8 @@
         }
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>lock_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>lock_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
         <span class="kw">let </span>try_lock = |state: <span class="kw-2">&amp;mut </span>usize| {
             <span class="kw">let </span><span class="kw-2">mut </span>spinwait_shared = SpinWait::new();
             <span class="kw">loop </span>{
@@ -1927,8 +1927,8 @@
         )
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>unlock_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, force_fair: bool) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>unlock_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, force_fair: bool) {
         <span class="comment">// Just release the lock if there are no parked threads.
         </span><span class="kw">let </span><span class="kw-2">mut </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         <span class="kw">while </span>state &amp; PARKED_BIT == <span class="number">0 </span>{
@@ -1996,8 +1996,8 @@
         }
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>try_upgrade_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>try_upgrade_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span><span class="kw-2">mut </span>state = <span class="self">self</span>.state.load(Ordering::Relaxed);
         <span class="kw">loop </span>{
             <span class="kw">if </span>state &amp; READERS_MASK != ONE_READER {
@@ -2015,13 +2015,13 @@
         }
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>upgrade_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>upgrade_slow(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;) -&gt; bool {
         <span class="self">self</span>.wait_for_readers(timeout, ONE_READER | UPGRADABLE_BIT)
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>downgrade_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>downgrade_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="comment">// We only reach this point if PARKED_BIT is set.
         </span><span class="kw">let </span>callback = |<span class="kw">_</span>, result: UnparkResult| {
             <span class="comment">// Clear the parked bit if there no more parked threads
@@ -2036,8 +2036,8 @@
         }
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>downgrade_to_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>downgrade_to_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="comment">// We only reach this point if PARKED_BIT is set.
         </span><span class="kw">let </span>callback = |<span class="kw">_</span>, result: UnparkResult| {
             <span class="comment">// Clear the parked bit if there no more parked threads
@@ -2052,21 +2052,21 @@
         }
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">unsafe fn </span>bump_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">unsafe fn </span>bump_shared_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.unlock_shared();
         <span class="self">self</span>.lock_shared();
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>bump_exclusive_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>bump_exclusive_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.deadlock_release();
         <span class="self">self</span>.unlock_exclusive_slow(<span class="bool-val">true</span>);
         <span class="self">self</span>.lock_exclusive();
     }
 
-    <span class="attribute">#[cold]</span>
-    <span class="kw">fn </span>bump_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[cold]
+    </span><span class="kw">fn </span>bump_upgradable_slow(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.deadlock_release();
         <span class="self">self</span>.unlock_upgradable_slow(<span class="bool-val">true</span>);
         <span class="self">self</span>.lock_upgradable();
@@ -2080,8 +2080,8 @@
     /// `callback` must uphold the requirements of the `callback` parameter to
     /// `parking_lot_core::unpark_filter`. Meaning no panics or calls into any function in
     /// `parking_lot`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">unsafe fn </span>wake_parked_threads(
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">unsafe fn </span>wake_parked_threads(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         new_state: usize,
         callback: <span class="kw">impl </span>FnOnce(usize, UnparkResult) -&gt; UnparkToken,
@@ -2119,8 +2119,8 @@
 
     <span class="comment">// Common code for waiting for readers to exit the lock after acquiring
     // WRITER_BIT.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>wait_for_readers(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;, prev_value: usize) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>wait_for_readers(<span class="kw-2">&amp;</span><span class="self">self</span>, timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;, prev_value: usize) -&gt; bool {
         <span class="comment">// At this point WRITER_BIT is already set, we just need to wait for the
         // remaining readers to exit the lock.
         </span><span class="kw">let </span><span class="kw-2">mut </span>spinwait = SpinWait::new();
@@ -2207,8 +2207,8 @@
     </span>}
 
     <span class="doccomment">/// Common code for acquiring a lock
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>lock_common(
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>lock_common(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         timeout: <span class="prelude-ty">Option</span>&lt;Instant&gt;,
         token: ParkToken,
@@ -2284,17 +2284,17 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>deadlock_acquire(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>deadlock_acquire(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">unsafe </span>{ deadlock::acquire_resource(<span class="self">self </span><span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize) };
         <span class="kw">unsafe </span>{ deadlock::acquire_resource(<span class="self">self </span><span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize + <span class="number">1</span>) };
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>deadlock_release(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>deadlock_release(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">unsafe </span>{ deadlock::release_resource(<span class="self">self </span><span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize) };
         <span class="kw">unsafe </span>{ deadlock::release_resource(<span class="self">self </span><span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize + <span class="number">1</span>) };
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="parking_lot" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="parking_lot" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

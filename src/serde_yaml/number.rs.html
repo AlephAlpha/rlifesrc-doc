@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_yaml-0.9.9/src/number.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>number.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../serde_yaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_yaml-0.9.11/src/number.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>number.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../serde_yaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -547,16 +547,16 @@
 <span class="kw">use </span>std::hash::{Hash, Hasher};
 
 <span class="doccomment">/// Represents a YAML number, whether integer or floating point.
-</span><span class="attribute">#[derive(Clone, PartialEq, PartialOrd)]</span>
-<span class="kw">pub struct </span>Number {
+</span><span class="attribute">#[derive(Clone, PartialEq, PartialOrd)]
+</span><span class="kw">pub struct </span>Number {
     n: N,
 }
 
 <span class="comment">// &quot;N&quot; is a prefix of &quot;NegInt&quot;... this is a false positive.
 // https://github.com/Manishearth/rust-clippy/issues/1241
-</span><span class="attribute">#[allow(clippy::enum_variant_names)]</span>
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="kw">enum </span>N {
+</span><span class="attribute">#[allow(clippy::enum_variant_names)]
+#[derive(Copy, Clone)]
+</span><span class="kw">enum </span>N {
     PosInt(u64),
     <span class="doccomment">/// Always less than zero.
     </span>NegInt(i64),
@@ -590,9 +590,9 @@
     /// # Ok(())
     /// # }
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[allow(clippy::cast_sign_loss)]</span>
-    <span class="kw">pub fn </span>is_i64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    #[allow(clippy::cast_sign_loss)]
+    </span><span class="kw">pub fn </span>is_i64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(v) =&gt; v &lt;= i64::max_value() <span class="kw">as </span>u64,
             N::NegInt(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
@@ -623,8 +623,8 @@
     /// # Ok(())
     /// # }
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_u64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_u64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
             N::NegInt(<span class="kw">_</span>) | N::Float(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
@@ -655,8 +655,8 @@
     /// # Ok(())
     /// # }
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_f64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_f64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::Float(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
             N::PosInt(<span class="kw">_</span>) | N::NegInt(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
@@ -681,8 +681,8 @@
     /// # Ok(())
     /// # }
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>as_i64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;i64&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>as_i64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;i64&gt; {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(n) =&gt; {
                 <span class="kw">if </span>n &lt;= i64::max_value() <span class="kw">as </span>u64 {
@@ -713,8 +713,8 @@
     /// # Ok(())
     /// # }
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>as_u64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>as_u64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(n) =&gt; <span class="prelude-val">Some</span>(n),
             N::NegInt(<span class="kw">_</span>) | N::Float(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
@@ -751,8 +751,8 @@
     /// # Ok(())
     /// # }
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>as_f64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;f64&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>as_f64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;f64&gt; {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(n) =&gt; <span class="prelude-val">Some</span>(n <span class="kw">as </span>f64),
             N::NegInt(n) =&gt; <span class="prelude-val">Some</span>(n <span class="kw">as </span>f64),
@@ -775,8 +775,8 @@
     ///
     /// assert!(!Number::from(1).is_nan());
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_nan(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_nan(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(<span class="kw">_</span>) | N::NegInt(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             N::Float(f) =&gt; f.is_nan(),
@@ -799,8 +799,8 @@
     ///
     /// assert!(!Number::from(1).is_infinite());
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_infinite(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_infinite(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(<span class="kw">_</span>) | N::NegInt(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             N::Float(f) =&gt; f.is_infinite(),
@@ -822,8 +822,8 @@
     ///
     /// assert!(Number::from(1).is_finite());
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_finite(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_finite(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::PosInt(<span class="kw">_</span>) | N::NegInt(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
             N::Float(f) =&gt; f.is_finite(),
@@ -834,8 +834,8 @@
 <span class="kw">impl </span>Display <span class="kw">for </span>Number {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, formatter: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
         <span class="kw">match </span><span class="self">self</span>.n {
-            N::PosInt(i) =&gt; Display::fmt(<span class="kw-2">&amp;</span>i, formatter),
-            N::NegInt(i) =&gt; Display::fmt(<span class="kw-2">&amp;</span>i, formatter),
+            N::PosInt(i) =&gt; formatter.write_str(itoa::Buffer::new().format(i)),
+            N::NegInt(i) =&gt; formatter.write_str(itoa::Buffer::new().format(i)),
             N::Float(f) <span class="kw">if </span>f.is_nan() =&gt; formatter.write_str(<span class="string">&quot;.nan&quot;</span>),
             N::Float(f) <span class="kw">if </span>f.is_infinite() =&gt; {
                 <span class="kw">if </span>f.is_sign_negative() {
@@ -844,7 +844,7 @@
                     formatter.write_str(<span class="string">&quot;.inf&quot;</span>)
                 }
             }
-            N::Float(f) =&gt; Display::fmt(<span class="kw-2">&amp;</span>f, formatter),
+            N::Float(f) =&gt; formatter.write_str(ryu::Buffer::new().format_finite(f)),
         }
     }
 }
@@ -917,8 +917,8 @@
 }
 
 <span class="kw">impl </span>Serialize <span class="kw">for </span>Number {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
     <span class="kw">where
         </span>S: Serializer,
     {
@@ -931,8 +931,8 @@
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>Number {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>deserialize&lt;D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;Number, D::Error&gt;
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>deserialize&lt;D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;Number, D::Error&gt;
     <span class="kw">where
         </span>D: Deserializer&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
@@ -945,18 +945,18 @@
                 formatter.write_str(<span class="string">&quot;a number&quot;</span>)
             }
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>visit_i64&lt;E&gt;(<span class="self">self</span>, value: i64) -&gt; <span class="prelude-ty">Result</span>&lt;Number, E&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>visit_i64&lt;E&gt;(<span class="self">self</span>, value: i64) -&gt; <span class="prelude-ty">Result</span>&lt;Number, E&gt; {
                 <span class="prelude-val">Ok</span>(value.into())
             }
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>visit_u64&lt;E&gt;(<span class="self">self</span>, value: u64) -&gt; <span class="prelude-ty">Result</span>&lt;Number, E&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>visit_u64&lt;E&gt;(<span class="self">self</span>, value: u64) -&gt; <span class="prelude-ty">Result</span>&lt;Number, E&gt; {
                 <span class="prelude-val">Ok</span>(value.into())
             }
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>visit_f64&lt;E&gt;(<span class="self">self</span>, value: f64) -&gt; <span class="prelude-ty">Result</span>&lt;Number, E&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>visit_f64&lt;E&gt;(<span class="self">self</span>, value: f64) -&gt; <span class="prelude-ty">Result</span>&lt;Number, E&gt; {
                 <span class="prelude-val">Ok</span>(value.into())
             }
         }
@@ -968,8 +968,8 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserializer&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>Number {
     <span class="kw">type </span>Error = Error;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>deserialize_any&lt;V&gt;(<span class="self">self</span>, visitor: V) -&gt; <span class="prelude-ty">Result</span>&lt;V::Value, Error&gt;
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>deserialize_any&lt;V&gt;(<span class="self">self</span>, visitor: V) -&gt; <span class="prelude-ty">Result</span>&lt;V::Value, Error&gt;
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
@@ -980,7 +980,7 @@
         }
     }
 
-    <span class="macro">forward_to_deserialize_any!</span> {
+    <span class="macro">forward_to_deserialize_any! </span>{
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         tuple_struct map <span class="kw">struct enum </span>identifier ignored_any
@@ -990,8 +990,8 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>, <span class="lifetime">&#39;a</span>&gt; Deserializer&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Number {
     <span class="kw">type </span>Error = Error;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>deserialize_any&lt;V&gt;(<span class="self">self</span>, visitor: V) -&gt; <span class="prelude-ty">Result</span>&lt;V::Value, Error&gt;
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>deserialize_any&lt;V&gt;(<span class="self">self</span>, visitor: V) -&gt; <span class="prelude-ty">Result</span>&lt;V::Value, Error&gt;
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
@@ -1002,20 +1002,20 @@
         }
     }
 
-    <span class="macro">forward_to_deserialize_any!</span> {
+    <span class="macro">forward_to_deserialize_any! </span>{
         bool i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 f32 f64 char str string
         bytes byte_buf option unit unit_struct newtype_struct seq tuple
         tuple_struct map <span class="kw">struct enum </span>identifier ignored_any
     }
 }
 
-<span class="macro">macro_rules!</span> from_signed {
+<span class="macro">macro_rules! </span>from_signed {
     ($(<span class="macro-nonterminal">$signed_ty</span>:ident)<span class="kw-2">*</span>) =&gt; {
         $(
             <span class="kw">impl </span>From&lt;<span class="macro-nonterminal">$signed_ty</span>&gt; <span class="kw">for </span>Number {
-                <span class="attribute">#[inline]</span>
-                <span class="attribute">#[allow(clippy::cast_sign_loss)]</span>
-                <span class="kw">fn </span>from(i: <span class="macro-nonterminal">$signed_ty</span>) -&gt; <span class="self">Self </span>{
+                <span class="attribute">#[inline]
+                #[allow(clippy::cast_sign_loss)]
+                </span><span class="kw">fn </span>from(i: <span class="macro-nonterminal">$signed_ty</span>) -&gt; <span class="self">Self </span>{
                     <span class="kw">if </span>i &lt; <span class="number">0 </span>{
                         Number { n: N::NegInt(i <span class="kw">as </span>i64) }
                     } <span class="kw">else </span>{
@@ -1027,12 +1027,12 @@
     };
 }
 
-<span class="macro">macro_rules!</span> from_unsigned {
+<span class="macro">macro_rules! </span>from_unsigned {
     ($(<span class="macro-nonterminal">$unsigned_ty</span>:ident)<span class="kw-2">*</span>) =&gt; {
         $(
             <span class="kw">impl </span>From&lt;<span class="macro-nonterminal">$unsigned_ty</span>&gt; <span class="kw">for </span>Number {
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>from(u: <span class="macro-nonterminal">$unsigned_ty</span>) -&gt; <span class="self">Self </span>{
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>from(u: <span class="macro-nonterminal">$unsigned_ty</span>) -&gt; <span class="self">Self </span>{
                     Number { n: N::PosInt(u <span class="kw">as </span>u64) }
                 }
             }
@@ -1040,12 +1040,12 @@
     };
 }
 
-<span class="macro">macro_rules!</span> from_float {
+<span class="macro">macro_rules! </span>from_float {
     ($(<span class="macro-nonterminal">$float_ty</span>:ident)<span class="kw-2">*</span>) =&gt; {
         $(
             <span class="kw">impl </span>From&lt;<span class="macro-nonterminal">$float_ty</span>&gt; <span class="kw">for </span>Number {
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>from(f: <span class="macro-nonterminal">$float_ty</span>) -&gt; <span class="self">Self </span>{
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>from(f: <span class="macro-nonterminal">$float_ty</span>) -&gt; <span class="self">Self </span>{
                     Number { n: N::Float(f <span class="kw">as </span>f64) }
                 }
             }
@@ -1059,8 +1059,8 @@
 
 <span class="comment">// This is fine, because we don&#39;t _really_ implement hash for floats
 // all other hash functions should work as expected
-</span><span class="attribute">#[allow(clippy::derive_hash_xor_eq)]</span>
-<span class="kw">impl </span>Hash <span class="kw">for </span>Number {
+</span><span class="attribute">#[allow(clippy::derive_hash_xor_eq)]
+</span><span class="kw">impl </span>Hash <span class="kw">for </span>Number {
     <span class="kw">fn </span>hash&lt;H: Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
         <span class="kw">match </span><span class="self">self</span>.n {
             N::Float(<span class="kw">_</span>) =&gt; {
@@ -1081,4 +1081,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="serde_yaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="serde_yaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

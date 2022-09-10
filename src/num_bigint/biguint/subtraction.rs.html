@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/biguint/subtraction.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>subtraction.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../num_bigint/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/biguint/subtraction.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>subtraction.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../num_bigint/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -310,8 +310,8 @@
 <span id="310">310</span>
 <span id="311">311</span>
 <span id="312">312</span>
-</pre><pre class="rust"><code><span class="attribute">#[cfg(not(u64_digit))]</span>
-<span class="kw">use </span><span class="kw">super</span>::u32_from_u128;
+</pre><pre class="rust"><code><span class="attribute">#[cfg(not(u64_digit))]
+</span><span class="kw">use </span><span class="kw">super</span>::u32_from_u128;
 <span class="kw">use </span><span class="kw">super</span>::BigUint;
 
 <span class="kw">use </span><span class="kw">crate</span>::big_digit::{<span class="self">self</span>, BigDigit};
@@ -321,33 +321,33 @@
 <span class="kw">use </span>core::ops::{Sub, SubAssign};
 <span class="kw">use </span>num_traits::{CheckedSub, Zero};
 
-<span class="attribute">#[cfg(all(use_addcarry, target_arch = <span class="string">&quot;x86_64&quot;</span>))]</span>
-<span class="kw">use </span>core::arch::x86_64 <span class="kw">as </span>arch;
+<span class="attribute">#[cfg(all(use_addcarry, target_arch = <span class="string">&quot;x86_64&quot;</span>))]
+</span><span class="kw">use </span>core::arch::x86_64 <span class="kw">as </span>arch;
 
-<span class="attribute">#[cfg(all(use_addcarry, target_arch = <span class="string">&quot;x86&quot;</span>))]</span>
-<span class="kw">use </span>core::arch::x86 <span class="kw">as </span>arch;
+<span class="attribute">#[cfg(all(use_addcarry, target_arch = <span class="string">&quot;x86&quot;</span>))]
+</span><span class="kw">use </span>core::arch::x86 <span class="kw">as </span>arch;
 
 <span class="comment">// Subtract with borrow:
-</span><span class="attribute">#[cfg(all(use_addcarry, u64_digit))]</span>
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>sbb(borrow: u8, a: u64, b: u64, out: <span class="kw-2">&amp;mut </span>u64) -&gt; u8 {
+</span><span class="attribute">#[cfg(all(use_addcarry, u64_digit))]
+#[inline]
+</span><span class="kw">fn </span>sbb(borrow: u8, a: u64, b: u64, out: <span class="kw-2">&amp;mut </span>u64) -&gt; u8 {
     <span class="comment">// Safety: There are absolutely no safety concerns with calling `_subborrow_u64`.
     // It&#39;s just unsafe for API consistency with other intrinsics.
     </span><span class="kw">unsafe </span>{ arch::_subborrow_u64(borrow, a, b, out) }
 }
 
-<span class="attribute">#[cfg(all(use_addcarry, not(u64_digit)))]</span>
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>sbb(borrow: u8, a: u32, b: u32, out: <span class="kw-2">&amp;mut </span>u32) -&gt; u8 {
+<span class="attribute">#[cfg(all(use_addcarry, not(u64_digit)))]
+#[inline]
+</span><span class="kw">fn </span>sbb(borrow: u8, a: u32, b: u32, out: <span class="kw-2">&amp;mut </span>u32) -&gt; u8 {
     <span class="comment">// Safety: There are absolutely no safety concerns with calling `_subborrow_u32`.
     // It&#39;s just unsafe for API consistency with other intrinsics.
     </span><span class="kw">unsafe </span>{ arch::_subborrow_u32(borrow, a, b, out) }
 }
 
 <span class="comment">// fallback for environments where we don&#39;t have a subborrow intrinsic
-</span><span class="attribute">#[cfg(not(use_addcarry))]</span>
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>sbb(borrow: u8, a: BigDigit, b: BigDigit, out: <span class="kw-2">&amp;mut </span>BigDigit) -&gt; u8 {
+</span><span class="attribute">#[cfg(not(use_addcarry))]
+#[inline]
+</span><span class="kw">fn </span>sbb(borrow: u8, a: BigDigit, b: BigDigit, out: <span class="kw-2">&amp;mut </span>BigDigit) -&gt; u8 {
     <span class="kw">use </span><span class="kw">crate</span>::big_digit::SignedDoubleBigDigit;
 
     <span class="kw">let </span>difference = SignedDoubleBigDigit::from(a)
@@ -385,8 +385,8 @@
 }
 
 <span class="comment">// Only for the Sub impl. `a` and `b` must have same length.
-</span><span class="attribute">#[inline]</span>
-<span class="kw">fn </span>__sub2rev(a: <span class="kw-2">&amp;</span>[BigDigit], b: <span class="kw-2">&amp;mut </span>[BigDigit]) -&gt; u8 {
+</span><span class="attribute">#[inline]
+</span><span class="kw">fn </span>__sub2rev(a: <span class="kw-2">&amp;</span>[BigDigit], b: <span class="kw-2">&amp;mut </span>[BigDigit]) -&gt; u8 {
     <span class="macro">debug_assert!</span>(b.len() == a.len());
 
     <span class="kw">let </span><span class="kw-2">mut </span>borrow = <span class="number">0</span>;
@@ -462,8 +462,8 @@
 <span class="kw">impl </span>Sub&lt;u32&gt; <span class="kw">for </span>BigUint {
     <span class="kw">type </span>Output = BigUint;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="kw-2">mut </span><span class="self">self</span>, other: u32) -&gt; BigUint {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sub(<span class="kw-2">mut </span><span class="self">self</span>, other: u32) -&gt; BigUint {
         <span class="self">self </span>-= other;
         <span class="self">self
     </span>}
@@ -479,9 +479,9 @@
 <span class="kw">impl </span>Sub&lt;BigUint&gt; <span class="kw">for </span>u32 {
     <span class="kw">type </span>Output = BigUint;
 
-    <span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
+    <span class="attribute">#[cfg(not(u64_digit))]
+    #[inline]
+    </span><span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
         <span class="kw">if </span>other.data.len() == <span class="number">0 </span>{
             other.data.push(<span class="self">self</span>);
         } <span class="kw">else </span>{
@@ -490,9 +490,9 @@
         other.normalized()
     }
 
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
+    <span class="attribute">#[cfg(u64_digit)]
+    #[inline]
+    </span><span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
         <span class="kw">if </span>other.data.is_empty() {
             other.data.push(<span class="self">self </span><span class="kw">as </span>BigDigit);
         } <span class="kw">else </span>{
@@ -505,25 +505,25 @@
 <span class="kw">impl </span>Sub&lt;u64&gt; <span class="kw">for </span>BigUint {
     <span class="kw">type </span>Output = BigUint;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="kw-2">mut </span><span class="self">self</span>, other: u64) -&gt; BigUint {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sub(<span class="kw-2">mut </span><span class="self">self</span>, other: u64) -&gt; BigUint {
         <span class="self">self </span>-= other;
         <span class="self">self
     </span>}
 }
 
 <span class="kw">impl </span>SubAssign&lt;u64&gt; <span class="kw">for </span>BigUint {
-    <span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u64) {
+    <span class="attribute">#[cfg(not(u64_digit))]
+    #[inline]
+    </span><span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u64) {
         <span class="kw">let </span>(hi, lo) = big_digit::from_doublebigdigit(other);
         sub2(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[..], <span class="kw-2">&amp;</span>[lo, hi]);
         <span class="self">self</span>.normalize();
     }
 
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u64) {
+    <span class="attribute">#[cfg(u64_digit)]
+    #[inline]
+    </span><span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u64) {
         sub2(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[..], <span class="kw-2">&amp;</span>[other <span class="kw">as </span>BigDigit]);
         <span class="self">self</span>.normalize();
     }
@@ -532,9 +532,9 @@
 <span class="kw">impl </span>Sub&lt;BigUint&gt; <span class="kw">for </span>u64 {
     <span class="kw">type </span>Output = BigUint;
 
-    <span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
+    <span class="attribute">#[cfg(not(u64_digit))]
+    #[inline]
+    </span><span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
         <span class="kw">while </span>other.data.len() &lt; <span class="number">2 </span>{
             other.data.push(<span class="number">0</span>);
         }
@@ -544,9 +544,9 @@
         other.normalized()
     }
 
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
+    <span class="attribute">#[cfg(u64_digit)]
+    #[inline]
+    </span><span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
         <span class="kw">if </span>other.data.is_empty() {
             other.data.push(<span class="self">self</span>);
         } <span class="kw">else </span>{
@@ -559,25 +559,25 @@
 <span class="kw">impl </span>Sub&lt;u128&gt; <span class="kw">for </span>BigUint {
     <span class="kw">type </span>Output = BigUint;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="kw-2">mut </span><span class="self">self</span>, other: u128) -&gt; BigUint {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sub(<span class="kw-2">mut </span><span class="self">self</span>, other: u128) -&gt; BigUint {
         <span class="self">self </span>-= other;
         <span class="self">self
     </span>}
 }
 
 <span class="kw">impl </span>SubAssign&lt;u128&gt; <span class="kw">for </span>BigUint {
-    <span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u128) {
+    <span class="attribute">#[cfg(not(u64_digit))]
+    #[inline]
+    </span><span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u128) {
         <span class="kw">let </span>(a, b, c, d) = u32_from_u128(other);
         sub2(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[..], <span class="kw-2">&amp;</span>[d, c, b, a]);
         <span class="self">self</span>.normalize();
     }
 
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u128) {
+    <span class="attribute">#[cfg(u64_digit)]
+    #[inline]
+    </span><span class="kw">fn </span>sub_assign(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: u128) {
         <span class="kw">let </span>(hi, lo) = big_digit::from_doublebigdigit(other);
         sub2(<span class="kw-2">&amp;mut </span><span class="self">self</span>.data[..], <span class="kw-2">&amp;</span>[lo, hi]);
         <span class="self">self</span>.normalize();
@@ -587,9 +587,9 @@
 <span class="kw">impl </span>Sub&lt;BigUint&gt; <span class="kw">for </span>u128 {
     <span class="kw">type </span>Output = BigUint;
 
-    <span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
+    <span class="attribute">#[cfg(not(u64_digit))]
+    #[inline]
+    </span><span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
         <span class="kw">while </span>other.data.len() &lt; <span class="number">4 </span>{
             other.data.push(<span class="number">0</span>);
         }
@@ -599,9 +599,9 @@
         other.normalized()
     }
 
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
+    <span class="attribute">#[cfg(u64_digit)]
+    #[inline]
+    </span><span class="kw">fn </span>sub(<span class="self">self</span>, <span class="kw-2">mut </span>other: BigUint) -&gt; BigUint {
         <span class="kw">while </span>other.data.len() &lt; <span class="number">2 </span>{
             other.data.push(<span class="number">0</span>);
         }
@@ -613,8 +613,8 @@
 }
 
 <span class="kw">impl </span>CheckedSub <span class="kw">for </span>BigUint {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>checked_sub(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigUint) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>checked_sub(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigUint) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="kw">match </span><span class="self">self</span>.cmp(v) {
             Less =&gt; <span class="prelude-val">None</span>,
             Equal =&gt; <span class="prelude-val">Some</span>(Zero::zero()),
@@ -623,4 +623,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

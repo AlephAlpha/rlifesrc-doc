@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/search/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/search/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -334,16 +334,16 @@
 };
 <span class="kw">use </span>rand::{thread_rng, Rng};
 
-<span class="attribute">#[cfg(doc)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::cells::LifeCell;
+<span class="attribute">#[cfg(doc)]
+</span><span class="kw">use </span><span class="kw">crate</span>::cells::LifeCell;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use crate</span>::{
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">use crate</span>::{
     error::Error,
     save::{ReasonSer, SetCellSer},
 };
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="kw">mod </span>backjump;
 <span class="kw">mod </span>lifesrc;
@@ -356,8 +356,8 @@
 </span><span class="kw">mod </span>reason {
     <span class="kw">use crate</span>::{cells::CellRef, rules::Rule};
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="kw">use </span><span class="kw">crate</span>::save::ReasonSer;
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+    </span><span class="kw">use </span><span class="kw">crate</span>::save::ReasonSer;
 
     <span class="doccomment">/// Reasons for setting a cell.
     </span><span class="kw">pub trait </span>Reason&lt;R: Rule&gt; {
@@ -376,17 +376,17 @@
         <span class="doccomment">/// Decided or trying another state for generations rules.
         </span><span class="kw">fn </span>is_decided(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool;
 
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-        <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
-        <span class="doccomment">/// Saves the reason as a [`ReasonSer`].
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+        #[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]
+        </span><span class="doccomment">/// Saves the reason as a [`ReasonSer`].
         </span><span class="kw">fn </span>ser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReasonSer;
     }
 }
 
 <span class="doccomment">/// Search status.
-</span><span class="attribute">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub enum </span>Status {
+</span><span class="attribute">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub enum </span>Status {
     <span class="doccomment">/// Initial status. Waiting to start.
     </span>Initial,
     <span class="doccomment">/// A result is found.
@@ -407,39 +407,39 @@
 ///   to the original lifesrc algorithm. Very slow. Do not use it.
 ///
 /// This trait is sealed and cannot be implemented outside of this crate.
-</span><span class="attribute">#[cfg_attr(not(github_io), doc = <span class="string">&quot;Most of its items are hidden in the doc.&quot;</span>)]</span>
-<span class="kw">pub trait </span>Algorithm&lt;R: Rule&gt;: private::Sealed {
+</span><span class="attribute">#[cfg_attr(not(github_io), doc = <span class="string">&quot;Most of its items are hidden in the doc.&quot;</span>)]
+</span><span class="kw">pub trait </span>Algorithm&lt;R: Rule&gt;: private::Sealed {
     <span class="doccomment">/// Reasons for setting a cell.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="kw">type </span>Reason: Reason&lt;R&gt;;
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    </span><span class="kw">type </span>Reason: Reason&lt;R&gt;;
 
     <span class="doccomment">/// Reasons for a conflict. Ignored in [`LifeSrc`] algorithm.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="kw">type </span>ConflReason;
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    </span><span class="kw">type </span>ConflReason;
 
     <span class="doccomment">/// Generate new algorithm data.
     </span><span class="kw">fn </span>new() -&gt; <span class="self">Self</span>;
 
     <span class="doccomment">/// Conflict when constitifying a cell.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="kw">fn </span>confl_from_cell(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason;
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    </span><span class="kw">fn </span>confl_from_cell(cell: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason;
 
     <span class="doccomment">/// Conflict from symmetry.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="kw">fn </span>confl_from_sym(cell: CellRef&lt;R&gt;, sym: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason;
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    </span><span class="kw">fn </span>confl_from_sym(cell: CellRef&lt;R&gt;, sym: CellRef&lt;R&gt;) -&gt; <span class="self">Self</span>::ConflReason;
 
     <span class="doccomment">/// Conflict when constitifying a cell.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="kw">fn </span>init_front(world: World&lt;R, <span class="self">Self</span>&gt;) -&gt; World&lt;R, <span class="self">Self</span>&gt;;
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    </span><span class="kw">fn </span>init_front(world: World&lt;R, <span class="self">Self</span>&gt;) -&gt; World&lt;R, <span class="self">Self</span>&gt;;
 
     <span class="doccomment">/// Sets the [`state`](LifeCell#structfield.state) of a cell,
     /// push it to the [`set_stack`](World#structfield.set_stack),
     /// and update the neighborhood descriptor of its neighbors.
     ///
     /// The original state of the cell must be unknown.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="attribute">#[cfg_attr(github_io, allow(rustdoc::private_intra_doc_links))]</span>
-    <span class="kw">fn </span>set_cell(
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    #[cfg_attr(github_io, allow(rustdoc::private_intra_doc_links))]
+    </span><span class="kw">fn </span>set_cell(
         world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;,
         cell: CellRef&lt;R&gt;,
         state: State,
@@ -453,20 +453,20 @@
     ///
     /// It also records the number of steps it has walked in the parameter
     /// `step`.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="kw">fn </span>go(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;, step: <span class="kw-2">&amp;mut </span>u64) -&gt; bool;
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    </span><span class="kw">fn </span>go(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;, step: <span class="kw-2">&amp;mut </span>u64) -&gt; bool;
 
     <span class="doccomment">/// Retreats to the last time when a unknown cell is decided by choice,
     /// and switch that cell to the other state.
     ///
     /// Returns `true` if successes,
     /// `false` if it goes back to the time before the first cell is set.
-    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]</span>
-    <span class="kw">fn </span>retreat(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;) -&gt; bool;
+    </span><span class="attribute">#[cfg_attr(not(github_io), doc(hidden))]
+    </span><span class="kw">fn </span>retreat(world: <span class="kw-2">&amp;mut </span>World&lt;R, <span class="self">Self</span>&gt;) -&gt; bool;
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
-    <span class="doccomment">/// Restore the reason from a [`ReasonSer`].
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+    #[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]
+    </span><span class="doccomment">/// Restore the reason from a [`ReasonSer`].
     </span><span class="kw">fn </span>deser_reason(world: <span class="kw-2">&amp;</span>World&lt;R, <span class="self">Self</span>&gt;, ser: <span class="kw-2">&amp;</span>ReasonSer) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Reason, Error&gt;;
 }
 
@@ -479,8 +479,8 @@
 }
 
 <span class="doccomment">/// Records the cells whose values are set and their reasons.
-</span><span class="attribute">#[derive(Clone, Debug, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetCell&lt;R: Rule, A: Algorithm&lt;R&gt;&gt; {
+</span><span class="attribute">#[derive(Clone, Debug, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetCell&lt;R: Rule, A: Algorithm&lt;R&gt;&gt; {
     <span class="doccomment">/// The set cell.
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) cell: CellRef&lt;R&gt;,
 
@@ -490,16 +490,16 @@
 
 <span class="kw">impl</span>&lt;R: Rule, A: Algorithm&lt;R&gt;&gt; SetCell&lt;R, A&gt; {
     <span class="doccomment">/// Get a reference to the set cell.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>new(cell: CellRef&lt;R&gt;, reason: A::Reason) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const fn </span>new(cell: CellRef&lt;R&gt;, reason: A::Reason) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{ cell, reason }
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]</span>
-    <span class="doccomment">/// Saves the [`SetCell`] as a [`SetCellSer`].
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>ser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; SetCellSer {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+    #[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;serde&quot;</span>)))]
+    </span><span class="doccomment">/// Saves the [`SetCell`] as a [`SetCellSer`].
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>ser(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; SetCellSer {
         SetCellSer {
             coord: <span class="self">self</span>.cell.coord,
             state: <span class="self">self</span>.cell.state.get().unwrap(),
@@ -517,16 +517,16 @@
     /// cells involved.
     ///
     /// If there is a conflict, returns its reason.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>consistify(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cell: CellRef&lt;R&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), A::ConflReason&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>consistify(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cell: CellRef&lt;R&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), A::ConflReason&gt; {
         Rule::consistify(<span class="self">self</span>, cell)
     }
 
     <span class="doccomment">/// Consistifies a cell, its neighbors, and its predecessor.
     ///
     /// If there is a conflict, returns its reason.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>consistify10(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cell: CellRef&lt;R&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), A::ConflReason&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>consistify10(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cell: CellRef&lt;R&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), A::ConflReason&gt; {
         <span class="self">self</span>.consistify(cell)<span class="question-mark">?</span>;
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(pred) = cell.pred {
@@ -572,8 +572,8 @@
     ///
     /// Returns `true` if successes,
     /// `false` if it goes back to the time before the first cell is set.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>retreat(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>retreat(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
         A::retreat(<span class="self">self</span>)
     }
 
@@ -584,8 +584,8 @@
     ///
     /// Returns `None` is there is no unknown cell,
     /// `Some(false)` if the new state leads to an immediate conflict.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>decide(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;bool&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>decide(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;bool&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(cell) = <span class="self">self</span>.get_unknown() {
             <span class="self">self</span>.next_unknown = cell.next;
             <span class="kw">let </span>state = <span class="kw">match </span><span class="self">self</span>.config.new_state {
@@ -600,8 +600,8 @@
     }
 
     <span class="doccomment">/// Deduces all cells that could be deduced before the first decision.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>presearch(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>presearch(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">loop </span>{
             <span class="kw">if </span><span class="self">self</span>.proceed().is_ok() {
                 <span class="self">self</span>.set_stack.clear();
@@ -651,4 +651,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

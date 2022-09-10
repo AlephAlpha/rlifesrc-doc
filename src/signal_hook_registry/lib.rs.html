@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/signal-hook-registry-1.4.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../signal_hook_registry/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../signal_hook_registry/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../signal_hook_registry/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/signal-hook-registry-1.4.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../signal_hook_registry/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../signal_hook_registry/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../signal_hook_registry/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -780,11 +780,11 @@
 <span id="780">780</span>
 <span id="781">781</span>
 <span id="782">782</span>
-</pre><pre class="rust"><code><span class="attribute">#![doc(test(attr(deny(warnings))))]</span>
-<span class="attribute">#![warn(missing_docs)]</span>
-<span class="attribute">#![allow(unknown_lints, renamed_and_remove_lints, bare_trait_objects)]</span>
+</pre><pre class="rust"><code><span class="attribute">#![doc(test(attr(deny(warnings))))]
+#![warn(missing_docs)]
+#![allow(unknown_lints, renamed_and_remove_lints, bare_trait_objects)]
 
-<span class="doccomment">//! Backend of the [signal-hook] crate.
+</span><span class="doccomment">//! Backend of the [signal-hook] crate.
 //!
 //! The [signal-hook] crate tries to provide an API to the unix signals, which are a global
 //! resource. Therefore, it is desirable an application contains just one version of the crate
@@ -848,41 +848,41 @@
 <span class="kw">use </span>std::collections::{BTreeMap, HashMap};
 <span class="kw">use </span>std::io::Error;
 <span class="kw">use </span>std::mem;
-<span class="attribute">#[cfg(not(windows))]</span>
-<span class="kw">use </span>std::ptr;
+<span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">use </span>std::ptr;
 <span class="comment">// Once::new is now a const-fn. But it is not stable in all the rustc versions we want to support
 // yet.
-</span><span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">use </span>std::sync::ONCE_INIT;
+</span><span class="attribute">#[allow(deprecated)]
+</span><span class="kw">use </span>std::sync::ONCE_INIT;
 <span class="kw">use </span>std::sync::{Arc, Once};
 
-<span class="attribute">#[cfg(not(windows))]</span>
-<span class="kw">use </span>libc::{c_int, c_void, sigaction, siginfo_t};
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span>libc::{c_int, sighandler_t};
+<span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">use </span>libc::{c_int, c_void, sigaction, siginfo_t};
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span>libc::{c_int, sighandler_t};
 
-<span class="attribute">#[cfg(not(windows))]</span>
-<span class="kw">use </span>libc::{SIGFPE, SIGILL, SIGKILL, SIGSEGV, SIGSTOP};
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span>libc::{SIGFPE, SIGILL, SIGSEGV};
+<span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">use </span>libc::{SIGFPE, SIGILL, SIGKILL, SIGSEGV, SIGSTOP};
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span>libc::{SIGFPE, SIGILL, SIGSEGV};
 
 <span class="kw">use </span>half_lock::HalfLock;
 
 <span class="comment">// These constants are not defined in the current version of libc, but it actually
 // exists in Windows CRT.
-</span><span class="attribute">#[cfg(windows)]</span>
-<span class="kw">const </span>SIG_DFL: sighandler_t = <span class="number">0</span>;
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">const </span>SIG_IGN: sighandler_t = <span class="number">1</span>;
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">const </span>SIG_GET: sighandler_t = <span class="number">2</span>;
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">const </span>SIG_ERR: sighandler_t = !<span class="number">0</span>;
+</span><span class="attribute">#[cfg(windows)]
+</span><span class="kw">const </span>SIG_DFL: sighandler_t = <span class="number">0</span>;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">const </span>SIG_IGN: sighandler_t = <span class="number">1</span>;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">const </span>SIG_GET: sighandler_t = <span class="number">2</span>;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">const </span>SIG_ERR: sighandler_t = !<span class="number">0</span>;
 
 <span class="comment">// To simplify implementation. Not to be exposed.
-</span><span class="attribute">#[cfg(windows)]</span>
-<span class="attribute">#[allow(non_camel_case_types)]</span>
-<span class="kw">struct </span>siginfo_t;
+</span><span class="attribute">#[cfg(windows)]
+#[allow(non_camel_case_types)]
+</span><span class="kw">struct </span>siginfo_t;
 
 <span class="comment">// # Internal workings
 //
@@ -897,26 +897,26 @@
 // needs to busy-wait for the reference count on the old pointer to drop to 1 and take ownership ‒
 // that way the one deallocating is the modification routine, outside of the signal handler.
 
-</span><span class="attribute">#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]</span>
-<span class="kw">struct </span>ActionId(u128);
+</span><span class="attribute">#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+</span><span class="kw">struct </span>ActionId(u128);
 
 <span class="doccomment">/// An ID of registered action.
 ///
 /// This is returned by all the registration routines and can be used to remove the action later on
 /// with a call to [`unregister`].
-</span><span class="attribute">#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]</span>
-<span class="kw">pub struct </span>SigId {
+</span><span class="attribute">#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
+</span><span class="kw">pub struct </span>SigId {
     signal: c_int,
     action: ActionId,
 }
 
 <span class="comment">// This should be dyn Fn(...), but we want to support Rust 1.26.0 and that one doesn&#39;t allow dyn
 // yet.
-</span><span class="attribute">#[allow(unknown_lints, bare_trait_objects)]</span>
-<span class="kw">type </span>Action = Fn(<span class="kw-2">&amp;</span>siginfo_t) + Send + Sync;
+</span><span class="attribute">#[allow(unknown_lints, bare_trait_objects)]
+</span><span class="kw">type </span>Action = Fn(<span class="kw-2">&amp;</span>siginfo_t) + Send + Sync;
 
-<span class="attribute">#[derive(Clone)]</span>
-<span class="kw">struct </span>Slot {
+<span class="attribute">#[derive(Clone)]
+</span><span class="kw">struct </span>Slot {
     prev: Prev,
     <span class="comment">// We use BTreeMap here, because we want to run the actions in the order they were inserted.
     // This works, because the ActionIds are assigned in an increasing order.
@@ -924,8 +924,8 @@
 }
 
 <span class="kw">impl </span>Slot {
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>new(signal: libc::c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>new(signal: libc::c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
         <span class="kw">let </span>old = <span class="kw">unsafe </span>{ libc::signal(signal, handler <span class="kw">as </span>sighandler_t) };
         <span class="kw">if </span>old == SIG_ERR {
             <span class="kw">return </span><span class="prelude-val">Err</span>(Error::last_os_error());
@@ -936,8 +936,8 @@
         })
     }
 
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>new(signal: libc::c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>new(signal: libc::c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
         <span class="comment">// C data structure, expected to be zeroed out.
         </span><span class="kw">let </span><span class="kw-2">mut </span>new: libc::sigaction = <span class="kw">unsafe </span>{ mem::zeroed() };
         new.sa_sigaction = handler <span class="kw">as </span>usize;
@@ -945,8 +945,8 @@
         // the pointer width). This converts the flags to the proper type no matter what it is on
         // the given platform.
         </span><span class="kw">let </span>flags = libc::SA_RESTART;
-        <span class="attribute">#[allow(unused_assignments)]</span>
-        <span class="kw">let </span><span class="kw-2">mut </span>siginfo = flags;
+        <span class="attribute">#[allow(unused_assignments)]
+        </span><span class="kw">let </span><span class="kw-2">mut </span>siginfo = flags;
         siginfo = libc::SA_SIGINFO <span class="kw">as _</span>;
         <span class="kw">let </span>flags = flags | siginfo;
         new.sa_flags = flags <span class="kw">as _</span>;
@@ -963,24 +963,24 @@
     }
 }
 
-<span class="attribute">#[derive(Clone)]</span>
-<span class="kw">struct </span>SignalData {
+<span class="attribute">#[derive(Clone)]
+</span><span class="kw">struct </span>SignalData {
     signals: HashMap&lt;c_int, Slot&gt;,
     next_id: u128,
 }
 
-<span class="attribute">#[derive(Clone)]</span>
-<span class="kw">struct </span>Prev {
+<span class="attribute">#[derive(Clone)]
+</span><span class="kw">struct </span>Prev {
     signal: c_int,
-    <span class="attribute">#[cfg(windows)]</span>
-    info: sighandler_t,
-    <span class="attribute">#[cfg(not(windows))]</span>
-    info: sigaction,
+    <span class="attribute">#[cfg(windows)]
+    </span>info: sighandler_t,
+    <span class="attribute">#[cfg(not(windows))]
+    </span>info: sigaction,
 }
 
 <span class="kw">impl </span>Prev {
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>detect(signal: c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>detect(signal: c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
         <span class="kw">let </span>old = <span class="kw">unsafe </span>{ libc::signal(signal, SIG_GET) };
         <span class="kw">if </span>old == SIG_ERR {
             <span class="kw">return </span><span class="prelude-val">Err</span>(Error::last_os_error());
@@ -988,8 +988,8 @@
         <span class="prelude-val">Ok</span>(Prev { signal, info: old })
     }
 
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>detect(signal: c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>detect(signal: c_int) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
         <span class="comment">// C data structure, expected to be zeroed out.
         </span><span class="kw">let </span><span class="kw-2">mut </span>old: libc::sigaction = <span class="kw">unsafe </span>{ mem::zeroed() };
         <span class="comment">// FFI ‒ pointers are valid, it doesn&#39;t take ownership.
@@ -1000,8 +1000,8 @@
         <span class="prelude-val">Ok</span>(Prev { signal, info: old })
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute(<span class="kw-2">&amp;</span><span class="self">self</span>, sig: c_int) {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute(<span class="kw-2">&amp;</span><span class="self">self</span>, sig: c_int) {
         <span class="kw">let </span>fptr = <span class="self">self</span>.info;
         <span class="kw">if </span>fptr != <span class="number">0 </span>&amp;&amp; fptr != SIG_DFL &amp;&amp; fptr != SIG_IGN {
             <span class="comment">// FFI ‒ calling the original signal handler.
@@ -1012,8 +1012,8 @@
         }
     }
 
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">unsafe fn </span>execute(<span class="kw-2">&amp;</span><span class="self">self</span>, sig: c_int, info: <span class="kw-2">*mut </span>siginfo_t, data: <span class="kw-2">*mut </span>c_void) {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">unsafe fn </span>execute(<span class="kw-2">&amp;</span><span class="self">self</span>, sig: c_int, info: <span class="kw-2">*mut </span>siginfo_t, data: <span class="kw-2">*mut </span>c_void) {
         <span class="kw">let </span>fptr = <span class="self">self</span>.info.sa_sigaction;
         <span class="kw">if </span>fptr != <span class="number">0 </span>&amp;&amp; fptr != libc::SIG_DFL &amp;&amp; fptr != libc::SIG_IGN {
             <span class="comment">// Android is broken and uses different int types than the rest (and different
@@ -1023,8 +1023,8 @@
             // The trick is to create the same-typed variable as the sa_flags first and then
             // set it to the proper value (does Rust have a way to copy a type in a different
             // way?)
-            </span><span class="attribute">#[allow(unused_assignments)]</span>
-            <span class="kw">let </span><span class="kw-2">mut </span>siginfo = <span class="self">self</span>.info.sa_flags;
+            </span><span class="attribute">#[allow(unused_assignments)]
+            </span><span class="kw">let </span><span class="kw-2">mut </span>siginfo = <span class="self">self</span>.info.sa_flags;
             siginfo = libc::SA_SIGINFO <span class="kw">as _</span>;
             <span class="kw">if </span><span class="self">self</span>.info.sa_flags &amp; siginfo == <span class="number">0 </span>{
                 <span class="kw">let </span>action = mem::transmute::&lt;usize, <span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn</span>(c_int)&gt;(fptr);
@@ -1055,8 +1055,8 @@
 }
 
 <span class="kw">static </span><span class="kw-2">mut </span>GLOBAL_DATA: <span class="prelude-ty">Option</span>&lt;GlobalData&gt; = <span class="prelude-val">None</span>;
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">static </span>GLOBAL_INIT: Once = ONCE_INIT;
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">static </span>GLOBAL_INIT: Once = ONCE_INIT;
 
 <span class="kw">impl </span>GlobalData {
     <span class="kw">fn </span>get() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span><span class="self">Self </span>{
@@ -1076,8 +1076,8 @@
     }
 }
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>handler(sig: c_int) {
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>handler(sig: c_int) {
     <span class="kw">if </span>sig != SIGFPE {
         <span class="comment">// Windows CRT `signal` resets handler every time, unless for SIGFPE.
         // Reregister the handler to retain maximal compatibility.
@@ -1120,8 +1120,8 @@
     </span>}
 }
 
-<span class="attribute">#[cfg(not(windows))]</span>
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>handler(sig: c_int, info: <span class="kw-2">*mut </span>siginfo_t, data: <span class="kw-2">*mut </span>c_void) {
+<span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn </span>handler(sig: c_int, info: <span class="kw-2">*mut </span>siginfo_t, data: <span class="kw-2">*mut </span>c_void) {
     <span class="kw">let </span>globals = GlobalData::get();
     <span class="kw">let </span>fallback = globals.race_fallback.read();
     <span class="kw">let </span>sigdata = globals.data.read();
@@ -1168,10 +1168,10 @@
 /// See [`register`].
 </span><span class="kw">pub const </span>FORBIDDEN: <span class="kw-2">&amp;</span>[c_int] = FORBIDDEN_IMPL;
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">const </span>FORBIDDEN_IMPL: <span class="kw-2">&amp;</span>[c_int] = <span class="kw-2">&amp;</span>[SIGILL, SIGFPE, SIGSEGV];
-<span class="attribute">#[cfg(not(windows))]</span>
-<span class="kw">const </span>FORBIDDEN_IMPL: <span class="kw-2">&amp;</span>[c_int] = <span class="kw-2">&amp;</span>[SIGKILL, SIGSTOP, SIGILL, SIGFPE, SIGSEGV];
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">const </span>FORBIDDEN_IMPL: <span class="kw-2">&amp;</span>[c_int] = <span class="kw-2">&amp;</span>[SIGILL, SIGFPE, SIGSEGV];
+<span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">const </span>FORBIDDEN_IMPL: <span class="kw-2">&amp;</span>[c_int] = <span class="kw-2">&amp;</span>[SIGKILL, SIGSTOP, SIGILL, SIGFPE, SIGSEGV];
 
 <span class="doccomment">/// Registers an arbitrary action for the given signal.
 ///
@@ -1289,8 +1289,8 @@
 /// # Safety
 ///
 /// See the details of [`register`].
-</span><span class="attribute">#[cfg(not(windows))]</span>
-<span class="kw">pub unsafe fn </span>register_sigaction&lt;F&gt;(signal: c_int, action: F) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt;
+</span><span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">pub unsafe fn </span>register_sigaction&lt;F&gt;(signal: c_int, action: F) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt;
 <span class="kw">where
     </span>F: Fn(<span class="kw-2">&amp;</span>siginfo_t) + Sync + Send + <span class="lifetime">&#39;static</span>,
 {
@@ -1338,8 +1338,8 @@
 /// # Safety
 ///
 /// See the details of [`register`].
-</span><span class="attribute">#[cfg(not(windows))]</span>
-<span class="kw">pub unsafe fn </span>register_unchecked&lt;F&gt;(signal: c_int, action: F) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt;
+</span><span class="attribute">#[cfg(not(windows))]
+</span><span class="kw">pub unsafe fn </span>register_unchecked&lt;F&gt;(signal: c_int, action: F) -&gt; <span class="prelude-ty">Result</span>&lt;SigId, Error&gt;
 <span class="kw">where
     </span>F: Fn(<span class="kw-2">&amp;</span>siginfo_t) + Sync + Send + <span class="lifetime">&#39;static</span>,
 {
@@ -1431,9 +1431,9 @@
 </span><span class="attribute">#[deprecated(
     since = <span class="string">&quot;1.3.0&quot;</span>,
     note = <span class="string">&quot;Don&#39;t use. Can influence unrelated parts of program / unknown actions&quot;
-</span>)]</span>
-<span class="attribute">#[doc(hidden)]</span>
-<span class="kw">pub fn </span>unregister_signal(signal: c_int) -&gt; bool {
+</span>)]
+#[doc(hidden)]
+</span><span class="kw">pub fn </span>unregister_signal(signal: c_int) -&gt; bool {
     <span class="kw">let </span>globals = GlobalData::ensure();
     <span class="kw">let </span><span class="kw-2">mut </span>replace = <span class="bool-val">false</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>lock = globals.data.write();
@@ -1450,37 +1450,37 @@
     replace
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span>std::sync::atomic::{AtomicUsize, Ordering};
     <span class="kw">use </span>std::sync::Arc;
     <span class="kw">use </span>std::thread;
     <span class="kw">use </span>std::time::Duration;
 
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">use </span>libc::{pid_t, SIGUSR1, SIGUSR2};
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">use </span>libc::{pid_t, SIGUSR1, SIGUSR2};
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">use </span>libc::SIGTERM <span class="kw">as </span>SIGUSR1;
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">use </span>libc::SIGTERM <span class="kw">as </span>SIGUSR2;
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">use </span>libc::SIGTERM <span class="kw">as </span>SIGUSR1;
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">use </span>libc::SIGTERM <span class="kw">as </span>SIGUSR2;
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[should_panic]</span>
-    <span class="kw">fn </span>panic_forbidden() {
+    <span class="attribute">#[test]
+    #[should_panic]
+    </span><span class="kw">fn </span>panic_forbidden() {
         <span class="kw">let _ </span>= <span class="kw">unsafe </span>{ register(SIGILL, || ()) };
     }
 
     <span class="doccomment">/// Registering the forbidden signals is allowed in the _unchecked version.
-    </span><span class="attribute">#[test]</span>
-    <span class="kw">fn </span>forbidden_raw() {
+    </span><span class="attribute">#[test]
+    </span><span class="kw">fn </span>forbidden_raw() {
         <span class="kw">unsafe </span>{ register_signal_unchecked(SIGFPE, || std::process::abort()).unwrap() };
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>signal_without_pid() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>signal_without_pid() {
         <span class="kw">let </span>status = Arc::new(AtomicUsize::new(<span class="number">0</span>));
         <span class="kw">let </span>action = {
             <span class="kw">let </span>status = Arc::clone(<span class="kw-2">&amp;</span>status);
@@ -1506,9 +1506,9 @@
         <span class="macro">panic!</span>(<span class="string">&quot;Timed out waiting for the signal&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>signal_with_pid() {
+    <span class="attribute">#[test]
+    #[cfg(not(windows))]
+    </span><span class="kw">fn </span>signal_with_pid() {
         <span class="kw">let </span>status = Arc::new(AtomicUsize::new(<span class="number">0</span>));
         <span class="kw">let </span>action = {
             <span class="kw">let </span>status = Arc::clone(<span class="kw-2">&amp;</span>status);
@@ -1517,11 +1517,11 @@
                 // comes somewhat later on. Therefore, we do a Really Ugly Hack and define our
                 // own structure (and hope it is correct on all platforms). But hey, this is
                 // only the tests, so we are going to get away with this.
-                </span><span class="attribute">#[repr(C)]</span>
-                <span class="kw">struct </span>SigInfo {
+                </span><span class="attribute">#[repr(C)]
+                </span><span class="kw">struct </span>SigInfo {
                     _fields: [c_int; <span class="number">3</span>],
-                    <span class="attribute">#[cfg(all(target_pointer_width = <span class="string">&quot;64&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]</span>
-                    _pad: c_int,
+                    <span class="attribute">#[cfg(all(target_pointer_width = <span class="string">&quot;64&quot;</span>, target_os = <span class="string">&quot;linux&quot;</span>))]
+                    </span>_pad: c_int,
                     pid: pid_t,
                 }
                 <span class="kw">let </span>s: <span class="kw-2">&amp;</span>SigInfo = <span class="kw">unsafe </span>{
@@ -1553,8 +1553,8 @@
     }
 
     <span class="doccomment">/// Check that registration works as expected and that unregister tells if it did or not.
-    </span><span class="attribute">#[test]</span>
-    <span class="kw">fn </span>register_unregister() {
+    </span><span class="attribute">#[test]
+    </span><span class="kw">fn </span>register_unregister() {
         <span class="kw">let </span>signal = <span class="kw">unsafe </span>{ register(SIGUSR1, || ()).unwrap() };
         <span class="comment">// It was there now, so we can unregister
         </span><span class="macro">assert!</span>(unregister(signal));
@@ -1563,4 +1563,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="signal_hook_registry" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="signal_hook_registry" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

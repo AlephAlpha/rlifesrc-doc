@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/event/read.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>read.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/event/read.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>read.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../crossterm/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -445,12 +445,12 @@
 <span id="445">445</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::{collections::vec_deque::VecDeque, io, time::Duration};
 
-<span class="attribute">#[cfg(unix)]</span>
-<span class="kw">use </span><span class="kw">super</span>::source::unix::UnixInternalEventSource;
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span><span class="kw">super</span>::source::windows::WindowsEventSource;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
-<span class="kw">use </span><span class="kw">super</span>::sys::Waker;
+<span class="attribute">#[cfg(unix)]
+</span><span class="kw">use </span><span class="kw">super</span>::source::unix::UnixInternalEventSource;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span><span class="kw">super</span>::source::windows::WindowsEventSource;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">super</span>::sys::Waker;
 <span class="kw">use super</span>::{filter::Filter, source::EventSource, timeout::PollTimeout, InternalEvent, <span class="prelude-ty">Result</span>};
 <span class="doccomment">/// Can be used to read `InternalEvent`s.
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>InternalEventReader {
@@ -461,10 +461,10 @@
 
 <span class="kw">impl </span>Default <span class="kw">for </span>InternalEventReader {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        <span class="attribute">#[cfg(windows)]</span>
-        <span class="kw">let </span>source = WindowsEventSource::new();
-        <span class="attribute">#[cfg(unix)]</span>
-        <span class="kw">let </span>source = UnixInternalEventSource::new();
+        <span class="attribute">#[cfg(windows)]
+        </span><span class="kw">let </span>source = WindowsEventSource::new();
+        <span class="attribute">#[cfg(unix)]
+        </span><span class="kw">let </span>source = UnixInternalEventSource::new();
 
         <span class="kw">let </span>source = source.ok().map(|x| Box::new(x) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>EventSource&gt;);
 
@@ -478,8 +478,8 @@
 
 <span class="kw">impl </span>InternalEventReader {
     <span class="doccomment">/// Returns a `Waker` allowing to wake/force the `poll` method to return `Ok(false)`.
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>waker(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Waker {
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>waker(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Waker {
         <span class="self">self</span>.source.as_ref().expect(<span class="string">&quot;reader source not set&quot;</span>).waker()
     }
 
@@ -569,22 +569,22 @@
     }
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span>std::io;
     <span class="kw">use </span>std::{collections::VecDeque, time::Duration};
 
     <span class="kw">use </span><span class="kw">crate</span>::ErrorKind;
 
-    <span class="attribute">#[cfg(unix)]</span>
-    <span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::filter::CursorPositionFilter;
+    <span class="attribute">#[cfg(unix)]
+    </span><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::filter::CursorPositionFilter;
     <span class="kw">use super</span>::{
         <span class="kw">super</span>::{filter::InternalEventFilter, Event},
         EventSource, InternalEvent, InternalEventReader,
     };
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_poll_fails_without_event_source() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_poll_fails_without_event_source() {
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
             events: VecDeque::new(),
             source: <span class="prelude-val">None</span>,
@@ -600,8 +600,8 @@
             .is_err());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_poll_returns_true_for_matching_event_in_queue_at_front() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_poll_returns_true_for_matching_event_in_queue_at_front() {
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
             events: <span class="macro">vec!</span>[InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>))].into(),
             source: <span class="prelude-val">None</span>,
@@ -611,9 +611,9 @@
         <span class="macro">assert!</span>(reader.poll(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>InternalEventFilter).unwrap());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(unix)]</span>
-    <span class="kw">fn </span>test_poll_returns_true_for_matching_event_in_queue_at_back() {
+    <span class="attribute">#[test]
+    #[cfg(unix)]
+    </span><span class="kw">fn </span>test_poll_returns_true_for_matching_event_in_queue_at_back() {
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
             events: <span class="macro">vec!</span>[
                 InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>)),
@@ -627,8 +627,8 @@
         <span class="macro">assert!</span>(reader.poll(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>CursorPositionFilter).unwrap());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_read_returns_matching_event_in_queue_at_front() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_read_returns_matching_event_in_queue_at_front() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
@@ -640,9 +640,9 @@
         <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(unix)]</span>
-    <span class="kw">fn </span>test_read_returns_matching_event_in_queue_at_back() {
+    <span class="attribute">#[test]
+    #[cfg(unix)]
+    </span><span class="kw">fn </span>test_read_returns_matching_event_in_queue_at_back() {
         <span class="kw">const </span>CURSOR_EVENT: InternalEvent = InternalEvent::CursorPosition(<span class="number">10</span>, <span class="number">20</span>);
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
@@ -654,9 +654,9 @@
         <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>CursorPositionFilter).unwrap(), CURSOR_EVENT);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(unix)]</span>
-    <span class="kw">fn </span>test_read_does_not_consume_skipped_event() {
+    <span class="attribute">#[test]
+    #[cfg(unix)]
+    </span><span class="kw">fn </span>test_read_does_not_consume_skipped_event() {
         <span class="kw">const </span>SKIPPED_EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
         <span class="kw">const </span>CURSOR_EVENT: InternalEvent = InternalEvent::CursorPosition(<span class="number">10</span>, <span class="number">20</span>);
 
@@ -670,8 +670,8 @@
         <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), SKIPPED_EVENT);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_poll_timeouts_if_source_has_no_events() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_poll_timeouts_if_source_has_no_events() {
         <span class="kw">let </span>source = FakeSource::default();
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
@@ -685,8 +685,8 @@
             .unwrap());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_poll_returns_true_if_source_has_at_least_one_event() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_poll_returns_true_if_source_has_at_least_one_event() {
         <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>))]);
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
@@ -701,8 +701,8 @@
             .unwrap());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_reads_returns_event_if_source_has_at_least_one_event() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_reads_returns_event_if_source_has_at_least_one_event() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
         <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[EVENT]);
@@ -716,8 +716,8 @@
         <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_read_returns_events_if_source_has_events() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_read_returns_events_if_source_has_events() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
         <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[EVENT, EVENT, EVENT]);
@@ -733,8 +733,8 @@
         <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_poll_returns_false_after_all_source_events_are_consumed() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_poll_returns_false_after_all_source_events_are_consumed() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
         <span class="kw">let </span>source = FakeSource::with_events(<span class="kw-2">&amp;</span>[EVENT, EVENT, EVENT]);
@@ -753,8 +753,8 @@
             .unwrap());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_poll_propagates_error() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_poll_propagates_error() {
         <span class="kw">let </span>source = FakeSource::with_error(ErrorKind::from(io::ErrorKind::Other));
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
@@ -772,8 +772,8 @@
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_read_propagates_error() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_read_propagates_error() {
         <span class="kw">let </span>source = FakeSource::with_error(ErrorKind::from(io::ErrorKind::Other));
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = InternalEventReader {
@@ -791,8 +791,8 @@
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_poll_continues_after_error() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_poll_continues_after_error() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
         <span class="kw">let </span>source = FakeSource::new(<span class="kw-2">&amp;</span>[EVENT, EVENT], ErrorKind::from(io::ErrorKind::Other));
@@ -810,8 +810,8 @@
             .unwrap());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_read_continues_after_error() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_read_continues_after_error() {
         <span class="kw">const </span>EVENT: InternalEvent = InternalEvent::Event(Event::Resize(<span class="number">10</span>, <span class="number">10</span>));
 
         <span class="kw">let </span>source = FakeSource::new(<span class="kw-2">&amp;</span>[EVENT, EVENT], ErrorKind::from(io::ErrorKind::Other));
@@ -827,8 +827,8 @@
         <span class="macro">assert_eq!</span>(reader.read(<span class="kw-2">&amp;</span>InternalEventFilter).unwrap(), EVENT);
     }
 
-    <span class="attribute">#[derive(Default)]</span>
-    <span class="kw">struct </span>FakeSource {
+    <span class="attribute">#[derive(Default)]
+    </span><span class="kw">struct </span>FakeSource {
         events: VecDeque&lt;InternalEvent&gt;,
         error: <span class="prelude-ty">Option</span>&lt;ErrorKind&gt;,
     }
@@ -882,11 +882,11 @@
             </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         }
 
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
-        <span class="kw">fn </span>waker(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">super</span>::<span class="kw">super</span>::sys::Waker {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]
+        </span><span class="kw">fn </span>waker(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">super</span>::<span class="kw">super</span>::sys::Waker {
             <span class="macro">unimplemented!</span>();
         }
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

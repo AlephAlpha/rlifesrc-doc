@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.17/src/error/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.20/src/error/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../clap/index.html">
                         <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -1154,9 +1154,9 @@
 <span id="1152">1152</span>
 <span id="1153">1153</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Error reporting
-</span><span class="attribute">#![allow(deprecated)]</span>
+</span><span class="attribute">#![allow(deprecated)]
 
-<span class="comment">// Std
+</span><span class="comment">// Std
 </span><span class="kw">use </span>std::{
     borrow::Cow,
     convert::From,
@@ -1191,25 +1191,25 @@
 /// See [`Command::error`] to create an error.
 ///
 /// [`Command::error`]: crate::Command::error
-</span><span class="attribute">#[derive(Debug)]</span>
-<span class="kw">pub struct </span>Error {
+</span><span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>Error {
     inner: Box&lt;ErrorInner&gt;,
     <span class="doccomment">/// Deprecated, replaced with [`Error::kind()`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Error::kind()`&quot;</span>)
-    )]</span>
-    <span class="kw">pub </span>kind: ErrorKind,
+    )]
+    </span><span class="kw">pub </span>kind: ErrorKind,
     <span class="doccomment">/// Deprecated, replaced with [`Error::context()`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Error::context()`&quot;</span>)
-    )]</span>
-    <span class="kw">pub </span>info: Vec&lt;String&gt;,
+    )]
+    </span><span class="kw">pub </span>info: Vec&lt;String&gt;,
 }
 
-<span class="attribute">#[derive(Debug)]</span>
-<span class="kw">struct </span>ErrorInner {
+<span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>ErrorInner {
     kind: ErrorKind,
     context: Vec&lt;(ContextKind, ContextValue)&gt;,
     message: <span class="prelude-ty">Option</span>&lt;Message&gt;,
@@ -1234,8 +1234,8 @@
     }
 
     <span class="doccomment">/// Format the existing message with the Command&#39;s context
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>format(<span class="kw-2">mut </span><span class="self">self</span>, cmd: <span class="kw-2">&amp;mut </span>Command) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>format(<span class="kw-2">mut </span><span class="self">self</span>, cmd: <span class="kw-2">&amp;mut </span>Command) -&gt; <span class="self">Self </span>{
         cmd._build_self();
         <span class="kw">let </span>usage = cmd.render_usage();
         <span class="kw">if let </span><span class="prelude-val">Some</span>(message) = <span class="self">self</span>.inner.message.as_mut() {
@@ -1255,8 +1255,8 @@
     }
 
     <span class="doccomment">/// Should the message be written to `stdout` or not?
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>use_stderr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>use_stderr(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.stream() == Stream::Stderr
     }
 
@@ -1317,9 +1317,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::error`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>with_description(description: String, kind: ErrorKind) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>with_description(description: String, kind: ErrorKind) -&gt; <span class="self">Self </span>{
         Error::raw(kind, description)
     }
 
@@ -1340,8 +1340,8 @@
         }
     }
 
-    <span class="attribute">#[inline(never)]</span>
-    <span class="kw">fn </span>for_app(kind: ErrorKind, cmd: <span class="kw-2">&amp;</span>Command, colorizer: Colorizer, info: Vec&lt;String&gt;) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline(never)]
+    </span><span class="kw">fn </span>for_app(kind: ErrorKind, cmd: <span class="kw-2">&amp;</span>Command, colorizer: Colorizer, info: Vec&lt;String&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::new(kind)
             .set_message(colorizer)
             .with_cmd(cmd)
@@ -1385,8 +1385,8 @@
     </span>}
 
     <span class="doccomment">/// Does not verify if `ContextKind` is already present
-    </span><span class="attribute">#[inline(never)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>insert_context_unchecked(
+    </span><span class="attribute">#[inline(never)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>insert_context_unchecked(
         <span class="kw-2">mut </span><span class="self">self</span>,
         kind: ContextKind,
         value: ContextValue,
@@ -1396,8 +1396,8 @@
     </span>}
 
     <span class="doccomment">/// Does not verify if `ContextKind` is already present
-    </span><span class="attribute">#[inline(never)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>extend_context_unchecked&lt;<span class="kw">const </span>N: usize&gt;(
+    </span><span class="attribute">#[inline(never)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>extend_context_unchecked&lt;<span class="kw">const </span>N: usize&gt;(
         <span class="kw-2">mut </span><span class="self">self</span>,
         context: [(ContextKind, ContextValue); N],
     ) -&gt; <span class="self">Self </span>{
@@ -1405,8 +1405,8 @@
         <span class="self">self
     </span>}
 
-    <span class="attribute">#[inline(never)]</span>
-    <span class="kw">fn </span>get_context(<span class="kw-2">&amp;</span><span class="self">self</span>, kind: ContextKind) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>ContextValue&gt; {
+    <span class="attribute">#[inline(never)]
+    </span><span class="kw">fn </span>get_context(<span class="kw-2">&amp;</span><span class="self">self</span>, kind: ContextKind) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>ContextValue&gt; {
         <span class="self">self</span>.inner
             .context
             .iter()
@@ -1769,8 +1769,8 @@
         }
     }
 
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">fn </span>write_dynamic_context(<span class="kw-2">&amp;</span><span class="self">self</span>, c: <span class="kw-2">&amp;mut </span>Colorizer) -&gt; bool {
+    <span class="attribute">#[must_use]
+    </span><span class="kw">fn </span>write_dynamic_context(<span class="kw-2">&amp;</span><span class="self">self</span>, c: <span class="kw-2">&amp;mut </span>Colorizer) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.kind() {
             ErrorKind::ArgumentConflict =&gt; {
                 <span class="kw">let </span>invalid_arg = <span class="self">self</span>.get_context(ContextKind::InvalidArg);
@@ -2153,8 +2153,8 @@
 }
 
 <span class="kw">impl </span>error::Error <span class="kw">for </span>Error {
-    <span class="attribute">#[allow(trivial_casts)]</span>
-    <span class="kw">fn </span>source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>(<span class="kw">dyn </span>error::Error + <span class="lifetime">&#39;static</span>)&gt; {
+    <span class="attribute">#[allow(trivial_casts)]
+    </span><span class="kw">fn </span>source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>(<span class="kw">dyn </span>error::Error + <span class="lifetime">&#39;static</span>)&gt; {
         <span class="self">self</span>.inner.source.as_ref().map(|e| e.as_ref() <span class="kw">as _</span>)
     }
 }
@@ -2216,8 +2216,8 @@
     }
 }
 
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>Message {
+<span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>Message {
     Raw(String),
     Formatted(Colorizer),
 }
@@ -2265,46 +2265,46 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;debug&quot;</span>)]</span>
-<span class="attribute">#[derive(Debug)]</span>
-<span class="kw">struct </span>Backtrace(backtrace::Backtrace);
+<span class="attribute">#[cfg(feature = <span class="string">&quot;debug&quot;</span>)]
+#[derive(Debug)]
+</span><span class="kw">struct </span>Backtrace(backtrace::Backtrace);
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;debug&quot;</span>)]</span>
-<span class="kw">impl </span>Backtrace {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;debug&quot;</span>)]
+</span><span class="kw">impl </span>Backtrace {
     <span class="kw">fn </span>new() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
         <span class="prelude-val">Some</span>(<span class="self">Self</span>(backtrace::Backtrace::new()))
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;debug&quot;</span>)]</span>
-<span class="kw">impl </span>Display <span class="kw">for </span>Backtrace {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;debug&quot;</span>)]
+</span><span class="kw">impl </span>Display <span class="kw">for </span>Backtrace {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>Formatter) -&gt; fmt::Result {
         <span class="comment">// `backtrace::Backtrace` uses `Debug` instead of `Display`
         </span><span class="macro">write!</span>(f, <span class="string">&quot;{:?}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
-<span class="attribute">#[cfg(not(feature = <span class="string">&quot;debug&quot;</span>))]</span>
-<span class="attribute">#[derive(Debug)]</span>
-<span class="kw">struct </span>Backtrace;
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;debug&quot;</span>))]
+#[derive(Debug)]
+</span><span class="kw">struct </span>Backtrace;
 
-<span class="attribute">#[cfg(not(feature = <span class="string">&quot;debug&quot;</span>))]</span>
-<span class="kw">impl </span>Backtrace {
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;debug&quot;</span>))]
+</span><span class="kw">impl </span>Backtrace {
     <span class="kw">fn </span>new() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
         <span class="prelude-val">None
     </span>}
 }
 
-<span class="attribute">#[cfg(not(feature = <span class="string">&quot;debug&quot;</span>))]</span>
-<span class="kw">impl </span>Display <span class="kw">for </span>Backtrace {
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;debug&quot;</span>))]
+</span><span class="kw">impl </span>Display <span class="kw">for </span>Backtrace {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>Formatter) -&gt; fmt::Result {
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[test]</span>
-<span class="kw">fn </span>check_auto_traits() {
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>check_auto_traits() {
     <span class="macro">static_assertions::assert_impl_all!</span>(Error: Send, Sync, Unpin);
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

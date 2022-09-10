@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-util-0.3.23/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../futures_util/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-util-0.3.24/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../futures_util/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../futures_util/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -338,45 +338,45 @@
 </pre><pre class="rust"><code><span class="doccomment">//! Combinators and utilities for working with `Future`s, `Stream`s, `Sink`s,
 //! and the `AsyncRead` and `AsyncWrite` traits.
 
-</span><span class="attribute">#![cfg_attr(feature = <span class="string">&quot;write-all-vectored&quot;</span>, feature(io_slice_advance))]</span>
-<span class="attribute">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]</span>
-<span class="attribute">#![warn(
+</span><span class="attribute">#![cfg_attr(feature = <span class="string">&quot;write-all-vectored&quot;</span>, feature(io_slice_advance))]
+#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
+#![warn(
     missing_debug_implementations,
     missing_docs,
     rust_2018_idioms,
     single_use_lifetimes,
     unreachable_pub
-)]</span>
-<span class="attribute">#![doc(test(
+)]
+#![doc(test(
     no_crate_inject,
     attr(
         deny(warnings, rust_2018_idioms, single_use_lifetimes),
         allow(dead_code, unused_assignments, unused_variables)
     )
-))]</span>
-<span class="attribute">#![cfg_attr(docsrs, feature(doc_cfg))]</span>
+))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
-<span class="attribute">#[cfg(all(feature = <span class="string">&quot;bilock&quot;</span>, not(feature = <span class="string">&quot;unstable&quot;</span>)))]</span>
-<span class="macro">compile_error!</span>(<span class="string">&quot;The `bilock` feature requires the `unstable` feature as an explicit opt-in to unstable features&quot;</span>);
+#[cfg(all(feature = <span class="string">&quot;bilock&quot;</span>, not(feature = <span class="string">&quot;unstable&quot;</span>)))]
+</span><span class="macro">compile_error!</span>(<span class="string">&quot;The `bilock` feature requires the `unstable` feature as an explicit opt-in to unstable features&quot;</span>);
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">extern crate </span>alloc;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">extern crate </span>alloc;
 
 <span class="comment">// Macro re-exports
 </span><span class="kw">pub use </span>futures_core::ready;
 <span class="kw">pub use </span>pin_utils::pin_mut;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;async-await&quot;</span>)]</span>
-<span class="attribute">#[macro_use]</span>
-<span class="kw">mod </span>async_await;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;async-await&quot;</span>)]</span>
-<span class="attribute">#[doc(hidden)]</span>
-<span class="kw">pub use </span><span class="self">self</span>::async_await::<span class="kw-2">*</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;async-await&quot;</span>)]
+#[macro_use]
+</span><span class="kw">mod </span>async_await;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;async-await&quot;</span>)]
+#[doc(hidden)]
+</span><span class="kw">pub use </span><span class="self">self</span>::async_await::<span class="kw-2">*</span>;
 
 <span class="comment">// Not public API.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;async-await&quot;</span>)]</span>
-<span class="attribute">#[doc(hidden)]</span>
-<span class="kw">pub mod </span>__private {
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;async-await&quot;</span>)]
+#[doc(hidden)]
+</span><span class="kw">pub mod </span>__private {
     <span class="kw">pub use crate</span>::<span class="kw-2">*</span>;
     <span class="kw">pub use </span>core::{
         option::Option::{<span class="self">self</span>, <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>},
@@ -389,8 +389,8 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]</span>
-<span class="macro">macro_rules!</span> delegate_sink {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]
+</span><span class="macro">macro_rules! </span>delegate_sink {
     (<span class="macro-nonterminal">$field</span>:ident, <span class="macro-nonterminal">$item</span>:ty) =&gt; {
         <span class="kw">fn </span>poll_ready(
             <span class="self">self</span>: core::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
@@ -419,7 +419,7 @@
     };
 }
 
-<span class="macro">macro_rules!</span> delegate_future {
+<span class="macro">macro_rules! </span>delegate_future {
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="kw">fn </span>poll(
             <span class="self">self</span>: core::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
@@ -430,7 +430,7 @@
     };
 }
 
-<span class="macro">macro_rules!</span> delegate_stream {
+<span class="macro">macro_rules! </span>delegate_stream {
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="kw">fn </span>poll_next(
             <span class="self">self</span>: core::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
@@ -444,9 +444,9 @@
     };
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]</span>
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="macro">macro_rules!</span> delegate_async_write {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]
+#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="macro">macro_rules! </span>delegate_async_write {
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="kw">fn </span>poll_write(
             <span class="self">self</span>: core::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
@@ -477,9 +477,9 @@
     };
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]</span>
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="macro">macro_rules!</span> delegate_async_read {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]
+#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="macro">macro_rules! </span>delegate_async_read {
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="kw">fn </span>poll_read(
             <span class="self">self</span>: core::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
@@ -499,9 +499,9 @@
     };
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]</span>
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="macro">macro_rules!</span> delegate_async_buf_read {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]
+#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="macro">macro_rules! </span>delegate_async_buf_read {
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="kw">fn </span>poll_fill_buf(
             <span class="self">self</span>: core::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
@@ -516,7 +516,7 @@
     };
 }
 
-<span class="macro">macro_rules!</span> delegate_access_inner {
+<span class="macro">macro_rules! </span>delegate_access_inner {
     (<span class="macro-nonterminal">$field</span>:ident, <span class="macro-nonterminal">$inner</span>:ty, ($(<span class="macro-nonterminal">$ind</span>:tt)<span class="kw-2">*</span>)) =&gt; {
         <span class="doccomment">/// Acquires a reference to the underlying sink or stream that this combinator is
         /// pulling from.
@@ -552,7 +552,7 @@
     }
 }
 
-<span class="macro">macro_rules!</span> delegate_all {
+<span class="macro">macro_rules! </span>delegate_all {
     (@<span class="kw">trait </span>Future <span class="macro-nonterminal">$name</span>:ident &lt; $(<span class="macro-nonterminal">$arg</span>:ident),* &gt; (<span class="macro-nonterminal">$t</span>:ty) $(<span class="kw">where </span>$(<span class="macro-nonterminal">$bound</span>:tt)<span class="kw-2">*</span>)<span class="kw-2">*</span>) =&gt; {
         <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; futures_core::future::Future <span class="kw">for </span><span class="macro-nonterminal">$name</span>&lt;$(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; <span class="kw">where </span><span class="macro-nonterminal">$t</span>: futures_core::future::Future $(, $(<span class="macro-nonterminal">$bound</span>)<span class="kw-2">*</span>)* {
             <span class="kw">type </span>Output = &lt;<span class="macro-nonterminal">$t </span><span class="kw">as </span>futures_core::future::Future&gt;::Output;
@@ -582,8 +582,8 @@
         }
     };
     (@<span class="kw">trait </span>Sink <span class="macro-nonterminal">$name</span>:ident &lt; $(<span class="macro-nonterminal">$arg</span>:ident),* &gt; (<span class="macro-nonterminal">$t</span>:ty) $(<span class="kw">where </span>$(<span class="macro-nonterminal">$bound</span>:tt)<span class="kw-2">*</span>)<span class="kw-2">*</span>) =&gt; {
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]</span>
-        <span class="kw">impl</span>&lt;_Item, $(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; futures_sink::Sink&lt;_Item&gt; <span class="kw">for </span><span class="macro-nonterminal">$name</span>&lt;$(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; <span class="kw">where </span><span class="macro-nonterminal">$t</span>: futures_sink::Sink&lt;_Item&gt; $(, $(<span class="macro-nonterminal">$bound</span>)<span class="kw-2">*</span>)* {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]
+        </span><span class="kw">impl</span>&lt;_Item, $(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; futures_sink::Sink&lt;_Item&gt; <span class="kw">for </span><span class="macro-nonterminal">$name</span>&lt;$(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; <span class="kw">where </span><span class="macro-nonterminal">$t</span>: futures_sink::Sink&lt;_Item&gt; $(, $(<span class="macro-nonterminal">$bound</span>)<span class="kw-2">*</span>)* {
             <span class="kw">type </span>Error = &lt;<span class="macro-nonterminal">$t </span><span class="kw">as </span>futures_sink::Sink&lt;_Item&gt;&gt;::Error;
 
             <span class="macro">delegate_sink!</span>(inner, _Item);
@@ -609,10 +609,10 @@
         }
     };
     ($(<span class="attribute">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$name</span>:ident&lt;$(<span class="macro-nonterminal">$arg</span>:ident),<span class="kw-2">*</span>&gt;(<span class="macro-nonterminal">$t</span>:ty) : <span class="macro-nonterminal">$ftrait</span>:ident $([$(<span class="macro-nonterminal">$targs</span>:tt)<span class="kw-2">*</span>])* $({$(<span class="macro-nonterminal">$item</span>:tt)<span class="kw-2">*</span>})* $(<span class="kw">where </span>$(<span class="macro-nonterminal">$bound</span>:tt)<span class="kw-2">*</span>)<span class="kw-2">*</span>) =&gt; {
-        <span class="macro">pin_project_lite::pin_project!</span> {
-            <span class="attribute">#[must_use = <span class="string">&quot;futures/streams/sinks do nothing unless you `.await` or poll them&quot;</span>]</span>
-            $(<span class="attribute">#[<span class="macro-nonterminal">$attr</span>]</span>)*
-            <span class="kw">pub struct </span><span class="macro-nonterminal">$name</span>&lt; $(<span class="macro-nonterminal">$arg</span>),* &gt; $(<span class="kw">where </span>$(<span class="macro-nonterminal">$bound</span>)<span class="kw-2">*</span>)* { <span class="attribute">#[pin]</span> inner: <span class="macro-nonterminal">$t </span>}
+        <span class="macro">pin_project_lite::pin_project! </span>{
+            <span class="attribute">#[must_use = <span class="string">&quot;futures/streams/sinks do nothing unless you `.await` or poll them&quot;</span>]
+            </span>$(<span class="attribute">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+            <span class="kw">pub struct </span><span class="macro-nonterminal">$name</span>&lt; $(<span class="macro-nonterminal">$arg</span>),* &gt; $(<span class="kw">where </span>$(<span class="macro-nonterminal">$bound</span>)<span class="kw-2">*</span>)* { <span class="attribute">#[pin] </span>inner: <span class="macro-nonterminal">$t </span>}
         }
 
         <span class="kw">impl</span>&lt;$(<span class="macro-nonterminal">$arg</span>),<span class="kw-2">*</span>&gt; <span class="macro-nonterminal">$name</span>&lt; $(<span class="macro-nonterminal">$arg</span>),* &gt; $(<span class="kw">where </span>$(<span class="macro-nonterminal">$bound</span>)<span class="kw-2">*</span>)* {
@@ -629,48 +629,48 @@
 }
 
 <span class="kw">pub mod </span>future;
-<span class="attribute">#[doc(no_inline)]</span>
-<span class="kw">pub use </span><span class="kw">crate</span>::future::{Future, FutureExt, TryFuture, TryFutureExt};
+<span class="attribute">#[doc(no_inline)]
+</span><span class="kw">pub use </span><span class="kw">crate</span>::future::{Future, FutureExt, TryFuture, TryFutureExt};
 
 <span class="kw">pub mod </span>stream;
-<span class="attribute">#[doc(no_inline)]</span>
-<span class="kw">pub use </span><span class="kw">crate</span>::stream::{Stream, StreamExt, TryStream, TryStreamExt};
+<span class="attribute">#[doc(no_inline)]
+</span><span class="kw">pub use </span><span class="kw">crate</span>::stream::{Stream, StreamExt, TryStream, TryStreamExt};
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;sink&quot;</span>)))]</span>
-<span class="kw">pub mod </span>sink;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]</span>
-<span class="attribute">#[doc(no_inline)]</span>
-<span class="kw">pub use </span><span class="kw">crate</span>::sink::{Sink, SinkExt};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;sink&quot;</span>)))]
+</span><span class="kw">pub mod </span>sink;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;sink&quot;</span>)]
+#[doc(no_inline)]
+</span><span class="kw">pub use </span><span class="kw">crate</span>::sink::{Sink, SinkExt};
 
 <span class="kw">pub mod </span>task;
 
 <span class="kw">pub mod </span>never;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;compat&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;compat&quot;</span>)))]</span>
-<span class="kw">pub mod </span>compat;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;compat&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;compat&quot;</span>)))]
+</span><span class="kw">pub mod </span>compat;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;io&quot;</span>)))]</span>
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub mod </span>io;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]</span>
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="attribute">#[doc(no_inline)]</span>
-<span class="kw">pub use </span><span class="kw">crate</span>::io::{
+<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;io&quot;</span>)))]
+#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">pub mod </span>io;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;io&quot;</span>)]
+#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+#[doc(no_inline)]
+</span><span class="kw">pub use </span><span class="kw">crate</span>::io::{
     AsyncBufRead, AsyncBufReadExt, AsyncRead, AsyncReadExt, AsyncSeek, AsyncSeekExt, AsyncWrite,
     AsyncWriteExt,
 };
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">pub mod </span>lock;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">pub mod </span>lock;
 
-<span class="attribute">#[cfg(not(futures_no_atomic_cas))]</span>
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">mod </span>abortable;
+<span class="attribute">#[cfg(not(futures_no_atomic_cas))]
+#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">mod </span>abortable;
 
 <span class="kw">mod </span>fns;
 <span class="kw">mod </span>unfold_state;
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="futures_util" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="futures_util" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

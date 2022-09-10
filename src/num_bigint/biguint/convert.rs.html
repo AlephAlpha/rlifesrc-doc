@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/biguint/convert.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>convert.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../num_bigint/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/biguint/convert.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>convert.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../num_bigint/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -791,12 +791,12 @@
 <span class="kw">use </span><span class="kw">crate</span>::big_digit::{<span class="self">self</span>, BigDigit};
 <span class="kw">use </span><span class="kw">crate</span>::std_alloc::Vec;
 <span class="kw">use </span><span class="kw">crate</span>::ParseBigIntError;
-<span class="attribute">#[cfg(has_try_from)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::TryFromBigIntError;
+<span class="attribute">#[cfg(has_try_from)]
+</span><span class="kw">use </span><span class="kw">crate</span>::TryFromBigIntError;
 
 <span class="kw">use </span>core::cmp::Ordering::{Equal, Greater, Less};
-<span class="attribute">#[cfg(has_try_from)]</span>
-<span class="kw">use </span>core::convert::TryFrom;
+<span class="attribute">#[cfg(has_try_from)]
+</span><span class="kw">use </span>core::convert::TryFrom;
 <span class="kw">use </span>core::mem;
 <span class="kw">use </span>core::str::FromStr;
 <span class="kw">use </span>num_integer::{Integer, Roots};
@@ -816,8 +816,8 @@
 <span class="kw">impl </span>FromStr <span class="kw">for </span>BigUint {
     <span class="kw">type </span><span class="prelude-val">Err </span>= ParseBigIntError;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;BigUint, ParseBigIntError&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;BigUint, ParseBigIntError&gt; {
         BigUint::from_str_radix(s, <span class="number">10</span>)
     }
 }
@@ -886,10 +886,10 @@
     <span class="macro">debug_assert!</span>(!v.is_empty() &amp;&amp; !radix.is_power_of_two());
     <span class="macro">debug_assert!</span>(v.iter().all(|<span class="kw-2">&amp;</span>c| u32::from(c) &lt; radix));
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-    <span class="kw">let </span>radix_log2 = f64::from(radix).log2();
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">let </span>radix_log2 = ilog2(radix.next_power_of_two()) <span class="kw">as </span>f64;
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+    </span><span class="kw">let </span>radix_log2 = f64::from(radix).log2();
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">let </span>radix_log2 = ilog2(radix.next_power_of_two()) <span class="kw">as </span>f64;
 
     <span class="comment">// Estimate how big the result will be, so we can pre-allocate it.
     </span><span class="kw">let </span>bits = radix_log2 * v.len() <span class="kw">as </span>f64;
@@ -1052,8 +1052,8 @@
         <span class="number">0 </span>=&gt; <span class="number">0</span>,
         <span class="number">1 </span>=&gt; {
             <span class="comment">// XXX Conversion is useless if already 64-bit.
-            </span><span class="attribute">#[allow(clippy::useless_conversion)]</span>
-            <span class="kw">let </span>v0 = u64::from(v.data[<span class="number">0</span>]);
+            </span><span class="attribute">#[allow(clippy::useless_conversion)]
+            </span><span class="kw">let </span>v0 = u64::from(v.data[<span class="number">0</span>]);
             v0
         }
         <span class="kw">_ </span>=&gt; {
@@ -1069,8 +1069,8 @@
                     ret &lt;&lt;= bits_want;
                 }
                 <span class="comment">// XXX Conversion is useless if already 64-bit.
-                </span><span class="attribute">#[allow(clippy::useless_conversion)]</span>
-                <span class="kw">let </span>d0 = u64::from(<span class="kw-2">*</span>d) &gt;&gt; (digit_bits - bits_want);
+                </span><span class="attribute">#[allow(clippy::useless_conversion)]
+                </span><span class="kw">let </span>d0 = u64::from(<span class="kw-2">*</span>d) &gt;&gt; (digit_bits - bits_want);
                 ret |= d0;
                 ret_bits += bits_want;
                 bits -= bits_want;
@@ -1086,19 +1086,19 @@
 }
 
 <span class="kw">impl </span>ToPrimitive <span class="kw">for </span>BigUint {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_i64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;i64&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_i64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;i64&gt; {
         <span class="self">self</span>.to_u64().as_ref().and_then(u64::to_i64)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_i128(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;i128&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_i128(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;i128&gt; {
         <span class="self">self</span>.to_u128().as_ref().and_then(u128::to_i128)
     }
 
-    <span class="attribute">#[allow(clippy::useless_conversion)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_u64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
+    <span class="attribute">#[allow(clippy::useless_conversion)]
+    #[inline]
+    </span><span class="kw">fn </span>to_u64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret: u64 = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>bits = <span class="number">0</span>;
 
@@ -1115,8 +1115,8 @@
         <span class="prelude-val">Some</span>(ret)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_u128(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u128&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_u128(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u128&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>ret: u128 = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>bits = <span class="number">0</span>;
 
@@ -1132,8 +1132,8 @@
         <span class="prelude-val">Some</span>(ret)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_f32(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;f32&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_f32(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;f32&gt; {
         <span class="kw">let </span>mantissa = high_bits_to_u64(<span class="self">self</span>);
         <span class="kw">let </span>exponent = <span class="self">self</span>.bits() - u64::from(fls(mantissa));
 
@@ -1144,8 +1144,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_f64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;f64&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_f64(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;f64&gt; {
         <span class="kw">let </span>mantissa = high_bits_to_u64(<span class="self">self</span>);
         <span class="kw">let </span>exponent = <span class="self">self</span>.bits() - u64::from(fls(mantissa));
 
@@ -1157,24 +1157,24 @@
     }
 }
 
-<span class="macro">macro_rules!</span> impl_try_from_biguint {
+<span class="macro">macro_rules! </span>impl_try_from_biguint {
     (<span class="macro-nonterminal">$T</span>:ty, <span class="macro-nonterminal">$to_ty</span>:path) =&gt; {
-        <span class="attribute">#[cfg(has_try_from)]</span>
-        <span class="kw">impl </span>TryFrom&lt;<span class="kw-2">&amp;</span>BigUint&gt; <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
+        <span class="attribute">#[cfg(has_try_from)]
+        </span><span class="kw">impl </span>TryFrom&lt;<span class="kw-2">&amp;</span>BigUint&gt; <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
             <span class="kw">type </span>Error = TryFromBigIntError&lt;()&gt;;
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>try_from(value: <span class="kw-2">&amp;</span>BigUint) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="macro-nonterminal">$T</span>, TryFromBigIntError&lt;()&gt;&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>try_from(value: <span class="kw-2">&amp;</span>BigUint) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="macro-nonterminal">$T</span>, TryFromBigIntError&lt;()&gt;&gt; {
                 <span class="macro-nonterminal">$to_ty</span>(value).ok_or(TryFromBigIntError::new(()))
             }
         }
 
-        <span class="attribute">#[cfg(has_try_from)]</span>
-        <span class="kw">impl </span>TryFrom&lt;BigUint&gt; <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
+        <span class="attribute">#[cfg(has_try_from)]
+        </span><span class="kw">impl </span>TryFrom&lt;BigUint&gt; <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
             <span class="kw">type </span>Error = TryFromBigIntError&lt;BigUint&gt;;
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>try_from(value: BigUint) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="macro-nonterminal">$T</span>, TryFromBigIntError&lt;BigUint&gt;&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>try_from(value: BigUint) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="macro-nonterminal">$T</span>, TryFromBigIntError&lt;BigUint&gt;&gt; {
                 &lt;<span class="macro-nonterminal">$T</span>&gt;::try_from(<span class="kw-2">&amp;</span>value).map_err(|<span class="kw">_</span>| TryFromBigIntError::new(value))
             }
         }
@@ -1196,8 +1196,8 @@
 <span class="macro">impl_try_from_biguint!</span>(i128, ToPrimitive::to_i128);
 
 <span class="kw">impl </span>FromPrimitive <span class="kw">for </span>BigUint {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_i64(n: i64) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_i64(n: i64) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="kw">if </span>n &gt;= <span class="number">0 </span>{
             <span class="prelude-val">Some</span>(BigUint::from(n <span class="kw">as </span>u64))
         } <span class="kw">else </span>{
@@ -1205,8 +1205,8 @@
         </span>}
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_i128(n: i128) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_i128(n: i128) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="kw">if </span>n &gt;= <span class="number">0 </span>{
             <span class="prelude-val">Some</span>(BigUint::from(n <span class="kw">as </span>u128))
         } <span class="kw">else </span>{
@@ -1214,18 +1214,18 @@
         </span>}
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_u64(n: u64) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_u64(n: u64) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="prelude-val">Some</span>(BigUint::from(n))
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_u128(n: u128) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_u128(n: u128) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="prelude-val">Some</span>(BigUint::from(n))
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_f64(<span class="kw-2">mut </span>n: f64) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_f64(<span class="kw-2">mut </span>n: f64) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="comment">// handle NAN, INFINITY, NEG_INFINITY
         </span><span class="kw">if </span>!n.is_finite() {
             <span class="kw">return </span><span class="prelude-val">None</span>;
@@ -1256,8 +1256,8 @@
 }
 
 <span class="kw">impl </span>From&lt;u64&gt; <span class="kw">for </span>BigUint {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from(<span class="kw-2">mut </span>n: u64) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from(<span class="kw-2">mut </span>n: u64) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>ret: BigUint = Zero::zero();
 
         <span class="kw">while </span>n != <span class="number">0 </span>{
@@ -1271,8 +1271,8 @@
 }
 
 <span class="kw">impl </span>From&lt;u128&gt; <span class="kw">for </span>BigUint {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from(<span class="kw-2">mut </span>n: u128) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from(<span class="kw-2">mut </span>n: u128) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>ret: BigUint = Zero::zero();
 
         <span class="kw">while </span>n != <span class="number">0 </span>{
@@ -1284,11 +1284,11 @@
     }
 }
 
-<span class="macro">macro_rules!</span> impl_biguint_from_uint {
+<span class="macro">macro_rules! </span>impl_biguint_from_uint {
     (<span class="macro-nonterminal">$T</span>:ty) =&gt; {
         <span class="kw">impl </span>From&lt;<span class="macro-nonterminal">$T</span>&gt; <span class="kw">for </span>BigUint {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>from(n: <span class="macro-nonterminal">$T</span>) -&gt; <span class="self">Self </span>{
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>from(n: <span class="macro-nonterminal">$T</span>) -&gt; <span class="self">Self </span>{
                 BigUint::from(n <span class="kw">as </span>u64)
             }
         }
@@ -1300,14 +1300,14 @@
 <span class="macro">impl_biguint_from_uint!</span>(u32);
 <span class="macro">impl_biguint_from_uint!</span>(usize);
 
-<span class="macro">macro_rules!</span> impl_biguint_try_from_int {
+<span class="macro">macro_rules! </span>impl_biguint_try_from_int {
     (<span class="macro-nonterminal">$T</span>:ty, <span class="macro-nonterminal">$from_ty</span>:path) =&gt; {
-        <span class="attribute">#[cfg(has_try_from)]</span>
-        <span class="kw">impl </span>TryFrom&lt;<span class="macro-nonterminal">$T</span>&gt; <span class="kw">for </span>BigUint {
+        <span class="attribute">#[cfg(has_try_from)]
+        </span><span class="kw">impl </span>TryFrom&lt;<span class="macro-nonterminal">$T</span>&gt; <span class="kw">for </span>BigUint {
             <span class="kw">type </span>Error = TryFromBigIntError&lt;()&gt;;
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>try_from(value: <span class="macro-nonterminal">$T</span>) -&gt; <span class="prelude-ty">Result</span>&lt;BigUint, TryFromBigIntError&lt;()&gt;&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>try_from(value: <span class="macro-nonterminal">$T</span>) -&gt; <span class="prelude-ty">Result</span>&lt;BigUint, TryFromBigIntError&lt;()&gt;&gt; {
                 <span class="macro-nonterminal">$from_ty</span>(value).ok_or(TryFromBigIntError::new(()))
             }
         }
@@ -1322,17 +1322,17 @@
 <span class="macro">impl_biguint_try_from_int!</span>(i128, FromPrimitive::from_i128);
 
 <span class="kw">impl </span>ToBigUint <span class="kw">for </span>BigUint {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_biguint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_biguint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="prelude-val">Some</span>(<span class="self">self</span>.clone())
     }
 }
 
-<span class="macro">macro_rules!</span> impl_to_biguint {
+<span class="macro">macro_rules! </span>impl_to_biguint {
     (<span class="macro-nonterminal">$T</span>:ty, <span class="macro-nonterminal">$from_ty</span>:path) =&gt; {
         <span class="kw">impl </span>ToBigUint <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>to_biguint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>to_biguint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
                 <span class="macro-nonterminal">$from_ty</span>(<span class="kw-2">*</span><span class="self">self</span>)
             }
         }
@@ -1426,14 +1426,14 @@
 }
 
 <span class="comment">// Extract little-endian radix digits
-</span><span class="attribute">#[inline(always)]</span> <span class="comment">// forced inline to get const-prop for radix=10
+</span><span class="attribute">#[inline(always)] </span><span class="comment">// forced inline to get const-prop for radix=10
 </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>to_radix_digits_le(u: <span class="kw-2">&amp;</span>BigUint, radix: u32) -&gt; Vec&lt;u8&gt; {
     <span class="macro">debug_assert!</span>(!u.is_zero() &amp;&amp; !radix.is_power_of_two());
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-    <span class="kw">let </span>radix_log2 = f64::from(radix).log2();
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">let </span>radix_log2 = ilog2(radix) <span class="kw">as </span>f64;
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+    </span><span class="kw">let </span>radix_log2 = f64::from(radix).log2();
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">let </span>radix_log2 = ilog2(radix) <span class="kw">as </span>f64;
 
     <span class="comment">// Estimate how big the result will be, so we can pre-allocate it.
     </span><span class="kw">let </span>radix_digits = ((u.bits() <span class="kw">as </span>f64) / radix_log2).ceil();
@@ -1537,10 +1537,10 @@
 }
 
 <span class="doccomment">/// Returns the greatest power of the radix for the given bit size
-</span><span class="attribute">#[inline]</span>
-<span class="kw">fn </span>get_radix_base(radix: u32, bits: u8) -&gt; (BigDigit, usize) {
+</span><span class="attribute">#[inline]
+</span><span class="kw">fn </span>get_radix_base(radix: u32, bits: u8) -&gt; (BigDigit, usize) {
     <span class="kw">mod </span>gen {
-        <span class="macro">include!</span> { <span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">&quot;OUT_DIR&quot;</span>), <span class="string">&quot;/radix_bases.rs&quot;</span>) }
+        <span class="macro">include! </span>{ <span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">&quot;OUT_DIR&quot;</span>), <span class="string">&quot;/radix_bases.rs&quot;</span>) }
     }
 
     <span class="macro">debug_assert!</span>(
@@ -1567,4 +1567,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

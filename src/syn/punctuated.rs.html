@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/syn-1.0.99/src/punctuated.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>punctuated.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../syn/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../syn/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../syn/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/syn-1.0.99/src/punctuated.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>punctuated.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../syn/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../syn/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../syn/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1088,22 +1088,22 @@
 //!                 ~~~~^ ~~~~^ ~~~~
 //! ```
 
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]</span>
-<span class="kw">use </span>std::fmt::{<span class="self">self</span>, Debug};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]</span>
-<span class="kw">use </span>std::hash::{Hash, Hasher};
-<span class="attribute">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]</span>
-<span class="kw">use </span>std::iter;
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+</span><span class="kw">use </span>std::fmt::{<span class="self">self</span>, Debug};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+</span><span class="kw">use </span>std::hash::{Hash, Hasher};
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]
+</span><span class="kw">use </span>std::iter;
 <span class="kw">use </span>std::iter::FromIterator;
 <span class="kw">use </span>std::ops::{Index, IndexMut};
 <span class="kw">use </span>std::option;
 <span class="kw">use </span>std::slice;
 <span class="kw">use </span>std::vec;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::parse::{Parse, ParseStream, <span class="prelude-ty">Result</span>};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::token::Token;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::parse::{Parse, ParseStream, <span class="prelude-ty">Result</span>};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::token::Token;
 
 <span class="doccomment">/// A punctuated sequence of syntax tree nodes of type `T` separated by
 /// punctuation of type `P`.
@@ -1118,8 +1118,8 @@
 
 <span class="kw">impl</span>&lt;T, P&gt; Punctuated&lt;T, P&gt; {
     <span class="doccomment">/// Creates an empty punctuated sequence.
-    </span><span class="attribute">#[cfg(not(syn_no_const_vec_new))]</span>
-    <span class="kw">pub const fn </span>new() -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[cfg(not(syn_no_const_vec_new))]
+    </span><span class="kw">pub const fn </span>new() -&gt; <span class="self">Self </span>{
         Punctuated {
             inner: Vec::new(),
             last: <span class="prelude-val">None</span>,
@@ -1127,8 +1127,8 @@
     }
 
     <span class="doccomment">/// Creates an empty punctuated sequence.
-    </span><span class="attribute">#[cfg(syn_no_const_vec_new)]</span>
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[cfg(syn_no_const_vec_new)]
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         Punctuated {
             inner: Vec::new(),
             last: <span class="prelude-val">None</span>,
@@ -1330,9 +1330,9 @@
     ///
     /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
     /// feature.*
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]</span>
-    <span class="kw">pub fn </span>parse_terminated(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="kw">pub fn </span>parse_terminated(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
     <span class="kw">where
         </span>T: Parse,
         P: Parse,
@@ -1351,9 +1351,9 @@
     ///
     /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
     /// feature.*
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]</span>
-    <span class="kw">pub fn </span>parse_terminated_with(
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="kw">pub fn </span>parse_terminated_with(
         input: ParseStream,
         parser: <span class="kw">fn</span>(ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
@@ -1388,9 +1388,9 @@
     ///
     /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
     /// feature.*
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]</span>
-    <span class="kw">pub fn </span>parse_separated_nonempty(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="kw">pub fn </span>parse_separated_nonempty(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
     <span class="kw">where
         </span>T: Parse,
         P: Token + Parse,
@@ -1409,9 +1409,9 @@
     ///
     /// *This function is available only if Syn is built with the `&quot;parsing&quot;`
     /// feature.*
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]</span>
-    <span class="kw">pub fn </span>parse_separated_nonempty_with(
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    </span><span class="kw">pub fn </span>parse_separated_nonempty_with(
         input: ParseStream,
         parser: <span class="kw">fn</span>(ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
@@ -1434,9 +1434,9 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)))]</span>
-<span class="kw">impl</span>&lt;T, P&gt; Clone <span class="kw">for </span>Punctuated&lt;T, P&gt;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)))]
+</span><span class="kw">impl</span>&lt;T, P&gt; Clone <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: Clone,
     P: Clone,
@@ -1449,18 +1449,18 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]</span>
-<span class="kw">impl</span>&lt;T, P&gt; Eq <span class="kw">for </span>Punctuated&lt;T, P&gt;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+</span><span class="kw">impl</span>&lt;T, P&gt; Eq <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: Eq,
     P: Eq,
 {
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]</span>
-<span class="kw">impl</span>&lt;T, P&gt; PartialEq <span class="kw">for </span>Punctuated&lt;T, P&gt;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+</span><span class="kw">impl</span>&lt;T, P&gt; PartialEq <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: PartialEq,
     P: PartialEq,
@@ -1471,9 +1471,9 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]</span>
-<span class="kw">impl</span>&lt;T, P&gt; Hash <span class="kw">for </span>Punctuated&lt;T, P&gt;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+</span><span class="kw">impl</span>&lt;T, P&gt; Hash <span class="kw">for </span>Punctuated&lt;T, P&gt;
 <span class="kw">where
     </span>T: Hash,
     P: Hash,
@@ -1485,9 +1485,9 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]</span>
-<span class="kw">impl</span>&lt;T: Debug, P: Debug&gt; Debug <span class="kw">for </span>Punctuated&lt;T, P&gt; {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;extra-traits&quot;</span>)))]
+</span><span class="kw">impl</span>&lt;T: Debug, P: Debug&gt; Debug <span class="kw">for </span>Punctuated&lt;T, P&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
         <span class="kw">let </span><span class="kw-2">mut </span>list = f.debug_list();
         <span class="kw">for </span>(t, p) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.inner {
@@ -1803,8 +1803,8 @@
     last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>T&gt;,
 }
 
-<span class="attribute">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter&lt;<span class="lifetime">&#39;a</span>, T&gt;() -&gt; Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter&lt;<span class="lifetime">&#39;a</span>, T&gt;() -&gt; Iter&lt;<span class="lifetime">&#39;a</span>, T&gt; {
     Iter {
         inner: Box::new(iter::empty()),
     }
@@ -1907,8 +1907,8 @@
     last: option::IntoIter&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>T&gt;,
 }
 
-<span class="attribute">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter_mut&lt;<span class="lifetime">&#39;a</span>, T&gt;() -&gt; IterMut&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;full&quot;</span>, feature = <span class="string">&quot;derive&quot;</span>))]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>empty_punctuated_iter_mut&lt;<span class="lifetime">&#39;a</span>, T&gt;() -&gt; IterMut&lt;<span class="lifetime">&#39;a</span>, T&gt; {
     IterMut {
         inner: Box::new(iter::empty()),
     }
@@ -2057,9 +2057,9 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)))]</span>
-<span class="kw">impl</span>&lt;T, P&gt; Clone <span class="kw">for </span>Pair&lt;T, P&gt;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;clone-impls&quot;</span>)))]
+</span><span class="kw">impl</span>&lt;T, P&gt; Clone <span class="kw">for </span>Pair&lt;T, P&gt;
 <span class="kw">where
     </span>T: Clone,
     P: Clone,
@@ -2100,14 +2100,14 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;printing&quot;</span>)]</span>
-<span class="kw">mod </span>printing {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;printing&quot;</span>)]
+</span><span class="kw">mod </span>printing {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span>proc_macro2::TokenStream;
     <span class="kw">use </span>quote::{ToTokens, TokenStreamExt};
 
-    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]</span>
-    <span class="kw">impl</span>&lt;T, P&gt; ToTokens <span class="kw">for </span>Punctuated&lt;T, P&gt;
+    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    </span><span class="kw">impl</span>&lt;T, P&gt; ToTokens <span class="kw">for </span>Punctuated&lt;T, P&gt;
     <span class="kw">where
         </span>T: ToTokens,
         P: ToTokens,
@@ -2117,8 +2117,8 @@
         }
     }
 
-    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]</span>
-    <span class="kw">impl</span>&lt;T, P&gt; ToTokens <span class="kw">for </span>Pair&lt;T, P&gt;
+    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    </span><span class="kw">impl</span>&lt;T, P&gt; ToTokens <span class="kw">for </span>Pair&lt;T, P&gt;
     <span class="kw">where
         </span>T: ToTokens,
         P: ToTokens,
@@ -2135,4 +2135,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="syn" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="syn" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../num_bigint/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../num_bigint/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -378,66 +378,66 @@
 //!
 //! The `num-bigint` crate is tested for rustc 1.31 and greater.
 
-</span><span class="attribute">#![doc(html_root_url = <span class="string">&quot;https://docs.rs/num-bigint/0.4&quot;</span>)]</span>
-<span class="attribute">#![warn(rust_2018_idioms)]</span>
-<span class="attribute">#![no_std]</span>
+</span><span class="attribute">#![doc(html_root_url = <span class="string">&quot;https://docs.rs/num-bigint/0.4&quot;</span>)]
+#![warn(rust_2018_idioms)]
+#![no_std]
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="attribute">#[macro_use]</span>
-<span class="kw">extern crate </span>std;
+#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+#[macro_use]
+</span><span class="kw">extern crate </span>std;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">mod </span>std_alloc {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">mod </span>std_alloc {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>std::borrow::Cow;
-    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;quickcheck&quot;</span>))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>std::boxed::Box;
+    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;quickcheck&quot;</span>))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>std::boxed::Box;
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>std::string::String;
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>std::vec::Vec;
 }
 
-<span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-<span class="attribute">#[macro_use]</span>
-<span class="kw">extern crate </span>alloc;
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+#[macro_use]
+</span><span class="kw">extern crate </span>alloc;
 
-<span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-<span class="kw">mod </span>std_alloc {
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+</span><span class="kw">mod </span>std_alloc {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>alloc::borrow::Cow;
-    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;quickcheck&quot;</span>))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>alloc::boxed::Box;
+    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;quickcheck&quot;</span>))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>alloc::boxed::Box;
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>alloc::string::String;
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>alloc::vec::Vec;
 }
 
 <span class="kw">use </span>core::fmt;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">use </span>std::error::Error;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">use </span>std::error::Error;
 
-<span class="attribute">#[macro_use]</span>
-<span class="kw">mod </span>macros;
+<span class="attribute">#[macro_use]
+</span><span class="kw">mod </span>macros;
 
 <span class="kw">mod </span>bigint;
 <span class="kw">mod </span>biguint;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]</span>
-<span class="kw">mod </span>bigrand;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]
+</span><span class="kw">mod </span>bigrand;
 
-<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;32&quot;</span>)]</span>
-<span class="kw">type </span>UsizePromotion = u32;
-<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;64&quot;</span>)]</span>
-<span class="kw">type </span>UsizePromotion = u64;
+<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;32&quot;</span>)]
+</span><span class="kw">type </span>UsizePromotion = u32;
+<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;64&quot;</span>)]
+</span><span class="kw">type </span>UsizePromotion = u64;
 
-<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;32&quot;</span>)]</span>
-<span class="kw">type </span>IsizePromotion = i32;
-<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;64&quot;</span>)]</span>
-<span class="kw">type </span>IsizePromotion = i64;
+<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;32&quot;</span>)]
+</span><span class="kw">type </span>IsizePromotion = i32;
+<span class="attribute">#[cfg(target_pointer_width = <span class="string">&quot;64&quot;</span>)]
+</span><span class="kw">type </span>IsizePromotion = i64;
 
-<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>ParseBigIntError {
+<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>ParseBigIntError {
     kind: BigIntErrorKind,
 }
 
-<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]</span>
-<span class="kw">enum </span>BigIntErrorKind {
+<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">enum </span>BigIntErrorKind {
     Empty,
     InvalidDigit,
 }
@@ -470,22 +470,22 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">impl </span>Error <span class="kw">for </span>ParseBigIntError {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">impl </span>Error <span class="kw">for </span>ParseBigIntError {
     <span class="kw">fn </span>description(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="self">self</span>.__description()
     }
 }
 
 <span class="doccomment">/// The error type returned when a checked conversion regarding big integer fails.
-</span><span class="attribute">#[cfg(has_try_from)]</span>
-<span class="attribute">#[derive(Debug, Copy, Clone, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>TryFromBigIntError&lt;T&gt; {
+</span><span class="attribute">#[cfg(has_try_from)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>TryFromBigIntError&lt;T&gt; {
     original: T,
 }
 
-<span class="attribute">#[cfg(has_try_from)]</span>
-<span class="kw">impl</span>&lt;T&gt; TryFromBigIntError&lt;T&gt; {
+<span class="attribute">#[cfg(has_try_from)]
+</span><span class="kw">impl</span>&lt;T&gt; TryFromBigIntError&lt;T&gt; {
     <span class="kw">fn </span>new(original: T) -&gt; <span class="self">Self </span>{
         TryFromBigIntError { original }
     }
@@ -504,8 +504,8 @@
     }
 }
 
-<span class="attribute">#[cfg(all(feature = <span class="string">&quot;std&quot;</span>, has_try_from))]</span>
-<span class="kw">impl</span>&lt;T&gt; std::error::Error <span class="kw">for </span>TryFromBigIntError&lt;T&gt;
+<span class="attribute">#[cfg(all(feature = <span class="string">&quot;std&quot;</span>, has_try_from))]
+</span><span class="kw">impl</span>&lt;T&gt; std::error::Error <span class="kw">for </span>TryFromBigIntError&lt;T&gt;
 <span class="kw">where
     </span>T: fmt::Debug,
 {
@@ -514,8 +514,8 @@
     }
 }
 
-<span class="attribute">#[cfg(has_try_from)]</span>
-<span class="kw">impl</span>&lt;T&gt; fmt::Display <span class="kw">for </span>TryFromBigIntError&lt;T&gt; {
+<span class="attribute">#[cfg(has_try_from)]
+</span><span class="kw">impl</span>&lt;T&gt; fmt::Display <span class="kw">for </span>TryFromBigIntError&lt;T&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
         <span class="self">self</span>.__description().fmt(f)
     }
@@ -530,34 +530,34 @@
 <span class="kw">pub use </span><span class="kw">crate</span>::bigint::Sign;
 <span class="kw">pub use </span><span class="kw">crate</span>::bigint::ToBigInt;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]</span>
-<span class="kw">pub use </span><span class="kw">crate</span>::bigrand::{RandBigInt, RandomBits, UniformBigInt, UniformBigUint};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;rand&quot;</span>)]
+</span><span class="kw">pub use </span><span class="kw">crate</span>::bigrand::{RandBigInt, RandomBits, UniformBigInt, UniformBigUint};
 
 <span class="kw">mod </span>big_digit {
     <span class="doccomment">/// A `BigDigit` is a `BigUint`&#39;s composing element.
-    </span><span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>BigDigit = u32;
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>BigDigit = u64;
+    </span><span class="attribute">#[cfg(not(u64_digit))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>BigDigit = u32;
+    <span class="attribute">#[cfg(u64_digit)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>BigDigit = u64;
 
     <span class="doccomment">/// A `DoubleBigDigit` is the internal type used to do the computations.  Its
     /// size is the double of the size of `BigDigit`.
-    </span><span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>DoubleBigDigit = u64;
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>DoubleBigDigit = u128;
+    </span><span class="attribute">#[cfg(not(u64_digit))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>DoubleBigDigit = u64;
+    <span class="attribute">#[cfg(u64_digit)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>DoubleBigDigit = u128;
 
     <span class="doccomment">/// A `SignedDoubleBigDigit` is the signed version of `DoubleBigDigit`.
-    </span><span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>SignedDoubleBigDigit = i64;
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>SignedDoubleBigDigit = i128;
+    </span><span class="attribute">#[cfg(not(u64_digit))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>SignedDoubleBigDigit = i64;
+    <span class="attribute">#[cfg(u64_digit)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>SignedDoubleBigDigit = i128;
 
     <span class="comment">// `DoubleBigDigit` size dependent
-    </span><span class="attribute">#[cfg(not(u64_digit))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BITS: u8 = <span class="number">32</span>;
-    <span class="attribute">#[cfg(u64_digit)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BITS: u8 = <span class="number">64</span>;
+    </span><span class="attribute">#[cfg(not(u64_digit))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BITS: u8 = <span class="number">32</span>;
+    <span class="attribute">#[cfg(u64_digit)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>BITS: u8 = <span class="number">64</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>HALF_BITS: u8 = BITS / <span class="number">2</span>;
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>HALF: BigDigit = (<span class="number">1 </span>&lt;&lt; HALF_BITS) - <span class="number">1</span>;
@@ -565,26 +565,26 @@
     <span class="kw">const </span>LO_MASK: DoubleBigDigit = (<span class="number">1 </span>&lt;&lt; BITS) - <span class="number">1</span>;
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>MAX: BigDigit = LO_MASK <span class="kw">as </span>BigDigit;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>get_hi(n: DoubleBigDigit) -&gt; BigDigit {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>get_hi(n: DoubleBigDigit) -&gt; BigDigit {
         (n &gt;&gt; BITS) <span class="kw">as </span>BigDigit
     }
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>get_lo(n: DoubleBigDigit) -&gt; BigDigit {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>get_lo(n: DoubleBigDigit) -&gt; BigDigit {
         (n &amp; LO_MASK) <span class="kw">as </span>BigDigit
     }
 
     <span class="doccomment">/// Split one `DoubleBigDigit` into two `BigDigit`s.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>from_doublebigdigit(n: DoubleBigDigit) -&gt; (BigDigit, BigDigit) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>from_doublebigdigit(n: DoubleBigDigit) -&gt; (BigDigit, BigDigit) {
         (get_hi(n), get_lo(n))
     }
 
     <span class="doccomment">/// Join two `BigDigit`s into one `DoubleBigDigit`
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>to_doublebigdigit(hi: BigDigit, lo: BigDigit) -&gt; DoubleBigDigit {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>to_doublebigdigit(hi: BigDigit, lo: BigDigit) -&gt; DoubleBigDigit {
         DoubleBigDigit::from(lo) | (DoubleBigDigit::from(hi) &lt;&lt; BITS)
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

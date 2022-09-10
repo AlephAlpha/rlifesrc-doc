@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.17/src/output/help.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>help.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.20/src/output/help.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>help.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../clap/index.html">
                         <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -1206,16 +1206,16 @@
 
 <span class="comment">// Public Functions
 </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;help</span>, <span class="lifetime">&#39;cmd</span>, <span class="lifetime">&#39;writer</span>&gt; Help&lt;<span class="lifetime">&#39;help</span>, <span class="lifetime">&#39;cmd</span>, <span class="lifetime">&#39;writer</span>&gt; {
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]</span>
-    <span class="kw">const </span>DEFAULT_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]
+    </span><span class="kw">const </span>DEFAULT_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
         {before-help}{name} {version}\n\
         {author-with-newline}{about-with-newline}\n\
         {usage-heading}\n    {usage}\n\
         \n\
         {all-args}{after-help}\
     &quot;</span>;
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;unstable-v4&quot;</span>))]</span>
-    <span class="kw">const </span>DEFAULT_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;unstable-v4&quot;</span>))]
+    </span><span class="kw">const </span>DEFAULT_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
         {before-help}{bin} {version}\n\
         {author-with-newline}{about-with-newline}\n\
         {usage-heading}\n    {usage}\n\
@@ -1223,14 +1223,14 @@
         {all-args}{after-help}\
     &quot;</span>;
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]</span>
-    <span class="kw">const </span>DEFAULT_NO_ARGS_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]
+    </span><span class="kw">const </span>DEFAULT_NO_ARGS_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
         {before-help}{name} {version}\n\
         {author-with-newline}{about-with-newline}\n\
         {usage-heading}\n    {usage}{after-help}\
     &quot;</span>;
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;unstable-v4&quot;</span>))]</span>
-    <span class="kw">const </span>DEFAULT_NO_ARGS_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;unstable-v4&quot;</span>))]
+    </span><span class="kw">const </span>DEFAULT_NO_ARGS_TEMPLATE: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;\
         {before-help}{bin} {version}\n\
         {author-with-newline}{about-with-newline}\n\
         {usage-heading}\n    {usage}{after-help}\
@@ -1299,7 +1299,7 @@
     }
 }
 
-<span class="macro">macro_rules!</span> write_method {
+<span class="macro">macro_rules! </span>write_method {
     (<span class="macro-nonterminal">$_self</span>:ident, <span class="macro-nonterminal">$msg</span>:ident, <span class="macro-nonterminal">$meth</span>:ident) =&gt; {
         <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="macro-nonterminal">$_self</span>.writer {
             HelpWriter::Buffer(c) =&gt; {
@@ -1313,23 +1313,23 @@
 
 <span class="comment">// Methods to write Arg help.
 </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;help</span>, <span class="lifetime">&#39;cmd</span>, <span class="lifetime">&#39;writer</span>&gt; Help&lt;<span class="lifetime">&#39;help</span>, <span class="lifetime">&#39;cmd</span>, <span class="lifetime">&#39;writer</span>&gt; {
-    <span class="attribute">#[inline(never)]</span>
-    <span class="kw">fn </span>good&lt;T: Into&lt;String&gt; + AsRef&lt;[u8]&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, msg: T) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline(never)]
+    </span><span class="kw">fn </span>good&lt;T: Into&lt;String&gt; + AsRef&lt;[u8]&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, msg: T) -&gt; io::Result&lt;()&gt; {
         <span class="macro">write_method!</span>(<span class="self">self</span>, msg, good)
     }
 
-    <span class="attribute">#[inline(never)]</span>
-    <span class="kw">fn </span>warning&lt;T: Into&lt;String&gt; + AsRef&lt;[u8]&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, msg: T) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline(never)]
+    </span><span class="kw">fn </span>warning&lt;T: Into&lt;String&gt; + AsRef&lt;[u8]&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, msg: T) -&gt; io::Result&lt;()&gt; {
         <span class="macro">write_method!</span>(<span class="self">self</span>, msg, warning)
     }
 
-    <span class="attribute">#[inline(never)]</span>
-    <span class="kw">fn </span>none&lt;T: Into&lt;String&gt; + AsRef&lt;[u8]&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, msg: T) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline(never)]
+    </span><span class="kw">fn </span>none&lt;T: Into&lt;String&gt; + AsRef&lt;[u8]&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, msg: T) -&gt; io::Result&lt;()&gt; {
         <span class="macro">write_method!</span>(<span class="self">self</span>, msg, none)
     }
 
-    <span class="attribute">#[inline(never)]</span>
-    <span class="kw">fn </span>spaces(<span class="kw-2">&amp;mut </span><span class="self">self</span>, n: usize) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline(never)]
+    </span><span class="kw">fn </span>spaces(<span class="kw-2">&amp;mut </span><span class="self">self</span>, n: usize) -&gt; io::Result&lt;()&gt; {
         <span class="comment">// A string with 64 consecutive spaces.
         </span><span class="kw">const </span>SHORT_SPACE: <span class="kw-2">&amp;</span>str =
             <span class="string">&quot;                                                                &quot;</span>;
@@ -1655,8 +1655,8 @@
             <span class="self">self</span>.none(part)<span class="question-mark">?</span>;
         }
 
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]</span>
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(arg) = arg {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(arg) = arg {
             <span class="kw">const </span>DASH_SPACE: usize = <span class="string">&quot;- &quot;</span>.len();
             <span class="kw">const </span>COLON_SPACE: usize = <span class="string">&quot;: &quot;</span>.len();
             <span class="kw">let </span>possible_vals = arg.get_possible_values2();
@@ -1760,8 +1760,8 @@
     <span class="kw">fn </span>spec_vals(<span class="kw-2">&amp;</span><span class="self">self</span>, a: <span class="kw-2">&amp;</span>Arg) -&gt; String {
         <span class="macro">debug!</span>(<span class="string">&quot;Help::spec_vals: a={}&quot;</span>, a);
         <span class="kw">let </span><span class="kw-2">mut </span>spec_vals = <span class="macro">vec!</span>[];
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;env&quot;</span>)]</span>
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>env) = a.env {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;env&quot;</span>)]
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref </span>env) = a.env {
             <span class="kw">if </span>!a.is_hide_env_set() {
                 <span class="macro">debug!</span>(
                     <span class="string">&quot;Help::spec_vals: Found environment variable...[{:?}:{:?}]&quot;</span>,
@@ -2188,7 +2188,7 @@
         // The copy from template is then resumed, repeating this sequence until reading
         // the complete template.
 
-        </span><span class="macro">macro_rules!</span> tags {
+        </span><span class="macro">macro_rules! </span>tags {
             (
                 <span class="kw">match </span><span class="macro-nonterminal">$part</span>:ident {
                     $( <span class="macro-nonterminal">$tag</span>:expr =&gt; <span class="macro-nonterminal">$action</span>:stmt )*
@@ -2218,7 +2218,7 @@
         }
 
         <span class="kw">for </span>part <span class="kw">in </span>parts {
-            <span class="macro">tags!</span> {
+            <span class="macro">tags! </span>{
                 <span class="kw">match </span>part {
                     <span class="string">&quot;name&quot; </span>=&gt; {
                         <span class="self">self</span>.write_display_name()<span class="question-mark">?</span>;
@@ -2282,11 +2282,11 @@
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>dimensions() -&gt; <span class="prelude-ty">Option</span>&lt;(usize, usize)&gt; {
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;wrap_help&quot;</span>))]</span>
-    <span class="kw">return </span><span class="prelude-val">None</span>;
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;wrap_help&quot;</span>))]
+    </span><span class="kw">return </span><span class="prelude-val">None</span>;
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;wrap_help&quot;</span>)]</span>
-    terminal_size::terminal_size().map(|(w, h)| (w.<span class="number">0</span>.into(), h.<span class="number">0</span>.into()))
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;wrap_help&quot;</span>)]
+    </span>terminal_size::terminal_size().map(|(w, h)| (w.<span class="number">0</span>.into(), h.<span class="number">0</span>.into()))
 }
 
 <span class="kw">const </span>TAB: <span class="kw-2">&amp;</span>str = <span class="string">&quot;    &quot;</span>;
@@ -2321,18 +2321,18 @@
         .join(<span class="string">&quot;\n&quot;</span>)
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>test {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>wrap_help_last_word() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>wrap_help_last_word() {
         <span class="kw">let </span>help = String::from(<span class="string">&quot;foo bar baz&quot;</span>);
         <span class="macro">assert_eq!</span>(text_wrapper(<span class="kw-2">&amp;</span>help, <span class="number">5</span>), <span class="string">&quot;foo\nbar\nbaz&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>display_width_handles_non_ascii() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>display_width_handles_non_ascii() {
         <span class="comment">// Popular Danish tongue-twister, the name of a fruit dessert.
         </span><span class="kw">let </span>text = <span class="string">&quot;rødgrød med fløde&quot;</span>;
         <span class="macro">assert_eq!</span>(display_width(text), <span class="number">17</span>);
@@ -2341,8 +2341,8 @@
         </span><span class="macro">assert_eq!</span>(text.len(), <span class="number">20</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>display_width_handles_emojis() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>display_width_handles_emojis() {
         <span class="kw">let </span>text = <span class="string">&quot;😂&quot;</span>;
         <span class="comment">// There is a single `char`...
         </span><span class="macro">assert_eq!</span>(text.chars().count(), <span class="number">1</span>);
@@ -2353,4 +2353,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

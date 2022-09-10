@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.8.5/src/distributions/other.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>other.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://www.rust-lang.org/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container"><img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.8.5/src/distributions/other.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>other.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://www.rust-lang.org/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container"><img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rand/index.html"><div class="logo-container">
                     <img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rand/index.html">
                         <img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -377,18 +377,18 @@
 
 </span><span class="kw">use </span>core::char;
 <span class="kw">use </span>core::num::Wrapping;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">use </span>alloc::string::String;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">use </span>alloc::string::String;
 
 <span class="kw">use </span><span class="kw">crate</span>::distributions::{Distribution, Standard, Uniform};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::distributions::DistString;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::distributions::DistString;
 <span class="kw">use </span><span class="kw">crate</span>::Rng;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde1&quot;</span>)]</span>
-<span class="kw">use </span>serde::{Serialize, Deserialize};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;min_const_gen&quot;</span>)]</span>
-<span class="kw">use </span>core::mem::{<span class="self">self</span>, MaybeUninit};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde1&quot;</span>)]
+</span><span class="kw">use </span>serde::{Serialize, Deserialize};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;min_const_gen&quot;</span>)]
+</span><span class="kw">use </span>core::mem::{<span class="self">self</span>, MaybeUninit};
 
 
 <span class="comment">// ----- Sampling distributions -----
@@ -431,16 +431,16 @@
 ///
 /// - [Wikipedia article on Password Strength](https://en.wikipedia.org/wiki/Password_strength)
 /// - [Diceware for generating memorable passwords](https://en.wikipedia.org/wiki/Diceware)
-</span><span class="attribute">#[derive(Debug, Clone, Copy)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde1&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub struct </span>Alphanumeric;
+</span><span class="attribute">#[derive(Debug, Clone, Copy)]
+#[cfg_attr(feature = <span class="string">&quot;serde1&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub struct </span>Alphanumeric;
 
 
 <span class="comment">// ----- Implementations of distributions -----
 
 </span><span class="kw">impl </span>Distribution&lt;char&gt; <span class="kw">for </span>Standard {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; char {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; char {
         <span class="comment">// A valid `char` is either in the interval `[0, 0xD800)` or
         // `(0xDFFF, 0x11_0000)`. All `char`s must therefore be in
         // `[0, 0x11_0000)` but not in the &quot;gap&quot; `[0xD800, 0xDFFF]` which is
@@ -461,8 +461,8 @@
 
 <span class="doccomment">/// Note: the `String` is potentially left with excess capacity; optionally the
 /// user may call `string.shrink_to_fit()` afterwards.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">impl </span>DistString <span class="kw">for </span>Standard {
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">impl </span>DistString <span class="kw">for </span>Standard {
     <span class="kw">fn </span>append_string&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R, s: <span class="kw-2">&amp;mut </span>String, len: usize) {
         <span class="comment">// A char is encoded with at most four bytes, thus this reservation is
         // guaranteed to be sufficient. We do not shrink_to_fit afterwards so
@@ -491,8 +491,8 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">impl </span>DistString <span class="kw">for </span>Alphanumeric {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">impl </span>DistString <span class="kw">for </span>Alphanumeric {
     <span class="kw">fn </span>append_string&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R, string: <span class="kw-2">&amp;mut </span>String, len: usize) {
         <span class="kw">unsafe </span>{
             <span class="kw">let </span>v = string.as_mut_vec();
@@ -502,8 +502,8 @@
 }
 
 <span class="kw">impl </span>Distribution&lt;bool&gt; <span class="kw">for </span>Standard {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; bool {
         <span class="comment">// We can compare against an arbitrary bit of an u32 to get a bool.
         // Because the least significant bits of a lower quality RNG can have
         // simple patterns, we compare against the most significant bit. This is
@@ -512,7 +512,7 @@
     </span>}
 }
 
-<span class="macro">macro_rules!</span> tuple_impl {
+<span class="macro">macro_rules! </span>tuple_impl {
     <span class="comment">// use variables to indicate the arity of the tuple
     </span>($(<span class="macro-nonterminal">$tyvar</span>:ident),* ) =&gt; {
         <span class="comment">// the trailing commas are for the 1 tuple
@@ -521,8 +521,8 @@
             <span class="kw">for </span>Standard
             <span class="kw">where </span>$( Standard: Distribution&lt;<span class="macro-nonterminal">$tyvar</span>&gt; ),*
         {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _rng: <span class="kw-2">&amp;mut </span>R) -&gt; ( $( <span class="macro-nonterminal">$tyvar </span>),* , ) {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _rng: <span class="kw-2">&amp;mut </span>R) -&gt; ( $( <span class="macro-nonterminal">$tyvar </span>),* , ) {
                 (
                     <span class="comment">// use the $tyvar&#39;s to get the appropriate number of
                     // repeats (they&#39;re not actually needed)
@@ -537,32 +537,32 @@
 }
 
 <span class="kw">impl </span>Distribution&lt;()&gt; <span class="kw">for </span>Standard {
-    <span class="attribute">#[allow(clippy::unused_unit)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>R) -&gt; () {
+    <span class="attribute">#[allow(clippy::unused_unit)]
+    #[inline]
+    </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span>R) -&gt; () {
         ()
     }
 }
-<span class="macro">tuple_impl!</span> {A}
-<span class="macro">tuple_impl!</span> {A, B}
-<span class="macro">tuple_impl!</span> {A, B, C}
-<span class="macro">tuple_impl!</span> {A, B, C, D}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E, F}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E, F, G}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E, F, G, H}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E, F, G, H, I}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E, F, G, H, I, J}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E, F, G, H, I, J, K}
-<span class="macro">tuple_impl!</span> {A, B, C, D, E, F, G, H, I, J, K, L}
+<span class="macro">tuple_impl! </span>{A}
+<span class="macro">tuple_impl! </span>{A, B}
+<span class="macro">tuple_impl! </span>{A, B, C}
+<span class="macro">tuple_impl! </span>{A, B, C, D}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E, F}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E, F, G}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E, F, G, H}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E, F, G, H, I}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E, F, G, H, I, J}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E, F, G, H, I, J, K}
+<span class="macro">tuple_impl! </span>{A, B, C, D, E, F, G, H, I, J, K, L}
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;min_const_gen&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;min_const_gen&quot;</span>)))]</span>
-<span class="kw">impl</span>&lt;T, <span class="kw">const </span>N: usize&gt; Distribution&lt;[T; N]&gt; <span class="kw">for </span>Standard
+<span class="attribute">#[cfg(feature = <span class="string">&quot;min_const_gen&quot;</span>)]
+#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;min_const_gen&quot;</span>)))]
+</span><span class="kw">impl</span>&lt;T, <span class="kw">const </span>N: usize&gt; Distribution&lt;[T; N]&gt; <span class="kw">for </span>Standard
 <span class="kw">where </span>Standard: Distribution&lt;T&gt;
 {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _rng: <span class="kw-2">&amp;mut </span>R) -&gt; [T; N] {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _rng: <span class="kw-2">&amp;mut </span>R) -&gt; [T; N] {
         <span class="kw">let </span><span class="kw-2">mut </span>buff: [MaybeUninit&lt;T&gt;; N] = <span class="kw">unsafe </span>{ MaybeUninit::uninit().assume_init() };
 
         <span class="kw">for </span>elem <span class="kw">in </span><span class="kw-2">&amp;mut </span>buff {
@@ -573,15 +573,15 @@
     }
 }
 
-<span class="attribute">#[cfg(not(feature = <span class="string">&quot;min_const_gen&quot;</span>))]</span>
-<span class="macro">macro_rules!</span> array_impl {
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;min_const_gen&quot;</span>))]
+</span><span class="macro">macro_rules! </span>array_impl {
     <span class="comment">// recursive, given at least one type parameter:
     </span>{<span class="macro-nonterminal">$n</span>:expr, <span class="macro-nonterminal">$t</span>:ident, $(<span class="macro-nonterminal">$ts</span>:ident,)<span class="kw-2">*</span>} =&gt; {
         <span class="macro">array_impl!</span>{(<span class="macro-nonterminal">$n </span>- <span class="number">1</span>), $(<span class="macro-nonterminal">$ts</span>,)<span class="kw-2">*</span>}
 
         <span class="kw">impl</span>&lt;T&gt; Distribution&lt;[T; <span class="macro-nonterminal">$n</span>]&gt; <span class="kw">for </span>Standard <span class="kw">where </span>Standard: Distribution&lt;T&gt; {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _rng: <span class="kw-2">&amp;mut </span>R) -&gt; [T; <span class="macro-nonterminal">$n</span>] {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, _rng: <span class="kw-2">&amp;mut </span>R) -&gt; [T; <span class="macro-nonterminal">$n</span>] {
                 [_rng.gen::&lt;<span class="macro-nonterminal">$t</span>&gt;(), $(_rng.gen::&lt;<span class="macro-nonterminal">$ts</span>&gt;()),<span class="kw-2">*</span>]
             }
         }
@@ -594,14 +594,14 @@
     };
 }
 
-<span class="attribute">#[cfg(not(feature = <span class="string">&quot;min_const_gen&quot;</span>))]</span>
-<span class="macro">array_impl!</span> {<span class="number">32</span>, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,}
+<span class="attribute">#[cfg(not(feature = <span class="string">&quot;min_const_gen&quot;</span>))]
+</span><span class="macro">array_impl! </span>{<span class="number">32</span>, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,}
 
 <span class="kw">impl</span>&lt;T&gt; Distribution&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt; <span class="kw">for </span>Standard
 <span class="kw">where </span>Standard: Distribution&lt;T&gt;
 {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="comment">// UFCS is needed here: https://github.com/rust-lang/rust/issues/24066
         </span><span class="kw">if </span>rng.gen::&lt;bool&gt;() {
             <span class="prelude-val">Some</span>(rng.gen())
@@ -614,30 +614,30 @@
 <span class="kw">impl</span>&lt;T&gt; Distribution&lt;Wrapping&lt;T&gt;&gt; <span class="kw">for </span>Standard
 <span class="kw">where </span>Standard: Distribution&lt;T&gt;
 {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; Wrapping&lt;T&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>sample&lt;R: Rng + <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, rng: <span class="kw-2">&amp;mut </span>R) -&gt; Wrapping&lt;T&gt; {
         Wrapping(rng.gen())
     }
 }
 
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span><span class="kw">crate</span>::RngCore;
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span> <span class="kw">use </span>alloc::string::String;
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)] </span><span class="kw">use </span>alloc::string::String;
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_misc() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_misc() {
         <span class="kw">let </span>rng: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>RngCore = <span class="kw-2">&amp;mut </span><span class="kw">crate</span>::test::rng(<span class="number">820</span>);
 
         rng.sample::&lt;char, <span class="kw">_</span>&gt;(Standard);
         rng.sample::&lt;bool, <span class="kw">_</span>&gt;(Standard);
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_chars() {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+    #[test]
+    </span><span class="kw">fn </span>test_chars() {
         <span class="kw">use </span>core::iter;
         <span class="kw">let </span><span class="kw-2">mut </span>rng = <span class="kw">crate</span>::test::rng(<span class="number">805</span>);
 
@@ -650,8 +650,8 @@
         <span class="macro">assert!</span>(!word.is_empty());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_alphanumeric() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_alphanumeric() {
         <span class="kw">let </span><span class="kw-2">mut </span>rng = <span class="kw">crate</span>::test::rng(<span class="number">806</span>);
 
         <span class="comment">// Test by generating a relatively large number of chars, so we also
@@ -666,8 +666,8 @@
         <span class="macro">assert!</span>(!incorrect);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>value_stability() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>value_stability() {
         <span class="kw">fn </span>test_samples&lt;T: Copy + core::fmt::Debug + PartialEq, D: Distribution&lt;T&gt;&gt;(
             distr: <span class="kw-2">&amp;</span>D, zero: T, expected: <span class="kw-2">&amp;</span>[T],
         ) {
@@ -731,4 +731,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rand" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rand" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

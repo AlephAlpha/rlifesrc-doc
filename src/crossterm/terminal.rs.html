@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/terminal.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>terminal.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/terminal.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>terminal.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -527,15 +527,15 @@
 
 </span><span class="kw">use </span>std::fmt;
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span>crossterm_winapi::{ConsoleMode, Handle, ScreenBuffer};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use </span>serde::{Deserialize, Serialize};
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span>winapi::um::wincon::ENABLE_WRAP_AT_EOL_OUTPUT;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span>crossterm_winapi::{ConsoleMode, Handle, ScreenBuffer};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span>winapi::um::wincon::ENABLE_WRAP_AT_EOL_OUTPUT;
 
-<span class="attribute">#[doc(no_inline)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::Command;
+<span class="attribute">#[doc(no_inline)]
+</span><span class="kw">use </span><span class="kw">crate</span>::Command;
 <span class="kw">use crate</span>::{csi, impl_display, <span class="prelude-ty">Result</span>};
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>sys;
@@ -544,13 +544,13 @@
 ///
 /// Please have a look at the [raw mode](./index.html#raw-mode) section.
 </span><span class="kw">pub fn </span>is_raw_mode_enabled() -&gt; <span class="prelude-ty">Result</span>&lt;bool&gt; {
-    <span class="attribute">#[cfg(unix)]</span>
-    {
+    <span class="attribute">#[cfg(unix)]
+    </span>{
         <span class="prelude-val">Ok</span>(sys::is_raw_mode_enabled())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    {
+    <span class="attribute">#[cfg(windows)]
+    </span>{
         sys::is_raw_mode_enabled()
     }
 }
@@ -577,16 +577,16 @@
 }
 
 <span class="doccomment">/// Disables line wrapping.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>DisableLineWrap;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>DisableLineWrap;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>DisableLineWrap {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?7l&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">let </span>screen_buffer = ScreenBuffer::current()<span class="question-mark">?</span>;
         <span class="kw">let </span>console_mode = ConsoleMode::from(screen_buffer.handle().clone());
         <span class="kw">let </span>new_mode = console_mode.mode()<span class="question-mark">? </span>&amp; !ENABLE_WRAP_AT_EOL_OUTPUT;
@@ -596,16 +596,16 @@
 }
 
 <span class="doccomment">/// Enable line wrapping.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>EnableLineWrap;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>EnableLineWrap;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>EnableLineWrap {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?7h&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">let </span>screen_buffer = ScreenBuffer::current()<span class="question-mark">?</span>;
         <span class="kw">let </span>console_mode = ConsoleMode::from(screen_buffer.handle().clone());
         <span class="kw">let </span>new_mode = console_mode.mode()<span class="question-mark">? </span>| ENABLE_WRAP_AT_EOL_OUTPUT;
@@ -636,16 +636,16 @@
 /// }
 /// ```
 ///
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>EnterAlternateScreen;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>EnterAlternateScreen;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>EnterAlternateScreen {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?1049h&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">let </span>alternate_screen = ScreenBuffer::create()<span class="question-mark">?</span>;
         alternate_screen.show()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -674,16 +674,16 @@
 /// }
 /// ```
 ///
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>LeaveAlternateScreen;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>LeaveAlternateScreen;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>LeaveAlternateScreen {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?1049l&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">let </span>screen_buffer = ScreenBuffer::from(Handle::current_out_handle()<span class="question-mark">?</span>);
         screen_buffer.show()<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -691,9 +691,9 @@
 }
 
 <span class="doccomment">/// Different ways to clear the terminal buffer.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]</span>
-<span class="kw">pub enum </span>ClearType {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]
+</span><span class="kw">pub enum </span>ClearType {
     <span class="doccomment">/// All cells.
     </span>All,
     <span class="doccomment">/// All plus history
@@ -713,8 +713,8 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>ScrollUp(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>ScrollUp(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>ScrollUp {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -724,8 +724,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::scroll_up(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -735,8 +735,8 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>ScrollDown(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>ScrollDown(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>ScrollDown {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -746,8 +746,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::scroll_down(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -759,8 +759,8 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>Clear(<span class="kw">pub </span>ClearType);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>Clear(<span class="kw">pub </span>ClearType);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>Clear {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -774,8 +774,8 @@
         })
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::clear(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -785,16 +785,16 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetSize(<span class="kw">pub </span>u16, <span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetSize(<span class="kw">pub </span>u16, <span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetSize {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;8;{};{}t&quot;</span>), <span class="self">self</span>.<span class="number">1</span>, <span class="self">self</span>.<span class="number">0</span>)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::set_size(<span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
     }
 }
@@ -804,16 +804,16 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetTitle&lt;T&gt;(<span class="kw">pub </span>T);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetTitle&lt;T&gt;(<span class="kw">pub </span>T);
 
 <span class="kw">impl</span>&lt;T: fmt::Display&gt; Command <span class="kw">for </span>SetTitle&lt;T&gt; {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="string">&quot;\x1B]0;{}\x07&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::set_window_title(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -823,8 +823,8 @@
 <span class="macro">impl_display!</span>(<span class="kw">for </span>SetSize);
 <span class="macro">impl_display!</span>(<span class="kw">for </span>Clear);
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span>std::{io::stdout, thread, time};
 
     <span class="kw">use </span><span class="kw">crate</span>::execute;
@@ -832,9 +832,9 @@
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
     <span class="comment">// Test is disabled, because it&#39;s failing on Travis CI
-    </span><span class="attribute">#[test]</span>
-    <span class="attribute">#[ignore]</span>
-    <span class="kw">fn </span>test_resize_ansi() {
+    </span><span class="attribute">#[test]
+    #[ignore]
+    </span><span class="kw">fn </span>test_resize_ansi() {
         <span class="kw">let </span>(width, height) = size().unwrap();
 
         <span class="macro">execute!</span>(stdout(), SetSize(<span class="number">35</span>, <span class="number">35</span>)).unwrap();
@@ -853,8 +853,8 @@
         <span class="macro">assert_eq!</span>((width, height), size().unwrap());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_raw_mode() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_raw_mode() {
         <span class="comment">// check we start from normal mode (may fail on some test harnesses)
         </span><span class="macro">assert!</span>(!is_raw_mode_enabled().unwrap());
 
@@ -883,4 +883,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

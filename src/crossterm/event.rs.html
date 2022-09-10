@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/event.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>event.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/event.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>event.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1055,27 +1055,27 @@
 
 </span><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::hash::{Hash, Hasher};
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span>std::io;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span>std::io;
 <span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span>bitflags::bitflags;
 <span class="kw">use </span>parking_lot::{MappedMutexGuard, Mutex, MutexGuard};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="kw">use crate</span>::{csi, Command, <span class="prelude-ty">Result</span>};
 <span class="kw">use </span>filter::{EventFilter, Filter};
 <span class="kw">use </span>read::InternalEventReader;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
-<span class="kw">pub use </span>stream::EventStream;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]
+</span><span class="kw">pub use </span>stream::EventStream;
 <span class="kw">use </span>timeout::PollTimeout;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>filter;
 <span class="kw">mod </span>read;
 <span class="kw">mod </span>source;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]</span>
-<span class="kw">mod </span>stream;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;event-stream&quot;</span>)]
+</span><span class="kw">mod </span>stream;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>sys;
 <span class="kw">mod </span>timeout;
 
@@ -1183,8 +1183,8 @@
 </span><span class="kw">pub fn </span>read() -&gt; <span class="prelude-ty">Result</span>&lt;Event&gt; {
     <span class="kw">match </span>read_internal(<span class="kw-2">&amp;</span>EventFilter)<span class="question-mark">? </span>{
         InternalEvent::Event(event) =&gt; <span class="prelude-val">Ok</span>(event),
-        <span class="attribute">#[cfg(unix)]</span>
-        <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+        <span class="attribute">#[cfg(unix)]
+        </span><span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
     }
 }
 
@@ -1218,8 +1218,8 @@
 <span class="doccomment">/// A command that enables mouse event capturing.
 ///
 /// Mouse events can be captured with [read](./fn.read.html)/[poll](./fn.poll.html).
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>EnableMouseCapture;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>EnableMouseCapture;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>EnableMouseCapture {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -1237,13 +1237,13 @@
         ))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::windows::enable_mouse_capture()
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
@@ -1251,8 +1251,8 @@
 <span class="doccomment">/// A command that disables mouse event capturing.
 ///
 /// Mouse events can be captured with [read](./fn.read.html)/[poll](./fn.poll.html).
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>DisableMouseCapture;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>DisableMouseCapture;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>DisableMouseCapture {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -1266,25 +1266,25 @@
         ))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::windows::disable_mouse_capture()
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
 
-<span class="macro">bitflags!</span> {
+<span class="macro">bitflags! </span>{
     <span class="doccomment">/// Represents special flags that tell compatible terminals to add extra information to keyboard events.
     ///
     /// See &lt;https://sw.kovidgoyal.net/kitty/keyboard-protocol/#progressive-enhancement&gt; for more information.
     ///
     /// Alternate keys and Unicode codepoints are not yet supported by crossterm.
-    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-    <span class="kw">pub struct </span>KeyboardEnhancementFlags: u8 {
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+    </span><span class="kw">pub struct </span>KeyboardEnhancementFlags: u8 {
         <span class="doccomment">/// Represent Escape and modified keys using CSI-u sequences, so they can be unambiguously
         /// read.
         </span><span class="kw">const </span>DISAMBIGUATE_ESCAPE_CODES = <span class="number">0b0000_0001</span>;
@@ -1342,24 +1342,24 @@
 /// * [neovim text editor](https://github.com/neovim/neovim/pull/18181)
 /// * [kakoune text editor](https://github.com/mawww/kakoune/issues/4103)
 /// * [dte text editor](https://gitlab.com/craigbarnes/dte/-/issues/138)
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>PushKeyboardEnhancementFlags(<span class="kw">pub </span>KeyboardEnhancementFlags);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>PushKeyboardEnhancementFlags(<span class="kw">pub </span>KeyboardEnhancementFlags);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>PushKeyboardEnhancementFlags {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="string">&quot;{}{}u&quot;</span>, <span class="macro">csi!</span>(<span class="string">&quot;&gt;&quot;</span>), <span class="self">self</span>.<span class="number">0</span>.bits())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Err</span>(io::Error::new(
             io::ErrorKind::Unsupported,
             <span class="string">&quot;Keyboard progressive enhancement not implemented for the legacy Windows API.&quot;</span>,
         ))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
@@ -1369,24 +1369,24 @@
 /// Specifically, it pops one level of keyboard enhancement flags.
 ///
 /// See [`PushKeyboardEnhancementFlags`] and &lt;https://sw.kovidgoyal.net/kitty/keyboard-protocol/&gt; for more information.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>PopKeyboardEnhancementFlags;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>PopKeyboardEnhancementFlags;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>PopKeyboardEnhancementFlags {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;&lt;1u&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Err</span>(io::Error::new(
             io::ErrorKind::Unsupported,
             <span class="string">&quot;Keyboard progressive enhancement not implemented for the legacy Windows API.&quot;</span>,
         ))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
@@ -1396,32 +1396,32 @@
 /// It should be paired with [`DisableFocusChange`] at the end of execution.
 ///
 /// Focus events can be captured with [read](./fn.read.html)/[poll](./fn.poll.html).
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>EnableFocusChange;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>EnableFocusChange;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>EnableFocusChange {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?1004h&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="comment">// Focus events are always enabled on Windows
         </span><span class="prelude-val">Ok</span>(())
     }
 }
 
 <span class="doccomment">/// A command that disables focus event emission.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>DisableFocusChange;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>DisableFocusChange;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>DisableFocusChange {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?1004l&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="comment">// Focus events can&#39;t be disabled on Windows
         </span><span class="prelude-val">Ok</span>(())
     }
@@ -1433,18 +1433,18 @@
 ///
 /// This is not supported in older Windows terminals without
 /// [virtual terminal sequences](https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences).
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]</span>
-<span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>EnableBracketedPaste;
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>EnableBracketedPaste;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]</span>
-<span class="kw">impl </span>Command <span class="kw">for </span>EnableBracketedPaste {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]
+</span><span class="kw">impl </span>Command <span class="kw">for </span>EnableBracketedPaste {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?2004h&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Err</span>(io::Error::new(
             io::ErrorKind::Unsupported,
             <span class="string">&quot;Bracketed paste not implemented in the legacy Windows API.&quot;</span>,
@@ -1453,27 +1453,27 @@
 }
 
 <span class="doccomment">/// A command that disables bracketed paste mode.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]</span>
-<span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>DisableBracketedPaste;
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>DisableBracketedPaste;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]</span>
-<span class="kw">impl </span>Command <span class="kw">for </span>DisableBracketedPaste {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]
+</span><span class="kw">impl </span>Command <span class="kw">for </span>DisableBracketedPaste {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?2004l&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
 
 <span class="doccomment">/// Represents an event.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;bracketed-paste&quot;</span>), derive(Copy))]</span>
-<span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Hash)]</span>
-<span class="kw">pub enum </span>Event {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(not(feature = <span class="string">&quot;bracketed-paste&quot;</span>), derive(Copy))]
+#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Hash)]
+</span><span class="kw">pub enum </span>Event {
     <span class="doccomment">/// The terminal gained focus
     </span>FocusGained,
     <span class="doccomment">/// The terminal lost focus
@@ -1484,8 +1484,8 @@
     </span>Mouse(MouseEvent),
     <span class="doccomment">/// A string that was pasted into the terminal. Only emitted if bracketed paste has been
     /// enabled.
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]</span>
-    Paste(String),
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;bracketed-paste&quot;</span>)]
+    </span>Paste(String),
     <span class="doccomment">/// An resize event with new dimensions after resize (columns, rows).
     /// **Note** that resize events can be occur in batches.
     </span>Resize(u16, u16),
@@ -1506,9 +1506,9 @@
 /// Some platforms/terminals does not report all key modifiers
 /// combinations for all mouse event types. For example - macOS reports
 /// `Ctrl` + left mouse button click as a right mouse button click.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]</span>
-<span class="kw">pub struct </span>MouseEvent {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+</span><span class="kw">pub struct </span>MouseEvent {
     <span class="doccomment">/// The kind of mouse event that was caused.
     </span><span class="kw">pub </span>kind: MouseEventKind,
     <span class="doccomment">/// The column that the event occurred on.
@@ -1528,9 +1528,9 @@
 /// Some platforms/terminals do not report mouse button for the
 /// `MouseEventKind::Up` and `MouseEventKind::Drag` events. `MouseButton::Left`
 /// is returned if we don&#39;t know which button was used.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]</span>
-<span class="kw">pub enum </span>MouseEventKind {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+</span><span class="kw">pub enum </span>MouseEventKind {
     <span class="doccomment">/// Pressed mouse button. Contains the button that was pressed.
     </span>Down(MouseButton),
     <span class="doccomment">/// Released mouse button. Contains the button that was released.
@@ -1546,9 +1546,9 @@
 }
 
 <span class="doccomment">/// Represents a mouse button.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]</span>
-<span class="kw">pub enum </span>MouseButton {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+</span><span class="kw">pub enum </span>MouseButton {
     <span class="doccomment">/// Left mouse button.
     </span>Left,
     <span class="doccomment">/// Right mouse button.
@@ -1557,14 +1557,14 @@
     </span>Middle,
 }
 
-<span class="macro">bitflags!</span> {
+<span class="macro">bitflags! </span>{
     <span class="doccomment">/// Represents key modifiers (shift, control, alt, etc.).
     ///
     /// **Note:** `SUPER`, `HYPER`, and `META` can only be read if
     /// [`KeyboardEnhancementFlags::DISAMBIGUATE_ESCAPE_CODES`] has been enabled with
     /// [`PushKeyboardEnhancementFlags`].
-    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-    <span class="kw">pub struct </span>KeyModifiers: u8 {
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+    </span><span class="kw">pub struct </span>KeyModifiers: u8 {
         <span class="kw">const </span>SHIFT = <span class="number">0b0000_0001</span>;
         <span class="kw">const </span>CONTROL = <span class="number">0b0000_0010</span>;
         <span class="kw">const </span>ALT = <span class="number">0b0000_0100</span>;
@@ -1576,22 +1576,22 @@
 }
 
 <span class="doccomment">/// Represents a keyboard event kind.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]</span>
-<span class="kw">pub enum </span>KeyEventKind {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+</span><span class="kw">pub enum </span>KeyEventKind {
     Press,
     Repeat,
     Release,
 }
 
-<span class="macro">bitflags!</span> {
+<span class="macro">bitflags! </span>{
     <span class="doccomment">/// Represents extra state about the key event.
     ///
     /// **Note:** This state can only be read if
     /// [`KeyboardEnhancementFlags::DISAMBIGUATE_ESCAPE_CODES`] has been enabled with
     /// [`PushKeyboardEnhancementFlags`].
-    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-    <span class="kw">pub struct </span>KeyEventState: u8 {
+    </span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+    </span><span class="kw">pub struct </span>KeyEventState: u8 {
         <span class="doccomment">/// The key event origins from the keypad.
         </span><span class="kw">const </span>KEYPAD = <span class="number">0b0000_0001</span>;
         <span class="doccomment">/// Caps Lock was enabled for this key event.
@@ -1607,9 +1607,9 @@
 }
 
 <span class="doccomment">/// Represents a key event.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[derive(Debug, PartialOrd, Clone, Copy)]</span>
-<span class="kw">pub struct </span>KeyEvent {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[derive(Debug, PartialOrd, Clone, Copy)]
+</span><span class="kw">pub struct </span>KeyEvent {
     <span class="doccomment">/// The key itself.
     </span><span class="kw">pub </span>code: KeyCode,
     <span class="doccomment">/// Additional key modifiers.
@@ -1728,9 +1728,9 @@
 }
 
 <span class="doccomment">/// Represents a media key (as part of [`KeyCode::Media`]).
-</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub enum </span>MediaKeyCode {
+</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub enum </span>MediaKeyCode {
     <span class="doccomment">/// Play media key.
     </span>Play,
     <span class="doccomment">/// Pause media key.
@@ -1760,9 +1760,9 @@
 }
 
 <span class="doccomment">/// Represents a modifier key (as part of [`KeyCode::Modifier`]).
-</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub enum </span>ModifierKeyCode {
+</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub enum </span>ModifierKeyCode {
     <span class="doccomment">/// Left Shift key.
     </span>LeftShift,
     <span class="doccomment">/// Left Control key.
@@ -1794,9 +1794,9 @@
 }
 
 <span class="doccomment">/// Represents a key.
-</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub enum </span>KeyCode {
+</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub enum </span>KeyCode {
     <span class="doccomment">/// Backspace key.
     </span>Backspace,
     <span class="doccomment">/// Enter key.
@@ -1898,24 +1898,24 @@
 ///
 /// Encapsulates publicly available `Event` with additional internal
 /// events that shouldn&#39;t be publicly available to the crate users.
-</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Hash, Clone, Eq)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>InternalEvent {
+</span><span class="attribute">#[derive(Debug, PartialOrd, PartialEq, Hash, Clone, Eq)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>InternalEvent {
     <span class="doccomment">/// An event.
     </span>Event(Event),
     <span class="doccomment">/// A cursor position (`col`, `row`).
-    </span><span class="attribute">#[cfg(unix)]</span>
-    CursorPosition(u16, u16),
+    </span><span class="attribute">#[cfg(unix)]
+    </span>CursorPosition(u16, u16),
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span>std::collections::hash_map::DefaultHasher;
     <span class="kw">use </span>std::hash::{Hash, Hasher};
 
     <span class="kw">use super</span>::{KeyCode, KeyEvent, KeyModifiers};
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_equality() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_equality() {
         <span class="kw">let </span>lowercase_d_with_shift = KeyEvent::new(KeyCode::Char(<span class="string">&#39;d&#39;</span>), KeyModifiers::SHIFT);
         <span class="kw">let </span>uppercase_d_with_shift = KeyEvent::new(KeyCode::Char(<span class="string">&#39;D&#39;</span>), KeyModifiers::SHIFT);
         <span class="kw">let </span>uppercase_d = KeyEvent::new(KeyCode::Char(<span class="string">&#39;D&#39;</span>), KeyModifiers::NONE);
@@ -1923,8 +1923,8 @@
         <span class="macro">assert_eq!</span>(uppercase_d, uppercase_d_with_shift);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_hash() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_hash() {
         <span class="kw">let </span>lowercase_d_with_shift_hash = {
             <span class="kw">let </span><span class="kw-2">mut </span>hasher = DefaultHasher::new();
             KeyEvent::new(KeyCode::Char(<span class="string">&#39;d&#39;</span>), KeyModifiers::SHIFT).hash(<span class="kw-2">&amp;mut </span>hasher);
@@ -1945,4 +1945,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

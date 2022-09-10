@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/termcolor-1.1.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../termcolor/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../termcolor/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../termcolor/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/termcolor-1.1.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../termcolor/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../termcolor/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../termcolor/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -2377,9 +2377,9 @@ let stdout = StandardStream::stdout(choice);
 Currently, `termcolor` does not provide anything to do this for you.
 */
 
-</span><span class="attribute">#![deny(missing_docs)]</span>
+</span><span class="attribute">#![deny(missing_docs)]
 
-<span class="comment">// #[cfg(doctest)]
+</span><span class="comment">// #[cfg(doctest)]
 // use doc_comment::doctest;
 // #[cfg(doctest)]
 // doctest!(&quot;../README.md&quot;);
@@ -2390,11 +2390,11 @@ Currently, `termcolor` does not provide anything to do this for you.
 <span class="kw">use </span>std::io::{<span class="self">self</span>, Write};
 <span class="kw">use </span>std::str::FromStr;
 <span class="kw">use </span>std::sync::atomic::{AtomicBool, Ordering};
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span>std::sync::{Mutex, MutexGuard};
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span>std::sync::{Mutex, MutexGuard};
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span>winapi_util::console <span class="kw">as </span>wincon;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span>winapi_util::console <span class="kw">as </span>wincon;
 
 <span class="doccomment">/// This trait describes the behavior of writers that support colored output.
 </span><span class="kw">pub trait </span>WriteColor: io::Write {
@@ -2463,8 +2463,8 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="doccomment">/// ColorChoice represents the color preferences of an end user.
-</span><span class="attribute">#[derive(Clone, Copy, Debug, Eq, PartialEq)]</span>
-<span class="kw">pub enum </span>ColorChoice {
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+</span><span class="kw">pub enum </span>ColorChoice {
     <span class="doccomment">/// Try very hard to emit colors. This includes emitting ANSI colors
     /// on Windows if the console API is unavailable.
     </span>Always,
@@ -2490,8 +2490,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         }
     }
 
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>env_allows_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>env_allows_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span>env::var_os(<span class="string">&quot;TERM&quot;</span>) {
             <span class="comment">// If TERM isn&#39;t set, then we are in a weird environment that
             // probably doesn&#39;t support colors.
@@ -2510,8 +2510,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="bool-val">true
     </span>}
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>env_allows_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>env_allows_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="comment">// On Windows, if TERM isn&#39;t set, then we shouldn&#39;t automatically
         // assume that colors aren&#39;t allowed. This is unlike Unix environments
         // where TERM is more rigorously set.
@@ -2532,8 +2532,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     ///
     /// It&#39;s possible that ANSI is still the correct choice even if this
     /// returns false.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>should_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>should_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             ColorChoice::Always =&gt; <span class="bool-val">false</span>,
             ColorChoice::AlwaysAnsi =&gt; <span class="bool-val">true</span>,
@@ -2608,8 +2608,8 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="kw">impl </span>io::Write <span class="kw">for </span>IoStandardStream {
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IoStandardStream::Stdout(<span class="kw-2">ref mut </span>s) =&gt; s.write(b),
             IoStandardStream::Stderr(<span class="kw-2">ref mut </span>s) =&gt; s.write(b),
@@ -2618,8 +2618,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         }
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IoStandardStream::Stdout(<span class="kw-2">ref mut </span>s) =&gt; s.flush(),
             IoStandardStream::Stderr(<span class="kw-2">ref mut </span>s) =&gt; s.flush(),
@@ -2637,16 +2637,16 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; io::Write <span class="kw">for </span>IoStandardStreamLock&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IoStandardStreamLock::StdoutLock(<span class="kw-2">ref mut </span>s) =&gt; s.write(b),
             IoStandardStreamLock::StderrLock(<span class="kw-2">ref mut </span>s) =&gt; s.write(b),
         }
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             IoStandardStreamLock::StdoutLock(<span class="kw-2">ref mut </span>s) =&gt; s.flush(),
             IoStandardStreamLock::StderrLock(<span class="kw-2">ref mut </span>s) =&gt; s.flush(),
@@ -2681,8 +2681,8 @@ Currently, `termcolor` does not provide anything to do this for you.
 </span><span class="kw">enum </span>WriterInner&lt;W&gt; {
     NoColor(NoColor&lt;W&gt;),
     Ansi(Ansi&lt;W&gt;),
-    <span class="attribute">#[cfg(windows)]</span>
-    Windows {
+    <span class="attribute">#[cfg(windows)]
+    </span>Windows {
         wtr: W,
         console: Mutex&lt;wincon::Console&gt;,
     },
@@ -2697,10 +2697,10 @@ Currently, `termcolor` does not provide anything to do this for you.
     /// console when in a locked state, but obviously don&#39;t need to do that
     /// on Unix, which makes the `&#39;a` unused. To satisfy the compiler, we need
     /// a PhantomData.
-    </span><span class="attribute">#[allow(dead_code)]</span>
-    Unreachable(::std::marker::PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>()&gt;),
-    <span class="attribute">#[cfg(windows)]</span>
-    Windows {
+    </span><span class="attribute">#[allow(dead_code)]
+    </span>Unreachable(::std::marker::PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>()&gt;),
+    <span class="attribute">#[cfg(windows)]
+    </span>Windows {
         wtr: W,
         console: MutexGuard&lt;<span class="lifetime">&#39;a</span>, wincon::Console&gt;,
     },
@@ -2746,8 +2746,8 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; StandardStreamLock&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>from_stream(stream: <span class="kw-2">&amp;</span>StandardStream) -&gt; StandardStreamLock&lt;<span class="lifetime">&#39;_</span>&gt; {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>from_stream(stream: <span class="kw-2">&amp;</span>StandardStream) -&gt; StandardStreamLock&lt;<span class="lifetime">&#39;_</span>&gt; {
         <span class="kw">let </span>locked = <span class="kw">match </span><span class="kw-2">*</span>stream.wtr.get_ref() {
             WriterInner::NoColor(<span class="kw-2">ref </span>w) =&gt; {
                 WriterInnerLock::NoColor(NoColor(w.<span class="number">0</span>.lock()))
@@ -2759,8 +2759,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         StandardStreamLock { wtr: stream.wtr.wrap(locked) }
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>from_stream(stream: <span class="kw-2">&amp;</span>StandardStream) -&gt; StandardStreamLock {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>from_stream(stream: <span class="kw-2">&amp;</span>StandardStream) -&gt; StandardStreamLock {
         <span class="kw">let </span>locked = <span class="kw">match </span><span class="kw-2">*</span>stream.wtr.get_ref() {
             WriterInner::NoColor(<span class="kw-2">ref </span>w) =&gt; {
                 WriterInnerLock::NoColor(NoColor(w.<span class="number">0</span>.lock()))
@@ -2768,8 +2768,8 @@ Currently, `termcolor` does not provide anything to do this for you.
             WriterInner::Ansi(<span class="kw-2">ref </span>w) =&gt; {
                 WriterInnerLock::Ansi(Ansi(w.<span class="number">0</span>.lock()))
             }
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInner::Windows { <span class="kw-2">ref </span>wtr, <span class="kw-2">ref </span>console } =&gt; {
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInner::Windows { <span class="kw-2">ref </span>wtr, <span class="kw-2">ref </span>console } =&gt; {
                 WriterInnerLock::Windows {
                     wtr: wtr.lock(),
                     console: console.lock().unwrap(),
@@ -2813,8 +2813,8 @@ Currently, `termcolor` does not provide anything to do this for you.
 <span class="kw">impl </span>WriterInner&lt;IoStandardStream&gt; {
     <span class="doccomment">/// Create a new inner writer for a standard stream with the given color
     /// preferences.
-    </span><span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>create(
+    </span><span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>create(
         sty: StandardStreamType,
         choice: ColorChoice,
     ) -&gt; WriterInner&lt;IoStandardStream&gt; {
@@ -2830,8 +2830,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     ///
     /// If coloring is desired and a Windows console could not be found, then
     /// ANSI escape sequences are used instead.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>create(
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>create(
         sty: StandardStreamType,
         choice: ColorChoice,
     ) -&gt; WriterInner&lt;IoStandardStream&gt; {
@@ -2863,128 +2863,128 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="kw">impl </span>io::Write <span class="kw">for </span>StandardStream {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="self">self</span>.wtr.write(b)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.flush()
     }
 }
 
 <span class="kw">impl </span>WriteColor <span class="kw">for </span>StandardStream {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.wtr.supports_color()
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.set_color(spec)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.reset()
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.wtr.is_synchronous()
     }
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; io::Write <span class="kw">for </span>StandardStreamLock&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="self">self</span>.wtr.write(b)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.flush()
     }
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; WriteColor <span class="kw">for </span>StandardStreamLock&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.wtr.supports_color()
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.set_color(spec)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.reset()
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.wtr.is_synchronous()
     }
 }
 
 <span class="kw">impl </span>io::Write <span class="kw">for </span>BufferedStandardStream {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, b: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="self">self</span>.wtr.write(b)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.flush()
     }
 }
 
 <span class="kw">impl </span>WriteColor <span class="kw">for </span>BufferedStandardStream {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.wtr.supports_color()
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
         <span class="kw">if </span><span class="self">self</span>.is_synchronous() {
             <span class="self">self</span>.wtr.flush()<span class="question-mark">?</span>;
         }
         <span class="self">self</span>.wtr.set_color(spec)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.wtr.reset()
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.wtr.is_synchronous()
     }
 }
 
 <span class="kw">impl</span>&lt;W: io::Write&gt; io::Write <span class="kw">for </span>WriterInner&lt;W&gt; {
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             WriterInner::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.write(buf),
             WriterInner::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.write(buf),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.write(buf),
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.write(buf),
         }
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             WriterInner::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.flush(),
             WriterInner::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.flush(),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.flush(),
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.flush(),
         }
     }
 }
@@ -2994,8 +2994,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             WriterInner::NoColor(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             WriterInner::Ansi(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInner::Windows { .. } =&gt; <span class="bool-val">true</span>,
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInner::Windows { .. } =&gt; <span class="bool-val">true</span>,
         }
     }
 
@@ -3003,8 +3003,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             WriterInner::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.set_color(spec),
             WriterInner::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.set_color(spec),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref </span>console } =&gt; {
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref </span>console } =&gt; {
                 wtr.flush()<span class="question-mark">?</span>;
                 <span class="kw">let </span><span class="kw-2">mut </span>console = console.lock().unwrap();
                 spec.write_console(<span class="kw-2">&amp;mut *</span>console)
@@ -3016,8 +3016,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             WriterInner::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.reset(),
             WriterInner::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.reset(),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref mut </span>console } =&gt; {
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInner::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref mut </span>console } =&gt; {
                 wtr.flush()<span class="question-mark">?</span>;
                 console.lock().unwrap().reset()<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(())
@@ -3029,8 +3029,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="kw-2">*</span><span class="self">self </span>{
             WriterInner::NoColor(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             WriterInner::Ansi(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInner::Windows { .. } =&gt; <span class="bool-val">true</span>,
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInner::Windows { .. } =&gt; <span class="bool-val">true</span>,
         }
     }
 }
@@ -3041,8 +3041,8 @@ Currently, `termcolor` does not provide anything to do this for you.
             WriterInnerLock::Unreachable(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             WriterInnerLock::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.write(buf),
             WriterInnerLock::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.write(buf),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.write(buf),
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.write(buf),
         }
     }
 
@@ -3051,8 +3051,8 @@ Currently, `termcolor` does not provide anything to do this for you.
             WriterInnerLock::Unreachable(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             WriterInnerLock::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.flush(),
             WriterInnerLock::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.flush(),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.flush(),
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, .. } =&gt; wtr.flush(),
         }
     }
 }
@@ -3063,8 +3063,8 @@ Currently, `termcolor` does not provide anything to do this for you.
             WriterInnerLock::Unreachable(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             WriterInnerLock::NoColor(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             WriterInnerLock::Ansi(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInnerLock::Windows { .. } =&gt; <span class="bool-val">true</span>,
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInnerLock::Windows { .. } =&gt; <span class="bool-val">true</span>,
         }
     }
 
@@ -3073,8 +3073,8 @@ Currently, `termcolor` does not provide anything to do this for you.
             WriterInnerLock::Unreachable(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             WriterInnerLock::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.set_color(spec),
             WriterInnerLock::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.set_color(spec),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref mut </span>console } =&gt; {
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref mut </span>console } =&gt; {
                 wtr.flush()<span class="question-mark">?</span>;
                 spec.write_console(console)
             }
@@ -3086,8 +3086,8 @@ Currently, `termcolor` does not provide anything to do this for you.
             WriterInnerLock::Unreachable(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             WriterInnerLock::NoColor(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.reset(),
             WriterInnerLock::Ansi(<span class="kw-2">ref mut </span>wtr) =&gt; wtr.reset(),
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref mut </span>console } =&gt; {
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInnerLock::Windows { <span class="kw-2">ref mut </span>wtr, <span class="kw-2">ref mut </span>console } =&gt; {
                 wtr.flush()<span class="question-mark">?</span>;
                 console.reset()<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(())
@@ -3100,8 +3100,8 @@ Currently, `termcolor` does not provide anything to do this for you.
             WriterInnerLock::Unreachable(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
             WriterInnerLock::NoColor(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             WriterInnerLock::Ansi(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            WriterInnerLock::Windows { .. } =&gt; <span class="bool-val">true</span>,
+            <span class="attribute">#[cfg(windows)]
+            </span>WriterInnerLock::Windows { .. } =&gt; <span class="bool-val">true</span>,
         }
     }
 }
@@ -3120,8 +3120,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     printed: AtomicBool,
     separator: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;,
     color_choice: ColorChoice,
-    <span class="attribute">#[cfg(windows)]</span>
-    console: <span class="prelude-ty">Option</span>&lt;Mutex&lt;wincon::Console&gt;&gt;,
+    <span class="attribute">#[cfg(windows)]
+    </span>console: <span class="prelude-ty">Option</span>&lt;Mutex&lt;wincon::Console&gt;&gt;,
 }
 
 <span class="kw">impl </span>BufferWriter {
@@ -3130,8 +3130,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     ///
     /// The specific color/style settings can be configured when writing to
     /// the buffers themselves.
-    </span><span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>create(sty: StandardStreamType, choice: ColorChoice) -&gt; BufferWriter {
+    </span><span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>create(sty: StandardStreamType, choice: ColorChoice) -&gt; BufferWriter {
         BufferWriter {
             stream: LossyStandardStream::new(IoStandardStream::new(sty)),
             printed: AtomicBool::new(<span class="bool-val">false</span>),
@@ -3148,8 +3148,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     ///
     /// The specific color/style settings can be configured when writing to
     /// the buffers themselves.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>create(sty: StandardStreamType, choice: ColorChoice) -&gt; BufferWriter {
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>create(sty: StandardStreamType, choice: ColorChoice) -&gt; BufferWriter {
         <span class="kw">let </span><span class="kw-2">mut </span>con = <span class="kw">match </span>sty {
             StandardStreamType::Stdout =&gt; wincon::Console::stdout(),
             StandardStreamType::Stderr =&gt; wincon::Console::stderr(),
@@ -3212,8 +3212,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     ///
     /// A `Buffer` satisfies both `io::Write` and `WriteColor`. A `Buffer` can
     /// be printed using the `print` method.
-    </span><span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">pub fn </span>buffer(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Buffer {
+    </span><span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">pub fn </span>buffer(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Buffer {
         Buffer::new(<span class="self">self</span>.color_choice)
     }
 
@@ -3221,8 +3221,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     ///
     /// A `Buffer` satisfies both `io::Write` and `WriteColor`. A `Buffer` can
     /// be printed using the `print` method.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">pub fn </span>buffer(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Buffer {
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">pub fn </span>buffer(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Buffer {
         Buffer::new(<span class="self">self</span>.color_choice, <span class="self">self</span>.console.is_some())
     }
 
@@ -3245,8 +3245,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span>buf.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref </span>b) =&gt; stream.write_all(<span class="kw-2">&amp;</span>b.<span class="number">0</span>)<span class="question-mark">?</span>,
             BufferInner::Ansi(<span class="kw-2">ref </span>b) =&gt; stream.write_all(<span class="kw-2">&amp;</span>b.<span class="number">0</span>)<span class="question-mark">?</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref </span>b) =&gt; {
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref </span>b) =&gt; {
                 <span class="comment">// We guarantee by construction that we have a console here.
                 // Namely, a BufferWriter is the only way to produce a Buffer.
                 </span><span class="kw">let </span>console_mutex = <span class="self">self
@@ -3285,14 +3285,14 @@ Currently, `termcolor` does not provide anything to do this for you.
     <span class="doccomment">/// Apply coloring using the Windows console APIs. This buffer saves
     /// color information in memory and only interacts with the console when
     /// the buffer is printed.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    Windows(WindowsBuffer),
+    </span><span class="attribute">#[cfg(windows)]
+    </span>Windows(WindowsBuffer),
 }
 
 <span class="kw">impl </span>Buffer {
     <span class="doccomment">/// Create a new buffer with the given color settings.
-    </span><span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>new(choice: ColorChoice) -&gt; Buffer {
+    </span><span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>new(choice: ColorChoice) -&gt; Buffer {
         <span class="kw">if </span>choice.should_attempt_color() {
             Buffer::ansi()
         } <span class="kw">else </span>{
@@ -3307,8 +3307,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     ///
     /// If coloring is desired and `console` is false, then ANSI escape
     /// sequences are used instead.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>new(choice: ColorChoice, console: bool) -&gt; Buffer {
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>new(choice: ColorChoice, console: bool) -&gt; Buffer {
         <span class="kw">if </span>choice.should_attempt_color() {
             <span class="kw">if </span>!console || choice.should_ansi() {
                 Buffer::ansi()
@@ -3331,8 +3331,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     }
 
     <span class="doccomment">/// Create a buffer that can be written to a Windows console.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">pub fn </span>console() -&gt; Buffer {
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">pub fn </span>console() -&gt; Buffer {
         Buffer(BufferInner::Windows(WindowsBuffer::new()))
     }
 
@@ -3346,8 +3346,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref </span>b) =&gt; b.<span class="number">0</span>.len(),
             BufferInner::Ansi(<span class="kw-2">ref </span>b) =&gt; b.<span class="number">0</span>.len(),
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref </span>b) =&gt; b.buf.len(),
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref </span>b) =&gt; b.buf.len(),
         }
     }
 
@@ -3356,8 +3356,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref mut </span>b) =&gt; b.<span class="number">0</span>.clear(),
             BufferInner::Ansi(<span class="kw-2">ref mut </span>b) =&gt; b.<span class="number">0</span>.clear(),
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref mut </span>b) =&gt; b.clear(),
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref mut </span>b) =&gt; b.clear(),
         }
     }
 
@@ -3369,8 +3369,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(b) =&gt; b.<span class="number">0</span>,
             BufferInner::Ansi(b) =&gt; b.<span class="number">0</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(b) =&gt; b.buf,
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(b) =&gt; b.buf,
         }
     }
 
@@ -3379,8 +3379,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref </span>b) =&gt; <span class="kw-2">&amp;</span>b.<span class="number">0</span>,
             BufferInner::Ansi(<span class="kw-2">ref </span>b) =&gt; <span class="kw-2">&amp;</span>b.<span class="number">0</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref </span>b) =&gt; <span class="kw-2">&amp;</span>b.buf,
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref </span>b) =&gt; <span class="kw-2">&amp;</span>b.buf,
         }
     }
 
@@ -3389,67 +3389,67 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref mut </span>b) =&gt; <span class="kw-2">&amp;mut </span>b.<span class="number">0</span>,
             BufferInner::Ansi(<span class="kw-2">ref mut </span>b) =&gt; <span class="kw-2">&amp;mut </span>b.<span class="number">0</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref mut </span>b) =&gt; <span class="kw-2">&amp;mut </span>b.buf,
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref mut </span>b) =&gt; <span class="kw-2">&amp;mut </span>b.buf,
         }
     }
 }
 
 <span class="kw">impl </span>io::Write <span class="kw">for </span>Buffer {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref mut </span>w) =&gt; w.write(buf),
             BufferInner::Ansi(<span class="kw-2">ref mut </span>w) =&gt; w.write(buf),
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.write(buf),
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.write(buf),
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref mut </span>w) =&gt; w.flush(),
             BufferInner::Ansi(<span class="kw-2">ref mut </span>w) =&gt; w.flush(),
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.flush(),
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.flush(),
         }
     }
 }
 
 <span class="kw">impl </span>WriteColor <span class="kw">for </span>Buffer {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
             BufferInner::Ansi(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref mut </span>w) =&gt; w.set_color(spec),
             BufferInner::Ansi(<span class="kw-2">ref mut </span>w) =&gt; w.set_color(spec),
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.set_color(spec),
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.set_color(spec),
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="kw">match </span><span class="self">self</span>.<span class="number">0 </span>{
             BufferInner::NoColor(<span class="kw-2">ref mut </span>w) =&gt; w.reset(),
             BufferInner::Ansi(<span class="kw-2">ref mut </span>w) =&gt; w.reset(),
-            <span class="attribute">#[cfg(windows)]</span>
-            BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.reset(),
+            <span class="attribute">#[cfg(windows)]
+            </span>BufferInner::Windows(<span class="kw-2">ref mut </span>w) =&gt; w.reset(),
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
@@ -3481,35 +3481,35 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="kw">impl</span>&lt;W: io::Write&gt; io::Write <span class="kw">for </span>NoColor&lt;W&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="self">self</span>.<span class="number">0</span>.write(buf)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.<span class="number">0</span>.flush()
     }
 }
 
 <span class="kw">impl</span>&lt;W: io::Write&gt; WriteColor <span class="kw">for </span>NoColor&lt;W&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
@@ -3541,25 +3541,25 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="kw">impl</span>&lt;W: io::Write&gt; io::Write <span class="kw">for </span>Ansi&lt;W&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="self">self</span>.<span class="number">0</span>.write(buf)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.<span class="number">0</span>.flush()
     }
 }
 
 <span class="kw">impl</span>&lt;W: io::Write&gt; WriteColor <span class="kw">for </span>Ansi&lt;W&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">true
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
         <span class="kw">if </span>spec.reset {
             <span class="self">self</span>.reset()<span class="question-mark">?</span>;
         }
@@ -3584,13 +3584,13 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.write_str(<span class="string">&quot;\x1B[0m&quot;</span>)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
@@ -3606,7 +3606,7 @@ Currently, `termcolor` does not provide anything to do this for you.
         c: <span class="kw-2">&amp;</span>Color,
         intense: bool,
     ) -&gt; io::Result&lt;()&gt; {
-        <span class="macro">macro_rules!</span> write_intense {
+        <span class="macro">macro_rules! </span>write_intense {
             (<span class="macro-nonterminal">$clr</span>:expr) =&gt; {
                 <span class="kw">if </span>fg {
                     <span class="self">self</span>.write_str(<span class="macro">concat!</span>(<span class="string">&quot;\x1B[38;5;&quot;</span>, <span class="macro-nonterminal">$clr</span>, <span class="string">&quot;m&quot;</span>))
@@ -3615,7 +3615,7 @@ Currently, `termcolor` does not provide anything to do this for you.
                 }
             };
         }
-        <span class="macro">macro_rules!</span> write_normal {
+        <span class="macro">macro_rules! </span>write_normal {
             (<span class="macro-nonterminal">$clr</span>:expr) =&gt; {
                 <span class="kw">if </span>fg {
                     <span class="self">self</span>.write_str(<span class="macro">concat!</span>(<span class="string">&quot;\x1B[3&quot;</span>, <span class="macro-nonterminal">$clr</span>, <span class="string">&quot;m&quot;</span>))
@@ -3624,7 +3624,7 @@ Currently, `termcolor` does not provide anything to do this for you.
                 }
             };
         }
-        <span class="macro">macro_rules!</span> write_var_ansi_code {
+        <span class="macro">macro_rules! </span>write_var_ansi_code {
             (<span class="macro-nonterminal">$pre</span>:expr, $(<span class="macro-nonterminal">$code</span>:expr),+) =&gt; {{
                 <span class="comment">// The loop generates at worst a literal of the form
                 // &#39;255,255,255m&#39; which is 12-bytes.
@@ -3661,7 +3661,7 @@ Currently, `termcolor` does not provide anything to do this for you.
                 <span class="self">self</span>.write_all(<span class="kw-2">&amp;</span>fmt[<span class="number">0</span>..i+<span class="number">1</span>])
             }}
         }
-        <span class="macro">macro_rules!</span> write_custom {
+        <span class="macro">macro_rules! </span>write_custom {
             (<span class="macro-nonterminal">$ansi256</span>:expr) =&gt; {
                 <span class="kw">if </span>fg {
                     <span class="macro">write_var_ansi_code!</span>(<span class="string">b&quot;\x1B[38;5;&quot;</span>, <span class="macro-nonterminal">$ansi256</span>)
@@ -3739,9 +3739,9 @@ Currently, `termcolor` does not provide anything to do this for you.
 /// `WindowsConsole&lt;W: io::Write&gt;` since coloring on Windows is tied
 /// specifically to the console APIs, and therefore can&#39;t work on arbitrary
 /// writers.
-</span><span class="attribute">#[cfg(windows)]</span>
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">struct </span>WindowsBuffer {
+</span><span class="attribute">#[cfg(windows)]
+#[derive(Clone, Debug)]
+</span><span class="kw">struct </span>WindowsBuffer {
     <span class="doccomment">/// The actual content that should be printed.
     </span>buf: Vec&lt;u8&gt;,
     <span class="doccomment">/// A sequence of position oriented color specifications. Namely, each
@@ -3752,8 +3752,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     </span>colors: Vec&lt;(usize, <span class="prelude-ty">Option</span>&lt;ColorSpec&gt;)&gt;,
 }
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">impl </span>WindowsBuffer {
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">impl </span>WindowsBuffer {
     <span class="doccomment">/// Create a new empty buffer for Windows console coloring.
     </span><span class="kw">fn </span>new() -&gt; WindowsBuffer {
         WindowsBuffer { buf: <span class="macro">vec!</span>[], colors: <span class="macro">vec!</span>[] }
@@ -3796,48 +3796,48 @@ Currently, `termcolor` does not provide anything to do this for you.
     }
 }
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">impl </span>io::Write <span class="kw">for </span>WindowsBuffer {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">impl </span>io::Write <span class="kw">for </span>WindowsBuffer {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="self">self</span>.buf.extend_from_slice(buf);
         <span class="prelude-val">Ok</span>(buf.len())
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>flush(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">impl </span>WriteColor <span class="kw">for </span>WindowsBuffer {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">impl </span>WriteColor <span class="kw">for </span>WindowsBuffer {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>supports_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">true
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_color(<span class="kw-2">&amp;mut </span><span class="self">self</span>, spec: <span class="kw-2">&amp;</span>ColorSpec) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.push(<span class="prelude-val">Some</span>(spec.clone()));
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>.push(<span class="prelude-val">None</span>);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_synchronous(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
 
 <span class="doccomment">/// A color specification.
-</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]</span>
-<span class="kw">pub struct </span>ColorSpec {
+</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]
+</span><span class="kw">pub struct </span>ColorSpec {
     fg_color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
     bg_color: <span class="prelude-ty">Option</span>&lt;Color&gt;,
     bold: bool,
@@ -4026,8 +4026,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     }
 
     <span class="doccomment">/// Writes this color spec to the given Windows console.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>write_console(<span class="kw-2">&amp;</span><span class="self">self</span>, console: <span class="kw-2">&amp;mut </span>wincon::Console) -&gt; io::Result&lt;()&gt; {
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>write_console(<span class="kw-2">&amp;</span><span class="self">self</span>, console: <span class="kw-2">&amp;mut </span>wincon::Console) -&gt; io::Result&lt;()&gt; {
         <span class="kw">let </span>fg_color = <span class="self">self</span>.fg_color.and_then(|c| c.to_windows(<span class="self">self</span>.intense));
         <span class="kw">if let </span><span class="prelude-val">Some</span>((intense, color)) = fg_color {
             console.fg(intense, color)<span class="question-mark">?</span>;
@@ -4061,9 +4061,9 @@ Currently, `termcolor` does not provide anything to do this for you.
 ///    in decimal or hexadecimal format.
 ///
 /// Hexadecimal numbers are written with a `0x` prefix.
-</span><span class="attribute">#[allow(missing_docs)]</span>
-<span class="attribute">#[derive(Clone, Copy, Debug, Eq, PartialEq)]</span>
-<span class="kw">pub enum </span>Color {
+</span><span class="attribute">#[allow(missing_docs)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+</span><span class="kw">pub enum </span>Color {
     Black,
     Blue,
     Green,
@@ -4074,14 +4074,14 @@ Currently, `termcolor` does not provide anything to do this for you.
     White,
     Ansi256(u8),
     Rgb(u8, u8, u8),
-    <span class="attribute">#[doc(hidden)]</span>
-    __Nonexhaustive,
+    <span class="attribute">#[doc(hidden)]
+    </span>__Nonexhaustive,
 }
 
 <span class="kw">impl </span>Color {
     <span class="doccomment">/// Translate this color to a wincon::Color.
-    </span><span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>to_windows(
+    </span><span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>to_windows(
         <span class="self">self</span>,
         intense: bool,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;(wincon::Intense, wincon::Color)&gt; {
@@ -4182,14 +4182,14 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="doccomment">/// An error from parsing an invalid color specification.
-</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]</span>
-<span class="kw">pub struct </span>ParseColorError {
+</span><span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]
+</span><span class="kw">pub struct </span>ParseColorError {
     kind: ParseColorErrorKind,
     given: String,
 }
 
-<span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]</span>
-<span class="kw">enum </span>ParseColorErrorKind {
+<span class="attribute">#[derive(Clone, Debug, Eq, PartialEq)]
+</span><span class="kw">enum </span>ParseColorErrorKind {
     InvalidName,
     InvalidAnsi256,
     InvalidRgb,
@@ -4261,30 +4261,30 @@ Currently, `termcolor` does not provide anything to do this for you.
 
 <span class="kw">struct </span>LossyStandardStream&lt;W&gt; {
     wtr: W,
-    <span class="attribute">#[cfg(windows)]</span>
-    is_console: bool,
+    <span class="attribute">#[cfg(windows)]
+    </span>is_console: bool,
 }
 
 <span class="kw">impl</span>&lt;W: io::Write&gt; LossyStandardStream&lt;W&gt; {
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>new(wtr: W) -&gt; LossyStandardStream&lt;W&gt; {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>new(wtr: W) -&gt; LossyStandardStream&lt;W&gt; {
         LossyStandardStream { wtr: wtr }
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>new(wtr: W) -&gt; LossyStandardStream&lt;W&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>new(wtr: W) -&gt; LossyStandardStream&lt;W&gt; {
         <span class="kw">let </span>is_console = wincon::Console::stdout().is_ok()
             || wincon::Console::stderr().is_ok();
         LossyStandardStream { wtr: wtr, is_console: is_console }
     }
 
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>wrap&lt;Q: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, wtr: Q) -&gt; LossyStandardStream&lt;Q&gt; {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>wrap&lt;Q: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, wtr: Q) -&gt; LossyStandardStream&lt;Q&gt; {
         LossyStandardStream::new(wtr)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>wrap&lt;Q: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, wtr: Q) -&gt; LossyStandardStream&lt;Q&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>wrap&lt;Q: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, wtr: Q) -&gt; LossyStandardStream&lt;Q&gt; {
         LossyStandardStream { wtr: wtr, is_console: <span class="self">self</span>.is_console }
     }
 
@@ -4309,13 +4309,13 @@ Currently, `termcolor` does not provide anything to do this for you.
 }
 
 <span class="kw">impl</span>&lt;W: io::Write&gt; io::Write <span class="kw">for </span>LossyStandardStream&lt;W&gt; {
-    <span class="attribute">#[cfg(not(windows))]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[cfg(not(windows))]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="self">self</span>.wtr.write(buf)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
         <span class="kw">if </span><span class="self">self</span>.is_console {
             write_lossy_utf8(<span class="kw-2">&amp;mut </span><span class="self">self</span>.wtr, buf)
         } <span class="kw">else </span>{
@@ -4328,8 +4328,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     }
 }
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">fn </span>write_lossy_utf8&lt;W: io::Write&gt;(<span class="kw-2">mut </span>w: W, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">fn </span>write_lossy_utf8&lt;W: io::Write&gt;(<span class="kw-2">mut </span>w: W, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; io::Result&lt;usize&gt; {
     <span class="kw">match </span>::std::str::from_utf8(buf) {
         <span class="prelude-val">Ok</span>(s) =&gt; w.write(s.as_bytes()),
         <span class="prelude-val">Err</span>(<span class="kw-2">ref </span>e) <span class="kw">if </span>e.valid_up_to() == <span class="number">0 </span>=&gt; {
@@ -4340,8 +4340,8 @@ Currently, `termcolor` does not provide anything to do this for you.
     }
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::{
         Ansi, Color, ColorSpec, ParseColorError, ParseColorErrorKind,
         StandardStream, WriteColor,
@@ -4349,19 +4349,19 @@ Currently, `termcolor` does not provide anything to do this for you.
 
     <span class="kw">fn </span>assert_is_send&lt;T: Send&gt;() {}
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>standard_stream_is_send() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>standard_stream_is_send() {
         assert_is_send::&lt;StandardStream&gt;();
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_simple_parse_ok() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_simple_parse_ok() {
         <span class="kw">let </span>color = <span class="string">&quot;green&quot;</span>.parse::&lt;Color&gt;();
         <span class="macro">assert_eq!</span>(color, <span class="prelude-val">Ok</span>(Color::Green));
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_256_parse_ok() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_256_parse_ok() {
         <span class="kw">let </span>color = <span class="string">&quot;7&quot;</span>.parse::&lt;Color&gt;();
         <span class="macro">assert_eq!</span>(color, <span class="prelude-val">Ok</span>(Color::Ansi256(<span class="number">7</span>)));
 
@@ -4372,8 +4372,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="macro">assert_eq!</span>(color, <span class="prelude-val">Ok</span>(Color::Ansi256(<span class="number">0xFF</span>)));
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_256_parse_err_out_of_range() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_256_parse_err_out_of_range() {
         <span class="kw">let </span>color = <span class="string">&quot;256&quot;</span>.parse::&lt;Color&gt;();
         <span class="macro">assert_eq!</span>(
             color,
@@ -4384,8 +4384,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_rgb_parse_ok() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_rgb_parse_ok() {
         <span class="kw">let </span>color = <span class="string">&quot;0,0,0&quot;</span>.parse::&lt;Color&gt;();
         <span class="macro">assert_eq!</span>(color, <span class="prelude-val">Ok</span>(Color::Rgb(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)));
 
@@ -4399,8 +4399,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="macro">assert_eq!</span>(color, <span class="prelude-val">Ok</span>(Color::Rgb(<span class="number">0x33</span>, <span class="number">0x66</span>, <span class="number">0xFF</span>)));
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_rgb_parse_err_out_of_range() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_rgb_parse_err_out_of_range() {
         <span class="kw">let </span>color = <span class="string">&quot;0,0,256&quot;</span>.parse::&lt;Color&gt;();
         <span class="macro">assert_eq!</span>(
             color,
@@ -4411,8 +4411,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_rgb_parse_err_bad_format() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_rgb_parse_err_bad_format() {
         <span class="kw">let </span>color = <span class="string">&quot;0,0&quot;</span>.parse::&lt;Color&gt;();
         <span class="macro">assert_eq!</span>(
             color,
@@ -4432,23 +4432,23 @@ Currently, `termcolor` does not provide anything to do this for you.
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_var_ansi_write_rgb() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_var_ansi_write_rgb() {
         <span class="kw">let </span><span class="kw-2">mut </span>buf = Ansi::new(<span class="macro">vec!</span>[]);
         <span class="kw">let _ </span>= buf.write_color(<span class="bool-val">true</span>, <span class="kw-2">&amp;</span>Color::Rgb(<span class="number">254</span>, <span class="number">253</span>, <span class="number">255</span>), <span class="bool-val">false</span>);
         <span class="macro">assert_eq!</span>(buf.<span class="number">0</span>, <span class="string">b&quot;\x1B[38;2;254;253;255m&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_reset() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_reset() {
         <span class="kw">let </span>spec = ColorSpec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>buf = Ansi::new(<span class="macro">vec!</span>[]);
         buf.set_color(<span class="kw-2">&amp;</span>spec).unwrap();
         <span class="macro">assert_eq!</span>(buf.<span class="number">0</span>, <span class="string">b&quot;\x1B[0m&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_no_reset() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_no_reset() {
         <span class="kw">let </span><span class="kw-2">mut </span>spec = ColorSpec::new();
         spec.set_reset(<span class="bool-val">false</span>);
 
@@ -4457,8 +4457,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         <span class="macro">assert_eq!</span>(buf.<span class="number">0</span>, <span class="string">b&quot;&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_var_ansi_write_256() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_var_ansi_write_256() {
         <span class="kw">let </span><span class="kw-2">mut </span>buf = Ansi::new(<span class="macro">vec!</span>[]);
         <span class="kw">let _ </span>= buf.write_color(<span class="bool-val">false</span>, <span class="kw-2">&amp;</span>Color::Ansi256(<span class="number">7</span>), <span class="bool-val">false</span>);
         <span class="macro">assert_eq!</span>(buf.<span class="number">0</span>, <span class="string">b&quot;\x1B[48;5;7m&quot;</span>);
@@ -4496,8 +4496,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         result
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_is_none() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_is_none() {
         <span class="kw">for </span>(i, color) <span class="kw">in </span>all_attributes().iter().enumerate() {
             <span class="macro">assert_eq!</span>(
                 i == <span class="number">0</span>,
@@ -4509,8 +4509,8 @@ Currently, `termcolor` does not provide anything to do this for you.
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_clear() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_clear() {
         <span class="kw">for </span>color <span class="kw">in </span>all_attributes() {
             <span class="kw">let </span><span class="kw-2">mut </span>color1 = color.clone();
             color1.clear();
@@ -4519,4 +4519,4 @@ Currently, `termcolor` does not provide anything to do this for you.
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="termcolor" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="termcolor" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

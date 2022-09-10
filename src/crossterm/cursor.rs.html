@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/cursor.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cursor.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/cursor.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cursor.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -543,8 +543,8 @@
 
 </span><span class="kw">use </span>std::fmt;
 
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::Result;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span><span class="kw">crate</span>::Result;
 <span class="kw">use crate</span>::{csi, impl_display, Command};
 
 <span class="kw">pub use </span>sys::position;
@@ -556,16 +556,16 @@
 /// # Notes
 /// * Top left cell is represented as `0,0`.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveTo(<span class="kw">pub </span>u16, <span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveTo(<span class="kw">pub </span>u16, <span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveTo {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{};{}H&quot;</span>), <span class="self">self</span>.<span class="number">1 </span>+ <span class="number">1</span>, <span class="self">self</span>.<span class="number">0 </span>+ <span class="number">1</span>)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::move_to(<span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
     }
 }
@@ -577,8 +577,8 @@
 /// * This command is 1 based, meaning `MoveToNextLine(1)` moves to the next line.
 /// * Most terminals default 0 argument to 1.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveToNextLine(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveToNextLine(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveToNextLine {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -586,8 +586,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">if </span><span class="self">self</span>.<span class="number">0 </span>!= <span class="number">0 </span>{
             sys::move_to_next_line(<span class="self">self</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
         }
@@ -602,8 +602,8 @@
 /// * This command is 1 based, meaning `MoveToPreviousLine(1)` moves to the previous line.
 /// * Most terminals default 0 argument to 1.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveToPreviousLine(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveToPreviousLine(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveToPreviousLine {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -611,8 +611,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">if </span><span class="self">self</span>.<span class="number">0 </span>!= <span class="number">0 </span>{
             sys::move_to_previous_line(<span class="self">self</span>.<span class="number">0</span>)<span class="question-mark">?</span>;
         }
@@ -625,8 +625,8 @@
 /// # Notes
 /// * This command is 0 based, meaning 0 is the leftmost column.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveToColumn(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveToColumn(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveToColumn {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -634,8 +634,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::move_to_column(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -645,8 +645,8 @@
 /// # Notes
 /// * This command is 0 based, meaning 0 is the topmost row.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveToRow(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveToRow(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveToRow {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -654,8 +654,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::move_to_row(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -666,8 +666,8 @@
 /// * This command is 1 based, meaning `MoveUp(1)` moves the cursor up one cell.
 /// * Most terminals default 0 argument to 1.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveUp(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveUp(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveUp {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -675,8 +675,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::move_up(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -687,8 +687,8 @@
 /// * This command is 1 based, meaning `MoveRight(1)` moves the cursor right one cell.
 /// * Most terminals default 0 argument to 1.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveRight(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveRight(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveRight {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -696,8 +696,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::move_right(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -708,8 +708,8 @@
 /// * This command is 1 based, meaning `MoveDown(1)` moves the cursor down one cell.
 /// * Most terminals default 0 argument to 1.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveDown(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveDown(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveDown {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -717,8 +717,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::move_down(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -729,8 +729,8 @@
 /// * This command is 1 based, meaning `MoveLeft(1)` moves the cursor left one cell.
 /// * Most terminals default 0 argument to 1.
 /// * Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>MoveLeft(<span class="kw">pub </span>u16);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>MoveLeft(<span class="kw">pub </span>u16);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>MoveLeft {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -738,8 +738,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::move_left(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -752,16 +752,16 @@
 ///
 /// - The cursor position is stored globally.
 /// - Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SavePosition;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SavePosition;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SavePosition {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="string">&quot;\x1B7&quot;</span>)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::save_position()
     }
 }
@@ -774,16 +774,16 @@
 ///
 /// - The cursor position is stored globally.
 /// - Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>RestorePosition;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>RestorePosition;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>RestorePosition {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="string">&quot;\x1B8&quot;</span>)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::restore_position()
     }
 }
@@ -793,16 +793,16 @@
 /// # Notes
 ///
 /// - Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>Hide;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>Hide;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>Hide {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?25l&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::show_cursor(<span class="bool-val">false</span>)
     }
 }
@@ -812,16 +812,16 @@
 /// # Notes
 ///
 /// - Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>Show;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>Show;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>Show {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?25h&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::show_cursor(<span class="bool-val">true</span>)
     }
 }
@@ -832,16 +832,16 @@
 ///
 /// - Windows versions lower than Windows 10 do not support this functionality.
 /// - Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>EnableBlinking;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>EnableBlinking;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>EnableBlinking {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?12h&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
@@ -852,16 +852,16 @@
 ///
 /// - Windows versions lower than Windows 10 do not support this functionality.
 /// - Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>DisableBlinking;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>DisableBlinking;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>DisableBlinking {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;?12l&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
@@ -871,8 +871,8 @@
 /// # Note
 ///
 /// - Used with SetCursorShape
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub enum </span>CursorShape {
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub enum </span>CursorShape {
     UnderScore,
     Line,
     Block,
@@ -883,8 +883,8 @@
 /// # Note
 ///
 /// - Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetCursorShape(<span class="kw">pub </span>CursorShape);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetCursorShape(<span class="kw">pub </span>CursorShape);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetCursorShape {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -896,8 +896,8 @@
         }
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
@@ -919,8 +919,8 @@
 <span class="macro">impl_display!</span>(<span class="kw">for </span>DisableBlinking);
 <span class="macro">impl_display!</span>(<span class="kw">for </span>SetCursorShape);
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span>std::io::{<span class="self">self</span>, stdout};
 
     <span class="kw">use </span><span class="kw">crate</span>::execute;
@@ -930,9 +930,9 @@
     };
 
     <span class="comment">// Test is disabled, because it&#39;s failing on Travis
-    </span><span class="attribute">#[test]</span>
-    <span class="attribute">#[ignore]</span>
-    <span class="kw">fn </span>test_move_to() {
+    </span><span class="attribute">#[test]
+    #[ignore]
+    </span><span class="kw">fn </span>test_move_to() {
         <span class="kw">let </span>(saved_x, saved_y) = position().unwrap();
 
         <span class="macro">execute!</span>(stdout(), MoveTo(saved_x + <span class="number">1</span>, saved_y + <span class="number">1</span>)).unwrap();
@@ -943,43 +943,43 @@
     }
 
     <span class="comment">// Test is disabled, because it&#39;s failing on Travis
-    </span><span class="attribute">#[test]</span>
-    <span class="attribute">#[ignore]</span>
-    <span class="kw">fn </span>test_move_right() {
+    </span><span class="attribute">#[test]
+    #[ignore]
+    </span><span class="kw">fn </span>test_move_right() {
         <span class="kw">let </span>(saved_x, saved_y) = position().unwrap();
         <span class="macro">execute!</span>(io::stdout(), MoveRight(<span class="number">1</span>)).unwrap();
         <span class="macro">assert_eq!</span>(position().unwrap(), (saved_x + <span class="number">1</span>, saved_y));
     }
 
     <span class="comment">// Test is disabled, because it&#39;s failing on Travis
-    </span><span class="attribute">#[test]</span>
-    <span class="attribute">#[ignore]</span>
-    <span class="kw">fn </span>test_move_left() {
+    </span><span class="attribute">#[test]
+    #[ignore]
+    </span><span class="kw">fn </span>test_move_left() {
         <span class="macro">execute!</span>(stdout(), MoveTo(<span class="number">2</span>, <span class="number">0</span>), MoveLeft(<span class="number">2</span>)).unwrap();
         <span class="macro">assert_eq!</span>(position().unwrap(), (<span class="number">0</span>, <span class="number">0</span>));
     }
 
     <span class="comment">// Test is disabled, because it&#39;s failing on Travis
-    </span><span class="attribute">#[test]</span>
-    <span class="attribute">#[ignore]</span>
-    <span class="kw">fn </span>test_move_up() {
+    </span><span class="attribute">#[test]
+    #[ignore]
+    </span><span class="kw">fn </span>test_move_up() {
         <span class="macro">execute!</span>(stdout(), MoveTo(<span class="number">0</span>, <span class="number">2</span>), MoveUp(<span class="number">2</span>)).unwrap();
         <span class="macro">assert_eq!</span>(position().unwrap(), (<span class="number">0</span>, <span class="number">0</span>));
     }
 
     <span class="comment">// Test is disabled, because it&#39;s failing on Travis
-    </span><span class="attribute">#[test]</span>
-    <span class="attribute">#[ignore]</span>
-    <span class="kw">fn </span>test_move_down() {
+    </span><span class="attribute">#[test]
+    #[ignore]
+    </span><span class="kw">fn </span>test_move_down() {
         <span class="macro">execute!</span>(stdout(), MoveTo(<span class="number">0</span>, <span class="number">0</span>), MoveDown(<span class="number">2</span>)).unwrap();
 
         <span class="macro">assert_eq!</span>(position().unwrap(), (<span class="number">0</span>, <span class="number">2</span>));
     }
 
     <span class="comment">// Test is disabled, because it&#39;s failing on Travis
-    </span><span class="attribute">#[test]</span>
-    <span class="attribute">#[ignore]</span>
-    <span class="kw">fn </span>test_save_restore_position() {
+    </span><span class="attribute">#[test]
+    #[ignore]
+    </span><span class="kw">fn </span>test_save_restore_position() {
         <span class="kw">let </span>(saved_x, saved_y) = position().unwrap();
 
         <span class="macro">execute!</span>(
@@ -997,4 +997,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

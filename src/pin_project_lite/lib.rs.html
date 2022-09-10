@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/pin-project-lite-0.2.9/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../pin_project_lite/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../pin_project_lite/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../pin_project_lite/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/pin-project-lite-0.2.9/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../pin_project_lite/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../pin_project_lite/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../pin_project_lite/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1653,18 +1653,18 @@
 //! [pin-project]: https://github.com/taiki-e/pin-project
 //! [unsafe-unpin]: https://docs.rs/pin-project/1/pin_project/attr.pin_project.html#unsafeunpin
 
-</span><span class="attribute">#![no_std]</span>
-<span class="attribute">#![doc(test(
+</span><span class="attribute">#![no_std]
+#![doc(test(
     no_crate_inject,
     attr(
         deny(warnings, rust_2018_idioms, single_use_lifetimes),
         allow(dead_code, unused_variables)
     )
-))]</span>
-<span class="attribute">#![warn(rust_2018_idioms, single_use_lifetimes, unreachable_pub)]</span>
-<span class="attribute">#![warn(clippy::default_trait_access, clippy::wildcard_imports)]</span>
+))]
+#![warn(rust_2018_idioms, single_use_lifetimes, unreachable_pub)]
+#![warn(clippy::default_trait_access, clippy::wildcard_imports)]
 
-<span class="doccomment">/// A macro that creates a projection type covering all the fields of struct.
+</span><span class="doccomment">/// A macro that creates a projection type covering all the fields of struct.
 ///
 /// This macro creates a projection type according to the following rules:
 ///
@@ -1846,10 +1846,10 @@
 /// [`Pin::as_mut`]: core::pin::Pin::as_mut
 /// [`Pin`]: core::pin::Pin
 /// [pin-project]: https://github.com/taiki-e/pin-project
-</span><span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> pin_project {
+</span><span class="attribute">#[macro_export]
+</span><span class="macro">macro_rules! </span>pin_project {
     ($(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal! </span>{
             [][][][]
             $(<span class="macro-nonterminal">$tt</span>)*
         }
@@ -1865,9 +1865,9 @@
 // - no useful error messages. (wontfix)
 // etc...
 
-</span><span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_expand {
+</span><span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_expand {
     (
         [$(<span class="macro-nonterminal">$proj_mut_ident</span>:ident)<span class="question-mark">?</span>]
         [$(<span class="macro-nonterminal">$proj_ref_ident</span>:ident)<span class="question-mark">?</span>]
@@ -1881,7 +1881,7 @@
         }
         $(<span class="kw">impl </span>$(<span class="macro-nonterminal">$pinned_drop</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?
     </span>) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_reconstruct!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_reconstruct! </span>{
             [$(<span class="attribute">#[<span class="macro-nonterminal">$attrs</span>]</span>)* <span class="macro-nonterminal">$vis $struct_ty_ident $ident</span>]
             [$(<span class="macro-nonterminal">$def_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>]
             [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
@@ -1890,7 +1890,7 @@
             }
         }
 
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty! </span>{
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
             [<span class="macro-nonterminal">$proj_vis $struct_ty_ident $ident</span>]
             [__pin_project_make_proj_field_mut]
@@ -1899,7 +1899,7 @@
                 $(<span class="macro-nonterminal">$body_data</span>)*
             }
         }
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty! </span>{
             [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
             [<span class="macro-nonterminal">$proj_vis $struct_ty_ident $ident</span>]
             [__pin_project_make_proj_field_ref]
@@ -1908,7 +1908,7 @@
                 $(<span class="macro-nonterminal">$body_data</span>)*
             }
         }
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_ty!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_ty! </span>{
             [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
             [<span class="macro-nonterminal">$proj_vis $struct_ty_ident</span>]
             [__pin_project_make_proj_field_replace]
@@ -1918,7 +1918,7 @@
             }
         }
 
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_constant!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_constant! </span>{
             [$(<span class="attribute">#[<span class="macro-nonterminal">$attrs</span>]</span>)* <span class="macro-nonterminal">$vis $struct_ty_ident $ident</span>]
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>] [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>] [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
             [<span class="macro-nonterminal">$proj_vis</span>]
@@ -1932,9 +1932,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_constant {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_constant {
     (
         [$(<span class="attribute">#[<span class="macro-nonterminal">$attrs</span>:meta]</span>)* <span class="macro-nonterminal">$vis</span>:vis <span class="kw">struct </span><span class="macro-nonterminal">$ident</span>:ident]
         [$(<span class="macro-nonterminal">$proj_mut_ident</span>:ident)<span class="question-mark">?</span>] [$(<span class="macro-nonterminal">$proj_ref_ident</span>:ident)<span class="question-mark">?</span>] [$(<span class="macro-nonterminal">$proj_replace_ident</span>:ident)<span class="question-mark">?</span>]
@@ -1949,15 +1949,15 @@
         </span>}
         $(<span class="kw">impl </span>$(<span class="macro-nonterminal">$pinned_drop</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?
     </span>) =&gt; {
-        <span class="attribute">#[allow(explicit_outlives_requirements)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/60993
-        </span><span class="attribute">#[allow(single_use_lifetimes)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/55058
+        <span class="attribute">#[allow(explicit_outlives_requirements)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/60993
+        </span><span class="attribute">#[allow(single_use_lifetimes)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/55058
         // This lint warns of `clippy::*` generated by external macros.
         // We allow this lint for compatibility with older compilers.
-        </span><span class="attribute">#[allow(clippy::unknown_clippy_lints)]</span>
-        <span class="attribute">#[allow(clippy::redundant_pub_crate)]</span> <span class="comment">// This lint warns `pub(crate)` field in private struct.
-        </span><span class="attribute">#[allow(clippy::used_underscore_binding)]</span>
-        <span class="kw">const _</span>: () = {
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty!</span> {
+        </span><span class="attribute">#[allow(clippy::unknown_clippy_lints)]
+        #[allow(clippy::redundant_pub_crate)] </span><span class="comment">// This lint warns `pub(crate)` field in private struct.
+        </span><span class="attribute">#[allow(clippy::used_underscore_binding)]
+        </span><span class="kw">const _</span>: () = {
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty! </span>{
                 [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">? </span>Projection]
                 [<span class="macro-nonterminal">$proj_vis </span><span class="kw">struct </span><span class="macro-nonterminal">$ident</span>]
                 [__pin_project_make_proj_field_mut]
@@ -1969,7 +1969,7 @@
                     </span>),+
                 }
             }
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty! </span>{
                 [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">? </span>ProjectionRef]
                 [<span class="macro-nonterminal">$proj_vis </span><span class="kw">struct </span><span class="macro-nonterminal">$ident</span>]
                 [__pin_project_make_proj_field_ref]
@@ -1986,7 +1986,7 @@
             $(<span class="kw">where
                 </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?
             </span>{
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_method!</span> {
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_method! </span>{
                     [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">? </span>Projection]
                     [<span class="macro-nonterminal">$proj_vis</span>]
                     [project get_unchecked_mut <span class="kw-2">mut</span>]
@@ -1998,7 +1998,7 @@
                         </span>),+
                     }
                 }
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_method!</span> {
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_method! </span>{
                     [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">? </span>ProjectionRef]
                     [<span class="macro-nonterminal">$proj_vis</span>]
                     [project_ref get_ref]
@@ -2010,7 +2010,7 @@
                         </span>),+
                     }
                 }
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_replace_method!</span> {
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_replace_method! </span>{
                     [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
                     [<span class="macro-nonterminal">$proj_vis</span>]
                     [ProjectionReplace]
@@ -2024,7 +2024,7 @@
                 }
             }
 
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_unpin_impl!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_unpin_impl! </span>{
                 [<span class="macro-nonterminal">$vis $ident</span>]
                 [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
                 $(
@@ -2034,7 +2034,7 @@
                 ),+
             }
 
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_drop_impl!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_drop_impl! </span>{
                 [<span class="macro-nonterminal">$ident</span>]
                 [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
                 $(<span class="kw">impl </span>$(<span class="macro-nonterminal">$pinned_drop</span>)<span class="kw-2">*</span>)<span class="question-mark">?
@@ -2060,8 +2060,8 @@
             //   because unaligned_references lint does not exist in older compilers:
             //   https://github.com/taiki-e/pin-project-lite/pull/55
             //   https://github.com/rust-lang/rust/pull/82525
-            </span><span class="attribute">#[forbid(unaligned_references, safe_packed_borrows)]</span>
-            <span class="kw">fn </span>__assert_not_repr_packed &lt;$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt; (this: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$ident </span>&lt;$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>&gt;)
+            </span><span class="attribute">#[forbid(unaligned_references, safe_packed_borrows)]
+            </span><span class="kw">fn </span>__assert_not_repr_packed &lt;$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt; (this: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$ident </span>&lt;$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>&gt;)
             $(<span class="kw">where
                 </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?
             </span>{
@@ -2090,17 +2090,17 @@
         </span>}
         $(<span class="kw">impl </span>$(<span class="macro-nonterminal">$pinned_drop</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?
     </span>) =&gt; {
-        <span class="attribute">#[allow(single_use_lifetimes)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/55058
+        <span class="attribute">#[allow(single_use_lifetimes)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/55058
         // This lint warns of `clippy::*` generated by external macros.
         // We allow this lint for compatibility with older compilers.
-        </span><span class="attribute">#[allow(clippy::unknown_clippy_lints)]</span>
-        <span class="attribute">#[allow(clippy::used_underscore_binding)]</span>
-        <span class="kw">const _</span>: () = {
+        </span><span class="attribute">#[allow(clippy::unknown_clippy_lints)]
+        #[allow(clippy::used_underscore_binding)]
+        </span><span class="kw">const _</span>: () = {
             <span class="kw">impl </span>&lt;$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt; <span class="macro-nonterminal">$ident </span>&lt;$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>&gt;
             $(<span class="kw">where
                 </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?
             </span>{
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_enum_make_proj_method!</span> {
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_enum_make_proj_method! </span>{
                     [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
                     [<span class="macro-nonterminal">$proj_vis</span>]
                     [project get_unchecked_mut <span class="kw-2">mut</span>]
@@ -2116,7 +2116,7 @@
                         </span>),+
                     }
                 }
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_enum_make_proj_method!</span> {
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_enum_make_proj_method! </span>{
                     [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
                     [<span class="macro-nonterminal">$proj_vis</span>]
                     [project_ref get_ref]
@@ -2132,7 +2132,7 @@
                         </span>),+
                     }
                 }
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_enum_make_proj_replace_method!</span> {
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_enum_make_proj_replace_method! </span>{
                     [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
                     [<span class="macro-nonterminal">$proj_vis</span>]
                     [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>]
@@ -2149,7 +2149,7 @@
                 }
             }
 
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_unpin_impl!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_unpin_impl! </span>{
                 [<span class="macro-nonterminal">$vis $ident</span>]
                 [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
                 $(
@@ -2163,7 +2163,7 @@
                 ),+
             }
 
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_drop_impl!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_drop_impl! </span>{
                 [<span class="macro-nonterminal">$ident</span>]
                 [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
                 $(<span class="kw">impl </span>$(<span class="macro-nonterminal">$pinned_drop</span>)<span class="kw-2">*</span>)<span class="question-mark">?
@@ -2175,9 +2175,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_reconstruct {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_reconstruct {
     (
         [$(<span class="attribute">#[<span class="macro-nonterminal">$attrs</span>:meta]</span>)* <span class="macro-nonterminal">$vis</span>:vis <span class="kw">struct </span><span class="macro-nonterminal">$ident</span>:ident]
         [$(<span class="macro-nonterminal">$def_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$impl_generics</span>:tt)<span class="kw-2">*</span>]
@@ -2232,9 +2232,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_ty {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_ty {
     ([] $(<span class="macro-nonterminal">$field</span>:tt)<span class="kw-2">*</span>) =&gt; {};
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident <span class="macro-nonterminal">$default_ident</span>:ident]
@@ -2253,7 +2253,7 @@
             ),+ $(,)<span class="question-mark">?
         </span>}
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty_body!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty_body! </span>{
             [<span class="macro-nonterminal">$proj_ty_ident</span>]
             [<span class="macro-nonterminal">$proj_vis </span><span class="kw">struct </span><span class="macro-nonterminal">$ident</span>]
             [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
@@ -2283,7 +2283,7 @@
             </span>),+ $(,)<span class="question-mark">?
         </span>}
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty_body!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_ty_body! </span>{
             [<span class="macro-nonterminal">$proj_ty_ident</span>]
             [<span class="macro-nonterminal">$proj_vis </span><span class="kw">enum </span><span class="macro-nonterminal">$ident</span>]
             [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
@@ -2302,24 +2302,24 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_ty_body {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_ty_body {
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident]
         [<span class="macro-nonterminal">$proj_vis</span>:vis <span class="macro-nonterminal">$struct_ty_ident</span>:ident <span class="macro-nonterminal">$ident</span>:ident]
         [$(<span class="macro-nonterminal">$impl_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
         [$(<span class="macro-nonterminal">$body_data</span>:tt)+]
     ) =&gt; {
-        <span class="attribute">#[allow(dead_code)]</span> <span class="comment">// This lint warns unused fields/variants.
-        </span><span class="attribute">#[allow(single_use_lifetimes)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/55058
+        <span class="attribute">#[allow(dead_code)] </span><span class="comment">// This lint warns unused fields/variants.
+        </span><span class="attribute">#[allow(single_use_lifetimes)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/55058
         // This lint warns of `clippy::*` generated by external macros.
         // We allow this lint for compatibility with older compilers.
-        </span><span class="attribute">#[allow(clippy::unknown_clippy_lints)]</span>
-        <span class="attribute">#[allow(clippy::mut_mut)]</span> <span class="comment">// This lint warns `&amp;mut &amp;mut &lt;ty&gt;`. (only needed for project)
-        </span><span class="attribute">#[allow(clippy::redundant_pub_crate)]</span> <span class="comment">// This lint warns `pub(crate)` field in private struct.
-        </span><span class="attribute">#[allow(clippy::ref_option_ref)]</span> <span class="comment">// This lint warns `&amp;Option&lt;&amp;&lt;ty&gt;&gt;`. (only needed for project_ref)
-        </span><span class="attribute">#[allow(clippy::type_repetition_in_bounds)]</span> <span class="comment">// https://github.com/rust-lang/rust-clippy/issues/4326
+        </span><span class="attribute">#[allow(clippy::unknown_clippy_lints)]
+        #[allow(clippy::mut_mut)] </span><span class="comment">// This lint warns `&amp;mut &amp;mut &lt;ty&gt;`. (only needed for project)
+        </span><span class="attribute">#[allow(clippy::redundant_pub_crate)] </span><span class="comment">// This lint warns `pub(crate)` field in private struct.
+        </span><span class="attribute">#[allow(clippy::ref_option_ref)] </span><span class="comment">// This lint warns `&amp;Option&lt;&amp;&lt;ty&gt;&gt;`. (only needed for project_ref)
+        </span><span class="attribute">#[allow(clippy::type_repetition_in_bounds)] </span><span class="comment">// https://github.com/rust-lang/rust-clippy/issues/4326
         </span><span class="macro-nonterminal">$proj_vis $struct_ty_ident $proj_ty_ident </span>&lt;<span class="lifetime">&#39;__pin</span>, $(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt;
         <span class="kw">where
             </span><span class="macro-nonterminal">$ident </span>&lt;$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>&gt;: <span class="lifetime">&#39;__pin
@@ -2330,9 +2330,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_replace_ty {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_replace_ty {
     ([] $(<span class="macro-nonterminal">$field</span>:tt)<span class="kw-2">*</span>) =&gt; {};
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident]
@@ -2346,7 +2346,7 @@
             ),+ $(,)<span class="question-mark">?
         </span>}
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_ty_body!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_ty_body! </span>{
             [<span class="macro-nonterminal">$proj_ty_ident</span>]
             [<span class="macro-nonterminal">$proj_vis </span><span class="kw">struct</span>]
             [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
@@ -2376,7 +2376,7 @@
             </span>),+ $(,)<span class="question-mark">?
         </span>}
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_ty_body!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_ty_body! </span>{
             [<span class="macro-nonterminal">$proj_ty_ident</span>]
             [<span class="macro-nonterminal">$proj_vis </span><span class="kw">enum</span>]
             [$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
@@ -2395,20 +2395,20 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_replace_ty_body {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_replace_ty_body {
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident]
         [<span class="macro-nonterminal">$proj_vis</span>:vis <span class="macro-nonterminal">$struct_ty_ident</span>:ident]
         [$(<span class="macro-nonterminal">$impl_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
         [$(<span class="macro-nonterminal">$body_data</span>:tt)+]
     ) =&gt; {
-        <span class="attribute">#[allow(dead_code)]</span> <span class="comment">// This lint warns unused fields/variants.
-        </span><span class="attribute">#[allow(single_use_lifetimes)]</span> <span class="comment">// https://github.com/rust-lang/rust/issues/55058
-        </span><span class="attribute">#[allow(clippy::mut_mut)]</span> <span class="comment">// This lint warns `&amp;mut &amp;mut &lt;ty&gt;`. (only needed for project)
-        </span><span class="attribute">#[allow(clippy::redundant_pub_crate)]</span> <span class="comment">// This lint warns `pub(crate)` field in private struct.
-        </span><span class="attribute">#[allow(clippy::type_repetition_in_bounds)]</span> <span class="comment">// https://github.com/rust-lang/rust-clippy/issues/4326
+        <span class="attribute">#[allow(dead_code)] </span><span class="comment">// This lint warns unused fields/variants.
+        </span><span class="attribute">#[allow(single_use_lifetimes)] </span><span class="comment">// https://github.com/rust-lang/rust/issues/55058
+        </span><span class="attribute">#[allow(clippy::mut_mut)] </span><span class="comment">// This lint warns `&amp;mut &amp;mut &lt;ty&gt;`. (only needed for project)
+        </span><span class="attribute">#[allow(clippy::redundant_pub_crate)] </span><span class="comment">// This lint warns `pub(crate)` field in private struct.
+        </span><span class="attribute">#[allow(clippy::type_repetition_in_bounds)] </span><span class="comment">// https://github.com/rust-lang/rust-clippy/issues/4326
         </span><span class="macro-nonterminal">$proj_vis $struct_ty_ident $proj_ty_ident </span>&lt;$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt;
         <span class="kw">where
             </span>$($(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?
@@ -2418,9 +2418,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_replace_block {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_replace_block {
     (
         [$(<span class="macro-nonterminal">$proj_path</span>:tt)+]
         {
@@ -2451,9 +2451,9 @@
     ([$(<span class="macro-nonterminal">$proj_path</span>:tt)+]) =&gt; { $(<span class="macro-nonterminal">$proj_path</span>)* };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_struct_make_proj_method {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_struct_make_proj_method {
     ([] $(<span class="macro-nonterminal">$variant</span>:tt)<span class="kw-2">*</span>) =&gt; {};
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident <span class="macro-nonterminal">$_ignored_default_arg</span>:ident]
@@ -2462,7 +2462,7 @@
         [$(<span class="macro-nonterminal">$ty_generics</span>:tt)<span class="kw-2">*</span>]
         $(<span class="macro-nonterminal">$variant</span>:tt)*
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_method!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_struct_make_proj_method! </span>{
             [<span class="macro-nonterminal">$proj_ty_ident</span>]
             [<span class="macro-nonterminal">$proj_vis</span>]
             [<span class="macro-nonterminal">$method_ident $get_method </span>$(<span class="macro-nonterminal">$</span><span class="kw-2">mut</span>)<span class="question-mark">?</span>]
@@ -2499,9 +2499,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_struct_make_proj_replace_method {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_struct_make_proj_replace_method {
     ([] $(<span class="macro-nonterminal">$field</span>:tt)<span class="kw-2">*</span>) =&gt; {};
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident]
@@ -2528,7 +2528,7 @@
 
                 <span class="kw">let </span><span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>),* } = <span class="kw-2">&amp;mut *</span>__self_ptr;
 
-                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_block!</span> {
+                <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_block! </span>{
                     [<span class="macro-nonterminal">$proj_ty_ident</span>]
                     {
                         $(
@@ -2542,9 +2542,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_enum_make_proj_method {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_enum_make_proj_method {
     ([] $(<span class="macro-nonterminal">$variant</span>:tt)<span class="kw-2">*</span>) =&gt; {};
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident]
@@ -2586,9 +2586,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_enum_make_proj_replace_method {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_enum_make_proj_replace_method {
     ([] $(<span class="macro-nonterminal">$field</span>:tt)<span class="kw-2">*</span>) =&gt; {};
     (
         [<span class="macro-nonterminal">$proj_ty_ident</span>:ident]
@@ -2621,7 +2621,7 @@
                         <span class="self">Self</span>::<span class="macro-nonterminal">$variant </span>$({
                             $(<span class="macro-nonterminal">$field</span>),+
                         })<span class="question-mark">? </span>=&gt; {
-                            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_block!</span> {
+                            <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_make_proj_replace_block! </span>{
                                 [<span class="macro-nonterminal">$proj_ty_ident </span>:: <span class="macro-nonterminal">$variant</span>]
                                 $({
                                     $(
@@ -2638,9 +2638,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_unpin_impl {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_unpin_impl {
     (
         [<span class="macro-nonterminal">$vis</span>:vis <span class="macro-nonterminal">$ident</span>:ident]
         [$(<span class="macro-nonterminal">$impl_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$ty_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$where_clause</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
@@ -2671,8 +2671,8 @@
         // regardless of the privacy of the types of their fields.
         //
         // See also https://github.com/taiki-e/pin-project/pull/53.
-        </span><span class="attribute">#[allow(non_snake_case)]</span>
-        <span class="macro-nonterminal">$vis </span><span class="kw">struct </span>__Origin &lt;<span class="lifetime">&#39;__pin</span>, $(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt;
+        </span><span class="attribute">#[allow(non_snake_case)]
+        </span><span class="macro-nonterminal">$vis </span><span class="kw">struct </span>__Origin &lt;<span class="lifetime">&#39;__pin</span>, $(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt;
         $(<span class="kw">where
             </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?
         </span>{
@@ -2688,9 +2688,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_drop_impl {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_drop_impl {
     (
         [<span class="macro-nonterminal">$_ident</span>:ident]
         [$(<span class="macro-nonterminal">$_impl_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="macro-nonterminal">$_ty_generics</span>:tt)<span class="kw-2">*</span>] [$(<span class="kw">where </span>$(<span class="macro-nonterminal">$_where_clause</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?</span>]
@@ -2789,8 +2789,8 @@
         // which will then conflict with the explicit MustNotImplDrop impl below.
         // This will result in a compilation error, which is exactly what we want.
         </span><span class="kw">trait </span>MustNotImplDrop {}
-        <span class="attribute">#[allow(clippy::drop_bounds, drop_bounds)]</span>
-        <span class="kw">impl</span>&lt;T: <span class="macro-nonterminal">$crate::__private::Drop</span>&gt; MustNotImplDrop <span class="kw">for </span>T {}
+        <span class="attribute">#[allow(clippy::drop_bounds, drop_bounds)]
+        </span><span class="kw">impl</span>&lt;T: <span class="macro-nonterminal">$crate::__private::Drop</span>&gt; MustNotImplDrop <span class="kw">for </span>T {}
         <span class="kw">impl </span>&lt;$(<span class="macro-nonterminal">$impl_generics</span>)<span class="kw-2">*</span>&gt; MustNotImplDrop <span class="kw">for </span><span class="macro-nonterminal">$ident </span>&lt;$(<span class="macro-nonterminal">$ty_generics</span>)<span class="kw-2">*</span>&gt;
         $(<span class="kw">where
             </span>$(<span class="macro-nonterminal">$where_clause</span>)<span class="kw-2">*</span>)<span class="question-mark">?
@@ -2799,10 +2799,10 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_unpin_bound {
-    (<span class="attribute">#[pin]</span> <span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_unpin_bound {
+    (<span class="attribute">#[pin] </span><span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
         <span class="macro-nonterminal">$field_ty
     </span>};
     (<span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
@@ -2810,10 +2810,10 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_unsafe_field_proj {
-    (<span class="attribute">#[pin]</span> <span class="macro-nonterminal">$field</span>:ident) =&gt; {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_unsafe_field_proj {
+    (<span class="attribute">#[pin] </span><span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="macro-nonterminal">$crate::__private::Pin::new_unchecked</span>(<span class="macro-nonterminal">$field</span>)
     };
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
@@ -2821,10 +2821,10 @@
     </span>};
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_replace_field_proj {
-    (<span class="attribute">#[pin]</span> <span class="macro-nonterminal">$field</span>:ident) =&gt; {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_replace_field_proj {
+    (<span class="attribute">#[pin] </span><span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="macro-nonterminal">$crate::__private::PhantomData
     </span>};
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
@@ -2832,10 +2832,10 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_unsafe_drop_in_place_guard {
-    (<span class="attribute">#[pin]</span> <span class="macro-nonterminal">$field</span>:ident) =&gt; {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_unsafe_drop_in_place_guard {
+    (<span class="attribute">#[pin] </span><span class="macro-nonterminal">$field</span>:ident) =&gt; {
         <span class="macro-nonterminal">$crate::__private::UnsafeDropInPlaceGuard::new</span>(<span class="macro-nonterminal">$field</span>)
     };
     (<span class="macro-nonterminal">$field</span>:ident) =&gt; {
@@ -2843,10 +2843,10 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_field_mut {
-    (<span class="attribute">#[pin]</span> <span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_field_mut {
+    (<span class="attribute">#[pin] </span><span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
         <span class="macro-nonterminal">$crate::__private::Pin</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;__pin </span><span class="kw-2">mut </span>(<span class="macro-nonterminal">$field_ty</span>)&gt;
     };
     (<span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
@@ -2854,10 +2854,10 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_field_ref {
-    (<span class="attribute">#[pin]</span> <span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_field_ref {
+    (<span class="attribute">#[pin] </span><span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
         <span class="macro-nonterminal">$crate::__private::Pin</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;__pin </span>(<span class="macro-nonterminal">$field_ty</span>)&gt;
     };
     (<span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
@@ -2865,10 +2865,10 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_make_proj_field_replace {
-    (<span class="attribute">#[pin]</span> <span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_make_proj_field_replace {
+    (<span class="attribute">#[pin] </span><span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
         <span class="macro-nonterminal">$crate::__private::PhantomData</span>&lt;<span class="macro-nonterminal">$field_ty</span>&gt;
     };
     (<span class="macro-nonterminal">$field_ty</span>:ty) =&gt; {
@@ -2876,9 +2876,9 @@
     </span>};
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_internal {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_internal {
     <span class="comment">// parsing proj_mut_ident
     </span>(
         []
@@ -2886,10 +2886,10 @@
         [$(<span class="macro-nonterminal">$proj_replace_ident</span>:ident)<span class="question-mark">?</span>]
         [$(<span class="macro-nonterminal">$attrs</span>:tt)<span class="kw-2">*</span>]
 
-        <span class="attribute">#[project = <span class="macro-nonterminal">$proj_mut_ident</span>:ident]</span>
-        $(<span class="macro-nonterminal">$tt</span>:tt)*
+        <span class="attribute">#[project = <span class="macro-nonterminal">$proj_mut_ident</span>:ident]
+        </span>$(<span class="macro-nonterminal">$tt</span>:tt)*
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal! </span>{
             [<span class="macro-nonterminal">$proj_mut_ident</span>]
             [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
@@ -2904,10 +2904,10 @@
         [$(<span class="macro-nonterminal">$proj_replace_ident</span>:ident)<span class="question-mark">?</span>]
         [$(<span class="macro-nonterminal">$attrs</span>:tt)<span class="kw-2">*</span>]
 
-        <span class="attribute">#[project_ref = <span class="macro-nonterminal">$proj_ref_ident</span>:ident]</span>
-        $(<span class="macro-nonterminal">$tt</span>:tt)*
+        <span class="attribute">#[project_ref = <span class="macro-nonterminal">$proj_ref_ident</span>:ident]
+        </span>$(<span class="macro-nonterminal">$tt</span>:tt)*
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal! </span>{
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
             [<span class="macro-nonterminal">$proj_ref_ident</span>]
             [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
@@ -2922,10 +2922,10 @@
         []
         [$(<span class="macro-nonterminal">$attrs</span>:tt)<span class="kw-2">*</span>]
 
-        <span class="attribute">#[project_replace = <span class="macro-nonterminal">$proj_replace_ident</span>:ident]</span>
-        $(<span class="macro-nonterminal">$tt</span>:tt)*
+        <span class="attribute">#[project_replace = <span class="macro-nonterminal">$proj_replace_ident</span>:ident]
+        </span>$(<span class="macro-nonterminal">$tt</span>:tt)*
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal! </span>{
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
             [<span class="macro-nonterminal">$proj_replace_ident</span>]
@@ -2941,10 +2941,10 @@
         [$(<span class="macro-nonterminal">$proj_replace_ident</span>:ident)<span class="question-mark">?</span>]
         [$(<span class="macro-nonterminal">$attrs</span>:tt)<span class="kw-2">*</span>]
 
-        <span class="attribute">#[$(<span class="macro-nonterminal">$attr</span>:tt)<span class="kw-2">*</span>]</span>
-        $(<span class="macro-nonterminal">$tt</span>:tt)*
+        <span class="attribute">#[$(<span class="macro-nonterminal">$attr</span>:tt)<span class="kw-2">*</span>]
+        </span>$(<span class="macro-nonterminal">$tt</span>:tt)*
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_internal! </span>{
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
@@ -2962,7 +2962,7 @@
         <span class="kw">pub </span><span class="macro-nonterminal">$struct_ty_ident</span>:ident <span class="macro-nonterminal">$ident</span>:ident
         $(<span class="macro-nonterminal">$tt</span>:tt)*
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_parse_generics!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_parse_generics! </span>{
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
@@ -2979,7 +2979,7 @@
         <span class="macro-nonterminal">$vis</span>:vis <span class="macro-nonterminal">$struct_ty_ident</span>:ident <span class="macro-nonterminal">$ident</span>:ident
         $(<span class="macro-nonterminal">$tt</span>:tt)*
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_parse_generics!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_parse_generics! </span>{
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
@@ -2990,9 +2990,9 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[macro_export]</span>
-<span class="macro">macro_rules!</span> __pin_project_parse_generics {
+<span class="attribute">#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules! </span>__pin_project_parse_generics {
     (
         [$(<span class="macro-nonterminal">$proj_mut_ident</span>:ident)<span class="question-mark">?</span>]
         [$(<span class="macro-nonterminal">$proj_ref_ident</span>:ident)<span class="question-mark">?</span>]
@@ -3020,7 +3020,7 @@
         }
         $(<span class="kw">impl </span>$(<span class="macro-nonterminal">$pinned_drop</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">?
     </span>) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_expand!</span> {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__pin_project_expand! </span>{
             [$(<span class="macro-nonterminal">$proj_mut_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_ref_ident</span>)<span class="question-mark">?</span>]
             [$(<span class="macro-nonterminal">$proj_replace_ident</span>)<span class="question-mark">?</span>]
@@ -3057,11 +3057,11 @@
     };
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="kw">pub mod </span>__private {
+<span class="attribute">#[doc(hidden)]
+</span><span class="kw">pub mod </span>__private {
     <span class="kw">use </span>core::mem::ManuallyDrop;
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub use </span>core::{
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">pub use </span>core::{
         marker::{PhantomData, Unpin},
         ops::Drop,
         pin::Pin,
@@ -3069,18 +3069,18 @@
     };
 
     <span class="comment">// This is an internal helper struct used by `pin_project!`.
-    </span><span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub struct </span>AlwaysUnpin&lt;T: <span class="question-mark">?</span>Sized&gt;(PhantomData&lt;T&gt;);
+    </span><span class="attribute">#[doc(hidden)]
+    </span><span class="kw">pub struct </span>AlwaysUnpin&lt;T: <span class="question-mark">?</span>Sized&gt;(PhantomData&lt;T&gt;);
 
     <span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; Unpin <span class="kw">for </span>AlwaysUnpin&lt;T&gt; {}
 
     <span class="comment">// This is an internal helper used to ensure a value is dropped.
-    </span><span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub struct </span>UnsafeDropInPlaceGuard&lt;T: <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">*mut </span>T);
+    </span><span class="attribute">#[doc(hidden)]
+    </span><span class="kw">pub struct </span>UnsafeDropInPlaceGuard&lt;T: <span class="question-mark">?</span>Sized&gt;(<span class="kw-2">*mut </span>T);
 
     <span class="kw">impl</span>&lt;T: <span class="question-mark">?</span>Sized&gt; UnsafeDropInPlaceGuard&lt;T&gt; {
-        <span class="attribute">#[doc(hidden)]</span>
-        <span class="kw">pub unsafe fn </span>new(ptr: <span class="kw-2">*mut </span>T) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#[doc(hidden)]
+        </span><span class="kw">pub unsafe fn </span>new(ptr: <span class="kw-2">*mut </span>T) -&gt; <span class="self">Self </span>{
             <span class="self">Self</span>(ptr)
         }
     }
@@ -3095,15 +3095,15 @@
 
     <span class="comment">// This is an internal helper used to ensure a value is overwritten without
     // its destructor being called.
-    </span><span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub struct </span>UnsafeOverwriteGuard&lt;T&gt; {
+    </span><span class="attribute">#[doc(hidden)]
+    </span><span class="kw">pub struct </span>UnsafeOverwriteGuard&lt;T&gt; {
         target: <span class="kw-2">*mut </span>T,
         value: ManuallyDrop&lt;T&gt;,
     }
 
     <span class="kw">impl</span>&lt;T&gt; UnsafeOverwriteGuard&lt;T&gt; {
-        <span class="attribute">#[doc(hidden)]</span>
-        <span class="kw">pub unsafe fn </span>new(target: <span class="kw-2">*mut </span>T, value: T) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#[doc(hidden)]
+        </span><span class="kw">pub unsafe fn </span>new(target: <span class="kw-2">*mut </span>T, value: T) -&gt; <span class="self">Self </span>{
             <span class="self">Self </span>{ target, value: ManuallyDrop::new(value) }
         }
     }
@@ -3117,4 +3117,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="pin_project_lite" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="pin_project_lite" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

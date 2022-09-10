@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style/types/colored.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>colored.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../crossterm/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style/types/colored.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>colored.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../crossterm/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -270,8 +270,8 @@
 <span id="270">270</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::fmt::{<span class="self">self</span>, Formatter};
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="kw">use </span><span class="kw">crate</span>::style::{parse_next_u8, Color};
 
@@ -279,9 +279,9 @@
 ///
 /// This can be converted to a [Colors](struct.Colors.html) by calling `into()` and applied
 /// using the [SetColors](struct.SetColors.html) command.
-</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]</span>
-<span class="kw">pub enum </span>Colored {
+</span><span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Hash)]
+</span><span class="kw">pub enum </span>Colored {
     <span class="doccomment">/// A foreground color.
     </span>ForegroundColor(Color),
     <span class="doccomment">/// A background color.
@@ -391,60 +391,60 @@
     }
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span><span class="kw">crate</span>::style::{Color, Colored};
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_format_fg_color() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_format_fg_color() {
         <span class="kw">let </span>colored = Colored::ForegroundColor(Color::Red);
         <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;38;5;9&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_format_bg_color() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_format_bg_color() {
         <span class="kw">let </span>colored = Colored::BackgroundColor(Color::Red);
         <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;48;5;9&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_format_reset_fg_color() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_format_reset_fg_color() {
         <span class="kw">let </span>colored = Colored::ForegroundColor(Color::Reset);
         <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;39&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_format_reset_bg_color() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_format_reset_bg_color() {
         <span class="kw">let </span>colored = Colored::BackgroundColor(Color::Reset);
         <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;49&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_format_fg_rgb_color() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_format_fg_rgb_color() {
         <span class="kw">let </span>colored = Colored::BackgroundColor(Color::Rgb { r: <span class="number">1</span>, g: <span class="number">2</span>, b: <span class="number">3 </span>});
         <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;48;2;1;2;3&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_format_fg_ansi_color() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_format_fg_ansi_color() {
         <span class="kw">let </span>colored = Colored::ForegroundColor(Color::AnsiValue(<span class="number">255</span>));
         <span class="macro">assert_eq!</span>(colored.to_string(), <span class="string">&quot;38;5;255&quot;</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_parse_ansi_fg() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_parse_ansi_fg() {
         test_parse_ansi(Colored::ForegroundColor)
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_parse_ansi_bg() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_parse_ansi_bg() {
         test_parse_ansi(Colored::ForegroundColor)
     }
 
     <span class="doccomment">/// Used for test_parse_ansi_fg and test_parse_ansi_bg
     </span><span class="kw">fn </span>test_parse_ansi(bg_or_fg: <span class="kw">impl </span>Fn(Color) -&gt; Colored) {
         <span class="doccomment">/// Formats a re-parses `color` to check the result.
-        </span><span class="macro">macro_rules!</span> test {
+        </span><span class="macro">macro_rules! </span>test {
             (<span class="macro-nonterminal">$color</span>:expr) =&gt; {
                 <span class="kw">let </span>colored = bg_or_fg(<span class="macro-nonterminal">$color</span>);
                 <span class="macro">assert_eq!</span>(Colored::parse_ansi(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, colored)), <span class="prelude-val">Some</span>(colored));
@@ -485,8 +485,8 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_parse_invalid_ansi_color() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_parse_invalid_ansi_color() {
         <span class="doccomment">/// Checks that trying to parse `s` yields None.
         </span><span class="kw">fn </span>test(s: <span class="kw-2">&amp;</span>str) {
             <span class="macro">assert_eq!</span>(Colored::parse_ansi(s), <span class="prelude-val">None</span>);
@@ -539,4 +539,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

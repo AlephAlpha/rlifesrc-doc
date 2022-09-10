@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/world.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>world.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/world.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>world.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -778,8 +778,8 @@
 
     <span class="doccomment">/// Creates a new world from the configuration and the rule,
     /// using the [`LifeSrc`] algorithm.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>new_lifesrc(config: <span class="kw-2">&amp;</span>Config, rule: R) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>new_lifesrc(config: <span class="kw-2">&amp;</span>Config, rule: R) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::new_with_rule(config, rule)
     }
 }
@@ -787,16 +787,16 @@
 <span class="kw">impl</span>&lt;R: Rule&lt;IsGen = False&gt;&gt; World&lt;R, Backjump&lt;R&gt;&gt; {
     <span class="doccomment">/// Creates a new world from the configuration and the rule,
     /// using the [`Backjump`] algorithm.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>new_backjump(config: <span class="kw-2">&amp;</span>Config, rule: R) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>new_backjump(config: <span class="kw-2">&amp;</span>Config, rule: R) -&gt; <span class="self">Self </span>{
         World::new_with_rule(config, rule)
     }
 }
 
 <span class="kw">impl</span>&lt;R: Rule, A: Algorithm&lt;R&gt;&gt; World&lt;R, A&gt; {
     <span class="doccomment">/// Initialize the list of cells in the front.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>init_front(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>init_front(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         A::init_front(<span class="self">self</span>)
     }
 
@@ -1037,8 +1037,8 @@
     /// and update the neighborhood descriptor of its neighbors.
     ///
     /// The original state of the cell must be unknown.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_cell(
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_cell(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         cell: CellRef&lt;R&gt;,
         state: State,
@@ -1063,8 +1063,8 @@
     }
 
     <span class="doccomment">/// Gets a references to the first unknown cell since [`next_unknown`](#structfield.next_unknown).
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>get_unknown(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;CellRef&lt;R&gt;&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>get_unknown(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;CellRef&lt;R&gt;&gt; {
         <span class="kw">while let </span><span class="prelude-val">Some</span>(cell) = <span class="self">self</span>.next_unknown {
             <span class="kw">if </span>cell.state.get().is_none() {
                 <span class="kw">return </span><span class="prelude-val">Some</span>(cell);
@@ -1084,14 +1084,14 @@
     }
 
     <span class="doccomment">/// Tests if the result is trivial.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_trivial(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_trivial(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.cell_count[<span class="number">0</span>] == <span class="number">0
     </span>}
 
     <span class="doccomment">/// Tests if the result is stable.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_stable(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_stable(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.config.period &gt; <span class="number">1
             </span>&amp;&amp; <span class="self">self
                 </span>.cells
@@ -1137,8 +1137,8 @@
     }
 
     <span class="doccomment">/// Gets the state of a cell. Returns `Err(())` if there is no such cell.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_cell_state(<span class="kw-2">&amp;</span><span class="self">self</span>, coord: Coord) -&gt; <span class="prelude-ty">Option</span>&lt;State&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_cell_state(<span class="kw-2">&amp;</span><span class="self">self</span>, coord: Coord) -&gt; <span class="prelude-ty">Option</span>&lt;State&gt; {
         <span class="kw">let </span>(x, y, t) = <span class="self">self</span>.config.translate(coord);
         <span class="self">self</span>.find_cell((x, y, t)).map_or_else(
             || <span class="self">self</span>.find_cell((<span class="number">0</span>, <span class="number">0</span>, t)).map(|c1| c1.background),
@@ -1147,14 +1147,14 @@
     }
 
     <span class="doccomment">/// World configuration.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Config {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub const fn </span>config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Config {
         <span class="kw-2">&amp;</span><span class="self">self</span>.config
     }
 
     <span class="doccomment">/// Whether the rule is a Generations rule.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>is_gen_rule(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub const fn </span>is_gen_rule(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         R::IsGen::VALUE
     }
 
@@ -1162,30 +1162,30 @@
     ///
     /// In other words, whether a cell would become [`ALIVE`] in the next
     /// generation, if all its neighbors in this generation are dead.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_b0_rule(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_b0_rule(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.rule.has_b0()
     }
 
     <span class="doccomment">/// Number of known living cells in some generation.
     ///
     /// For Generations rules, dying cells are not counted.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>cell_count_gen(<span class="kw-2">&amp;</span><span class="self">self</span>, t: i32) -&gt; u32 {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>cell_count_gen(<span class="kw-2">&amp;</span><span class="self">self</span>, t: i32) -&gt; u32 {
         <span class="self">self</span>.cell_count[t <span class="kw">as </span>usize]
     }
 
     <span class="doccomment">/// Minimum number of known living cells in all generation.
     ///
     /// For Generations rules, dying cells are not counted.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>cell_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>cell_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
         <span class="kw-2">*</span><span class="self">self</span>.cell_count.iter().min().unwrap()
     }
 
     <span class="doccomment">/// Number of conflicts during the search.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>conflicts(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub const fn </span>conflicts(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
         <span class="self">self</span>.conflicts
     }
 
@@ -1193,8 +1193,8 @@
     ///
     /// Currently this is the only parameter that you can change
     /// during the search.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>set_max_cell_count(<span class="kw-2">&amp;mut </span><span class="self">self</span>, max_cell_count: <span class="prelude-ty">Option</span>&lt;u32&gt;) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>set_max_cell_count(<span class="kw-2">&amp;mut </span><span class="self">self</span>, max_cell_count: <span class="prelude-ty">Option</span>&lt;u32&gt;) {
         <span class="self">self</span>.config.max_cell_count = max_cell_count;
         <span class="kw">if let </span><span class="prelude-val">Some</span>(max) = <span class="self">self</span>.config.max_cell_count {
             <span class="kw">while </span><span class="self">self</span>.cell_count() &gt; max {
@@ -1277,4 +1277,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

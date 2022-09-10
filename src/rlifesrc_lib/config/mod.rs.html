@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/config/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `lib/src/config/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../rlifesrc_lib/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../rlifesrc_lib/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -462,7 +462,6 @@
 <span id="462">462</span>
 <span id="463">463</span>
 <span id="464">464</span>
-<span id="465">465</span>
 </pre><pre class="rust"><code><span class="doccomment">//! World configuration.
 
 </span><span class="kw">use crate</span>::{
@@ -474,9 +473,9 @@
 };
 <span class="kw">use </span>educe::Educe;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]</span>
-<span class="kw">use </span>ca_formats::{
+<span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]
+#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]
+</span><span class="kw">use </span>ca_formats::{
     rle::{Error <span class="kw">as </span>RleError, Rle},
     CellData, Input,
 };
@@ -487,16 +486,15 @@
 <span class="kw">pub use </span>d8::{Symmetry, Transform};
 <span class="kw">pub use </span>search_order::SearchOrder;
 
-<span class="attribute">#[cfg(doc)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::cells::{ALIVE, DEAD};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="attribute">#[cfg(doc)]
+</span><span class="kw">use </span><span class="kw">crate</span>::cells::{ALIVE, DEAD};
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="doccomment">/// How to choose a state for an unknown cell.
-</span><span class="attribute">#[derive(Clone, Copy, Debug, Educe, PartialEq, Eq, Hash)]</span>
-<span class="attribute">#[educe(Default)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub enum </span>NewState {
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub enum </span>NewState {
     <span class="doccomment">/// Chooses the background state.
     ///
     /// For rules without `B0`, it always chooses [`DEAD`].
@@ -515,8 +513,8 @@
     /// For example, for non-Generations rules,
     /// it chooses [`ALIVE`] on even generations,
     /// [`DEAD`] on odd generations.
-    </span><span class="attribute">#[educe(Default)]</span>
-    ChooseAlive,
+    </span><span class="attribute">#[default]
+    </span>ChooseAlive,
 
     <span class="doccomment">/// Random.
     ///
@@ -529,9 +527,9 @@
 }
 
 <span class="doccomment">/// A cell whose state is known before the search.
-</span><span class="attribute">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="kw">pub struct </span>KnownCell {
+</span><span class="attribute">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+</span><span class="kw">pub struct </span>KnownCell {
     <span class="doccomment">/// The coordinates of the set cell.
     </span><span class="kw">pub </span>coord: Coord,
 
@@ -539,9 +537,9 @@
     </span><span class="kw">pub </span>state: State,
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]</span>
-<span class="kw">impl </span>KnownCell {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]
+#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]
+</span><span class="kw">impl </span>KnownCell {
     <span class="doccomment">/// Convert a [`CellData`] to a [`KnownCell`].
     </span><span class="kw">pub const fn </span>from_cell_data(data: CellData, gen: i32) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>(x, y) = data.position;
@@ -590,22 +588,22 @@
 <span class="doccomment">/// World configuration.
 ///
 /// The world will be generated from this configuration.
-</span><span class="attribute">#[derive(Clone, Debug, Educe, PartialEq, Eq, Hash)]</span>
-<span class="attribute">#[educe(Default)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(default))]</span>
-<span class="kw">pub struct </span>Config {
+</span><span class="attribute">#[derive(Clone, Debug, Educe, PartialEq, Eq, Hash)]
+#[educe(Default)]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]
+#[cfg_attr(feature = <span class="string">&quot;serde&quot;</span>, serde(default))]
+</span><span class="kw">pub struct </span>Config {
     <span class="doccomment">/// Width.
-    </span><span class="attribute">#[educe(Default = <span class="number">16</span>)]</span>
-    <span class="kw">pub </span>width: i32,
+    </span><span class="attribute">#[educe(Default = <span class="number">16</span>)]
+    </span><span class="kw">pub </span>width: i32,
 
     <span class="doccomment">/// Height.
-    </span><span class="attribute">#[educe(Default = <span class="number">16</span>)]</span>
-    <span class="kw">pub </span>height: i32,
+    </span><span class="attribute">#[educe(Default = <span class="number">16</span>)]
+    </span><span class="kw">pub </span>height: i32,
 
     <span class="doccomment">/// Period.
-    </span><span class="attribute">#[educe(Default = <span class="number">1</span>)]</span>
-    <span class="kw">pub </span>period: i32,
+    </span><span class="attribute">#[educe(Default = <span class="number">1</span>)]
+    </span><span class="kw">pub </span>period: i32,
 
     <span class="doccomment">/// Horizontal translation.
     </span><span class="kw">pub </span>dx: i32,
@@ -650,8 +648,8 @@
     </span><span class="kw">pub </span>reduce_max: bool,
 
     <span class="doccomment">/// The rule string of the cellular automaton.
-    </span><span class="attribute">#[educe(Default = <span class="string">&quot;B3/S23&quot;</span>)]</span>
-    <span class="kw">pub </span>rule_string: String,
+    </span><span class="attribute">#[educe(Default = <span class="string">&quot;B3/S23&quot;</span>)]
+    </span><span class="kw">pub </span>rule_string: String,
 
     <span class="doccomment">/// Diagonal width.
     ///
@@ -660,8 +658,8 @@
     </span><span class="kw">pub </span>diagonal_width: <span class="prelude-ty">Option</span>&lt;i32&gt;,
 
     <span class="doccomment">/// Whether to skip patterns whose fundamental period are smaller than the given period.
-    </span><span class="attribute">#[educe(Default = <span class="bool-val">true</span>)]</span>
-    <span class="kw">pub </span>skip_subperiod: bool,
+    </span><span class="attribute">#[educe(Default = <span class="bool-val">true</span>)]
+    </span><span class="kw">pub </span>skip_subperiod: bool,
 
     <span class="doccomment">/// Whether to skip patterns which are invariant under more transformations than
     /// required by the given symmetry.
@@ -686,9 +684,9 @@
 
 <span class="kw">impl </span>Config {
     <span class="doccomment">/// Sets up a new configuration with given size.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>new(width: i32, height: i32, period: i32) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub fn </span>new(width: i32, height: i32, period: i32) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             width,
             height,
@@ -698,101 +696,101 @@
     }
 
     <span class="doccomment">/// Sets the translations `(dx, dy)`.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_translate(<span class="kw-2">mut </span><span class="self">self</span>, dx: i32, dy: i32) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_translate(<span class="kw-2">mut </span><span class="self">self</span>, dx: i32, dy: i32) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.dx = dx;
         <span class="self">self</span>.dy = dy;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets the transformation.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_transform(<span class="kw-2">mut </span><span class="self">self</span>, transform: Transform) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_transform(<span class="kw-2">mut </span><span class="self">self</span>, transform: Transform) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.transform = transform;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets the symmetry.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_symmetry(<span class="kw-2">mut </span><span class="self">self</span>, symmetry: Symmetry) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_symmetry(<span class="kw-2">mut </span><span class="self">self</span>, symmetry: Symmetry) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.symmetry = symmetry;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets the search order.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>set_search_order&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;SearchOrder&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, search_order: T) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub fn </span>set_search_order&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;SearchOrder&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, search_order: T) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.search_order = search_order.into();
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets how to choose a state for an unknown cell.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_new_state(<span class="kw-2">mut </span><span class="self">self</span>, new_state: NewState) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_new_state(<span class="kw-2">mut </span><span class="self">self</span>, new_state: NewState) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.new_state = new_state;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets the maximal number of living cells.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>set_max_cell_count&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;u32&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, max_cell_count: T) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub fn </span>set_max_cell_count&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;u32&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, max_cell_count: T) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.max_cell_count = max_cell_count.into();
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets whether to automatically reduce the `max_cell_count`
     /// when a result is found.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_reduce_max(<span class="kw-2">mut </span><span class="self">self</span>, reduce_max: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_reduce_max(<span class="kw-2">mut </span><span class="self">self</span>, reduce_max: bool) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.reduce_max = reduce_max;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets the rule string.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>set_rule_string&lt;S: ToString&gt;(<span class="kw-2">mut </span><span class="self">self</span>, rule_string: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub fn </span>set_rule_string&lt;S: ToString&gt;(<span class="kw-2">mut </span><span class="self">self</span>, rule_string: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.rule_string = rule_string.to_string();
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets the diagonal width.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>set_diagonal_width&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;i32&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, diagonal_width: T) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub fn </span>set_diagonal_width&lt;T: Into&lt;<span class="prelude-ty">Option</span>&lt;i32&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, diagonal_width: T) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.diagonal_width = diagonal_width.into();
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets whether to skip patterns whose fundamental period
     /// is smaller than the given period.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_skip_subperiod(<span class="kw-2">mut </span><span class="self">self</span>, skip_subperiod: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_skip_subperiod(<span class="kw-2">mut </span><span class="self">self</span>, skip_subperiod: bool) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.skip_subperiod = skip_subperiod;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets whether to skip patterns which are invariant under
     /// more transformations than required by the given symmetry.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_skip_subsymmetry(<span class="kw-2">mut </span><span class="self">self</span>, skip_subsymmetry: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_skip_subsymmetry(<span class="kw-2">mut </span><span class="self">self</span>, skip_subsymmetry: bool) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.skip_subsymmetry = skip_subsymmetry;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Sets cells whose states are known before the search.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>set_known_cells&lt;T: Into&lt;Vec&lt;KnownCell&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, known_cells: T) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub fn </span>set_known_cells&lt;T: Into&lt;Vec&lt;KnownCell&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, known_cells: T) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.known_cells = known_cells.into();
         <span class="self">self
     </span>}
@@ -800,10 +798,10 @@
     <span class="doccomment">/// Sets cells whose states are known before the search.
     ///
     /// The cells are specified by a list of RLE strings.
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>set_known_cells_from_rles&lt;I, L&gt;(<span class="kw-2">mut </span><span class="self">self</span>, input: I) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, RleError&gt;
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;read-rle&quot;</span>)]
+    #[cfg_attr(any(docs_rs, github_io), doc(cfg(feature = <span class="string">&quot;read-rle&quot;</span>)))]
+    #[inline]
+    </span><span class="kw">pub fn </span>set_known_cells_from_rles&lt;I, L&gt;(<span class="kw-2">mut </span><span class="self">self</span>, input: I) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, RleError&gt;
     <span class="kw">where
         </span>I: Input&lt;Lines = L&gt;,
         L: Input&lt;Lines = L&gt;,
@@ -813,24 +811,24 @@
     }
 
     <span class="doccomment">/// Sets whether to enable backjumping.
-    </span><span class="attribute">#[must_use]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>set_backjump(<span class="kw-2">mut </span><span class="self">self</span>, backjump: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    #[inline]
+    </span><span class="kw">pub const fn </span>set_backjump(<span class="kw-2">mut </span><span class="self">self</span>, backjump: bool) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.backjump = backjump;
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Whether the configuration requires the world to be square.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>require_square_world(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub const fn </span>require_square_world(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.symmetry.require_square_world()
             || <span class="self">self</span>.transform.require_square_world()
             || <span class="macro">matches!</span>(<span class="self">self</span>.search_order, <span class="prelude-val">Some</span>(SearchOrder::Diagonal))
     }
 
     <span class="doccomment">/// Whether the configuration requires the world to have no diagonal width.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub const fn </span>require_no_diagonal_width(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub const fn </span>require_no_diagonal_width(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.symmetry.require_no_diagonal_width() || <span class="self">self</span>.transform.require_no_diagonal_width()
     }
 
@@ -871,7 +869,7 @@
     <span class="doccomment">/// Creates a new world from the configuration.
     /// Returns an error if the rule string is invalid.
     </span><span class="kw">pub fn </span>world(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;PolyWorld, Error&gt; {
-        <span class="macro">macro_rules!</span> new_world {
+        <span class="macro">macro_rules! </span>new_world {
             (<span class="macro-nonterminal">$rule</span>:expr) =&gt; {{
                 <span class="kw">for </span>known_cell <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.known_cells {
                     <span class="kw">if </span>known_cell.state.<span class="number">0 </span>&gt;= <span class="number">2 </span>{
@@ -886,7 +884,7 @@
             }};
         }
 
-        <span class="macro">macro_rules!</span> new_world_gen {
+        <span class="macro">macro_rules! </span>new_world_gen {
             (<span class="macro-nonterminal">$rule</span>:expr) =&gt; {{
                 <span class="kw">if </span><span class="macro-nonterminal">$rule</span>.gen() &gt; <span class="number">2 </span>{
                     <span class="kw">for </span>known_cell <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.known_cells {
@@ -929,4 +927,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="rlifesrc_lib" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

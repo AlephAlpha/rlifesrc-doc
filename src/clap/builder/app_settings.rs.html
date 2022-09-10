@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.17/src/builder/app_settings.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>app_settings.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.20/src/builder/app_settings.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>app_settings.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../clap/index.html">
                         <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -864,24 +864,24 @@
 <span id="862">862</span>
 <span id="863">863</span>
 <span id="864">864</span>
-</pre><pre class="rust"><code><span class="attribute">#![allow(deprecated)]</span>
+</pre><pre class="rust"><code><span class="attribute">#![allow(deprecated)]
 
-<span class="comment">// Std
+</span><span class="comment">// Std
 </span><span class="kw">use </span>std::ops::BitOr;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]</span>
-<span class="kw">use </span>std::str::FromStr;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]
+</span><span class="kw">use </span>std::str::FromStr;
 
-<span class="attribute">#[allow(unused)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::Arg;
-<span class="attribute">#[allow(unused)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::Command;
+<span class="attribute">#[allow(unused)]
+</span><span class="kw">use </span><span class="kw">crate</span>::Arg;
+<span class="attribute">#[allow(unused)]
+</span><span class="kw">use </span><span class="kw">crate</span>::Command;
 
 <span class="comment">// Third party
 </span><span class="kw">use </span>bitflags::bitflags;
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="attribute">#[derive(Debug, Copy, Clone, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>AppFlags(Flags);
+<span class="attribute">#[doc(hidden)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>AppFlags(Flags);
 
 <span class="kw">impl </span>Default <span class="kw">for </span>AppFlags {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
@@ -895,15 +895,15 @@
 /// propagated down or up through child or parent subcommands
 ///
 /// [`Command`]: crate::Command
-</span><span class="attribute">#[derive(Debug, PartialEq, Copy, Clone)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>AppSettings {
+</span><span class="attribute">#[derive(Debug, PartialEq, Copy, Clone)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>AppSettings {
     <span class="doccomment">/// Deprecated, replaced with [`Command::ignore_errors`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::ignore_errors`&quot;</span>)
-    )]</span>
-    IgnoreErrors,
+    )]
+    </span>IgnoreErrors,
 
     <span class="doccomment">/// Deprecated, replace
     /// ```rust,no_run
@@ -942,8 +942,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;See documentation for how to hand-implement this&quot;
         </span>)
-    )]</span>
-    WaitOnError,
+    )]
+    </span>WaitOnError,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::allow_hyphen_values`] and
     /// [`Arg::is_allow_hyphen_values_set`]
@@ -953,8 +953,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::allow_hyphen_values` and `Arg::is_allow_hyphen_values_set`&quot;
         </span>)
-    )]</span>
-    AllowHyphenValues,
+    )]
+    </span>AllowHyphenValues,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::allow_negative_numbers`] and
     /// [`Command::is_allow_negative_numbers_set`]
@@ -964,15 +964,15 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::allow_negative_numbers` and `Command::is_allow_negative_numbers_set`&quot;
         </span>)
-    )]</span>
-    AllowNegativeNumbers,
+    )]
+    </span>AllowNegativeNumbers,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::args_override_self`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::args_override_self`&quot;</span>)
-    )]</span>
-    AllArgsOverrideSelf,
+    )]
+    </span>AllArgsOverrideSelf,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::allow_missing_positional`] and
     /// [`Command::is_allow_missing_positional_set`]
@@ -982,8 +982,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::allow_missing_positional` and `Command::is_allow_missing_positional_set`&quot;
         </span>)
-    )]</span>
-    AllowMissingPositional,
+    )]
+    </span>AllowMissingPositional,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::trailing_var_arg`] and [`Command::is_trailing_var_arg_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -992,8 +992,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::trailing_var_arg` and `Command::is_trailing_var_arg_set`&quot;
         </span>)
-    )]</span>
-    TrailingVarArg,
+    )]
+    </span>TrailingVarArg,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::dont_delimit_trailing_values`] and
     /// [`Command::is_dont_delimit_trailing_values_set`]
@@ -1003,22 +1003,22 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::dont_delimit_trailing_values` and `Command::is_dont_delimit_trailing_values_set`&quot;
         </span>)
-    )]</span>
-    DontDelimitTrailingValues,
+    )]
+    </span>DontDelimitTrailingValues,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::infer_long_args`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::infer_long_args`&quot;</span>)
-    )]</span>
-    InferLongArgs,
+    )]
+    </span>InferLongArgs,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::infer_subcommands`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::infer_subcommands`&quot;</span>)
-    )]</span>
-    InferSubcommands,
+    )]
+    </span>InferSubcommands,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::subcommand_required`] and
     /// [`Command::is_subcommand_required_set`]
@@ -1028,8 +1028,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::subcommand_required` and `Command::is_subcommand_required_set`&quot;
         </span>)
-    )]</span>
-    SubcommandRequired,
+    )]
+    </span>SubcommandRequired,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::subcommand_required`] combined with
     /// [`Command::arg_required_else_help`].
@@ -1039,8 +1039,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::subcommand_required` combined with `Command::arg_required_else_help`&quot;
         </span>)
-    )]</span>
-    SubcommandRequiredElseHelp,
+    )]
+    </span>SubcommandRequiredElseHelp,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::allow_external_subcommands`] and
     /// [`Command::is_allow_external_subcommands_set`]
@@ -1050,8 +1050,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::allow_external_subcommands` and `Command::is_allow_external_subcommands_set`&quot;
         </span>)
-    )]</span>
-    AllowExternalSubcommands,
+    )]
+    </span>AllowExternalSubcommands,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::multicall`] and [`Command::is_multicall_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1060,8 +1060,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::multicall` and `Command::is_multicall_set`&quot;
         </span>)
-    )]</span>
-    Multicall,
+    )]
+    </span>Multicall,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::allow_invalid_utf8_for_external_subcommands`] and [`Command::is_allow_invalid_utf8_for_external_subcommands_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1070,15 +1070,15 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::allow_invalid_utf8_for_external_subcommands` and `Command::is_allow_invalid_utf8_for_external_subcommands_set`&quot;
         </span>)
-    )]</span>
-    AllowInvalidUtf8ForExternalSubcommands,
+    )]
+    </span>AllowInvalidUtf8ForExternalSubcommands,
 
     <span class="doccomment">/// Deprecated, this is now the default
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;This is now the default&quot;</span>)
-    )]</span>
-    UseLongFormatForHelpSubcommand,
+    )]
+    </span>UseLongFormatForHelpSubcommand,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::subcommand_negates_reqs`] and
     /// [`Command::is_subcommand_negates_reqs_set`]
@@ -1088,8 +1088,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::subcommand_negates_reqs` and `Command::is_subcommand_negates_reqs_set`&quot;
         </span>)
-    )]</span>
-    SubcommandsNegateReqs,
+    )]
+    </span>SubcommandsNegateReqs,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::args_conflicts_with_subcommands`] and
     /// [`Command::is_args_conflicts_with_subcommands_set`]
@@ -1099,8 +1099,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::args_conflicts_with_subcommands` and `Command::is_args_conflicts_with_subcommands_set`&quot;
         </span>)
-    )]</span>
-    ArgsNegateSubcommands,
+    )]
+    </span>ArgsNegateSubcommands,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::subcommand_precedence_over_arg`] and
     /// [`Command::is_subcommand_precedence_over_arg_set`]
@@ -1110,8 +1110,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::subcommand_precedence_over_arg` and `Command::is_subcommand_precedence_over_arg_set`&quot;
         </span>)
-    )]</span>
-    SubcommandPrecedenceOverArg,
+    )]
+    </span>SubcommandPrecedenceOverArg,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::arg_required_else_help`] and
     /// [`Command::is_arg_required_else_help_set`]
@@ -1121,8 +1121,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::arg_required_else_help` and `Command::is_arg_required_else_help_set`&quot;
         </span>)
-    )]</span>
-    ArgRequiredElseHelp,
+    )]
+    </span>ArgRequiredElseHelp,
 
     <span class="doccomment">/// Displays the arguments and [`subcommands`] in the help message in the order that they were
     /// declared in, and not alphabetically which is the default.
@@ -1151,8 +1151,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::dont_collapse_args_in_usage` and `Command::is_dont_collapse_args_in_usage_set`&quot;
         </span>)
-    )]</span>
-    DontCollapseArgsInUsage,
+    )]
+    </span>DontCollapseArgsInUsage,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::next_line_help`] and [`Command::is_next_line_help_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1161,8 +1161,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::next_line_help` and `Command::is_next_line_help_set`&quot;
         </span>)
-    )]</span>
-    NextLineHelp,
+    )]
+    </span>NextLineHelp,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::disable_colored_help`] and
     /// [`Command::is_disable_colored_help_set`]
@@ -1172,8 +1172,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::disable_colored_help` and `Command::is_disable_colored_help_set`&quot;
         </span>)
-    )]</span>
-    DisableColoredHelp,
+    )]
+    </span>DisableColoredHelp,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::disable_help_flag`] and [`Command::is_disable_help_flag_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1182,8 +1182,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::disable_help_flag` and `Command::is_disable_help_flag_set`&quot;
         </span>)
-    )]</span>
-    DisableHelpFlag,
+    )]
+    </span>DisableHelpFlag,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::disable_help_subcommand`] and
     /// [`Command::is_disable_help_subcommand_set`]
@@ -1193,8 +1193,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::disable_help_subcommand` and `Command::is_disable_help_subcommand_set`&quot;
         </span>)
-    )]</span>
-    DisableHelpSubcommand,
+    )]
+    </span>DisableHelpSubcommand,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::disable_version_flag`] and
     /// [`Command::is_disable_version_flag_set`]
@@ -1204,8 +1204,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::disable_version_flag` and `Command::is_disable_version_flag_set`&quot;
         </span>)
-    )]</span>
-    DisableVersionFlag,
+    )]
+    </span>DisableVersionFlag,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::propagate_version`] and [`Command::is_propagate_version_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1214,8 +1214,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::propagate_version` and `Command::is_propagate_version_set`&quot;
         </span>)
-    )]</span>
-    PropagateVersion,
+    )]
+    </span>PropagateVersion,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::hide`] and [`Command::is_hide_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1224,8 +1224,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::hide` and `Command::is_hide_set`&quot;
         </span>)
-    )]</span>
-    Hidden,
+    )]
+    </span>Hidden,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::hide_possible_values`] and
     /// [`Arg::is_hide_possible_values_set`]
@@ -1235,44 +1235,44 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::hide_possible_values` and `Arg::is_hide_possible_values_set`&quot;
         </span>)
-    )]</span>
-    HidePossibleValues,
+    )]
+    </span>HidePossibleValues,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::help_expected`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::help_expected`&quot;</span>)
-    )]</span>
-    HelpExpected,
+    )]
+    </span>HelpExpected,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::no_binary_name`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::no_binary_name`&quot;</span>)
-    )]</span>
-    NoBinaryName,
+    )]
+    </span>NoBinaryName,
 
     <span class="doccomment">/// Deprecated, replaced with [`Arg::action`][super::Arg::action]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `Arg::action`&quot;</span>)
-    )]</span>
-    NoAutoHelp,
+    )]
+    </span>NoAutoHelp,
 
     <span class="doccomment">/// Deprecated, replaced with [`Arg::action`][super::Arg::action]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `Arg::action`&quot;</span>)
-    )]</span>
-    NoAutoVersion,
+    )]
+    </span>NoAutoVersion,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::allow_hyphen_values`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::allow_hyphen_values`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    AllowLeadingHyphen,
+    )]
+    #[doc(hidden)]
+    </span>AllowLeadingHyphen,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::allow_invalid_utf8_for_external_subcommands`] and [`Command::is_allow_invalid_utf8_for_external_subcommands_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1281,49 +1281,49 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::allow_invalid_utf8_for_external_subcommands` and `Command::is_allow_invalid_utf8_for_external_subcommands_set`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    StrictUtf8,
+    )]
+    #[doc(hidden)]
+    </span>StrictUtf8,
 
     <span class="doccomment">/// Deprecated, this is now the default
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;This is now the default&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    UnifiedHelpMessage,
+    )]
+    #[doc(hidden)]
+    </span>UnifiedHelpMessage,
 
     <span class="doccomment">/// Deprecated, this is now the default
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;This is now the default&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    ColoredHelp,
+    )]
+    #[doc(hidden)]
+    </span>ColoredHelp,
 
     <span class="doccomment">/// Deprecated, see [`Command::color`][crate::Command::color]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::color`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    ColorAuto,
+    )]
+    #[doc(hidden)]
+    </span>ColorAuto,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::color`][crate::Command::color]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::color`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    ColorAlways,
+    )]
+    #[doc(hidden)]
+    </span>ColorAlways,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::color`][crate::Command::color]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command::color`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    ColorNever,
+    )]
+    #[doc(hidden)]
+    </span>ColorNever,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::disable_help_flag`] and [`Command::is_disable_help_flag_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1332,9 +1332,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::disable_help_flag` and `Command::is_disable_help_flag_set`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    DisableHelpFlags,
+    )]
+    #[doc(hidden)]
+    </span>DisableHelpFlags,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::disable_version_flag`] and
     /// [`Command::is_disable_version_flag_set`]
@@ -1344,9 +1344,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::disable_version_flag` and `Command::is_disable_version_flag_set`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    DisableVersion,
+    )]
+    #[doc(hidden)]
+    </span>DisableVersion,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::propagate_version`] and [`Command::is_propagate_version_set`]
     </span><span class="attribute">#[cfg_attr(
@@ -1355,9 +1355,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::propagate_version` and `Command::is_propagate_version_set`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    GlobalVersion,
+    )]
+    #[doc(hidden)]
+    </span>GlobalVersion,
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::hide_possible_values`] and
     /// [`Arg::is_hide_possible_values_set`]
@@ -1367,28 +1367,28 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `Command::hide_possible_values` and `Arg::is_hide_possible_values_set`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    HidePossibleValuesInHelp,
+    )]
+    #[doc(hidden)]
+    </span>HidePossibleValuesInHelp,
 
     <span class="doccomment">/// Deprecated, this is now the default
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;This is now the default&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    UnifiedHelp,
+    )]
+    #[doc(hidden)]
+    </span>UnifiedHelp,
 
     <span class="doccomment">/// If the cmd is already built, used for caching.
-    </span><span class="attribute">#[doc(hidden)]</span>
-    Built,
+    </span><span class="attribute">#[doc(hidden)]
+    </span>Built,
 
     <span class="doccomment">/// If the cmd&#39;s bin name is already built, used for caching.
-    </span><span class="attribute">#[doc(hidden)]</span>
-    BinNameBuilt,
+    </span><span class="attribute">#[doc(hidden)]
+    </span>BinNameBuilt,
 }
 
-<span class="macro">bitflags!</span> {
+<span class="macro">bitflags! </span>{
     <span class="kw">struct </span>Flags: u64 {
         <span class="kw">const </span>SC_NEGATE_REQS                 = <span class="number">1</span>;
         <span class="kw">const </span>SC_REQUIRED                    = <span class="number">1 </span>&lt;&lt; <span class="number">1</span>;
@@ -1438,7 +1438,7 @@
     }
 }
 
-<span class="macro">impl_settings!</span> { AppSettings, AppFlags,
+<span class="macro">impl_settings! </span>{ AppSettings, AppFlags,
     ArgRequiredElseHelp
         =&gt; Flags::ARG_REQUIRED_ELSE_HELP,
     SubcommandPrecedenceOverArg
@@ -1537,13 +1537,13 @@
 }
 
 <span class="doccomment">/// Deprecated in [Issue #3087](https://github.com/clap-rs/clap/issues/3087), maybe [`clap::Parser`][crate::Parser] would fit your use case?
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]</span>
-<span class="kw">impl </span>FromStr <span class="kw">for </span>AppSettings {
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]
+</span><span class="kw">impl </span>FromStr <span class="kw">for </span>AppSettings {
     <span class="kw">type </span><span class="prelude-val">Err </span>= String;
     <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, &lt;<span class="self">Self </span><span class="kw">as </span>FromStr&gt;::Err&gt; {
-        <span class="attribute">#[allow(deprecated)]</span>
-        <span class="attribute">#[allow(unreachable_patterns)]</span>
-        <span class="kw">match </span><span class="kw-2">&amp;*</span>s.to_ascii_lowercase() {
+        <span class="attribute">#[allow(deprecated)]
+        #[allow(unreachable_patterns)]
+        </span><span class="kw">match </span><span class="kw-2">&amp;*</span>s.to_ascii_lowercase() {
             <span class="string">&quot;argrequiredelsehelp&quot; </span>=&gt; <span class="prelude-val">Ok</span>(AppSettings::ArgRequiredElseHelp),
             <span class="string">&quot;subcommandprecedenceoverarg&quot; </span>=&gt; <span class="prelude-val">Ok</span>(AppSettings::SubcommandPrecedenceOverArg),
             <span class="string">&quot;argsnegatesubcommands&quot; </span>=&gt; <span class="prelude-val">Ok</span>(AppSettings::ArgsNegateSubcommands),
@@ -1598,12 +1598,12 @@
     }
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>test {
-    <span class="attribute">#[allow(clippy::cognitive_complexity)]</span>
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]</span>
-    <span class="kw">fn </span>app_settings_fromstr() {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test {
+    <span class="attribute">#[allow(clippy::cognitive_complexity)]
+    #[test]
+    #[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]
+    </span><span class="kw">fn </span>app_settings_fromstr() {
         <span class="kw">use </span><span class="kw">super</span>::AppSettings;
 
         <span class="macro">assert_eq!</span>(
@@ -1729,4 +1729,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_yaml-0.9.9/src/mapping.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mapping.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../serde_yaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_yaml-0.9.11/src/mapping.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mapping.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../serde_yaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -783,21 +783,21 @@
 <span class="kw">use </span>std::mem;
 
 <span class="doccomment">/// A YAML mapping in which the keys and values are both `serde_yaml::Value`.
-</span><span class="attribute">#[derive(Clone, Default, Eq, PartialEq)]</span>
-<span class="kw">pub struct </span>Mapping {
+</span><span class="attribute">#[derive(Clone, Default, Eq, PartialEq)]
+</span><span class="kw">pub struct </span>Mapping {
     map: IndexMap&lt;Value, Value&gt;,
 }
 
 <span class="kw">impl </span>Mapping {
     <span class="doccomment">/// Creates an empty YAML map.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::default()
     }
 
     <span class="doccomment">/// Creates an empty YAML map with the given initial capacity.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>with_capacity(capacity: usize) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>with_capacity(capacity: usize) -&gt; <span class="self">Self </span>{
         Mapping {
             map: IndexMap::with_capacity(capacity),
         }
@@ -810,48 +810,48 @@
     /// # Panics
     ///
     /// Panics if the new allocation size overflows `usize`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>reserve(<span class="kw-2">&amp;mut </span><span class="self">self</span>, additional: usize) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>reserve(<span class="kw-2">&amp;mut </span><span class="self">self</span>, additional: usize) {
         <span class="self">self</span>.map.reserve(additional);
     }
 
     <span class="doccomment">/// Shrinks the capacity of the map as much as possible. It will drop down
     /// as much as possible while maintaining the internal rules and possibly
     /// leaving some space in accordance with the resize policy.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>shrink_to_fit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>shrink_to_fit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.map.shrink_to_fit();
     }
 
     <span class="doccomment">/// Inserts a key-value pair into the map. If the key already existed, the
     /// old value is returned.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: Value, v: Value) -&gt; <span class="prelude-ty">Option</span>&lt;Value&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: Value, v: Value) -&gt; <span class="prelude-ty">Option</span>&lt;Value&gt; {
         <span class="self">self</span>.map.insert(k, v)
     }
 
     <span class="doccomment">/// Checks if the map contains the given key.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>contains_key&lt;I: Index&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, index: I) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>contains_key&lt;I: Index&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, index: I) -&gt; bool {
         index.is_key_into(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Returns the value corresponding to the key in the map.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get&lt;I: Index&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Value&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get&lt;I: Index&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Value&gt; {
         index.index_into(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Returns the mutable reference corresponding to the key in the map.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_mut&lt;I: Index&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Value&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_mut&lt;I: Index&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Value&gt; {
         index.index_into_mut(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Gets the given key’s corresponding entry in the map for insertion and/or
     /// in-place manipulation.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>entry(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: Value) -&gt; Entry {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>entry(<span class="kw-2">&amp;mut </span><span class="self">self</span>, k: Value) -&gt; Entry {
         <span class="kw">match </span><span class="self">self</span>.map.entry(k) {
             indexmap::map::Entry::Occupied(occupied) =&gt; Entry::Occupied(OccupiedEntry { occupied }),
             indexmap::map::Entry::Vacant(vacant) =&gt; Entry::Vacant(VacantEntry { vacant }),
@@ -859,21 +859,21 @@
     }
 
     <span class="doccomment">/// Removes and returns the value corresponding to the key from the map.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>remove&lt;I: Index&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;Value&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>remove&lt;I: Index&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;Value&gt; {
         index.remove_from(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Remove and return the key-value pair.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>remove_entry&lt;I: Index&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;(Value, Value)&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>remove_entry&lt;I: Index&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="prelude-ty">Option</span>&lt;(Value, Value)&gt; {
         index.remove_entry_from(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Scan through each key-value pair in the map and keep those where the
     /// closure `keep` returns true.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>retain&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keep: F)
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>retain&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keep: F)
     <span class="kw">where
         </span>F: FnMut(<span class="kw-2">&amp;</span>Value, <span class="kw-2">&amp;mut </span>Value) -&gt; bool,
     {
@@ -882,33 +882,33 @@
 
     <span class="doccomment">/// Returns the maximum number of key-value pairs the map can hold without
     /// reallocating.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>capacity(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>capacity(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.map.capacity()
     }
 
     <span class="doccomment">/// Returns the number of key-value pairs in the map.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.map.len()
     }
 
     <span class="doccomment">/// Returns whether the map is currently empty.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.map.is_empty()
     }
 
     <span class="doccomment">/// Clears the map of all key-value pairs.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.map.clear();
     }
 
     <span class="doccomment">/// Returns a double-ended iterator visiting all key-value pairs in order of
     /// insertion. Iterator element type is `(&amp;&#39;a Value, &amp;&#39;a Value)`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Iter {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Iter {
         Iter {
             iter: <span class="self">self</span>.map.iter(),
         }
@@ -916,8 +916,8 @@
 
     <span class="doccomment">/// Returns a double-ended iterator visiting all key-value pairs in order of
     /// insertion. Iterator element type is `(&amp;&#39;a Value, &amp;&#39;a mut ValuE)`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>iter_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; IterMut {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>iter_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; IterMut {
         IterMut {
             iter: <span class="self">self</span>.map.iter_mut(),
         }
@@ -965,20 +965,20 @@
 /// This trait is sealed and cannot be implemented for types outside of
 /// `serde_yaml`.
 </span><span class="kw">pub trait </span>Index: private::Sealed {
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>is_key_into(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>Mapping) -&gt; bool;
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">fn </span>is_key_into(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>Mapping) -&gt; bool;
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>index_into&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Value&gt;;
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">fn </span>index_into&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Value&gt;;
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>index_into_mut&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Value&gt;;
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">fn </span>index_into_mut&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Value&gt;;
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>remove_from(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;mut </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;Value&gt;;
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">fn </span>remove_from(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;mut </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;Value&gt;;
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>remove_entry_from(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;mut </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;(Value, Value)&gt;;
+    <span class="attribute">#[doc(hidden)]
+    </span><span class="kw">fn </span>remove_entry_from(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;mut </span>Mapping) -&gt; <span class="prelude-ty">Option</span>&lt;(Value, Value)&gt;;
 }
 
 <span class="kw">struct </span>HashLikeValue&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str);
@@ -1076,8 +1076,8 @@
     }
 }
 
-<span class="attribute">#[allow(clippy::derive_hash_xor_eq)]</span>
-<span class="kw">impl </span>Hash <span class="kw">for </span>Mapping {
+<span class="attribute">#[allow(clippy::derive_hash_xor_eq)]
+</span><span class="kw">impl </span>Hash <span class="kw">for </span>Mapping {
     <span class="kw">fn </span>hash&lt;H: Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
         <span class="comment">// Hash the kv pairs in a way that is not sensitive to their order.
         </span><span class="kw">let </span><span class="kw-2">mut </span>xor = <span class="number">0</span>;
@@ -1183,9 +1183,9 @@
 {
     <span class="kw">type </span>Output = Value;
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[track_caller]</span>
-    <span class="kw">fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, index: I) -&gt; <span class="kw-2">&amp;</span>Value {
+    <span class="attribute">#[inline]
+    #[track_caller]
+    </span><span class="kw">fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, index: I) -&gt; <span class="kw-2">&amp;</span>Value {
         index.index_into(<span class="self">self</span>).unwrap()
     }
 }
@@ -1194,46 +1194,46 @@
 <span class="kw">where
     </span>I: Index,
 {
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[track_caller]</span>
-    <span class="kw">fn </span>index_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="kw-2">&amp;mut </span>Value {
+    <span class="attribute">#[inline]
+    #[track_caller]
+    </span><span class="kw">fn </span>index_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: I) -&gt; <span class="kw-2">&amp;mut </span>Value {
         index.index_into_mut(<span class="self">self</span>).unwrap()
     }
 }
 
 <span class="kw">impl </span>Extend&lt;(Value, Value)&gt; <span class="kw">for </span>Mapping {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>extend&lt;I: IntoIterator&lt;Item = (Value, Value)&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: I) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>extend&lt;I: IntoIterator&lt;Item = (Value, Value)&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: I) {
         <span class="self">self</span>.map.extend(iter);
     }
 }
 
 <span class="kw">impl </span>FromIterator&lt;(Value, Value)&gt; <span class="kw">for </span>Mapping {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>from_iter&lt;I: IntoIterator&lt;Item = (Value, Value)&gt;&gt;(iter: I) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>from_iter&lt;I: IntoIterator&lt;Item = (Value, Value)&gt;&gt;(iter: I) -&gt; <span class="self">Self </span>{
         Mapping {
             map: IndexMap::from_iter(iter),
         }
     }
 }
 
-<span class="macro">macro_rules!</span> delegate_iterator {
+<span class="macro">macro_rules! </span>delegate_iterator {
     ((<span class="macro-nonterminal">$name</span>:ident $(<span class="macro-nonterminal">$generics</span>:tt)<span class="kw-2">*</span>) =&gt; <span class="macro-nonterminal">$item</span>:ty) =&gt; {
         <span class="kw">impl </span>$(<span class="macro-nonterminal">$generics</span>)* Iterator <span class="kw">for </span><span class="macro-nonterminal">$name </span>$(<span class="macro-nonterminal">$generics</span>)* {
             <span class="kw">type </span>Item = <span class="macro-nonterminal">$item</span>;
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
                 <span class="self">self</span>.iter.next()
             }
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
                 <span class="self">self</span>.iter.size_hint()
             }
         }
 
         <span class="kw">impl </span>$(<span class="macro-nonterminal">$generics</span>)* ExactSizeIterator <span class="kw">for </span><span class="macro-nonterminal">$name </span>$(<span class="macro-nonterminal">$generics</span>)* {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
                 <span class="self">self</span>.iter.len()
             }
         }
@@ -1250,8 +1250,8 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Mapping {
     <span class="kw">type </span>Item = (<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Value, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Value);
     <span class="kw">type </span>IntoIter = Iter&lt;<span class="lifetime">&#39;a</span>&gt;;
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
         Iter {
             iter: <span class="self">self</span>.map.iter(),
         }
@@ -1268,8 +1268,8 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; IntoIterator <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Mapping {
     <span class="kw">type </span>Item = (<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Value, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Value);
     <span class="kw">type </span>IntoIter = IterMut&lt;<span class="lifetime">&#39;a</span>&gt;;
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
         IterMut {
             iter: <span class="self">self</span>.map.iter_mut(),
         }
@@ -1286,8 +1286,8 @@
 <span class="kw">impl </span>IntoIterator <span class="kw">for </span>Mapping {
     <span class="kw">type </span>Item = (Value, Value);
     <span class="kw">type </span>IntoIter = IntoIter;
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
         IntoIter {
             iter: <span class="self">self</span>.map.into_iter(),
         }
@@ -1398,45 +1398,45 @@
 
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; OccupiedEntry&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="doccomment">/// Gets a reference to the key in the entry.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Value {
         <span class="self">self</span>.occupied.key()
     }
 
     <span class="doccomment">/// Gets a reference to the value in the entry.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Value {
         <span class="self">self</span>.occupied.get()
     }
 
     <span class="doccomment">/// Gets a mutable reference to the value in the entry.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Value {
         <span class="self">self</span>.occupied.get_mut()
     }
 
     <span class="doccomment">/// Converts the entry into a mutable reference to its value.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>into_mut(<span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>into_mut(<span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Value {
         <span class="self">self</span>.occupied.into_mut()
     }
 
     <span class="doccomment">/// Sets the value of the entry with the `OccupiedEntry`&#39;s key, and returns
     /// the entry&#39;s old value.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: Value) -&gt; Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: Value) -&gt; Value {
         <span class="self">self</span>.occupied.insert(value)
     }
 
     <span class="doccomment">/// Takes the value of the entry out of the map, and returns it.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>remove(<span class="self">self</span>) -&gt; Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>remove(<span class="self">self</span>) -&gt; Value {
         <span class="self">self</span>.occupied.swap_remove()
     }
 
     <span class="doccomment">/// Remove and return the key, value pair stored in the map for this entry.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>remove_entry(<span class="self">self</span>) -&gt; (Value, Value) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>remove_entry(<span class="self">self</span>) -&gt; (Value, Value) {
         <span class="self">self</span>.occupied.swap_remove_entry()
     }
 }
@@ -1444,28 +1444,28 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; VacantEntry&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="doccomment">/// Gets a reference to the key that would be used when inserting a value
     /// through the VacantEntry.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>key(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Value {
         <span class="self">self</span>.vacant.key()
     }
 
     <span class="doccomment">/// Takes ownership of the key, leaving the entry vacant.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>into_key(<span class="self">self</span>) -&gt; Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>into_key(<span class="self">self</span>) -&gt; Value {
         <span class="self">self</span>.vacant.into_key()
     }
 
     <span class="doccomment">/// Sets the value of the entry with the VacantEntry&#39;s key, and returns a
     /// mutable reference to it.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>insert(<span class="self">self</span>, value: Value) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Value {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>insert(<span class="self">self</span>, value: Value) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>Value {
         <span class="self">self</span>.vacant.insert(value)
     }
 }
 
 <span class="kw">impl </span>Serialize <span class="kw">for </span>Mapping {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>serialize&lt;S: serde::Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>serialize&lt;S: serde::Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
         <span class="kw">use </span>serde::ser::SerializeMap;
         <span class="kw">let </span><span class="kw-2">mut </span>map_serializer = serializer.serialize_map(<span class="prelude-val">Some</span>(<span class="self">self</span>.len()))<span class="question-mark">?</span>;
         <span class="kw">for </span>(k, v) <span class="kw">in </span><span class="self">self </span>{
@@ -1489,16 +1489,16 @@
                 formatter.write_str(<span class="string">&quot;a YAML mapping&quot;</span>)
             }
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>visit_unit&lt;E&gt;(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Value, E&gt;
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>visit_unit&lt;E&gt;(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Value, E&gt;
             <span class="kw">where
                 </span>E: serde::de::Error,
             {
                 <span class="prelude-val">Ok</span>(Mapping::new())
             }
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>visit_map&lt;A&gt;(<span class="self">self</span>, <span class="kw-2">mut </span>data: A) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Value, A::Error&gt;
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>visit_map&lt;A&gt;(<span class="self">self</span>, <span class="kw-2">mut </span>data: A) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Value, A::Error&gt;
             <span class="kw">where
                 </span>A: serde::de::MapAccess&lt;<span class="lifetime">&#39;de</span>&gt;,
             {
@@ -1543,4 +1543,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="serde_yaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="serde_yaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

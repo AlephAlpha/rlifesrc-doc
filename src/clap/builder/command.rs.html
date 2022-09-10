@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.17/src/builder/command.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.20/src/builder/command.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../clap/index.html">
                         <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -5164,9 +5164,34 @@
 <span id="5162">5162</span>
 <span id="5163">5163</span>
 <span id="5164">5164</span>
-</pre><pre class="rust"><code><span class="attribute">#![allow(deprecated)]</span>
+<span id="5165">5165</span>
+<span id="5166">5166</span>
+<span id="5167">5167</span>
+<span id="5168">5168</span>
+<span id="5169">5169</span>
+<span id="5170">5170</span>
+<span id="5171">5171</span>
+<span id="5172">5172</span>
+<span id="5173">5173</span>
+<span id="5174">5174</span>
+<span id="5175">5175</span>
+<span id="5176">5176</span>
+<span id="5177">5177</span>
+<span id="5178">5178</span>
+<span id="5179">5179</span>
+<span id="5180">5180</span>
+<span id="5181">5181</span>
+<span id="5182">5182</span>
+<span id="5183">5183</span>
+<span id="5184">5184</span>
+<span id="5185">5185</span>
+<span id="5186">5186</span>
+<span id="5187">5187</span>
+<span id="5188">5188</span>
+<span id="5189">5189</span>
+</pre><pre class="rust"><code><span class="attribute">#![allow(deprecated)]
 
-<span class="comment">// Std
+</span><span class="comment">// Std
 </span><span class="kw">use </span>std::collections::HashMap;
 <span class="kw">use </span>std::env;
 <span class="kw">use </span>std::ffi::OsString;
@@ -5176,8 +5201,8 @@
 <span class="kw">use </span>std::path::Path;
 
 <span class="comment">// Third Party
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]</span>
-<span class="kw">use </span>yaml_rust::Yaml;
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]
+</span><span class="kw">use </span>yaml_rust::Yaml;
 
 <span class="comment">// Internal
 </span><span class="kw">use </span><span class="kw">crate</span>::builder::app_settings::{AppFlags, AppSettings};
@@ -5194,8 +5219,8 @@
 <span class="kw">use </span><span class="kw">crate</span>::PossibleValue;
 <span class="kw">use crate</span>::{Error, INTERNAL_ERROR_MSG};
 
-<span class="attribute">#[cfg(debug_assertions)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::builder::debug_asserts::assert_app;
+<span class="attribute">#[cfg(debug_assertions)]
+</span><span class="kw">use </span><span class="kw">crate</span>::builder::debug_asserts::assert_app;
 
 <span class="doccomment">/// Build a command-line interface.
 ///
@@ -5239,9 +5264,9 @@
 </span><span class="attribute">#[cfg_attr(
     feature = <span class="string">&quot;deprecated&quot;</span>,
     deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `Command`&quot;</span>)
-)]</span>
-<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>App&lt;<span class="lifetime">&#39;help</span>&gt; {
+)]
+#[derive(Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>App&lt;<span class="lifetime">&#39;help</span>&gt; {
     id: Id,
     name: String,
     long_flag: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;,
@@ -5347,8 +5372,8 @@
     /// # ;
     /// ```
     /// [argument]: Arg
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>arg&lt;A: Into&lt;Arg&lt;<span class="lifetime">&#39;help</span>&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, a: A) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>arg&lt;A: Into&lt;Arg&lt;<span class="lifetime">&#39;help</span>&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, a: A) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>arg = a.into();
         <span class="kw">if let </span><span class="prelude-val">Some</span>(current_disp_ord) = <span class="self">self</span>.current_disp_ord.as_mut() {
             <span class="kw">if </span>!arg.is_positional() &amp;&amp; arg.provider != ArgProvider::Generated {
@@ -5377,8 +5402,8 @@
     /// # ;
     /// ```
     /// [arguments]: Arg
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>args&lt;I, T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, args: I) -&gt; <span class="self">Self
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>args&lt;I, T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, args: I) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>I: IntoIterator&lt;Item = T&gt;,
         T: Into&lt;Arg&lt;<span class="lifetime">&#39;help</span>&gt;&gt;,
@@ -5417,8 +5442,8 @@
     /// let res = cmd.try_get_matches_from_mut(vec![&quot;foo&quot;, &quot;-B&quot;]);
     /// assert!(res.is_ok());
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>mut_arg&lt;T, F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, arg_id: T, f: F) -&gt; <span class="self">Self
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>mut_arg&lt;T, F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, arg_id: T, f: F) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>F: FnOnce(Arg&lt;<span class="lifetime">&#39;help</span>&gt;) -&gt; Arg&lt;<span class="lifetime">&#39;help</span>&gt;,
         T: Key + Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;,
@@ -5463,8 +5488,8 @@
     /// let res = cmd.try_get_matches_from_mut(vec![&quot;foo&quot;, &quot;bar&quot;]);
     /// assert!(res.is_ok());
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>mut_subcommand&lt;<span class="lifetime">&#39;a</span>, T, F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, subcmd_id: T, f: F) -&gt; <span class="self">Self
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>mut_subcommand&lt;<span class="lifetime">&#39;a</span>, T, F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, subcmd_id: T, f: F) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>F: FnOnce(App&lt;<span class="lifetime">&#39;help</span>&gt;) -&gt; App&lt;<span class="lifetime">&#39;help</span>&gt;,
         T: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt;,
@@ -5515,9 +5540,9 @@
     ///          .required(true))
     /// # ;
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>group&lt;G: Into&lt;ArgGroup&lt;<span class="lifetime">&#39;help</span>&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, group: G) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>group&lt;G: Into&lt;ArgGroup&lt;<span class="lifetime">&#39;help</span>&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, group: G) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.groups.push(group.into());
         <span class="self">self
     </span>}
@@ -5544,8 +5569,8 @@
     ///     ])
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>groups&lt;I, T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, groups: I) -&gt; <span class="self">Self
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>groups&lt;I, T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, groups: I) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>I: IntoIterator&lt;Item = T&gt;,
         T: Into&lt;ArgGroup&lt;<span class="lifetime">&#39;help</span>&gt;&gt;,
@@ -5576,9 +5601,9 @@
     ///         .arg(arg!(&quot;&lt;config&gt; &#39;Required configuration file to use&#39;&quot;)))
     /// # ;
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>subcommand&lt;S: Into&lt;App&lt;<span class="lifetime">&#39;help</span>&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, subcmd: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>subcommand&lt;S: Into&lt;App&lt;<span class="lifetime">&#39;help</span>&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, subcmd: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.subcommands.push(subcmd.into());
         <span class="self">self
     </span>}
@@ -5597,8 +5622,8 @@
     /// # ;
     /// ```
     /// [`IntoIterator`]: std::iter::IntoIterator
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>subcommands&lt;I, T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, subcmds: I) -&gt; <span class="self">Self
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>subcommands&lt;I, T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, subcmds: I) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>I: IntoIterator&lt;Item = T&gt;,
         T: Into&lt;App&lt;<span class="lifetime">&#39;help</span>&gt;&gt;,
@@ -5673,8 +5698,8 @@
     /// ```
     /// [`env::args_os`]: std::env::args_os()
     /// [`App::try_get_matches_from_mut`]: Command::try_get_matches_from_mut()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_matches(<span class="self">self</span>) -&gt; ArgMatches {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_matches(<span class="self">self</span>) -&gt; ArgMatches {
         <span class="self">self</span>.get_matches_from(<span class="kw-2">&amp;mut </span>env::args_os())
     }
 
@@ -5730,8 +5755,8 @@
     /// [`kind`]: crate::Error
     /// [`ErrorKind::DisplayHelp`]: crate::ErrorKind::DisplayHelp
     /// [`ErrorKind::DisplayVersion`]: crate::ErrorKind::DisplayVersion
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>try_get_matches(<span class="self">self</span>) -&gt; ClapResult&lt;ArgMatches&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>try_get_matches(<span class="self">self</span>) -&gt; ClapResult&lt;ArgMatches&gt; {
         <span class="comment">// Start the parsing
         </span><span class="self">self</span>.try_get_matches_from(<span class="kw-2">&amp;mut </span>env::args_os())
     }
@@ -5910,7 +5935,7 @@
     /// [`io::stdout()`]: std::io::stdout()
     </span><span class="kw">pub fn </span>print_help(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>._build_self();
-        <span class="kw">let </span>color = <span class="self">self</span>.get_color();
+        <span class="kw">let </span>color = <span class="self">self</span>.color_help();
 
         <span class="kw">let </span><span class="kw-2">mut </span>c = Colorizer::new(Stream::Stdout, color);
         <span class="kw">let </span>usage = Usage::new(<span class="self">self</span>);
@@ -5935,7 +5960,7 @@
     /// [`--help` (long)]: Arg::long_help()
     </span><span class="kw">pub fn </span>print_long_help(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; io::Result&lt;()&gt; {
         <span class="self">self</span>._build_self();
-        <span class="kw">let </span>color = <span class="self">self</span>.get_color();
+        <span class="kw">let </span>color = <span class="self">self</span>.color_help();
 
         <span class="kw">let </span><span class="kw-2">mut </span>c = Colorizer::new(Stream::Stdout, color);
         <span class="kw">let </span>usage = Usage::new(<span class="self">self</span>);
@@ -6081,8 +6106,8 @@
     /// assert_eq!(cmds, [&quot;command&quot;, &quot;set&quot;]);
     /// ```
     /// [`try_get_matches_from_mut`]: crate::Command::try_get_matches_from_mut()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>no_binary_name(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>no_binary_name(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::NoBinaryName)
         } <span class="kw">else </span>{
@@ -6115,8 +6140,8 @@
     /// assert!(m.is_present(&quot;f&quot;));
     /// assert_eq!(m.value_of(&quot;stuff&quot;), None);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>ignore_errors(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>ignore_errors(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::IgnoreErrors)
         } <span class="kw">else </span>{
@@ -6128,8 +6153,8 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `Arg::action(ArgAction::Set)`&quot;</span>)
-    )]</span>
-    <span class="kw">pub fn </span>args_override_self(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    )]
+    </span><span class="kw">pub fn </span>args_override_self(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::AllArgsOverrideSelf)
         } <span class="kw">else </span>{
@@ -6156,8 +6181,8 @@
     /// ```
     ///
     /// [`Arg::use_value_delimiter(false)`]: crate::Arg::use_value_delimiter()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>dont_delimit_trailing_values(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>dont_delimit_trailing_values(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::DontDelimitTrailingValues)
         } <span class="kw">else </span>{
@@ -6180,12 +6205,12 @@
     ///     .get_matches();
     /// ```
     /// [`ColorChoice::Auto`]: crate::ColorChoice::Auto
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;color&quot;</span>)]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>color(<span class="self">self</span>, color: ColorChoice) -&gt; <span class="self">Self </span>{
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span>cmd = <span class="self">self
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;color&quot;</span>)]
+    #[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>color(<span class="self">self</span>, color: ColorChoice) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span>cmd = <span class="self">self
             </span>.unset_global_setting(AppSettings::ColorAuto)
             .unset_global_setting(AppSettings::ColorAlways)
             .unset_global_setting(AppSettings::ColorNever);
@@ -6213,9 +6238,9 @@
     ///     .term_width(80)
     /// # ;
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>term_width(<span class="kw-2">mut </span><span class="self">self</span>, width: usize) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>term_width(<span class="kw-2">mut </span><span class="self">self</span>, width: usize) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.term_w = <span class="prelude-val">Some</span>(width);
         <span class="self">self
     </span>}
@@ -6237,9 +6262,9 @@
     ///     .max_term_width(100)
     /// # ;
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>max_term_width(<span class="kw-2">mut </span><span class="self">self</span>, w: usize) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>max_term_width(<span class="kw-2">mut </span><span class="self">self</span>, w: usize) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.max_w = <span class="prelude-val">Some</span>(w);
         <span class="self">self
     </span>}
@@ -6258,8 +6283,8 @@
     /// assert!(res.is_err());
     /// assert_eq!(res.unwrap_err().kind(), ErrorKind::UnknownArgument);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>disable_version_flag(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>disable_version_flag(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::DisableVersionFlag)
         } <span class="kw">else </span>{
@@ -6290,8 +6315,8 @@
     /// ```
     ///
     /// [`subcommands`]: crate::Command::subcommand()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>propagate_version(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>propagate_version(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::PropagateVersion)
         } <span class="kw">else </span>{
@@ -6311,8 +6336,8 @@
     ///     .next_line_help(true)
     ///     .get_matches();
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>next_line_help(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>next_line_help(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::NextLineHelp)
         } <span class="kw">else </span>{
@@ -6336,8 +6361,8 @@
     /// assert!(res.is_err());
     /// assert_eq!(res.unwrap_err().kind(), ErrorKind::UnknownArgument);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>disable_help_flag(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>disable_help_flag(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::DisableHelpFlag)
         } <span class="kw">else </span>{
@@ -6364,8 +6389,8 @@
     /// ```
     ///
     /// [`subcommand`]: crate::Command::subcommand()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>disable_help_subcommand(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>disable_help_subcommand(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::DisableHelpSubcommand)
         } <span class="kw">else </span>{
@@ -6385,8 +6410,8 @@
     ///     .disable_colored_help(true)
     ///     .get_matches();
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>disable_colored_help(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>disable_colored_help(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::DisableColoredHelp)
         } <span class="kw">else </span>{
@@ -6428,8 +6453,8 @@
     ///     )
     /// #   .get_matches();
     ///```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>help_expected(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>help_expected(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::HelpExpected)
         } <span class="kw">else </span>{
@@ -6449,8 +6474,8 @@
     ///     .dont_collapse_args_in_usage(true)
     ///     .get_matches();
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>dont_collapse_args_in_usage(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>dont_collapse_args_in_usage(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::DontCollapseArgsInUsage)
         } <span class="kw">else </span>{
@@ -6466,8 +6491,8 @@
     /// [`Arg::hide_possible_values`][crate::Arg::hide_possible_values].
     ///
     /// **NOTE:** This choice is propagated to all child subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>hide_possible_values(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>hide_possible_values(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::HidePossibleValues)
         } <span class="kw">else </span>{
@@ -6487,8 +6512,8 @@
     /// **NOTE:** This choice is propagated to all child subcommands.
     ///
     /// [aliases]: crate::Command::aliases()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>infer_long_args(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>infer_long_args(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::InferLongArgs)
         } <span class="kw">else </span>{
@@ -6528,8 +6553,8 @@
     /// [subcommand]: crate::Command::subcommand()
     /// [positional/free arguments]: crate::Arg::index()
     /// [aliases]: crate::Command::aliases()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>infer_subcommands(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>infer_subcommands(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.global_setting(AppSettings::InferSubcommands)
         } <span class="kw">else </span>{
@@ -6556,8 +6581,8 @@
     ///
     /// // continued logic goes here, such as `cmd.get_matches()` etc.
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>name&lt;S: Into&lt;String&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>name&lt;S: Into&lt;String&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.name = name.into();
         <span class="self">self
     </span>}
@@ -6582,8 +6607,8 @@
     ///      .bin_name(&quot;my_binary&quot;)
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>bin_name&lt;S: Into&lt;String&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>bin_name&lt;S: Into&lt;String&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.bin_name = <span class="prelude-val">Some</span>(name.into());
         <span class="self">self
     </span>}
@@ -6598,8 +6623,8 @@
     ///      .display_name(&quot;my_program&quot;)
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>display_name&lt;S: Into&lt;String&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>display_name&lt;S: Into&lt;String&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.display_name = <span class="prelude-val">Some</span>(name.into());
         <span class="self">self
     </span>}
@@ -6619,8 +6644,8 @@
     /// # ;
     /// ```
     /// [`crate_authors!`]: ./macro.crate_authors!.html
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>author&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, author: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>author&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, author: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.author = <span class="prelude-val">Some</span>(author.into());
         <span class="self">self
     </span>}
@@ -6642,8 +6667,8 @@
     ///     .about(&quot;Does really amazing things for great people&quot;)
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>about&lt;O: Into&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, about: O) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>about&lt;O: Into&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, about: O) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.about = about.into();
         <span class="self">self
     </span>}
@@ -6667,8 +6692,8 @@
     /// # ;
     /// ```
     /// [`App::about`]: Command::about()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>long_about&lt;O: Into&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, long_about: O) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>long_about&lt;O: Into&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, long_about: O) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.long_about = long_about.into();
         <span class="self">self
     </span>}
@@ -6689,8 +6714,8 @@
     /// # ;
     /// ```
     ///
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>after_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>after_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.after_help = <span class="prelude-val">Some</span>(help.into());
         <span class="self">self
     </span>}
@@ -6711,8 +6736,8 @@
     ///                      like, for real, be careful with this!&quot;)
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>after_long_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>after_long_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.after_long_help = <span class="prelude-val">Some</span>(help.into());
         <span class="self">self
     </span>}
@@ -6731,8 +6756,8 @@
     ///     .before_help(&quot;Some info I&#39;d like to appear before the help info&quot;)
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>before_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>before_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.before_help = <span class="prelude-val">Some</span>(help.into());
         <span class="self">self
     </span>}
@@ -6751,8 +6776,8 @@
     ///     .before_long_help(&quot;Some verbose and long info I&#39;d like to appear before the help info&quot;)
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>before_long_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>before_long_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.before_long_help = <span class="prelude-val">Some</span>(help.into());
         <span class="self">self
     </span>}
@@ -6774,8 +6799,8 @@
     /// # ;
     /// ```
     /// [`crate_version!`]: ./macro.crate_version!.html
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>version&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, ver: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>version&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, ver: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.version = <span class="prelude-val">Some</span>(ver.into());
         <span class="self">self
     </span>}
@@ -6802,8 +6827,8 @@
     /// # ;
     /// ```
     /// [`crate_version!`]: ./macro.crate_version!.html
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>long_version&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, ver: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>long_version&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, ver: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.long_version = <span class="prelude-val">Some</span>(ver.into());
         <span class="self">self
     </span>}
@@ -6814,6 +6839,14 @@
     /// strings. After this setting is set, this will be *the only* usage string
     /// displayed to the user!
     ///
+    /// **NOTE:** Multiple usage lines may be present in the usage argument, but
+    /// some rules need to be followed to ensure the usage lines are formatted
+    /// correctly by the default help formatter:
+    ///
+    /// - Do not indent the first usage line.
+    /// - Indent all subsequent usage lines with four spaces.
+    /// - The last line must not end with a newline.
+    ///
     /// # Examples
     ///
     /// ```no_run
@@ -6822,9 +6855,23 @@
     ///     .override_usage(&quot;myapp [-clDas] &lt;some_file&gt;&quot;)
     /// # ;
     /// ```
+    ///
+    /// Or for multiple usage lines:
+    ///
+    /// ```no_run
+    /// # use clap::{Command, Arg};
+    /// Command::new(&quot;myprog&quot;)
+    ///     .override_usage(
+    ///         &quot;myapp -X [-a] [-b] &lt;file&gt;\n    \
+    ///          myapp -Y [-c] &lt;file1&gt; &lt;file2&gt;\n    \
+    ///          myapp -Z [-d|-e]&quot;
+    ///     )
+    /// # ;
+    /// ```
+    ///
     /// [`ArgMatches::usage`]: ArgMatches::usage()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>override_usage&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, usage: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>override_usage&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, usage: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.usage_str = <span class="prelude-val">Some</span>(usage.into());
         <span class="self">self
     </span>}
@@ -6860,8 +6907,8 @@
     ///            work             Do some work&quot;)
     /// # ;
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>override_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>override_help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.help_str = <span class="prelude-val">Some</span>(help.into());
         <span class="self">self
     </span>}
@@ -6910,8 +6957,8 @@
     /// [`App::after_long_help`]: Command::after_long_help()
     /// [`App::before_help`]: Command::before_help()
     /// [`App::before_long_help`]: Command::before_long_help()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>help_template&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, s: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>help_template&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, s: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.template = <span class="prelude-val">Some</span>(s.into());
         <span class="self">self
     </span>}
@@ -6938,9 +6985,9 @@
     ///     .setting(AppSettings::SubcommandRequired | AppSettings::AllowLeadingHyphen)
     /// # ;
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>setting&lt;F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, setting: F) -&gt; <span class="self">Self
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>setting&lt;F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, setting: F) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>F: Into&lt;AppFlags&gt;,
     {
@@ -6968,9 +7015,9 @@
     ///     .unset_setting(AppSettings::SubcommandRequired | AppSettings::AllowLeadingHyphen)
     /// # ;
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>unset_setting&lt;F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, setting: F) -&gt; <span class="self">Self
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>unset_setting&lt;F&gt;(<span class="kw-2">mut </span><span class="self">self</span>, setting: F) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>F: Into&lt;AppFlags&gt;,
     {
@@ -6992,9 +7039,9 @@
     ///     .global_setting(AppSettings::AllowNegativeNumbers)
     /// # ;
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>global_setting(<span class="kw-2">mut </span><span class="self">self</span>, setting: AppSettings) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>global_setting(<span class="kw-2">mut </span><span class="self">self</span>, setting: AppSettings) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.settings.set(setting);
         <span class="self">self</span>.g_settings.set(setting);
         <span class="self">self
@@ -7013,22 +7060,22 @@
     /// # ;
     /// ```
     /// [global]: Command::global_setting()
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>unset_global_setting(<span class="kw-2">mut </span><span class="self">self</span>, setting: AppSettings) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>unset_global_setting(<span class="kw-2">mut </span><span class="self">self</span>, setting: AppSettings) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.settings.unset(setting);
         <span class="self">self</span>.g_settings.unset(setting);
         <span class="self">self
     </span>}
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::next_help_heading`]
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="attribute">#[cfg_attr(
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::next_help_heading`&quot;</span>)
-    )]</span>
-    <span class="kw">pub fn </span>help_heading&lt;O&gt;(<span class="self">self</span>, heading: O) -&gt; <span class="self">Self
+    )]
+    </span><span class="kw">pub fn </span>help_heading&lt;O&gt;(<span class="self">self</span>, heading: O) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>O: Into&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;,
     {
@@ -7046,9 +7093,9 @@
     ///
     /// [`App::arg`]: Command::arg()
     /// [`Arg::help_heading`]: crate::Arg::help_heading()
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>next_help_heading&lt;O&gt;(<span class="kw-2">mut </span><span class="self">self</span>, heading: O) -&gt; <span class="self">Self
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>next_help_heading&lt;O&gt;(<span class="kw-2">mut </span><span class="self">self</span>, heading: O) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>O: Into&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;,
     {
@@ -7059,9 +7106,9 @@
     <span class="doccomment">/// Change the starting value for assigning future display orders for ags.
     ///
     /// This will be used for any arg that hasn&#39;t had [`Arg::display_order`] called.
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>next_display_order(<span class="kw-2">mut </span><span class="self">self</span>, disp_ord: <span class="kw">impl </span>Into&lt;<span class="prelude-ty">Option</span>&lt;usize&gt;&gt;) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>next_display_order(<span class="kw-2">mut </span><span class="self">self</span>, disp_ord: <span class="kw">impl </span>Into&lt;<span class="prelude-ty">Option</span>&lt;usize&gt;&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.current_disp_ord = disp_ord.into();
         <span class="self">self
     </span>}
@@ -7173,10 +7220,10 @@
     /// ```
     ///
     /// [`App::replace`]: Command::replace()
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-replace&quot;</span>)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>replace(<span class="kw-2">mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str, target: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[cfg(feature = <span class="string">&quot;unstable-replace&quot;</span>)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>replace(<span class="kw-2">mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str, target: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.replacers.insert(name, target);
         <span class="self">self
     </span>}
@@ -7195,8 +7242,8 @@
     ///
     /// [`subcommands`]: crate::Command::subcommand()
     /// [`Arg::default_value`]: crate::Arg::default_value()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>arg_required_else_help(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>arg_required_else_help(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.setting(AppSettings::ArgRequiredElseHelp)
         } <span class="kw">else </span>{
@@ -7229,8 +7276,8 @@
     /// # ;
     /// ```
     /// [`Arg::allow_hyphen_values`]: crate::Arg::allow_hyphen_values()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>allow_hyphen_values(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>allow_hyphen_values(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.setting(AppSettings::AllowHyphenValues)
         } <span class="kw">else </span>{
@@ -7257,8 +7304,8 @@
     /// let m = res.unwrap();
     /// assert_eq!(m.value_of(&quot;num&quot;).unwrap(), &quot;-20&quot;);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>allow_negative_numbers(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>allow_negative_numbers(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.setting(AppSettings::AllowNegativeNumbers)
         } <span class="kw">else </span>{
@@ -7402,8 +7449,8 @@
     /// ```
     ///
     /// [required]: crate::Arg::required()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>allow_missing_positional(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>allow_missing_positional(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.setting(AppSettings::AllowMissingPositional)
         } <span class="kw">else </span>{
@@ -7439,8 +7486,8 @@
     /// assert!(*sync_matches.get_one::&lt;bool&gt;(&quot;search&quot;).expect(&quot;defaulted by clap&quot;));
     /// ```
     /// [`Arg::short`]: Arg::short()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>short_flag(<span class="kw-2">mut </span><span class="self">self</span>, short: char) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>short_flag(<span class="kw-2">mut </span><span class="self">self</span>, short: char) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.short_flag = <span class="prelude-val">Some</span>(short);
         <span class="self">self
     </span>}
@@ -7477,14 +7524,14 @@
     /// ```
     ///
     /// [`Arg::long`]: Arg::long()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>long_flag(<span class="kw-2">mut </span><span class="self">self</span>, long: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]</span>
-        {
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>long_flag(<span class="kw-2">mut </span><span class="self">self</span>, long: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]
+        </span>{
             <span class="self">self</span>.long_flag = <span class="prelude-val">Some</span>(long);
         }
-        <span class="attribute">#[cfg(not(feature = <span class="string">&quot;unstable-v4&quot;</span>))]</span>
-        {
+        <span class="attribute">#[cfg(not(feature = <span class="string">&quot;unstable-v4&quot;</span>))]
+        </span>{
             <span class="self">self</span>.long_flag = <span class="prelude-val">Some</span>(long.trim_start_matches(|c| c == <span class="string">&#39;-&#39;</span>));
         }
         <span class="self">self
@@ -7515,8 +7562,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::visible_alias`]: Command::visible_alias()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>alias&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>alias&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.aliases.push((name.into(), <span class="bool-val">false</span>));
         <span class="self">self
     </span>}
@@ -7537,8 +7584,8 @@
     ///             .get_matches_from(vec![&quot;myprog&quot;, &quot;-d&quot;]);
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>short_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: char) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>short_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: char) -&gt; <span class="self">Self </span>{
         <span class="macro">assert!</span>(name != <span class="string">&#39;-&#39;</span>, <span class="string">&quot;short alias name cannot be `-`&quot;</span>);
         <span class="self">self</span>.short_flag_aliases.push((name, <span class="bool-val">false</span>));
         <span class="self">self
@@ -7560,8 +7607,8 @@
     ///             .get_matches_from(vec![&quot;myprog&quot;, &quot;--testing&quot;]);
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>long_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>long_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.long_flag_aliases.push((name, <span class="bool-val">false</span>));
         <span class="self">self
     </span>}
@@ -7594,8 +7641,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::visible_aliases`]: Command::visible_aliases()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.aliases.extend(names.iter().map(|n| (<span class="kw-2">*</span>n, <span class="bool-val">false</span>)));
         <span class="self">self
     </span>}
@@ -7619,8 +7666,8 @@
     ///     .get_matches_from(vec![&quot;myprog&quot;, &quot;-a&quot;]);
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>short_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[char]) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>short_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[char]) -&gt; <span class="self">Self </span>{
         <span class="kw">for </span>s <span class="kw">in </span>names {
             <span class="macro">assert!</span>(s != <span class="kw-2">&amp;</span><span class="string">&#39;-&#39;</span>, <span class="string">&quot;short alias name cannot be `-`&quot;</span>);
             <span class="self">self</span>.short_flag_aliases.push((<span class="kw-2">*</span>s, <span class="bool-val">false</span>));
@@ -7647,8 +7694,8 @@
     ///             .get_matches_from(vec![&quot;myprog&quot;, &quot;--testing&quot;]);
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>long_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>long_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
         <span class="kw">for </span>s <span class="kw">in </span>names {
             <span class="self">self</span>.long_flag_aliases.push((s, <span class="bool-val">false</span>));
         }
@@ -7682,8 +7729,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::alias`]: Command::alias()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>visible_alias&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>visible_alias&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="kw-2">mut </span><span class="self">self</span>, name: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.aliases.push((name.into(), <span class="bool-val">true</span>));
         <span class="self">self
     </span>}
@@ -7707,8 +7754,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::short_flag_alias`]: Command::short_flag_alias()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>visible_short_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: char) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>visible_short_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: char) -&gt; <span class="self">Self </span>{
         <span class="macro">assert!</span>(name != <span class="string">&#39;-&#39;</span>, <span class="string">&quot;short alias name cannot be `-`&quot;</span>);
         <span class="self">self</span>.short_flag_aliases.push((name, <span class="bool-val">true</span>));
         <span class="self">self
@@ -7733,8 +7780,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::long_flag_alias`]: Command::long_flag_alias()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>visible_long_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>visible_long_flag_alias(<span class="kw-2">mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.long_flag_aliases.push((name, <span class="bool-val">true</span>));
         <span class="self">self
     </span>}
@@ -7766,8 +7813,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::alias`]: Command::alias()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>visible_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>visible_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.aliases.extend(names.iter().map(|n| (<span class="kw-2">*</span>n, <span class="bool-val">true</span>)));
         <span class="self">self
     </span>}
@@ -7787,8 +7834,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::short_flag_aliases`]: Command::short_flag_aliases()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>visible_short_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[char]) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>visible_short_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[char]) -&gt; <span class="self">Self </span>{
         <span class="kw">for </span>s <span class="kw">in </span>names {
             <span class="macro">assert!</span>(s != <span class="kw-2">&amp;</span><span class="string">&#39;-&#39;</span>, <span class="string">&quot;short alias name cannot be `-`&quot;</span>);
             <span class="self">self</span>.short_flag_aliases.push((<span class="kw-2">*</span>s, <span class="bool-val">true</span>));
@@ -7811,8 +7858,8 @@
     /// assert_eq!(m.subcommand_name(), Some(&quot;test&quot;));
     /// ```
     /// [`App::long_flag_aliases`]: Command::long_flag_aliases()
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>visible_long_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>visible_long_flag_aliases(<span class="kw-2">mut </span><span class="self">self</span>, names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str]) -&gt; <span class="self">Self </span>{
         <span class="kw">for </span>s <span class="kw">in </span>names {
             <span class="self">self</span>.long_flag_aliases.push((s, <span class="bool-val">true</span>));
         }
@@ -7867,9 +7914,9 @@
     ///     beta    I should be first!
     ///     alpha   Some help and text
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>display_order(<span class="kw-2">mut </span><span class="self">self</span>, ord: usize) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    #[must_use]
+    </span><span class="kw">pub fn </span>display_order(<span class="kw-2">mut </span><span class="self">self</span>, ord: usize) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.disp_ord = <span class="prelude-val">Some</span>(ord);
         <span class="self">self
     </span>}
@@ -7888,8 +7935,8 @@
     /// ```
     ///
     /// [`subcommand`]: crate::Command::subcommand()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>hide(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>hide(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.setting(AppSettings::Hidden)
         } <span class="kw">else </span>{
@@ -7983,9 +8030,9 @@
     ///
     /// # Examples
     ///
-    </span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(unix, doc = <span class="string">&quot; ```&quot;</span>)]</span>
-    <span class="doccomment">/// # use clap::Command;
+    </span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+    #[cfg_attr(unix, doc = <span class="string">&quot; ```&quot;</span>)]
+    </span><span class="doccomment">/// # use clap::Command;
     /// // Assume there is an external subcommand named &quot;subcmd&quot;
     /// let m = Command::new(&quot;myprog&quot;)
     ///     .allow_invalid_utf8_for_external_subcommands(true)
@@ -8277,8 +8324,8 @@
     /// [`no_binary_name`]: crate::Command::no_binary_name
     /// [`App::subcommand_value_name`]: crate::Command::subcommand_value_name
     /// [`App::subcommand_help_heading`]: crate::Command::subcommand_help_heading
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>multicall(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>multicall(<span class="self">self</span>, yes: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>yes {
             <span class="self">self</span>.setting(AppSettings::Multicall)
         } <span class="kw">else </span>{
@@ -8346,8 +8393,8 @@
     ///     help    Print this message or the help of the given subcommand(s)
     ///     sub1
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>subcommand_value_name&lt;S&gt;(<span class="kw-2">mut </span><span class="self">self</span>, value_name: S) -&gt; <span class="self">Self
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>subcommand_value_name&lt;S&gt;(<span class="kw-2">mut </span><span class="self">self</span>, value_name: S) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;,
     {
@@ -8415,8 +8462,8 @@
     ///     help    Print this message or the help of the given subcommand(s)
     ///     sub1
     /// ```
-    </span><span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>subcommand_help_heading&lt;T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, heading: T) -&gt; <span class="self">Self
+    </span><span class="attribute">#[must_use]
+    </span><span class="kw">pub fn </span>subcommand_help_heading&lt;T&gt;(<span class="kw-2">mut </span><span class="self">self</span>, heading: T) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>T: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;,
     {
@@ -8427,20 +8474,20 @@
 
 <span class="doccomment">/// # Reflection
 </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;help</span>&gt; App&lt;<span class="lifetime">&#39;help</span>&gt; {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>get_usage_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>get_usage_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.usage_name.as_deref()
     }
 
     <span class="doccomment">/// Get the name of the binary.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_display_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_display_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.display_name.as_deref()
     }
 
     <span class="doccomment">/// Get the name of the binary.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_bin_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_bin_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.bin_name.as_deref()
     }
 
@@ -8450,84 +8497,84 @@
     }
 
     <span class="doccomment">/// Get the name of the cmd.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
         <span class="kw-2">&amp;</span><span class="self">self</span>.name
     }
 
     <span class="doccomment">/// Get the version of the cmd.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_version(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_version(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.version
     }
 
     <span class="doccomment">/// Get the long version of the cmd.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_long_version(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_long_version(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.long_version
     }
 
     <span class="doccomment">/// Get the authors of the cmd.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_author(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_author(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.author
     }
 
     <span class="doccomment">/// Get the short flag of the subcommand.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_short_flag(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;char&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_short_flag(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;char&gt; {
         <span class="self">self</span>.short_flag
     }
 
     <span class="doccomment">/// Get the long flag of the subcommand.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_long_flag(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_long_flag(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.long_flag
     }
 
     <span class="doccomment">/// Get the help message specified via [`Command::about`].
     ///
     /// [`App::about`]: Command::about()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_about(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_about(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.about
     }
 
     <span class="doccomment">/// Get the help message specified via [`Command::long_about`].
     ///
     /// [`App::long_about`]: Command::long_about()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_long_about(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_long_about(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.long_about
     }
 
     <span class="doccomment">/// Deprecated, replaced with [`Command::get_next_help_heading`]
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg_attr(
+    </span><span class="attribute">#[inline]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::get_next_help_heading`&quot;</span>)
-    )]</span>
-    <span class="kw">pub fn </span>get_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    )]
+    </span><span class="kw">pub fn </span>get_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.get_next_help_heading()
     }
 
     <span class="doccomment">/// Get the custom section heading specified via [`Command::help_heading`].
     ///
     /// [`App::help_heading`]: Command::help_heading()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_next_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_next_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; {
         <span class="self">self</span>.current_help_heading
     }
 
     <span class="doccomment">/// Iterate through the *visible* aliases for this subcommand.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_visible_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; + <span class="lifetime">&#39;_ </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_visible_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; + <span class="lifetime">&#39;_ </span>{
         <span class="self">self</span>.aliases.iter().filter(|(<span class="kw">_</span>, vis)| <span class="kw-2">*</span>vis).map(|a| a.<span class="number">0</span>)
     }
 
     <span class="doccomment">/// Iterate through the *visible* short aliases for this subcommand.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_visible_short_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = char&gt; + <span class="lifetime">&#39;_ </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_visible_short_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = char&gt; + <span class="lifetime">&#39;_ </span>{
         <span class="self">self</span>.short_flag_aliases
             .iter()
             .filter(|(<span class="kw">_</span>, vis)| <span class="kw-2">*</span>vis)
@@ -8535,8 +8582,8 @@
     }
 
     <span class="doccomment">/// Iterate through the *visible* long aliases for this subcommand.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_visible_long_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; + <span class="lifetime">&#39;_ </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_visible_long_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; + <span class="lifetime">&#39;_ </span>{
         <span class="self">self</span>.long_flag_aliases
             .iter()
             .filter(|(<span class="kw">_</span>, vis)| <span class="kw-2">*</span>vis)
@@ -8544,20 +8591,20 @@
     }
 
     <span class="doccomment">/// Iterate through the set of *all* the aliases for this subcommand, both visible and hidden.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_all_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>str&gt; + <span class="lifetime">&#39;_ </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_all_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>str&gt; + <span class="lifetime">&#39;_ </span>{
         <span class="self">self</span>.aliases.iter().map(|a| a.<span class="number">0</span>)
     }
 
     <span class="doccomment">/// Iterate through the set of *all* the short aliases for this subcommand, both visible and hidden.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_all_short_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = char&gt; + <span class="lifetime">&#39;_ </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_all_short_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = char&gt; + <span class="lifetime">&#39;_ </span>{
         <span class="self">self</span>.short_flag_aliases.iter().map(|a| a.<span class="number">0</span>)
     }
 
     <span class="doccomment">/// Iterate through the set of *all* the long aliases for this subcommand, both visible and hidden.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_all_long_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; + <span class="lifetime">&#39;_ </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_all_long_flag_aliases(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt; + <span class="lifetime">&#39;_ </span>{
         <span class="self">self</span>.long_flag_aliases.iter().map(|a| a.<span class="number">0</span>)
     }
 
@@ -8567,19 +8614,19 @@
     ///
     /// [local]: Command::setting()
     /// [global settings]: Command::global_setting()
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>is_set(<span class="kw-2">&amp;</span><span class="self">self</span>, s: AppSettings) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>is_set(<span class="kw-2">&amp;</span><span class="self">self</span>, s: AppSettings) -&gt; bool {
         <span class="self">self</span>.settings.is_set(s) || <span class="self">self</span>.g_settings.is_set(s)
     }
 
     <span class="doccomment">/// Should we color the output?
-    </span><span class="attribute">#[inline(never)]</span>
-    <span class="kw">pub fn </span>get_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ColorChoice {
+    </span><span class="attribute">#[inline(never)]
+    </span><span class="kw">pub fn </span>get_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ColorChoice {
         <span class="macro">debug!</span>(<span class="string">&quot;Command::color: Color setting...&quot;</span>);
 
         <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;color&quot;</span>) {
-            <span class="attribute">#[allow(deprecated)]</span>
-            <span class="kw">if </span><span class="self">self</span>.is_set(AppSettings::ColorNever) {
+            <span class="attribute">#[allow(deprecated)]
+            </span><span class="kw">if </span><span class="self">self</span>.is_set(AppSettings::ColorNever) {
                 <span class="macro">debug!</span>(<span class="string">&quot;Never&quot;</span>);
                 ColorChoice::Never
             } <span class="kw">else if </span><span class="self">self</span>.is_set(AppSettings::ColorAlways) {
@@ -8595,77 +8642,77 @@
     }
 
     <span class="doccomment">/// Iterate through the set of subcommands, getting a reference to each.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_subcommands(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_subcommands(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
         <span class="self">self</span>.subcommands.iter()
     }
 
     <span class="doccomment">/// Iterate through the set of subcommands, getting a mutable reference to each.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_subcommands_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;mut </span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_subcommands_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;mut </span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
         <span class="self">self</span>.subcommands.iter_mut()
     }
 
     <span class="doccomment">/// Returns `true` if this `Command` has subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>has_subcommands(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>has_subcommands(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         !<span class="self">self</span>.subcommands.is_empty()
     }
 
     <span class="doccomment">/// Returns the help heading for listing subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_subcommand_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_subcommand_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.subcommand_heading
     }
 
     <span class="doccomment">/// Deprecated, replaced with [`App::get_subcommand_help_heading`]
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg_attr(
+    </span><span class="attribute">#[inline]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `App::get_subcommand_help_heading`&quot;
         </span>)
-    )]</span>
-    <span class="kw">pub fn </span>get_subommand_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    )]
+    </span><span class="kw">pub fn </span>get_subommand_help_heading(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.get_subcommand_help_heading()
     }
 
     <span class="doccomment">/// Returns the subcommand value name.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_subcommand_value_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_subcommand_value_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.subcommand_value_name
     }
 
     <span class="doccomment">/// Returns the help heading for listing subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_before_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_before_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.before_help
     }
 
     <span class="doccomment">/// Returns the help heading for listing subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_before_long_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_before_long_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.before_long_help
     }
 
     <span class="doccomment">/// Returns the help heading for listing subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_after_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_after_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.after_help
     }
 
     <span class="doccomment">/// Returns the help heading for listing subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_after_long_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_after_long_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.after_long_help
     }
 
     <span class="doccomment">/// Find subcommand such that its name or one of aliases equals `name`.
     ///
     /// This does not recurse through subcommands of subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>find_subcommand&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt;
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>find_subcommand&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt;
     <span class="kw">where
         </span>T: PartialEq&lt;str&gt; + <span class="question-mark">?</span>Sized,
     {
@@ -8676,8 +8723,8 @@
     /// a mutable reference to the subcommand.
     ///
     /// This does not recurse through subcommands of subcommands.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>find_subcommand_mut&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt;
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>find_subcommand_mut&lt;T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>App&lt;<span class="lifetime">&#39;help</span>&gt;&gt;
     <span class="kw">where
         </span>T: PartialEq&lt;str&gt; + <span class="question-mark">?</span>Sized,
     {
@@ -8685,20 +8732,20 @@
     }
 
     <span class="doccomment">/// Iterate through the set of groups.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>ArgGroup&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_groups(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>ArgGroup&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
         <span class="self">self</span>.groups.iter()
     }
 
     <span class="doccomment">/// Iterate through the set of arguments.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_arguments(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_arguments(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
         <span class="self">self</span>.args.args()
     }
 
     <span class="doccomment">/// Iterate through the *positionals* arguments.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>get_positionals(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>get_positionals(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;&gt; {
         <span class="self">self</span>.get_arguments().filter(|a| a.is_positional())
     }
 
@@ -8840,8 +8887,8 @@
     }
 
     <span class="doccomment">/// Report whether [`Command::help_expected`] is set
-    </span><span class="attribute">#[cfg(debug_assertions)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>is_help_expected_set(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[cfg(debug_assertions)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>is_help_expected_set(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.is_set(AppSettings::HelpExpected)
     }
 
@@ -8952,18 +8999,18 @@
 <span class="doccomment">/// Deprecated
 </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;help</span>&gt; App&lt;<span class="lifetime">&#39;help</span>&gt; {
     <span class="doccomment">/// Deprecated in [Issue #3087](https://github.com/clap-rs/clap/issues/3087), maybe [`clap::Parser`][crate::Parser] would fit your use case?
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;yaml&quot;</span>)]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;Deprecated in Issue #3087, maybe clap::Parser would fit your use case?&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>from_yaml(y: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>Yaml) -&gt; <span class="self">Self </span>{
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span>yaml_file_hash = y.as_hash().expect(<span class="string">&quot;YAML file must be a hash&quot;</span>);
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>from_yaml(y: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>Yaml) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span>yaml_file_hash = y.as_hash().expect(<span class="string">&quot;YAML file must be a hash&quot;</span>);
         <span class="comment">// We WANT this to panic on error...so expect() is good.
         </span><span class="kw">let </span>(<span class="kw-2">mut </span>a, yaml, err) = <span class="kw">if let </span><span class="prelude-val">Some</span>(name) = y[<span class="string">&quot;name&quot;</span>].as_str() {
             (App::new(name), yaml_file_hash, <span class="string">&quot;cmd&quot;</span>.into())
@@ -9050,10 +9097,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::override_usage`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>usage&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="self">self</span>, usage: S) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>usage&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="self">self</span>, usage: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.override_usage(usage)
     }
 
@@ -9061,10 +9108,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::override_help`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>help&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="self">self</span>, help: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.override_help(help)
     }
 
@@ -9072,10 +9119,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::mut_arg`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>help_short(<span class="self">self</span>, c: char) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>help_short(<span class="self">self</span>, c: char) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.mut_arg(<span class="string">&quot;help&quot;</span>, |a| a.short(c))
     }
 
@@ -9083,10 +9130,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::mut_arg`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>version_short(<span class="self">self</span>, c: char) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>version_short(<span class="self">self</span>, c: char) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.mut_arg(<span class="string">&quot;version&quot;</span>, |a| a.short(c))
     }
 
@@ -9094,10 +9141,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::mut_arg`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>help_message(<span class="self">self</span>, s: <span class="kw">impl </span>Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>help_message(<span class="self">self</span>, s: <span class="kw">impl </span>Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.mut_arg(<span class="string">&quot;help&quot;</span>, |a| a.help(s.into()))
     }
 
@@ -9105,10 +9152,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::mut_arg`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>version_message(<span class="self">self</span>, s: <span class="kw">impl </span>Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>version_message(<span class="self">self</span>, s: <span class="kw">impl </span>Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.mut_arg(<span class="string">&quot;version&quot;</span>, |a| a.help(s.into()))
     }
 
@@ -9116,10 +9163,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::help_template`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>template&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="self">self</span>, s: S) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>template&lt;S: Into&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str&gt;&gt;(<span class="self">self</span>, s: S) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.help_template(s)
     }
 
@@ -9127,10 +9174,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::setting(a | b)`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>settings(<span class="kw-2">mut </span><span class="self">self</span>, settings: <span class="kw-2">&amp;</span>[AppSettings]) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>settings(<span class="kw-2">mut </span><span class="self">self</span>, settings: <span class="kw-2">&amp;</span>[AppSettings]) -&gt; <span class="self">Self </span>{
         <span class="kw">for </span>s <span class="kw">in </span>settings {
             <span class="self">self</span>.settings.insert((<span class="kw-2">*</span>s).into());
         }
@@ -9141,10 +9188,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::unset_setting(a | b)`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>unset_settings(<span class="kw-2">mut </span><span class="self">self</span>, settings: <span class="kw-2">&amp;</span>[AppSettings]) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>unset_settings(<span class="kw-2">mut </span><span class="self">self</span>, settings: <span class="kw-2">&amp;</span>[AppSettings]) -&gt; <span class="self">Self </span>{
         <span class="kw">for </span>s <span class="kw">in </span>settings {
             <span class="self">self</span>.settings.remove((<span class="kw-2">*</span>s).into());
         }
@@ -9155,10 +9202,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::global_setting(a | b)`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>global_settings(<span class="kw-2">mut </span><span class="self">self</span>, settings: <span class="kw-2">&amp;</span>[AppSettings]) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>global_settings(<span class="kw-2">mut </span><span class="self">self</span>, settings: <span class="kw-2">&amp;</span>[AppSettings]) -&gt; <span class="self">Self </span>{
         <span class="kw">for </span>s <span class="kw">in </span>settings {
             <span class="self">self</span>.settings.insert((<span class="kw-2">*</span>s).into());
             <span class="self">self</span>.g_settings.insert((<span class="kw-2">*</span>s).into());
@@ -9170,10 +9217,10 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::term_width`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>set_term_width(<span class="self">self</span>, width: usize) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>set_term_width(<span class="self">self</span>, width: usize) -&gt; <span class="self">Self </span>{
         <span class="self">self</span>.term_width(width)
     }
 
@@ -9181,24 +9228,24 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Deprecated in Issue #3086, see `clap::arg!&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>arg_from_usage(<span class="self">self</span>, usage: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="self">self</span>.arg(Arg::from_usage(usage))
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>arg_from_usage(<span class="self">self</span>, usage: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="self">self</span>.arg(Arg::from_usage(usage))
     }
 
     <span class="doccomment">/// Deprecated in [Issue #3086](https://github.com/clap-rs/clap/issues/3086), see [`arg!`][crate::arg!].
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Deprecated in Issue #3086, see `clap::arg!&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[must_use]</span>
-    <span class="kw">pub fn </span>args_from_usage(<span class="kw-2">mut </span><span class="self">self</span>, usage: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">for </span>line <span class="kw">in </span>usage.lines() {
+    )]
+    #[doc(hidden)]
+    #[must_use]
+    </span><span class="kw">pub fn </span>args_from_usage(<span class="kw-2">mut </span><span class="self">self</span>, usage: <span class="kw-2">&amp;</span><span class="lifetime">&#39;help </span>str) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">for </span>line <span class="kw">in </span>usage.lines() {
             <span class="kw">let </span>l = line.trim();
             <span class="kw">if </span>l.is_empty() {
                 <span class="kw">continue</span>;
@@ -9212,9 +9259,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::render_version`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>write_version&lt;W: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, w: <span class="kw-2">&amp;mut </span>W) -&gt; ClapResult&lt;()&gt; {
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>write_version&lt;W: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, w: <span class="kw-2">&amp;mut </span>W) -&gt; ClapResult&lt;()&gt; {
         <span class="macro">write!</span>(w, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.render_version()).map_err(From::from)
     }
 
@@ -9222,9 +9269,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::render_long_version`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>write_long_version&lt;W: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, w: <span class="kw-2">&amp;mut </span>W) -&gt; ClapResult&lt;()&gt; {
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>write_long_version&lt;W: io::Write&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, w: <span class="kw-2">&amp;mut </span>W) -&gt; ClapResult&lt;()&gt; {
         <span class="macro">write!</span>(w, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.render_long_version()).map_err(From::from)
     }
 
@@ -9232,9 +9279,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::try_get_matches`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>get_matches_safe(<span class="self">self</span>) -&gt; ClapResult&lt;ArgMatches&gt; {
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>get_matches_safe(<span class="self">self</span>) -&gt; ClapResult&lt;ArgMatches&gt; {
         <span class="self">self</span>.try_get_matches()
     }
 
@@ -9242,9 +9289,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.0.0&quot;</span>, note = <span class="string">&quot;Replaced with `App::try_get_matches_from`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>get_matches_from_safe&lt;I, T&gt;(<span class="self">self</span>, itr: I) -&gt; ClapResult&lt;ArgMatches&gt;
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>get_matches_from_safe&lt;I, T&gt;(<span class="self">self</span>, itr: I) -&gt; ClapResult&lt;ArgMatches&gt;
     <span class="kw">where
         </span>I: IntoIterator&lt;Item = T&gt;,
         T: Into&lt;OsString&gt; + Clone,
@@ -9259,9 +9306,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `App::try_get_matches_from_mut`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>get_matches_from_safe_borrow&lt;I, T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, itr: I) -&gt; ClapResult&lt;ArgMatches&gt;
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>get_matches_from_safe_borrow&lt;I, T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, itr: I) -&gt; ClapResult&lt;ArgMatches&gt;
     <span class="kw">where
         </span>I: IntoIterator&lt;Item = T&gt;,
         T: Into&lt;OsString&gt; + Clone,
@@ -9349,30 +9396,30 @@
         <span class="prelude-val">Ok</span>(matcher.into_inner())
     }
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[cfg_attr(
+    <span class="attribute">#[doc(hidden)]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.10&quot;</span>, note = <span class="string">&quot;Replaced with `Command::build`&quot;</span>)
-    )]</span>
-    <span class="kw">pub fn </span>_build_all(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    )]
+    </span><span class="kw">pub fn </span>_build_all(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.build();
     }
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[cfg_attr(
+    <span class="attribute">#[doc(hidden)]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.10&quot;</span>, note = <span class="string">&quot;Replaced with `Command::build`&quot;</span>)
-    )]</span>
-    <span class="kw">pub fn </span>_build(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    )]
+    </span><span class="kw">pub fn </span>_build(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>._build_self()
     }
 
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[cfg_attr(
+    <span class="attribute">#[doc(hidden)]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.13&quot;</span>, note = <span class="string">&quot;Replaced with `Command::build`&quot;</span>)
-    )]</span>
-    <span class="kw">pub fn </span>_build_bin_names(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    )]
+    </span><span class="kw">pub fn </span>_build_bin_names(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>._build_bin_names_internal();
     }
 
@@ -9468,8 +9515,8 @@
 
             <span class="self">self</span>.args._build();
 
-            <span class="attribute">#[cfg(debug_assertions)]</span>
-            assert_app(<span class="self">self</span>);
+            <span class="attribute">#[cfg(debug_assertions)]
+            </span>assert_app(<span class="self">self</span>);
             <span class="self">self</span>.settings.set(AppSettings::Built);
         } <span class="kw">else </span>{
             <span class="macro">debug!</span>(<span class="string">&quot;Command::_build: already built&quot;</span>);
@@ -9480,7 +9527,8 @@
         <span class="kw">use </span>std::fmt::Write;
 
         <span class="kw">let </span><span class="kw-2">mut </span>mid_string = String::from(<span class="string">&quot; &quot;</span>);
-        <span class="kw">if </span>!<span class="self">self</span>.is_subcommand_negates_reqs_set() {
+        <span class="kw">if </span>!<span class="self">self</span>.is_subcommand_negates_reqs_set() &amp;&amp; !<span class="self">self</span>.is_args_conflicts_with_subcommands_set()
+        {
             <span class="kw">let </span>reqs = Usage::new(<span class="self">self</span>).get_required_usage_from(<span class="kw-2">&amp;</span>[], <span class="prelude-val">None</span>, <span class="bool-val">true</span>); <span class="comment">// maybe Some(m)
 
             </span><span class="kw">for </span>s <span class="kw">in </span><span class="kw-2">&amp;</span>reqs {
@@ -9563,7 +9611,9 @@
 
         <span class="kw">if </span>!<span class="self">self</span>.is_set(AppSettings::BinNameBuilt) {
             <span class="kw">let </span><span class="kw-2">mut </span>mid_string = String::from(<span class="string">&quot; &quot;</span>);
-            <span class="kw">if </span>!<span class="self">self</span>.is_subcommand_negates_reqs_set() {
+            <span class="kw">if </span>!<span class="self">self</span>.is_subcommand_negates_reqs_set()
+                &amp;&amp; !<span class="self">self</span>.is_args_conflicts_with_subcommands_set()
+            {
                 <span class="kw">let </span>reqs = Usage::new(<span class="self">self</span>).get_required_usage_from(<span class="kw-2">&amp;</span>[], <span class="prelude-val">None</span>, <span class="bool-val">true</span>); <span class="comment">// maybe Some(m)
 
                 </span><span class="kw">for </span>s <span class="kw">in </span><span class="kw-2">&amp;</span>reqs {
@@ -9690,8 +9740,8 @@
         }
     }
 
-    <span class="attribute">#[cfg(debug_assertions)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>two_args_of&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, condition: F) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;, <span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;)&gt;
+    <span class="attribute">#[cfg(debug_assertions)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>two_args_of&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, condition: F) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;, <span class="kw-2">&amp;</span>Arg&lt;<span class="lifetime">&#39;help</span>&gt;)&gt;
     <span class="kw">where
         </span>F: Fn(<span class="kw-2">&amp;</span>Arg) -&gt; bool,
     {
@@ -9699,8 +9749,8 @@
     }
 
     <span class="comment">// just in case
-    </span><span class="attribute">#[allow(unused)]</span>
-    <span class="kw">fn </span>two_groups_of&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, condition: F) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>ArgGroup, <span class="kw-2">&amp;</span>ArgGroup)&gt;
+    </span><span class="attribute">#[allow(unused)]
+    </span><span class="kw">fn </span>two_groups_of&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, condition: F) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>ArgGroup, <span class="kw-2">&amp;</span>ArgGroup)&gt;
     <span class="kw">where
         </span>F: Fn(<span class="kw-2">&amp;</span>ArgGroup) -&gt; bool,
     {
@@ -9781,8 +9831,8 @@
         }
     }
 
-    <span class="attribute">#[allow(clippy::blocks_in_if_conditions)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>_check_help_and_version(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    <span class="attribute">#[allow(clippy::blocks_in_if_conditions)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>_check_help_and_version(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="macro">debug!</span>(<span class="string">&quot;Command::_check_help_and_version: {}&quot;</span>, <span class="self">self</span>.name);
 
         <span class="kw">if </span><span class="self">self</span>.is_set(AppSettings::DisableHelpFlag)
@@ -10014,8 +10064,8 @@ To change `help`s short, call `cmd.arg(Arg::new(\&quot;help\&quot;)...)`.&quot;<
         <span class="self">self</span>.args.args().find(|a| a.id == <span class="kw-2">*</span>arg_id)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>contains_short(<span class="kw-2">&amp;</span><span class="self">self</span>, s: char) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>contains_short(<span class="kw-2">&amp;</span><span class="self">self</span>, s: char) -&gt; bool {
         <span class="macro">assert!</span>(
             <span class="self">self</span>.is_set(AppSettings::Built),
             <span class="string">&quot;If App::_build hasn&#39;t been called, manually search through Arg shorts&quot;
@@ -10024,13 +10074,13 @@ To change `help`s short, call `cmd.arg(Arg::new(\&quot;help\&quot;)...)`.&quot;<
         <span class="self">self</span>.args.contains(s)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: AppSettings) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set(<span class="kw-2">&amp;mut </span><span class="self">self</span>, s: AppSettings) {
         <span class="self">self</span>.settings.set(s)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>has_args(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>has_args(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         !<span class="self">self</span>.args.is_empty()
     }
 
@@ -10046,8 +10096,8 @@ To change `help`s short, call `cmd.arg(Arg::new(\&quot;help\&quot;)...)`.&quot;<
 
     <span class="doccomment">/// Check if this subcommand can be referred to as `name`. In other words,
     /// check if `name` is the name of this subcommand or is one of its aliases.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>aliases_to&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>T) -&gt; bool
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>aliases_to&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>T) -&gt; bool
     <span class="kw">where
         </span>T: PartialEq&lt;str&gt; + <span class="question-mark">?</span>Sized,
     {
@@ -10056,16 +10106,16 @@ To change `help`s short, call `cmd.arg(Arg::new(\&quot;help\&quot;)...)`.&quot;<
 
     <span class="doccomment">/// Check if this subcommand can be referred to as `name`. In other words,
     /// check if `name` is the name of this short flag subcommand or is one of its short flag aliases.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>short_flag_aliases_to(<span class="kw-2">&amp;</span><span class="self">self</span>, flag: char) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>short_flag_aliases_to(<span class="kw-2">&amp;</span><span class="self">self</span>, flag: char) -&gt; bool {
         <span class="prelude-val">Some</span>(flag) == <span class="self">self</span>.short_flag
             || <span class="self">self</span>.get_all_short_flag_aliases().any(|alias| flag == alias)
     }
 
     <span class="doccomment">/// Check if this subcommand can be referred to as `name`. In other words,
     /// check if `name` is the name of this long flag subcommand or is one of its long flag aliases.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>long_flag_aliases_to&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, flag: <span class="kw-2">&amp;</span>T) -&gt; bool
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>long_flag_aliases_to&lt;T&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, flag: <span class="kw-2">&amp;</span>T) -&gt; bool
     <span class="kw">where
         </span>T: PartialEq&lt;str&gt; + <span class="question-mark">?</span>Sized,
     {
@@ -10077,8 +10127,8 @@ To change `help`s short, call `cmd.arg(Arg::new(\&quot;help\&quot;)...)`.&quot;<
         }
     }
 
-    <span class="attribute">#[cfg(debug_assertions)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>id_exists(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>Id) -&gt; bool {
+    <span class="attribute">#[cfg(debug_assertions)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>id_exists(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>Id) -&gt; bool {
         <span class="self">self</span>.args.args().any(|x| x.id == <span class="kw-2">*</span>id) || <span class="self">self</span>.groups.iter().any(|x| x.id == <span class="kw-2">*</span>id)
     }
 
@@ -10246,8 +10296,8 @@ To change `help`s short, call `cmd.arg(Arg::new(\&quot;help\&quot;)...)`.&quot;<
 
     <span class="comment">// Should we color the help?
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>color_help(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ColorChoice {
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;color&quot;</span>)]</span>
-        <span class="kw">if </span><span class="self">self</span>.is_disable_colored_help_set() {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;color&quot;</span>)]
+        </span><span class="kw">if </span><span class="self">self</span>.is_disable_colored_help_set() {
             <span class="kw">return </span>ColorChoice::Never;
         }
 
@@ -10324,9 +10374,9 @@ To change `help`s short, call `cmd.arg(Arg::new(\&quot;help\&quot;)...)`.&quot;<
     }
 }
 
-<span class="attribute">#[test]</span>
-<span class="kw">fn </span>check_auto_traits() {
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>check_auto_traits() {
     <span class="macro">static_assertions::assert_impl_all!</span>(Command: Send, Sync, Unpin);
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/unsafe-libyaml-0.2.2/src/yaml.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>yaml.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../unsafe_libyaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../unsafe_libyaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../unsafe_libyaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/unsafe-libyaml-0.2.2/src/yaml.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>yaml.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../unsafe_libyaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../unsafe_libyaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../unsafe_libyaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1294,10 +1294,10 @@
 <span class="kw">pub use </span>core::primitive::{i64 <span class="kw">as </span>ptrdiff_t, u64 <span class="kw">as </span>size_t, u8 <span class="kw">as </span>yaml_char_t};
 
 <span class="doccomment">/// The version directive data.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_version_directive_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_version_directive_t {
     <span class="doccomment">/// The major version number.
     </span><span class="kw">pub </span>major: libc::c_int,
     <span class="doccomment">/// The minor version number.
@@ -1305,10 +1305,10 @@
 }
 
 <span class="doccomment">/// The tag directive data.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_tag_directive_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_tag_directive_t {
     <span class="doccomment">/// The tag handle.
     </span><span class="kw">pub </span>handle: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The tag prefix.
@@ -1316,10 +1316,10 @@
 }
 
 <span class="doccomment">/// The stream encoding.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_encoding_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_encoding_t {
     <span class="doccomment">/// Let the parser choose the encoding.
     </span>YAML_ANY_ENCODING = <span class="number">0</span>,
     <span class="doccomment">/// The default UTF-8 encoding.
@@ -1331,10 +1331,10 @@
 }
 
 <span class="doccomment">/// Line break type.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_break_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_break_t {
     <span class="doccomment">/// Let the parser choose the break type.
     </span>YAML_ANY_BREAK = <span class="number">0</span>,
     <span class="doccomment">/// Use CR for line breaks (Mac style).
@@ -1346,10 +1346,10 @@
 }
 
 <span class="doccomment">/// Many bad things could happen with the parser and emitter.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_error_type_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_error_type_t {
     <span class="doccomment">/// No error is produced.
     </span>YAML_NO_ERROR = <span class="number">0</span>,
     <span class="doccomment">/// Cannot allocate or reallocate a block of memory.
@@ -1369,10 +1369,10 @@
 }
 
 <span class="doccomment">/// The pointer position.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_mark_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_mark_t {
     <span class="doccomment">/// The position index.
     </span><span class="kw">pub </span>index: size_t,
     <span class="doccomment">/// The position line.
@@ -1382,10 +1382,10 @@
 }
 
 <span class="doccomment">/// Scalar styles.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_scalar_style_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_scalar_style_t {
     <span class="doccomment">/// Let the emitter choose the style.
     </span>YAML_ANY_SCALAR_STYLE = <span class="number">0</span>,
     <span class="doccomment">/// The plain scalar style.
@@ -1401,10 +1401,10 @@
 }
 
 <span class="doccomment">/// Sequence styles.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_sequence_style_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_sequence_style_t {
     <span class="doccomment">/// Let the emitter choose the style.
     </span>YAML_ANY_SEQUENCE_STYLE = <span class="number">0</span>,
     <span class="doccomment">/// The block sequence style.
@@ -1414,10 +1414,10 @@
 }
 
 <span class="doccomment">/// Mapping styles.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_mapping_style_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_mapping_style_t {
     <span class="doccomment">/// Let the emitter choose the style.
     </span>YAML_ANY_MAPPING_STYLE = <span class="number">0</span>,
     <span class="doccomment">/// The block mapping style.
@@ -1427,10 +1427,10 @@
 }
 
 <span class="doccomment">/// Token types.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_token_type_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_token_type_t {
     <span class="doccomment">/// An empty token.
     </span>YAML_NO_TOKEN = <span class="number">0</span>,
     <span class="doccomment">/// A STREAM-START token.
@@ -1478,10 +1478,10 @@
 }
 
 <span class="doccomment">/// The token structure.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_token_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_token_t {
     <span class="doccomment">/// The token type.
     </span><span class="kw">pub </span>type_: yaml_token_type_t,
     <span class="doccomment">/// The token data.
@@ -1544,9 +1544,9 @@
     </span><span class="kw">pub </span>end_mark: yaml_mark_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub union </span>unnamed_yaml_token_t_data {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub union </span>unnamed_yaml_token_t_data {
     <span class="doccomment">/// The stream start (for YAML_STREAM_START_TOKEN).
     </span><span class="kw">pub </span>stream_start: unnamed_yaml_token_t_data_stream_start,
     <span class="doccomment">/// The alias (for YAML_ALIAS_TOKEN).
@@ -1563,44 +1563,44 @@
     </span><span class="kw">pub </span>tag_directive: unnamed_yaml_token_t_data_tag_directive,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_token_t_data_stream_start {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_token_t_data_stream_start {
     <span class="doccomment">/// The stream encoding.
     </span><span class="kw">pub </span>encoding: yaml_encoding_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_token_t_data_alias {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_token_t_data_alias {
     <span class="doccomment">/// The alias value.
     </span><span class="kw">pub </span>value: <span class="kw-2">*mut </span>yaml_char_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_token_t_data_anchor {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_token_t_data_anchor {
     <span class="doccomment">/// The anchor value.
     </span><span class="kw">pub </span>value: <span class="kw-2">*mut </span>yaml_char_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_token_t_data_tag {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_token_t_data_tag {
     <span class="doccomment">/// The tag handle.
     </span><span class="kw">pub </span>handle: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The tag suffix.
     </span><span class="kw">pub </span>suffix: <span class="kw-2">*mut </span>yaml_char_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_token_t_data_scalar {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_token_t_data_scalar {
     <span class="doccomment">/// The scalar value.
     </span><span class="kw">pub </span>value: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The length of the scalar value.
@@ -1609,20 +1609,20 @@
     </span><span class="kw">pub </span>style: yaml_scalar_style_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_token_t_data_version_directive {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_token_t_data_version_directive {
     <span class="doccomment">/// The major version number.
     </span><span class="kw">pub </span>major: libc::c_int,
     <span class="doccomment">/// The minor version number.
     </span><span class="kw">pub </span>minor: libc::c_int,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_token_t_data_tag_directive {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_token_t_data_tag_directive {
     <span class="doccomment">/// The tag handle.
     </span><span class="kw">pub </span>handle: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The tag prefix.
@@ -1630,10 +1630,10 @@
 }
 
 <span class="doccomment">/// Event types.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_event_type_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_event_type_t {
     <span class="doccomment">/// An empty event.
     </span>YAML_NO_EVENT = <span class="number">0</span>,
     <span class="doccomment">/// A STREAM-START event.
@@ -1659,10 +1659,10 @@
 }
 
 <span class="doccomment">/// The event structure.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_event_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_event_t {
     <span class="doccomment">/// The event type.
     </span><span class="kw">pub </span>type_: yaml_event_type_t,
     <span class="doccomment">/// The event data.
@@ -1748,9 +1748,9 @@
     </span><span class="kw">pub </span>end_mark: yaml_mark_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub union </span>unnamed_yaml_event_t_data {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub union </span>unnamed_yaml_event_t_data {
     <span class="doccomment">/// The stream parameters (for YAML_STREAM_START_EVENT).
     </span><span class="kw">pub </span>stream_start: unnamed_yaml_event_t_data_stream_start,
     <span class="doccomment">/// The document parameters (for YAML_DOCUMENT_START_EVENT).
@@ -1767,18 +1767,18 @@
     </span><span class="kw">pub </span>mapping_start: unnamed_yaml_event_t_data_mapping_start,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_stream_start {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_stream_start {
     <span class="doccomment">/// The document encoding.
     </span><span class="kw">pub </span>encoding: yaml_encoding_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_document_start {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_document_start {
     <span class="doccomment">/// The version directive.
     </span><span class="kw">pub </span>version_directive: <span class="kw-2">*mut </span>yaml_version_directive_t,
     <span class="doccomment">/// The list of tag directives.
@@ -1787,36 +1787,36 @@
     </span><span class="kw">pub </span>implicit: bool,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_document_start_tag_directives {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_document_start_tag_directives {
     <span class="doccomment">/// The beginning of the tag directives list.
     </span><span class="kw">pub </span>start: <span class="kw-2">*mut </span>yaml_tag_directive_t,
     <span class="doccomment">/// The end of the tag directives list.
     </span><span class="kw">pub </span>end: <span class="kw-2">*mut </span>yaml_tag_directive_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_document_end {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_document_end {
     <span class="doccomment">/// Is the document end indicator implicit?
     </span><span class="kw">pub </span>implicit: bool,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_alias {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_alias {
     <span class="doccomment">/// The anchor.
     </span><span class="kw">pub </span>anchor: <span class="kw-2">*mut </span>yaml_char_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_scalar {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_scalar {
     <span class="doccomment">/// The anchor.
     </span><span class="kw">pub </span>anchor: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The tag.
@@ -1833,10 +1833,10 @@
     </span><span class="kw">pub </span>style: yaml_scalar_style_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_sequence_start {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_sequence_start {
     <span class="doccomment">/// The anchor.
     </span><span class="kw">pub </span>anchor: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The tag.
@@ -1847,10 +1847,10 @@
     </span><span class="kw">pub </span>style: yaml_sequence_style_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_event_t_data_mapping_start {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_event_t_data_mapping_start {
     <span class="doccomment">/// The anchor.
     </span><span class="kw">pub </span>anchor: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The tag.
@@ -1862,10 +1862,10 @@
 }
 
 <span class="doccomment">/// Node types.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_node_type_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_node_type_t {
     <span class="doccomment">/// An empty node.
     </span>YAML_NO_NODE = <span class="number">0</span>,
     <span class="doccomment">/// A scalar node.
@@ -1877,10 +1877,10 @@
 }
 
 <span class="doccomment">/// The node structure.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_node_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_node_t {
     <span class="doccomment">/// The node type.
     </span><span class="kw">pub </span>type_: yaml_node_type_t,
     <span class="doccomment">/// The node tag.
@@ -1923,9 +1923,9 @@
     </span><span class="kw">pub </span>end_mark: yaml_mark_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub union </span>unnamed_yaml_node_t_data {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub union </span>unnamed_yaml_node_t_data {
     <span class="doccomment">/// The scalar parameters (for YAML_SCALAR_NODE).
     </span><span class="kw">pub </span>scalar: unnamed_yaml_node_t_data_scalar,
     <span class="doccomment">/// The sequence parameters (for YAML_SEQUENCE_NODE).
@@ -1934,10 +1934,10 @@
     </span><span class="kw">pub </span>mapping: unnamed_yaml_node_t_data_mapping,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_node_t_data_scalar {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_node_t_data_scalar {
     <span class="doccomment">/// The scalar value.
     </span><span class="kw">pub </span>value: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The length of the scalar value.
@@ -1949,20 +1949,20 @@
 <span class="doccomment">/// An element of a sequence node.
 </span><span class="kw">pub type </span>yaml_node_item_t = libc::c_int;
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_node_t_data_sequence {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_node_t_data_sequence {
     <span class="doccomment">/// The stack of sequence items.
     </span><span class="kw">pub </span>items: yaml_stack_t&lt;yaml_node_item_t&gt;,
     <span class="doccomment">/// The sequence style.
     </span><span class="kw">pub </span>style: yaml_sequence_style_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_node_t_data_mapping {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_node_t_data_mapping {
     <span class="doccomment">/// The stack of mapping pairs (key, value).
     </span><span class="kw">pub </span>pairs: yaml_stack_t&lt;yaml_node_pair_t&gt;,
     <span class="doccomment">/// The mapping style.
@@ -1970,10 +1970,10 @@
 }
 
 <span class="doccomment">/// An element of a mapping node.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_node_pair_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_node_pair_t {
     <span class="doccomment">/// The key of the element.
     </span><span class="kw">pub </span>key: libc::c_int,
     <span class="doccomment">/// The value of the element.
@@ -1981,10 +1981,10 @@
 }
 
 <span class="doccomment">/// The document structure.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_document_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_document_t {
     <span class="doccomment">/// The document nodes.
     </span><span class="kw">pub </span>nodes: yaml_stack_t&lt;yaml_node_t&gt;,
     <span class="doccomment">/// The version directive.
@@ -2012,10 +2012,10 @@
     </span><span class="kw">pub </span>end_mark: yaml_mark_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>unnamed_yaml_document_t_tag_directives {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>unnamed_yaml_document_t_tag_directives {
     <span class="doccomment">/// The beginning of the tag directives list.
     </span><span class="kw">pub </span>start: <span class="kw-2">*mut </span>yaml_tag_directive_t,
     <span class="doccomment">/// The end of the tag directives list.
@@ -2039,10 +2039,10 @@
 ) -&gt; libc::c_int;
 
 <span class="doccomment">/// This structure holds information about a potential simple key.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_simple_key_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_simple_key_t {
     <span class="doccomment">/// Is a simple key possible?
     </span><span class="kw">pub </span>possible: bool,
     <span class="doccomment">/// Is a simple key required?
@@ -2054,10 +2054,10 @@
 }
 
 <span class="doccomment">/// The states of the parser.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_parser_state_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_parser_state_t {
     <span class="doccomment">/// Expect STREAM-START.
     </span>YAML_PARSE_STREAM_START_STATE = <span class="number">0</span>,
     <span class="doccomment">/// Expect the beginning of an implicit document.
@@ -2109,10 +2109,10 @@
 }
 
 <span class="doccomment">/// This structure holds aliases data.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_alias_data_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_alias_data_t {
     <span class="doccomment">/// The anchor.
     </span><span class="kw">pub </span>anchor: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The node id.
@@ -2125,45 +2125,45 @@
 ///
 /// All members are internal. Manage the structure using the `yaml_parser_`
 /// family of functions.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_parser_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_parser_t {
     <span class="doccomment">/// Error type.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>error: yaml_error_type_t,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) error: yaml_error_type_t,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>error: yaml_error_type_t,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) error: yaml_error_type_t,
     <span class="doccomment">/// Error description.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>problem: <span class="kw-2">*const </span>libc::c_char,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) problem: <span class="kw-2">*const </span>libc::c_char,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>problem: <span class="kw-2">*const </span>libc::c_char,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) problem: <span class="kw-2">*const </span>libc::c_char,
     <span class="doccomment">/// The byte about which the problem occured.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>problem_offset: size_t,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) problem_offset: size_t,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>problem_offset: size_t,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) problem_offset: size_t,
     <span class="doccomment">/// The problematic value (-1 is none).
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>problem_value: libc::c_int,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) problem_value: libc::c_int,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>problem_value: libc::c_int,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) problem_value: libc::c_int,
     <span class="doccomment">/// The problem position.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>problem_mark: yaml_mark_t,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) problem_mark: yaml_mark_t,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>problem_mark: yaml_mark_t,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) problem_mark: yaml_mark_t,
     <span class="doccomment">/// The error context.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>context: <span class="kw-2">*const </span>libc::c_char,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) context: <span class="kw-2">*const </span>libc::c_char,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>context: <span class="kw-2">*const </span>libc::c_char,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) context: <span class="kw-2">*const </span>libc::c_char,
     <span class="doccomment">/// The context position.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>context_mark: yaml_mark_t,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) context_mark: yaml_mark_t,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>context_mark: yaml_mark_t,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) context_mark: yaml_mark_t,
     <span class="doccomment">/// Read handler.
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) read_handler: <span class="prelude-ty">Option</span>&lt;yaml_read_handler_t&gt;,
     <span class="doccomment">/// A pointer for passing to the read handler.
@@ -2218,9 +2218,9 @@
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) document: <span class="kw-2">*mut </span>yaml_document_t,
 }
 
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_parser_t_prefix {
+<span class="attribute">#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_parser_t_prefix {
     <span class="doccomment">/// Error type.
     </span><span class="kw">pub </span>error: yaml_error_type_t,
     <span class="doccomment">/// Error description.
@@ -2237,24 +2237,24 @@
     </span><span class="kw">pub </span>context_mark: yaml_mark_t,
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="kw">impl </span>Deref <span class="kw">for </span>yaml_parser_t {
+<span class="attribute">#[doc(hidden)]
+</span><span class="kw">impl </span>Deref <span class="kw">for </span>yaml_parser_t {
     <span class="kw">type </span>Target = yaml_parser_t_prefix;
     <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="macro">addr_of!</span>(<span class="kw-2">*</span><span class="self">self</span>).cast() }
     }
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">union </span>unnamed_yaml_parser_t_input {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">union </span>unnamed_yaml_parser_t_input {
     <span class="doccomment">/// String input data.
     </span><span class="kw">pub </span>string: unnamed_yaml_parser_t_input_string,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_parser_t_input_string {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_parser_t_input_string {
     <span class="doccomment">/// The string start pointer.
     </span><span class="kw">pub </span>start: <span class="kw-2">*const </span>libc::c_uchar,
     <span class="doccomment">/// The string end pointer.
@@ -2275,10 +2275,10 @@
     <span class="kw">unsafe fn</span>(data: <span class="kw-2">*mut </span>libc::c_void, buffer: <span class="kw-2">*mut </span>libc::c_uchar, size: size_t) -&gt; libc::c_int;
 
 <span class="doccomment">/// The emitter states.
-</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]</span>
-<span class="attribute">#[repr(u32)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub enum </span>yaml_emitter_state_t {
+</span><span class="attribute">#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[repr(u32)]
+#[non_exhaustive]
+</span><span class="kw">pub enum </span>yaml_emitter_state_t {
     <span class="doccomment">/// Expect STREAM-START.
     </span>YAML_EMIT_STREAM_START_STATE = <span class="number">0</span>,
     <span class="doccomment">/// Expect the first DOCUMENT-START or STREAM-END.
@@ -2317,9 +2317,9 @@
     </span>YAML_EMIT_END_STATE = <span class="number">17</span>,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_anchors_t {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_anchors_t {
     <span class="doccomment">/// The number of references.
     </span><span class="kw">pub </span>references: libc::c_int,
     <span class="doccomment">/// The anchor id.
@@ -2332,20 +2332,20 @@
 ///
 /// All members are internal. Manage the structure using the `yaml_emitter_`
 /// family of functions.
-</span><span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_emitter_t {
+</span><span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_emitter_t {
     <span class="doccomment">/// Error type.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>error: yaml_error_type_t,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) error: yaml_error_type_t,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>error: yaml_error_type_t,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) error: yaml_error_type_t,
     <span class="doccomment">/// Error description.
-    </span><span class="attribute">#[cfg(doc)]</span>
-    <span class="kw">pub </span>problem: <span class="kw-2">*const </span>libc::c_char,
-    <span class="attribute">#[cfg(not(doc))]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) problem: <span class="kw-2">*const </span>libc::c_char,
+    </span><span class="attribute">#[cfg(doc)]
+    </span><span class="kw">pub </span>problem: <span class="kw-2">*const </span>libc::c_char,
+    <span class="attribute">#[cfg(not(doc))]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) problem: <span class="kw-2">*const </span>libc::c_char,
     <span class="doccomment">/// Write handler.
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) write_handler: <span class="prelude-ty">Option</span>&lt;yaml_write_handler_t&gt;,
     <span class="doccomment">/// A pointer for passing to the write handler.
@@ -2418,33 +2418,33 @@
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) document: <span class="kw-2">*mut </span>yaml_document_t,
 }
 
-<span class="attribute">#[repr(C)]</span>
-<span class="attribute">#[non_exhaustive]</span>
-<span class="kw">pub struct </span>yaml_emitter_t_prefix {
+<span class="attribute">#[repr(C)]
+#[non_exhaustive]
+</span><span class="kw">pub struct </span>yaml_emitter_t_prefix {
     <span class="doccomment">/// Error type.
     </span><span class="kw">pub </span>error: yaml_error_type_t,
     <span class="doccomment">/// Error description.
     </span><span class="kw">pub </span>problem: <span class="kw-2">*const </span>libc::c_char,
 }
 
-<span class="attribute">#[doc(hidden)]</span>
-<span class="kw">impl </span>Deref <span class="kw">for </span>yaml_emitter_t {
+<span class="attribute">#[doc(hidden)]
+</span><span class="kw">impl </span>Deref <span class="kw">for </span>yaml_emitter_t {
     <span class="kw">type </span>Target = yaml_emitter_t_prefix;
     <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="macro">addr_of!</span>(<span class="kw-2">*</span><span class="self">self</span>).cast() }
     }
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">union </span>unnamed_yaml_emitter_t_output {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">union </span>unnamed_yaml_emitter_t_output {
     <span class="doccomment">/// String output data.
     </span><span class="kw">pub </span>string: unnamed_yaml_emitter_t_output_string,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_output_string {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_output_string {
     <span class="doccomment">/// The buffer pointer.
     </span><span class="kw">pub </span>buffer: <span class="kw-2">*mut </span>libc::c_uchar,
     <span class="doccomment">/// The buffer size.
@@ -2453,9 +2453,9 @@
     </span><span class="kw">pub </span>size_written: <span class="kw-2">*mut </span>size_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_anchor_data {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_anchor_data {
     <span class="doccomment">/// The anchor value.
     </span><span class="kw">pub </span>anchor: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The anchor length.
@@ -2464,9 +2464,9 @@
     </span><span class="kw">pub </span>alias: bool,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_tag_data {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_tag_data {
     <span class="doccomment">/// The tag handle.
     </span><span class="kw">pub </span>handle: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The tag handle length.
@@ -2477,9 +2477,9 @@
     </span><span class="kw">pub </span>suffix_length: size_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_scalar_data {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>unnamed_yaml_emitter_t_scalar_data {
     <span class="doccomment">/// The scalar value.
     </span><span class="kw">pub </span>value: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="doccomment">/// The scalar length.
@@ -2498,9 +2498,9 @@
     </span><span class="kw">pub </span>style: yaml_scalar_style_t,
 }
 
-<span class="attribute">#[derive(Copy, Clone)]</span>
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_string_t {
+<span class="attribute">#[derive(Copy, Clone)]
+#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_string_t {
     <span class="kw">pub </span>start: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="kw">pub </span>end: <span class="kw-2">*mut </span>yaml_char_t,
     <span class="kw">pub </span>pointer: <span class="kw-2">*mut </span>yaml_char_t,
@@ -2512,8 +2512,8 @@
     pointer: ptr::null_mut::&lt;yaml_char_t&gt;(),
 };
 
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_buffer_t&lt;T&gt; {
+<span class="attribute">#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_buffer_t&lt;T&gt; {
     <span class="doccomment">/// The beginning of the buffer.
     </span><span class="kw">pub </span>start: <span class="kw-2">*mut </span>T,
     <span class="doccomment">/// The end of the buffer.
@@ -2531,8 +2531,8 @@
     </span>}
 }
 
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub struct </span>yaml_stack_t&lt;T&gt; {
+<span class="attribute">#[repr(C)]
+</span><span class="kw">pub struct </span>yaml_stack_t&lt;T&gt; {
     <span class="doccomment">/// The beginning of the stack.
     </span><span class="kw">pub </span>start: <span class="kw-2">*mut </span>T,
     <span class="doccomment">/// The end of the stack.
@@ -2548,8 +2548,8 @@
     </span>}
 }
 
-<span class="attribute">#[repr(C)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_queue_t&lt;T&gt; {
+<span class="attribute">#[repr(C)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>yaml_queue_t&lt;T&gt; {
     <span class="doccomment">/// The beginning of the queue.
     </span><span class="kw">pub </span>start: <span class="kw-2">*mut </span>T,
     <span class="doccomment">/// The end of the queue.
@@ -2567,4 +2567,4 @@
     </span>}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="unsafe_libyaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="unsafe_libyaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

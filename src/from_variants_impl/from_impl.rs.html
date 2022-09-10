@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/from_variants_impl-1.0.0/src/from_impl.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>from_impl.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../from_variants_impl/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../from_variants_impl/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../from_variants_impl/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/from_variants_impl-1.0.0/src/from_impl.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>from_impl.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../from_variants_impl/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../from_variants_impl/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../from_variants_impl/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -193,8 +193,8 @@
 </span><span class="kw">const </span>INTO_GENERIC: <span class="kw-2">&amp;</span>str = <span class="string">&quot;INTO&quot;</span>;
 
 <span class="doccomment">/// A view of data which can generate a `From&lt;T&gt; for Target` impl block.
-</span><span class="attribute">#[derive(Debug, Clone)]</span>
-<span class="kw">pub struct </span>FromImpl&lt;<span class="lifetime">&#39;a</span>&gt; {
+</span><span class="attribute">#[derive(Debug, Clone)]
+</span><span class="kw">pub struct </span>FromImpl&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="doccomment">/// The generics of the target enum.
     </span><span class="kw">pub </span>generics: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>syn::Generics,
 
@@ -228,8 +228,8 @@
             <span class="kw">let </span>into_variant = syn::Ident::new(INTO_GENERIC, Span::call_site());
 
             tokens.extend(<span class="macro">quote!</span>(
-                <span class="attribute">#[doc = #doc_comment]</span>
-                <span class="kw">impl </span>#i ::from_variants::export::From&lt;#into_variant&gt; <span class="kw">for </span>#target_ident #ty_generics
+                <span class="attribute">#[doc = #doc_comment]
+                </span><span class="kw">impl </span>#i ::from_variants::export::From&lt;#into_variant&gt; <span class="kw">for </span>#target_ident #ty_generics
                     #where_clause {
                     <span class="kw">fn </span>from(v: #into_variant) -&gt; <span class="self">Self </span>{
                         #target_ident::#variant_ident(v.into())
@@ -238,8 +238,8 @@
             ))
         } <span class="kw">else </span>{
             tokens.extend(<span class="macro">quote!</span>(
-                <span class="attribute">#[doc = #doc_comment]</span>
-                <span class="kw">impl </span>#impl_generics ::from_variants::export::From&lt;#variant_ty&gt; <span class="kw">for </span>#target_ident #ty_generics
+                <span class="attribute">#[doc = #doc_comment]
+                </span><span class="kw">impl </span>#impl_generics ::from_variants::export::From&lt;#variant_ty&gt; <span class="kw">for </span>#target_ident #ty_generics
                     #where_clause {
                     <span class="kw">fn </span>from(v: #variant_ty) -&gt; <span class="self">Self </span>{
                         #target_ident::#variant_ident(v)
@@ -255,8 +255,8 @@
     <span class="macro">parse_quote!</span>(#into: ::from_variants::export::Into&lt;#variant_ty&gt;)
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="macro">macro_rules!</span> default_from_impl {
+<span class="attribute">#[cfg(test)]
+</span><span class="macro">macro_rules! </span>default_from_impl {
     () =&gt; {{
         FromImpl {
             generics: <span class="kw-2">&amp;</span>Default::default(),
@@ -275,9 +275,9 @@
 // spacing, so we have to arrange the angle brackets in `quote!` to match the
 // output of macro under test, but `rustfmt` doesn&#39;t care about spacing in macros
 // too much and tries to change it.
-</span><span class="attribute">#[cfg(test)]</span>
-<span class="attribute">#[rustfmt::skip]</span>
-<span class="kw">mod </span>tests {
+</span><span class="attribute">#[cfg(test)]
+#[rustfmt::skip]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span><span class="kw">super</span>::FromImpl;
     <span class="kw">use </span>pretty_assertions::assert_eq;
     <span class="kw">use </span>quote::<span class="kw-2">*</span>;
@@ -287,14 +287,14 @@
         <span class="macro">assert_eq!</span>(actual.into_token_stream().to_string(), expected.to_string());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>simple() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>simple() {
         <span class="kw">let </span>fi = <span class="macro">default_from_impl!</span>();
         assert_generates(
             fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl </span>::from_variants::export::From&lt;String&gt; <span class="kw">for </span>Foo {
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]
+                </span><span class="kw">impl </span>::from_variants::export::From&lt;String&gt; <span class="kw">for </span>Foo {
                     <span class="kw">fn </span>from(v: String) -&gt; <span class="self">Self </span>{
                         Foo::Bar(v)
                     }
@@ -303,8 +303,8 @@
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>lifetime() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>lifetime() {
         <span class="kw">let </span><span class="kw-2">mut </span>generics = syn::Generics::default();
         generics.params.push(<span class="macro">parse_quote!</span>(<span class="lifetime">&#39;a</span>));
 
@@ -317,8 +317,8 @@
         assert_generates(
             fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ::from_variants::export::From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt; <span class="kw">for </span>Foo&lt;<span class="lifetime">&#39;a</span>&gt; {
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]
+                </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ::from_variants::export::From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt; <span class="kw">for </span>Foo&lt;<span class="lifetime">&#39;a</span>&gt; {
                     <span class="kw">fn </span>from(v: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; <span class="self">Self </span>{
                         Foo::Bar(v)
                     }
@@ -327,16 +327,16 @@
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>into() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>into() {
         <span class="kw">let </span><span class="kw-2">mut </span>fi = <span class="macro">default_from_impl!</span>();
         fi.into = <span class="bool-val">true</span>;
 
         assert_generates(
             fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl</span>&lt;INTO: ::from_variants::export::Into&lt;String&gt; &gt;
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]
+                </span><span class="kw">impl</span>&lt;INTO: ::from_variants::export::Into&lt;String&gt; &gt;
                     ::from_variants::export::From&lt;INTO&gt; <span class="kw">for </span>Foo
                 {
                     <span class="kw">fn </span>from(v: INTO) -&gt; <span class="self">Self </span>{
@@ -347,8 +347,8 @@
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>into_generics() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>into_generics() {
         <span class="kw">let </span><span class="kw-2">mut </span>generics: syn::Generics = syn::Generics::default();
         <span class="kw">let </span>ty = <span class="macro">parse_quote!</span>(Vec&lt;T&gt;);
         generics.params.push(<span class="macro">parse_quote!</span>(T));
@@ -360,8 +360,8 @@
         assert_generates(
             fi,
             <span class="macro">quote!</span>(
-                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]</span>
-                <span class="kw">impl</span>&lt;T, INTO: ::from_variants::export::Into&lt;Vec&lt;T&gt; &gt; &gt;
+                <span class="attribute">#[doc = <span class="string">&quot;Convert into [`Bar`](#variant.Bar) variant.&quot;</span>]
+                </span><span class="kw">impl</span>&lt;T, INTO: ::from_variants::export::Into&lt;Vec&lt;T&gt; &gt; &gt;
                     ::from_variants::export::From&lt;INTO&gt; <span class="kw">for </span>Foo&lt;T&gt;
                 {
                     <span class="kw">fn </span>from(v: INTO) -&gt; <span class="self">Self </span>{
@@ -373,4 +373,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="from_variants_impl" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="from_variants_impl" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

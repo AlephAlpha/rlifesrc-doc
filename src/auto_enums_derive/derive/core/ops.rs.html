@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/auto_enums_derive-0.7.12/src/derive/core/ops.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ops.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../auto_enums_derive/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/auto_enums_derive-0.7.12/src/derive/core/ops.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>ops.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../auto_enums_derive/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -214,25 +214,25 @@
 <span id="214">214</span>
 <span id="215">215</span>
 <span id="216">216</span>
-</pre><pre class="rust"><code><span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>deref {
+</pre><pre class="rust"><code><span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>deref {
     <span class="kw">use </span><span class="kw">crate</span>::derive::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;Deref&quot;</span>];
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>derive(data: <span class="kw-2">&amp;</span>Data) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
-        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::Deref), <span class="prelude-val">None</span>, <span class="macro">parse_quote!</span> {
+        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::Deref), <span class="prelude-val">None</span>, <span class="macro">parse_quote! </span>{
             <span class="kw">trait </span>Deref {
                 <span class="kw">type </span>Target;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target;
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target;
             }
         }))
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>deref_mut {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>deref_mut {
     <span class="kw">use </span><span class="kw">crate</span>::derive::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;DerefMut&quot;</span>];
@@ -242,35 +242,35 @@
             data,
             <span class="macro">parse_quote!</span>(::core::ops::DerefMut),
             <span class="prelude-val">Some</span>(<span class="macro">format_ident!</span>(<span class="string">&quot;Target&quot;</span>)),
-            <span class="macro">parse_quote!</span> {
+            <span class="macro">parse_quote! </span>{
                 <span class="kw">trait </span>DerefMut: ::core::ops::Deref {
-                    <span class="attribute">#[inline]</span>
-                    <span class="kw">fn </span>deref_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Target;
+                    <span class="attribute">#[inline]
+                    </span><span class="kw">fn </span>deref_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Target;
                 }
             },
         ))
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>index {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>index {
     <span class="kw">use </span><span class="kw">crate</span>::derive::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;Index&quot;</span>];
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>derive(data: <span class="kw-2">&amp;</span>Data) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
-        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::Index), <span class="prelude-val">None</span>, <span class="macro">parse_quote!</span> {
+        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::Index), <span class="prelude-val">None</span>, <span class="macro">parse_quote! </span>{
             <span class="kw">trait </span>Index&lt;__Idx&gt; {
                 <span class="kw">type </span>Output;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, index: __Idx) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Output;
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, index: __Idx) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Output;
             }
         }))
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>index_mut {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>index_mut {
     <span class="kw">use </span><span class="kw">crate</span>::derive::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;IndexMut&quot;</span>];
@@ -280,47 +280,47 @@
             data,
             <span class="macro">parse_quote!</span>(::core::ops::IndexMut),
             <span class="prelude-val">Some</span>(<span class="macro">format_ident!</span>(<span class="string">&quot;Output&quot;</span>)),
-            <span class="macro">parse_quote!</span> {
+            <span class="macro">parse_quote! </span>{
                 <span class="kw">trait </span>IndexMut&lt;__Idx&gt;: ::core::ops::Index&lt;__Idx&gt; {
-                    <span class="attribute">#[inline]</span>
-                    <span class="kw">fn </span>index_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: __Idx) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Output;
+                    <span class="attribute">#[inline]
+                    </span><span class="kw">fn </span>index_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: __Idx) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Output;
                 }
             },
         ))
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>range_bounds {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;ops&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>range_bounds {
     <span class="kw">use </span><span class="kw">crate</span>::derive::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;RangeBounds&quot;</span>];
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>derive(data: <span class="kw-2">&amp;</span>Data) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
-        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::RangeBounds), <span class="prelude-val">None</span>, <span class="macro">parse_quote!</span> {
+        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::RangeBounds), <span class="prelude-val">None</span>, <span class="macro">parse_quote! </span>{
             <span class="kw">trait </span>RangeBounds&lt;__T: <span class="question-mark">?</span>Sized&gt; {
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>start_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ::core::ops::Bound&lt;<span class="kw-2">&amp;</span>__T&gt;;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>end_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ::core::ops::Bound&lt;<span class="kw-2">&amp;</span>__T&gt;;
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>start_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ::core::ops::Bound&lt;<span class="kw-2">&amp;</span>__T&gt;;
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>end_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ::core::ops::Bound&lt;<span class="kw-2">&amp;</span>__T&gt;;
             }
         }))
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;generator_trait&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>generator {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;generator_trait&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>generator {
     <span class="kw">use </span><span class="kw">crate</span>::derive::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;Generator&quot;</span>];
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>derive(data: <span class="kw-2">&amp;</span>Data) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
-        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::Generator), <span class="prelude-val">None</span>, <span class="macro">parse_quote!</span> {
+        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::ops::Generator), <span class="prelude-val">None</span>, <span class="macro">parse_quote! </span>{
             <span class="kw">trait </span>Generator&lt;R&gt; {
                 <span class="kw">type </span>Yield;
                 <span class="kw">type </span>Return;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>resume(
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>resume(
                     <span class="self">self</span>: ::core::pin::Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;,
                     arg: R,
                 ) -&gt; ::core::ops::GeneratorState&lt;<span class="self">Self</span>::Yield, <span class="self">Self</span>::Return&gt;;
@@ -329,8 +329,8 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;fn_traits&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>fn_ {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;fn_traits&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>fn_ {
     <span class="kw">use </span>derive_utils::EnumImpl;
     <span class="kw">use </span>syn::TypeParam;
 
@@ -353,17 +353,17 @@
             .skip(<span class="number">1</span>)
             .for_each(|f| impl_.push_where_predicate(<span class="macro">parse_quote!</span>(#f: #trait_)));
 
-        impl_.push_method(<span class="macro">parse_quote!</span> {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">extern </span><span class="string">&quot;rust-call&quot; </span><span class="kw">fn </span>call(<span class="kw-2">&amp;</span><span class="self">self</span>, args: (__T,)) -&gt; <span class="self">Self</span>::Output;
+        impl_.push_method(<span class="macro">parse_quote! </span>{
+            <span class="attribute">#[inline]
+            </span><span class="kw">extern </span><span class="string">&quot;rust-call&quot; </span><span class="kw">fn </span>call(<span class="kw-2">&amp;</span><span class="self">self</span>, args: (__T,)) -&gt; <span class="self">Self</span>::Output;
         });
 
         <span class="prelude-val">Ok</span>(impl_.build())
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;fn_traits&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>fn_mut {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;fn_traits&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>fn_mut {
     <span class="kw">use </span>derive_utils::EnumImpl;
     <span class="kw">use </span>syn::TypeParam;
 
@@ -386,17 +386,17 @@
             .skip(<span class="number">1</span>)
             .for_each(|f| impl_.push_where_predicate(<span class="macro">parse_quote!</span>(#f: #trait_)));
 
-        impl_.push_method(<span class="macro">parse_quote!</span> {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">extern </span><span class="string">&quot;rust-call&quot; </span><span class="kw">fn </span>call_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, args: (__T,)) -&gt; <span class="self">Self</span>::Output;
+        impl_.push_method(<span class="macro">parse_quote! </span>{
+            <span class="attribute">#[inline]
+            </span><span class="kw">extern </span><span class="string">&quot;rust-call&quot; </span><span class="kw">fn </span>call_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, args: (__T,)) -&gt; <span class="self">Self</span>::Output;
         });
 
         <span class="prelude-val">Ok</span>(impl_.build())
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;fn_traits&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>fn_once {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;fn_traits&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>fn_once {
     <span class="kw">use </span>derive_utils::EnumImpl;
     <span class="kw">use </span>syn::TypeParam;
 
@@ -419,11 +419,11 @@
             .skip(<span class="number">1</span>)
             .for_each(|f| impl_.push_where_predicate(<span class="macro">parse_quote!</span>(#f: #trait_)));
 
-        impl_.append_items_from_trait(<span class="macro">parse_quote!</span> {
+        impl_.append_items_from_trait(<span class="macro">parse_quote! </span>{
             <span class="kw">trait </span>FnOnce {
                 <span class="kw">type </span>Output;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">extern </span><span class="string">&quot;rust-call&quot; </span><span class="kw">fn </span>call_once(<span class="self">self</span>, args: (__T,)) -&gt; <span class="self">Self</span>::Output;
+                <span class="attribute">#[inline]
+                </span><span class="kw">extern </span><span class="string">&quot;rust-call&quot; </span><span class="kw">fn </span>call_once(<span class="self">self</span>, args: (__T,)) -&gt; <span class="self">Self</span>::Output;
             }
         });
 
@@ -431,4 +431,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="auto_enums_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="auto_enums_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

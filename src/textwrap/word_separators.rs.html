@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/textwrap-0.15.0/src/word_separators.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>word_separators.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../textwrap/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../textwrap/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../textwrap/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/textwrap-0.15.0/src/word_separators.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>word_separators.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../textwrap/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../textwrap/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../textwrap/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -442,8 +442,8 @@
 //! there words are in a line of text. Please refer to the trait and
 //! the structs which implement it for more information.
 
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::core::skip_ansi_escape_sequence;
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::core::skip_ansi_escape_sequence;
 <span class="kw">use </span><span class="kw">crate</span>::core::Word;
 
 <span class="doccomment">/// Describes where words occur in a line of text.
@@ -466,8 +466,8 @@
 /// let words = AsciiSpace.find_words(&quot;Hello World!&quot;).collect::&lt;Vec&lt;_&gt;&gt;();
 /// assert_eq!(words, vec![Word::from(&quot;Hello &quot;), Word::from(&quot;World!&quot;)]);
 /// ```
-</span><span class="attribute">#[derive(Clone, Copy)]</span>
-<span class="kw">pub enum </span>WordSeparator {
+</span><span class="attribute">#[derive(Clone, Copy)]
+</span><span class="kw">pub enum </span>WordSeparator {
     <span class="doccomment">/// Find words by splitting on runs of `&#39; &#39;` characters.
     ///
     /// # Examples
@@ -543,8 +543,8 @@
     ///                 Word::from(&quot;bar !&quot;)]);
     /// }
     /// ```
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-    UnicodeBreakProperties,
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+    </span>UnicodeBreakProperties,
 
     <span class="doccomment">/// Find words using a custom word separator
     </span>Custom(<span class="kw">fn</span>(line: <span class="kw-2">&amp;</span>str) -&gt; Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = Word&lt;<span class="lifetime">&#39;_</span>&gt;&gt; + <span class="lifetime">&#39;_</span>&gt;),
@@ -554,8 +554,8 @@
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
         <span class="kw">match </span><span class="self">self </span>{
             WordSeparator::AsciiSpace =&gt; f.write_str(<span class="string">&quot;AsciiSpace&quot;</span>),
-            <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-            WordSeparator::UnicodeBreakProperties =&gt; f.write_str(<span class="string">&quot;UnicodeBreakProperties&quot;</span>),
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+            </span>WordSeparator::UnicodeBreakProperties =&gt; f.write_str(<span class="string">&quot;UnicodeBreakProperties&quot;</span>),
             WordSeparator::Custom(<span class="kw">_</span>) =&gt; f.write_str(<span class="string">&quot;Custom(...)&quot;</span>),
         }
     }
@@ -569,8 +569,8 @@
     </span><span class="kw">pub fn </span>find_words&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, line: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str) -&gt; Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = Word&lt;<span class="lifetime">&#39;a</span>&gt;&gt; + <span class="lifetime">&#39;a</span>&gt; {
         <span class="kw">match </span><span class="self">self </span>{
             WordSeparator::AsciiSpace =&gt; find_words_ascii_space(line),
-            <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-            WordSeparator::UnicodeBreakProperties =&gt; find_words_unicode_break_properties(line),
+            <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+            </span>WordSeparator::UnicodeBreakProperties =&gt; find_words_unicode_break_properties(line),
             WordSeparator::Custom(func) =&gt; func(line),
         }
     }
@@ -587,8 +587,8 @@
         //
         // &gt; cannot move out of `char_indices`, a captured variable in
         // &gt; an `FnMut` closure
-        </span><span class="attribute">#[allow(clippy::while_let_on_iterator)]</span>
-        <span class="kw">while let </span><span class="prelude-val">Some</span>((idx, ch)) = char_indices.next() {
+        </span><span class="attribute">#[allow(clippy::while_let_on_iterator)]
+        </span><span class="kw">while let </span><span class="prelude-val">Some</span>((idx, ch)) = char_indices.next() {
             <span class="kw">if </span>in_whitespace &amp;&amp; ch != <span class="string">&#39; &#39; </span>{
                 <span class="kw">let </span>word = Word::from(<span class="kw-2">&amp;</span>line[start..idx]);
                 start = idx;
@@ -610,8 +610,8 @@
 }
 
 <span class="comment">// Strip all ANSI escape sequences from `text`.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-<span class="kw">fn </span>strip_ansi_escape_sequences(text: <span class="kw-2">&amp;</span>str) -&gt; String {
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+</span><span class="kw">fn </span>strip_ansi_escape_sequences(text: <span class="kw-2">&amp;</span>str) -&gt; String {
     <span class="kw">let </span><span class="kw-2">mut </span>result = String::with_capacity(text.len());
 
     <span class="kw">let </span><span class="kw-2">mut </span>chars = text.chars();
@@ -629,12 +629,12 @@
 /// if a line is broken at this point, and otherwise be invisible.
 /// Textwrap does not currently support breaking words at soft
 /// hyphens.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-<span class="kw">const </span>SHY: char = <span class="string">&#39;\u{00ad}&#39;</span>;
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+</span><span class="kw">const </span>SHY: char = <span class="string">&#39;\u{00ad}&#39;</span>;
 
 <span class="doccomment">/// Find words in line. ANSI escape sequences are ignored in `line`.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-<span class="kw">fn </span>find_words_unicode_break_properties&lt;<span class="lifetime">&#39;a</span>&gt;(
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+</span><span class="kw">fn </span>find_words_unicode_break_properties&lt;<span class="lifetime">&#39;a</span>&gt;(
     line: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str,
 ) -&gt; Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = Word&lt;<span class="lifetime">&#39;a</span>&gt;&gt; + <span class="lifetime">&#39;a</span>&gt; {
     <span class="comment">// Construct an iterator over (original index, stripped index)
@@ -657,8 +657,8 @@
     <span class="kw">let </span>stripped = strip_ansi_escape_sequences(line);
     <span class="kw">let </span><span class="kw-2">mut </span>opportunities = unicode_linebreak::linebreaks(<span class="kw-2">&amp;</span>stripped)
         .filter(|(idx, <span class="kw">_</span>)| {
-            <span class="attribute">#[allow(clippy::match_like_matches_macro)]</span>
-            <span class="kw">match </span><span class="kw-2">&amp;</span>stripped[..<span class="kw-2">*</span>idx].chars().next_back() {
+            <span class="attribute">#[allow(clippy::match_like_matches_macro)]
+            </span><span class="kw">match </span><span class="kw-2">&amp;</span>stripped[..<span class="kw-2">*</span>idx].chars().next_back() {
                 <span class="comment">// We suppress breaks at ‘-’ since we want to control
                 // this via the WordSplitter.
                 </span><span class="prelude-val">Some</span>(<span class="string">&#39;-&#39;</span>) =&gt; <span class="bool-val">false</span>,
@@ -680,8 +680,8 @@
 
     <span class="kw">let </span><span class="kw-2">mut </span>start = <span class="number">0</span>;
     Box::new(std::iter::from_fn(<span class="kw">move </span>|| {
-        <span class="attribute">#[allow(clippy::while_let_on_iterator)]</span>
-        <span class="kw">while let </span><span class="prelude-val">Some</span>((idx, <span class="kw">_</span>)) = opportunities.next() {
+        <span class="attribute">#[allow(clippy::while_let_on_iterator)]
+        </span><span class="kw">while let </span><span class="prelude-val">Some</span>((idx, <span class="kw">_</span>)) = opportunities.next() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>((orig_idx, <span class="kw">_</span>)) = idx_map.find(|<span class="kw-2">&amp;</span>(<span class="kw">_</span>, stripped_idx)| stripped_idx == idx) {
                 <span class="kw">let </span>word = Word::from(<span class="kw-2">&amp;</span>line[start..orig_idx]);
                 start = orig_idx;
@@ -699,13 +699,13 @@
     </span>}))
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span><span class="kw">super</span>::WordSeparator::<span class="kw-2">*</span>;
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
     <span class="comment">// Like assert_eq!, but the left expression is an iterator.
-    </span><span class="macro">macro_rules!</span> assert_iter_eq {
+    </span><span class="macro">macro_rules! </span>assert_iter_eq {
         (<span class="macro-nonterminal">$left</span>:expr, <span class="macro-nonterminal">$right</span>:expr) =&gt; {
             <span class="macro">assert_eq!</span>(<span class="macro-nonterminal">$left</span>.collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(), <span class="macro-nonterminal">$right</span>);
         };
@@ -715,12 +715,12 @@
         words.into_iter().map(|w: <span class="kw-2">&amp;</span>str| Word::from(<span class="kw-2">&amp;</span>w)).collect()
     }
 
-    <span class="macro">macro_rules!</span> test_find_words {
+    <span class="macro">macro_rules! </span>test_find_words {
         (<span class="macro-nonterminal">$ascii_name</span>:ident,
          <span class="macro-nonterminal">$unicode_name</span>:ident,
          $([ <span class="macro-nonterminal">$line</span>:expr, <span class="macro-nonterminal">$ascii_words</span>:expr, <span class="macro-nonterminal">$unicode_words</span>:expr ]),+) =&gt; {
-            <span class="attribute">#[test]</span>
-            <span class="kw">fn </span><span class="macro-nonterminal">$ascii_name</span>() {
+            <span class="attribute">#[test]
+            </span><span class="kw">fn </span><span class="macro-nonterminal">$ascii_name</span>() {
                 $(
                     <span class="kw">let </span>expected_words = to_words(<span class="macro-nonterminal">$ascii_words</span>.to_vec());
                     <span class="kw">let </span>actual_words = WordSeparator::AsciiSpace
@@ -730,9 +730,9 @@
                 )+
             }
 
-            <span class="attribute">#[test]</span>
-            <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-            <span class="kw">fn </span><span class="macro-nonterminal">$unicode_name</span>() {
+            <span class="attribute">#[test]
+            #[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+            </span><span class="kw">fn </span><span class="macro-nonterminal">$unicode_name</span>() {
                 $(
                     <span class="kw">let </span>expected_words = to_words(<span class="macro-nonterminal">$unicode_words</span>.to_vec());
                     <span class="kw">let </span>actual_words = WordSeparator::UnicodeBreakProperties
@@ -823,9 +823,9 @@
         [<span class="string">&quot;foo\u{00A0}bar&quot;</span>, [<span class="string">&quot;foo\u{00A0}bar&quot;</span>], [<span class="string">&quot;foo\u{00A0}bar&quot;</span>]]
     );
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(unix)]</span>
-    <span class="kw">fn </span>find_words_colored_text() {
+    <span class="attribute">#[test]
+    #[cfg(unix)]
+    </span><span class="kw">fn </span>find_words_colored_text() {
         <span class="kw">use </span>termion::color::{Blue, Fg, Green, Reset};
 
         <span class="kw">let </span>green_hello = <span class="macro">format!</span>(<span class="string">&quot;{}Hello{} &quot;</span>, Fg(Green), Fg(Reset));
@@ -835,24 +835,24 @@
             <span class="macro">vec!</span>[Word::from(<span class="kw-2">&amp;</span>green_hello), Word::from(<span class="kw-2">&amp;</span>blue_world)]
         );
 
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-        <span class="macro">assert_iter_eq!</span>(
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+        </span><span class="macro">assert_iter_eq!</span>(
             UnicodeBreakProperties.find_words(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{}{}&quot;</span>, green_hello, blue_world)),
             <span class="macro">vec!</span>[Word::from(<span class="kw-2">&amp;</span>green_hello), Word::from(<span class="kw-2">&amp;</span>blue_world)]
         );
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>find_words_color_inside_word() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>find_words_color_inside_word() {
         <span class="kw">let </span>text = <span class="string">&quot;foo\u{1b}[0m\u{1b}[32mbar\u{1b}[0mbaz&quot;</span>;
         <span class="macro">assert_iter_eq!</span>(AsciiSpace.find_words(<span class="kw-2">&amp;</span>text), <span class="macro">vec!</span>[Word::from(text)]);
 
-        <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]</span>
-        <span class="macro">assert_iter_eq!</span>(
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;unicode-linebreak&quot;</span>)]
+        </span><span class="macro">assert_iter_eq!</span>(
             UnicodeBreakProperties.find_words(<span class="kw-2">&amp;</span>text),
             <span class="macro">vec!</span>[Word::from(text)]
         );
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="textwrap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="textwrap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

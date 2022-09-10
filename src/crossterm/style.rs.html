@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>style.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/crossterm-0.25.0/src/style.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>style.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../crossterm/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../crossterm/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -619,8 +619,8 @@
 };
 
 <span class="kw">use </span><span class="kw">crate</span>::command::execute_fmt;
-<span class="attribute">#[cfg(windows)]</span>
-<span class="kw">use </span><span class="kw">crate</span>::Result;
+<span class="attribute">#[cfg(windows)]
+</span><span class="kw">use </span><span class="kw">crate</span>::Result;
 <span class="kw">use crate</span>::{csi, impl_display, Command};
 
 <span class="kw">pub use </span><span class="self">self</span>::{
@@ -680,16 +680,16 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetForegroundColor(<span class="kw">pub </span>Color);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetForegroundColor(<span class="kw">pub </span>Color);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetForegroundColor {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), Colored::ForegroundColor(<span class="self">self</span>.<span class="number">0</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::windows::set_foreground_color(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -704,16 +704,16 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetBackgroundColor(<span class="kw">pub </span>Color);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetBackgroundColor(<span class="kw">pub </span>Color);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetBackgroundColor {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), Colored::BackgroundColor(<span class="self">self</span>.<span class="number">0</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::windows::set_background_color(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
@@ -728,16 +728,16 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetUnderlineColor(<span class="kw">pub </span>Color);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetUnderlineColor(<span class="kw">pub </span>Color);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetUnderlineColor {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), Colored::UnderlineColor(<span class="self">self</span>.<span class="number">0</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Err</span>(std::io::Error::new(
             std::io::ErrorKind::Other,
             <span class="string">&quot;SetUnderlineColor not supported by winapi.&quot;</span>,
@@ -766,8 +766,8 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetColors(<span class="kw">pub </span>Colors);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetColors(<span class="kw">pub </span>Colors);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetColors {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -780,8 +780,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(color) = <span class="self">self</span>.<span class="number">0</span>.foreground {
             sys::windows::set_foreground_color(color)<span class="question-mark">?</span>;
         }
@@ -799,16 +799,16 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetAttribute(<span class="kw">pub </span>Attribute);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetAttribute(<span class="kw">pub </span>Attribute);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetAttribute {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="macro">csi!</span>(<span class="string">&quot;{}m&quot;</span>), <span class="self">self</span>.<span class="number">0</span>.sgr())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="comment">// attributes are not supported by WinAPI.
         </span><span class="prelude-val">Ok</span>(())
     }
@@ -821,8 +821,8 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetAttributes(<span class="kw">pub </span>Attributes);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetAttributes(<span class="kw">pub </span>Attributes);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetAttributes {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -834,8 +834,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="comment">// attributes are not supported by WinAPI.
         </span><span class="prelude-val">Ok</span>(())
     }
@@ -846,8 +846,8 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>SetStyle(<span class="kw">pub </span>ContentStyle);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>SetStyle(<span class="kw">pub </span>ContentStyle);
 
 <span class="kw">impl </span>Command <span class="kw">for </span>SetStyle {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -867,13 +867,13 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="macro">panic!</span>(<span class="string">&quot;tried to execute SetStyle command using WinAPI, use ANSI instead&quot;</span>);
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">true
     </span>}
 }
@@ -885,8 +885,8 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Copy, Clone)]</span>
-<span class="kw">pub struct </span>PrintStyledContent&lt;D: Display&gt;(<span class="kw">pub </span>StyledContent&lt;D&gt;);
+</span><span class="attribute">#[derive(Debug, Copy, Clone)]
+</span><span class="kw">pub struct </span>PrintStyledContent&lt;D: Display&gt;(<span class="kw">pub </span>StyledContent&lt;D&gt;);
 
 <span class="kw">impl</span>&lt;D: Display&gt; Command <span class="kw">for </span>PrintStyledContent&lt;D&gt; {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
@@ -934,8 +934,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="prelude-val">Ok</span>(())
     }
 }
@@ -945,16 +945,16 @@
 /// # Notes
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>ResetColor;
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>ResetColor;
 
 <span class="kw">impl </span>Command <span class="kw">for </span>ResetColor {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         f.write_str(<span class="macro">csi!</span>(<span class="string">&quot;0m&quot;</span>))
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         sys::windows::reset()
     }
 }
@@ -962,21 +962,21 @@
 <span class="doccomment">/// A command that prints the given displayable type.
 ///
 /// Commands must be executed/queued for execution otherwise they do nothing.
-</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>Print&lt;T: Display&gt;(<span class="kw">pub </span>T);
+</span><span class="attribute">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>Print&lt;T: Display&gt;(<span class="kw">pub </span>T);
 
 <span class="kw">impl</span>&lt;T: Display&gt; Command <span class="kw">for </span>Print&lt;T&gt; {
     <span class="kw">fn </span>write_ansi(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>fmt::Write) -&gt; fmt::Result {
         <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>)
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>execute_winapi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="macro">panic!</span>(<span class="string">&quot;tried to execute Print command using WinAPI, use ANSI instead&quot;</span>);
     }
 
-    <span class="attribute">#[cfg(windows)]</span>
-    <span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[cfg(windows)]
+    </span><span class="kw">fn </span>is_ansi_code_supported(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="bool-val">true
     </span>}
 }
@@ -1001,4 +1001,4 @@
     iter.next().and_then(|s| s.parse().ok())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="crossterm" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

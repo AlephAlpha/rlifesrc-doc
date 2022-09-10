@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/base64-0.13.0/src/encode.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>encode.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../base64/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../base64/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../base64/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/base64-0.13.0/src/encode.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>encode.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../base64/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../base64/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../base64/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -674,10 +674,10 @@
 <span id="674">674</span>
 <span id="675">675</span>
 </pre><pre class="rust"><code><span class="kw">use crate</span>::{Config, PAD_BYTE};
-<span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]</span>
-<span class="kw">use crate</span>::{chunked_encoder, STANDARD};
-<span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]</span>
-<span class="kw">use </span>alloc::{string::String, vec};
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]
+</span><span class="kw">use crate</span>::{chunked_encoder, STANDARD};
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]
+</span><span class="kw">use </span>alloc::{string::String, vec};
 <span class="kw">use </span>core::convert::TryInto;
 
 <span class="doccomment">///Encode arbitrary octets as base64.
@@ -694,8 +694,8 @@
 ///    println!(&quot;{}&quot;, b64);
 ///}
 ///```
-</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]</span>
-<span class="kw">pub fn </span>encode&lt;T: AsRef&lt;[u8]&gt;&gt;(input: T) -&gt; String {
+</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]
+</span><span class="kw">pub fn </span>encode&lt;T: AsRef&lt;[u8]&gt;&gt;(input: T) -&gt; String {
     encode_config(input, STANDARD)
 }
 
@@ -715,8 +715,8 @@
 ///    println!(&quot;{}&quot;, b64_url);
 ///}
 ///```
-</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]</span>
-<span class="kw">pub fn </span>encode_config&lt;T: AsRef&lt;[u8]&gt;&gt;(input: T, config: Config) -&gt; String {
+</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]
+</span><span class="kw">pub fn </span>encode_config&lt;T: AsRef&lt;[u8]&gt;&gt;(input: T, config: Config) -&gt; String {
     <span class="kw">let </span><span class="kw-2">mut </span>buf = <span class="kw">match </span>encoded_size(input.as_ref().len(), config) {
         <span class="prelude-val">Some</span>(n) =&gt; <span class="macro">vec!</span>[<span class="number">0</span>; n],
         <span class="prelude-val">None </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;integer overflow when calculating buffer size&quot;</span>),
@@ -745,8 +745,8 @@
 ///    println!(&quot;{}&quot;, buf);
 ///}
 ///```
-</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]</span>
-<span class="kw">pub fn </span>encode_config_buf&lt;T: AsRef&lt;[u8]&gt;&gt;(input: T, config: Config, buf: <span class="kw-2">&amp;mut </span>String) {
+</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;alloc&quot;</span>, feature = <span class="string">&quot;std&quot;</span>, test))]
+</span><span class="kw">pub fn </span>encode_config_buf&lt;T: AsRef&lt;[u8]&gt;&gt;(input: T, config: Config, buf: <span class="kw-2">&amp;mut </span>String) {
     <span class="kw">let </span>input_bytes = input.as_ref();
 
     {
@@ -830,16 +830,16 @@
     <span class="macro">debug_assert_eq!</span>(encoded_size, encoded_bytes);
 }
 
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>read_u64(s: <span class="kw-2">&amp;</span>[u8]) -&gt; u64 {
+<span class="attribute">#[inline]
+</span><span class="kw">fn </span>read_u64(s: <span class="kw-2">&amp;</span>[u8]) -&gt; u64 {
     u64::from_be_bytes(s[..<span class="number">8</span>].try_into().unwrap())
 }
 
 <span class="doccomment">/// Encode input bytes to utf8 base64 bytes. Does not pad.
 /// `output` must be long enough to hold the encoded `input` without padding.
 /// Returns the number of bytes written.
-</span><span class="attribute">#[inline]</span>
-<span class="kw">pub fn </span>encode_to_slice(input: <span class="kw-2">&amp;</span>[u8], output: <span class="kw-2">&amp;mut </span>[u8], encode_table: <span class="kw-2">&amp;</span>[u8; <span class="number">64</span>]) -&gt; usize {
+</span><span class="attribute">#[inline]
+</span><span class="kw">pub fn </span>encode_to_slice(input: <span class="kw-2">&amp;</span>[u8], output: <span class="kw-2">&amp;mut </span>[u8], encode_table: <span class="kw-2">&amp;</span>[u8; <span class="number">64</span>]) -&gt; usize {
     <span class="kw">let </span><span class="kw-2">mut </span>input_index: usize = <span class="number">0</span>;
 
     <span class="kw">const </span>BLOCKS_PER_FAST_LOOP: usize = <span class="number">4</span>;
@@ -994,8 +994,8 @@
     bytes_written
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use crate</span>::{
         decode::decode_config_buf,
@@ -1010,8 +1010,8 @@
     <span class="kw">use </span>std;
     <span class="kw">use </span>std::str;
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encoded_size_correct_standard() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encoded_size_correct_standard() {
         assert_encoded_length(<span class="number">0</span>, <span class="number">0</span>, STANDARD);
 
         assert_encoded_length(<span class="number">1</span>, <span class="number">4</span>, STANDARD);
@@ -1035,8 +1035,8 @@
         assert_encoded_length(<span class="number">58</span>, <span class="number">80</span>, STANDARD);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encoded_size_correct_no_pad() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encoded_size_correct_no_pad() {
         assert_encoded_length(<span class="number">0</span>, <span class="number">0</span>, URL_SAFE_NO_PAD);
 
         assert_encoded_length(<span class="number">1</span>, <span class="number">2</span>, URL_SAFE_NO_PAD);
@@ -1060,13 +1060,13 @@
         assert_encoded_length(<span class="number">58</span>, <span class="number">78</span>, URL_SAFE_NO_PAD);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encoded_size_overflow() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encoded_size_overflow() {
         <span class="macro">assert_eq!</span>(<span class="prelude-val">None</span>, encoded_size(std::usize::MAX, STANDARD));
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encode_config_buf_into_nonempty_buffer_doesnt_clobber_prefix() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encode_config_buf_into_nonempty_buffer_doesnt_clobber_prefix() {
         <span class="kw">let </span><span class="kw-2">mut </span>orig_data = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>prefix = String::new();
         <span class="kw">let </span><span class="kw-2">mut </span>encoded_data_no_prefix = String::new();
@@ -1120,8 +1120,8 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encode_config_slice_into_nonempty_buffer_doesnt_clobber_suffix() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encode_config_slice_into_nonempty_buffer_doesnt_clobber_suffix() {
         <span class="kw">let </span><span class="kw-2">mut </span>orig_data = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>encoded_data = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>encoded_data_original_state = Vec::new();
@@ -1175,8 +1175,8 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encode_config_slice_fits_into_precisely_sized_slice() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encode_config_slice_fits_into_precisely_sized_slice() {
         <span class="kw">let </span><span class="kw-2">mut </span>orig_data = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>encoded_data = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>decoded = Vec::new();
@@ -1218,8 +1218,8 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encode_to_slice_random_valid_utf8() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encode_to_slice_random_valid_utf8() {
         <span class="kw">let </span><span class="kw-2">mut </span>input = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>output = Vec::new();
 
@@ -1258,8 +1258,8 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encode_with_padding_random_valid_utf8() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encode_with_padding_random_valid_utf8() {
         <span class="kw">let </span><span class="kw-2">mut </span>input = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>output = Vec::new();
 
@@ -1297,8 +1297,8 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>add_padding_random_valid_utf8() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>add_padding_random_valid_utf8() {
         <span class="kw">let </span><span class="kw-2">mut </span>output = Vec::new();
 
         <span class="kw">let </span><span class="kw-2">mut </span>rng = rand::rngs::SmallRng::from_entropy();
@@ -1340,8 +1340,8 @@
         <span class="macro">assert_eq!</span>(encoded_len, encoded.len());
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>encode_imap() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>encode_imap() {
         <span class="macro">assert_eq!</span>(
             encode_config(<span class="string">b&quot;\xFB\xFF&quot;</span>, <span class="kw">crate</span>::IMAP_MUTF7),
             encode_config(<span class="string">b&quot;\xFB\xFF&quot;</span>, <span class="kw">crate</span>::STANDARD_NO_PAD).replace(<span class="string">&quot;/&quot;</span>, <span class="string">&quot;,&quot;</span>)
@@ -1349,4 +1349,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="base64" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="base64" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

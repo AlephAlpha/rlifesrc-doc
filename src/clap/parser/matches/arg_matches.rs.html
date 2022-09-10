@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.17/src/parser/matches/arg_matches.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>arg_matches.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.20/src/parser/matches/arg_matches.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>arg_matches.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../clap/index.html">
                         <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -1833,6 +1833,69 @@
 <span id="1831">1831</span>
 <span id="1832">1832</span>
 <span id="1833">1833</span>
+<span id="1834">1834</span>
+<span id="1835">1835</span>
+<span id="1836">1836</span>
+<span id="1837">1837</span>
+<span id="1838">1838</span>
+<span id="1839">1839</span>
+<span id="1840">1840</span>
+<span id="1841">1841</span>
+<span id="1842">1842</span>
+<span id="1843">1843</span>
+<span id="1844">1844</span>
+<span id="1845">1845</span>
+<span id="1846">1846</span>
+<span id="1847">1847</span>
+<span id="1848">1848</span>
+<span id="1849">1849</span>
+<span id="1850">1850</span>
+<span id="1851">1851</span>
+<span id="1852">1852</span>
+<span id="1853">1853</span>
+<span id="1854">1854</span>
+<span id="1855">1855</span>
+<span id="1856">1856</span>
+<span id="1857">1857</span>
+<span id="1858">1858</span>
+<span id="1859">1859</span>
+<span id="1860">1860</span>
+<span id="1861">1861</span>
+<span id="1862">1862</span>
+<span id="1863">1863</span>
+<span id="1864">1864</span>
+<span id="1865">1865</span>
+<span id="1866">1866</span>
+<span id="1867">1867</span>
+<span id="1868">1868</span>
+<span id="1869">1869</span>
+<span id="1870">1870</span>
+<span id="1871">1871</span>
+<span id="1872">1872</span>
+<span id="1873">1873</span>
+<span id="1874">1874</span>
+<span id="1875">1875</span>
+<span id="1876">1876</span>
+<span id="1877">1877</span>
+<span id="1878">1878</span>
+<span id="1879">1879</span>
+<span id="1880">1880</span>
+<span id="1881">1881</span>
+<span id="1882">1882</span>
+<span id="1883">1883</span>
+<span id="1884">1884</span>
+<span id="1885">1885</span>
+<span id="1886">1886</span>
+<span id="1887">1887</span>
+<span id="1888">1888</span>
+<span id="1889">1889</span>
+<span id="1890">1890</span>
+<span id="1891">1891</span>
+<span id="1892">1892</span>
+<span id="1893">1893</span>
+<span id="1894">1894</span>
+<span id="1895">1895</span>
+<span id="1896">1896</span>
 </pre><pre class="rust"><code><span class="comment">// Std
 </span><span class="kw">use </span>std::any::Any;
 <span class="kw">use </span>std::borrow::Cow;
@@ -1899,14 +1962,14 @@
 /// }
 /// ```
 /// [`Command::get_matches`]: crate::Command::get_matches()
-</span><span class="attribute">#[derive(Debug, Clone, Default, PartialEq, Eq)]</span>
-<span class="kw">pub struct </span>ArgMatches {
-    <span class="attribute">#[cfg(debug_assertions)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) valid_args: Vec&lt;Id&gt;,
-    <span class="attribute">#[cfg(debug_assertions)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) valid_subcommands: Vec&lt;Id&gt;,
-    <span class="attribute">#[cfg(debug_assertions)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) disable_asserts: bool,
+</span><span class="attribute">#[derive(Debug, Clone, Default, PartialEq, Eq)]
+</span><span class="kw">pub struct </span>ArgMatches {
+    <span class="attribute">#[cfg(debug_assertions)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) valid_args: Vec&lt;Id&gt;,
+    <span class="attribute">#[cfg(debug_assertions)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) valid_subcommands: Vec&lt;Id&gt;,
+    <span class="attribute">#[cfg(debug_assertions)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) disable_asserts: bool,
     <span class="kw">pub</span>(<span class="kw">crate</span>) args: IndexMap&lt;Id, MatchedArg&gt;,
     <span class="kw">pub</span>(<span class="kw">crate</span>) subcommand: <span class="prelude-ty">Option</span>&lt;Box&lt;SubCommand&gt;&gt;,
 }
@@ -1948,10 +2011,73 @@
     /// [option]: crate::Arg::takes_value()
     /// [positional]: crate::Arg::index()
     /// [`default_value`]: crate::Arg::default_value()
-    </span><span class="attribute">#[track_caller]</span>
-    <span class="kw">pub fn </span>get_one&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
+    </span><span class="attribute">#[track_caller]
+    </span><span class="kw">pub fn </span>get_one&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>T&gt; {
         <span class="kw">let </span>internal_id = Id::from(id);
         MatchesError::unwrap(<span class="kw-2">&amp;</span>internal_id, <span class="self">self</span>.try_get_one(id))
+    }
+
+    <span class="doccomment">/// Gets the value of a specific [`ArgAction::Count`][crate::ArgAction::Count] flag
+    ///
+    /// # Panic
+    ///
+    /// If the argument&#39;s action is not [`ArgAction::Count`][crate::ArgAction::Count]
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// # use clap::Command;
+    /// # use clap::Arg;
+    /// let cmd = Command::new(&quot;mycmd&quot;)
+    ///     .arg(
+    ///         Arg::new(&quot;flag&quot;)
+    ///             .long(&quot;flag&quot;)
+    ///             .action(clap::ArgAction::Count)
+    ///     );
+    ///
+    /// let matches = cmd.clone().try_get_matches_from([&quot;mycmd&quot;, &quot;--flag&quot;, &quot;--flag&quot;]).unwrap();
+    /// assert_eq!(
+    ///     matches.get_count(&quot;flag&quot;),
+    ///     2
+    /// );
+    /// ```
+    </span><span class="attribute">#[track_caller]
+    </span><span class="kw">pub fn </span>get_count(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; u8 {
+        <span class="kw-2">*</span><span class="self">self
+            </span>.get_one::&lt;u8&gt;(id)
+            .expect(<span class="string">&quot;ArgAction::Count is defaulted&quot;</span>)
+    }
+
+    <span class="doccomment">/// Gets the value of a specific [`ArgAction::SetTrue`][crate::ArgAction::SetTrue] or [`ArgAction::SetFalse`][crate::ArgAction::SetFalse] flag
+    ///
+    /// # Panic
+    ///
+    /// If the argument&#39;s action is not [`ArgAction::SetTrue`][crate::ArgAction::SetTrue] or [`ArgAction::SetFalse`][crate::ArgAction::SetFalse]
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// # use clap::Command;
+    /// # use clap::Arg;
+    /// let cmd = Command::new(&quot;mycmd&quot;)
+    ///     .arg(
+    ///         Arg::new(&quot;flag&quot;)
+    ///             .long(&quot;flag&quot;)
+    ///             .action(clap::ArgAction::SetTrue)
+    ///     );
+    ///
+    /// let matches = cmd.clone().try_get_matches_from([&quot;mycmd&quot;, &quot;--flag&quot;, &quot;--flag&quot;]).unwrap();
+    /// assert!(matches.contains_id(&quot;flag&quot;));
+    /// assert_eq!(
+    ///     matches.get_flag(&quot;flag&quot;),
+    ///     true
+    /// );
+    /// ```
+    </span><span class="attribute">#[track_caller]
+    </span><span class="kw">pub fn </span>get_flag(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; bool {
+        <span class="kw-2">*</span><span class="self">self
+            </span>.get_one::&lt;bool&gt;(id)
+            .expect(<span class="string">&quot;ArgAction::SetTrue / ArgAction::SetFalse is defaulted&quot;</span>)
     }
 
     <span class="doccomment">/// Iterate over values of a specific option or positional argument.
@@ -1987,8 +2113,8 @@
     ///     .collect();
     /// assert_eq!(vals, [22, 80, 2020]);
     /// ```
-    </span><span class="attribute">#[track_caller]</span>
-    <span class="kw">pub fn </span>get_many&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
+    </span><span class="attribute">#[track_caller]
+    </span><span class="kw">pub fn </span>get_many&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         id: <span class="kw-2">&amp;</span>str,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;ValuesRef&lt;T&gt;&gt; {
@@ -2011,9 +2137,9 @@
     ///
     /// # Examples
     ///
-    </span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(unix, doc = <span class="string">&quot; ```&quot;</span>)]</span>
-    <span class="doccomment">/// # use clap::{Command, arg, value_parser};
+    </span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+    #[cfg_attr(unix, doc = <span class="string">&quot; ```&quot;</span>)]
+    </span><span class="doccomment">/// # use clap::{Command, arg, value_parser};
     /// # use std::ffi::{OsStr,OsString};
     /// # use std::os::unix::ffi::{OsStrExt,OsStringExt};
     /// use std::path::PathBuf;
@@ -2037,8 +2163,8 @@
     /// [`OsSt`]: std::ffi::OsStr
     /// [values]: OsValues
     /// [`String`]: std::string::String
-    </span><span class="attribute">#[track_caller]</span>
-    <span class="kw">pub fn </span>get_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;RawValues&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
+    </span><span class="attribute">#[track_caller]
+    </span><span class="kw">pub fn </span>get_raw(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;RawValues&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
         <span class="kw">let </span>internal_id = Id::from(id);
         MatchesError::unwrap(<span class="kw-2">&amp;</span>internal_id, <span class="self">self</span>.try_get_raw(id))
     }
@@ -2077,8 +2203,8 @@
     /// [option]: crate::Arg::takes_value()
     /// [positional]: crate::Arg::index()
     /// [`default_value`]: crate::Arg::default_value()
-    </span><span class="attribute">#[track_caller]</span>
-    <span class="kw">pub fn </span>remove_one&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
+    </span><span class="attribute">#[track_caller]
+    </span><span class="kw">pub fn </span>remove_one&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; {
         <span class="kw">let </span>internal_id = Id::from(id);
         MatchesError::unwrap(<span class="kw-2">&amp;</span>internal_id, <span class="self">self</span>.try_remove_one(id))
     }
@@ -2114,8 +2240,8 @@
     ///     .collect();
     /// assert_eq!(vals, [&quot;file1.txt&quot;, &quot;file2.txt&quot;, &quot;file3.txt&quot;, &quot;file4.txt&quot;]);
     /// ```
-    </span><span class="attribute">#[track_caller]</span>
-    <span class="kw">pub fn </span>remove_many&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
+    </span><span class="attribute">#[track_caller]
+    </span><span class="kw">pub fn </span>remove_many&lt;T: Any + Clone + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         id: <span class="kw-2">&amp;</span>str,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;Values2&lt;T&gt;&gt; {
@@ -2180,9 +2306,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_one()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>value_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>value_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="kw">let </span>id = Id::from(id);
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id)<span class="question-mark">?</span>;
         <span class="kw">let </span>v = unwrap_string_arg(<span class="kw-2">&amp;</span>id, arg.first()<span class="question-mark">?</span>);
@@ -2193,9 +2319,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_one()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>value_of_lossy&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;<span class="lifetime">&#39;_</span>, str&gt;&gt; {
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>value_of_lossy&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;<span class="lifetime">&#39;_</span>, str&gt;&gt; {
         <span class="kw">let </span>id = Id::from(id);
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id)<span class="question-mark">?</span>;
         <span class="kw">let </span>v = unwrap_os_string_arg(<span class="kw-2">&amp;</span>id, arg.first()<span class="question-mark">?</span>);
@@ -2206,9 +2332,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_one()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>value_of_os&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>OsStr&gt; {
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>value_of_os&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>OsStr&gt; {
         <span class="kw">let </span>id = Id::from(id);
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id)<span class="question-mark">?</span>;
         <span class="kw">let </span>v = unwrap_os_string_arg(<span class="kw-2">&amp;</span>id, arg.first()<span class="question-mark">?</span>);
@@ -2219,11 +2345,11 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_many()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>values_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Values&gt; {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span>id = Id::from(id);
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>values_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Values&gt; {
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span>id = Id::from(id);
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id)<span class="question-mark">?</span>;
         <span class="kw">let </span>v = Values {
             iter: arg.vals_flatten().map(unwrap_string),
@@ -2265,9 +2391,9 @@
     /// assert_eq!(vals, [[&quot;echo&quot;, &quot;hi&quot;], [&quot;echo&quot;, &quot;bye&quot;]]);
     /// ```
     /// [`Iterator`]: std::iter::Iterator
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-grouped&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>grouped_values_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;GroupedValues&gt; {
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;unstable-grouped&quot;</span>)]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>grouped_values_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;GroupedValues&gt; {
         <span class="kw">let </span>id = Id::from(id);
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id)<span class="question-mark">?</span>;
         <span class="kw">let </span>v = GroupedValues {
@@ -2281,9 +2407,9 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_many()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>values_of_lossy&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;String&gt;&gt; {
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>values_of_lossy&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Vec&lt;String&gt;&gt; {
         <span class="kw">let </span>id = Id::from(id);
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id)<span class="question-mark">?</span>;
         <span class="kw">let </span>v = arg
@@ -2297,11 +2423,11 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_many()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>values_of_os&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;OsValues&gt; {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span>id = Id::from(id);
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>values_of_os&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;OsValues&gt; {
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span>id = Id::from(id);
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id)<span class="question-mark">?</span>;
         <span class="kw">let </span>v = OsValues {
             iter: arg.vals_flatten().map(unwrap_os_string),
@@ -2314,15 +2440,15 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_one()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>value_of_t&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;R, Error&gt;
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>value_of_t&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;R, Error&gt;
     <span class="kw">where
         </span>R: FromStr,
         &lt;R <span class="kw">as </span>FromStr&gt;::Err: Display,
     {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span>v = <span class="self">self
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span>v = <span class="self">self
             </span>.value_of(name)
             .ok_or_else(|| Error::argument_not_found_auto(name.to_string()))<span class="question-mark">?</span>;
         v.parse::&lt;R&gt;().map_err(|e| {
@@ -2339,30 +2465,30 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_one()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>value_of_t_or_exit&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; R
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>value_of_t_or_exit&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; R
     <span class="kw">where
         </span>R: FromStr,
         &lt;R <span class="kw">as </span>FromStr&gt;::Err: Display,
     {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="self">self</span>.value_of_t(name).unwrap_or_else(|e| e.exit())
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="self">self</span>.value_of_t(name).unwrap_or_else(|e| e.exit())
     }
 
     <span class="doccomment">/// Deprecated, replaced with [`ArgMatches::get_many()`]
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_many()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>values_of_t&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;R&gt;, Error&gt;
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>values_of_t&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;R&gt;, Error&gt;
     <span class="kw">where
         </span>R: FromStr,
         &lt;R <span class="kw">as </span>FromStr&gt;::Err: Display,
     {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span>v = <span class="self">self
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span>v = <span class="self">self
             </span>.values_of(name)
             .ok_or_else(|| Error::argument_not_found_auto(name.to_string()))<span class="question-mark">?</span>;
         v.map(|v| {
@@ -2379,15 +2505,15 @@
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_many()`&quot;</span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>values_of_t_or_exit&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;R&gt;
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>values_of_t_or_exit&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;R&gt;
     <span class="kw">where
         </span>R: FromStr,
         &lt;R <span class="kw">as </span>FromStr&gt;::Err: Display,
     {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="self">self</span>.values_of_t(name).unwrap_or_else(|e| e.exit())
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="self">self</span>.values_of_t(name).unwrap_or_else(|e| e.exit())
     }
 
     <span class="doccomment">/// Deprecated, replaced with [`ArgAction::SetTrue`][crate::ArgAction] or
@@ -2398,13 +2524,13 @@
             since = <span class="string">&quot;3.2.0&quot;</span>,
             note = <span class="string">&quot;Replaced with either `ArgAction::SetTrue` or `ArgMatches::contains_id(...)`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>is_present&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; bool {
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>is_present&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; bool {
         <span class="kw">let </span>id = Id::from(id);
 
-        <span class="attribute">#[cfg(debug_assertions)]</span>
-        <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id);
+        <span class="attribute">#[cfg(debug_assertions)]
+        </span><span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id);
 
         <span class="self">self</span>.args.contains_key(<span class="kw-2">&amp;</span>id)
     }
@@ -2430,8 +2556,8 @@
     /// ```
     ///
     /// [`default_value`]: crate::Arg::default_value()
-    </span><span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>value_source&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;ValueSource&gt; {
+    </span><span class="attribute">#[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>value_source&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;ValueSource&gt; {
         <span class="kw">let </span>id = Id::from(id);
 
         <span class="kw">let </span>value = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>id);
@@ -2447,11 +2573,11 @@
             since = <span class="string">&quot;3.2.0&quot;</span>,
             note = <span class="string">&quot;Replaced with either `ArgAction::Count`, `ArgMatches::get_many(...).len()`, or `ArgMatches::value_source`&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>occurrences_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; u64 {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>Id::from(id))
+    )]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>occurrences_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; u64 {
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>Id::from(id))
             .map_or(<span class="number">0</span>, |a| a.get_occurrences())
     }
 
@@ -2589,8 +2715,8 @@
     /// assert_eq!(m.indices_of(&quot;option&quot;).unwrap().collect::&lt;Vec&lt;_&gt;&gt;(), &amp;[2, 3, 4]);
     /// ```
     /// [delimiter]: crate::Arg::value_delimiter()
-    </span><span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>index_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    </span><span class="attribute">#[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>index_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>Id::from(id))<span class="question-mark">?</span>;
         <span class="kw">let </span>i = arg.get_index(<span class="number">0</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Some</span>(i)
@@ -2672,8 +2798,8 @@
     /// ```
     /// [`ArgMatches::index_of`]: ArgMatches::index_of()
     /// [delimiter]: Arg::value_delimiter()
-    </span><span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">pub fn </span>indices_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Indices&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
+    </span><span class="attribute">#[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">pub fn </span>indices_of&lt;T: Key&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, id: T) -&gt; <span class="prelude-ty">Option</span>&lt;Indices&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
         <span class="kw">let </span>arg = <span class="self">self</span>.get_arg(<span class="kw-2">&amp;</span>Id::from(id))<span class="question-mark">?</span>;
         <span class="kw">let </span>i = Indices {
             iter: arg.indices(),
@@ -2682,20 +2808,20 @@
         <span class="prelude-val">Some</span>(i)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="attribute">#[cfg_attr(
+    <span class="attribute">#[inline]
+    #[doc(hidden)]
+    #[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::try_get_one()`&quot;</span>)
-    )]</span>
-    <span class="kw">pub fn </span>is_valid_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, _id: <span class="kw">impl </span>Key) -&gt; bool {
-        <span class="attribute">#[cfg(debug_assertions)]</span>
-        {
+    )]
+    </span><span class="kw">pub fn </span>is_valid_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, _id: <span class="kw">impl </span>Key) -&gt; bool {
+        <span class="attribute">#[cfg(debug_assertions)]
+        </span>{
             <span class="kw">let </span>id = Id::from(_id);
             <span class="self">self</span>.disable_asserts || id == Id::empty_hash() || <span class="self">self</span>.valid_args.contains(<span class="kw-2">&amp;</span>id)
         }
-        <span class="attribute">#[cfg(not(debug_assertions))]</span>
-        {
+        <span class="attribute">#[cfg(not(debug_assertions))]
+        </span>{
             <span class="bool-val">true
         </span>}
     }
@@ -2753,8 +2879,8 @@
     /// }
     /// ```
     /// [subcommand]: crate::Command::subcommand
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>subcommand(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>str, <span class="kw-2">&amp;</span>ArgMatches)&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>subcommand(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>str, <span class="kw-2">&amp;</span>ArgMatches)&gt; {
         <span class="self">self</span>.subcommand.as_ref().map(|sc| (<span class="kw-2">&amp;*</span>sc.name, <span class="kw-2">&amp;</span>sc.matches))
     }
 
@@ -2881,8 +3007,8 @@
     /// ```
     /// [subcommand]: crate::Command::subcommand
     /// [`Command`]: crate::Command
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>subcommand_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>subcommand_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt; {
         <span class="self">self</span>.subcommand.as_ref().map(|sc| <span class="kw-2">&amp;*</span>sc.name)
     }
 
@@ -2891,16 +3017,16 @@
     /// By default, `ArgMatches` functions assert on undefined `Id`s to help catch programmer
     /// mistakes.  In some context, this doesn&#39;t work, so users can use this function to check
     /// before they do a query on `ArgMatches`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">pub fn </span>is_valid_subcommand(<span class="kw-2">&amp;</span><span class="self">self</span>, _id: <span class="kw">impl </span>Key) -&gt; bool {
-        <span class="attribute">#[cfg(debug_assertions)]</span>
-        {
+    </span><span class="attribute">#[inline]
+    #[doc(hidden)]
+    </span><span class="kw">pub fn </span>is_valid_subcommand(<span class="kw-2">&amp;</span><span class="self">self</span>, _id: <span class="kw">impl </span>Key) -&gt; bool {
+        <span class="attribute">#[cfg(debug_assertions)]
+        </span>{
             <span class="kw">let </span>id = Id::from(_id);
             <span class="self">self</span>.disable_asserts || id == Id::empty_hash() || <span class="self">self</span>.valid_subcommands.contains(<span class="kw-2">&amp;</span>id)
         }
-        <span class="attribute">#[cfg(not(debug_assertions))]</span>
-        {
+        <span class="attribute">#[cfg(not(debug_assertions))]
+        </span>{
             <span class="bool-val">true
         </span>}
     }
@@ -3012,14 +3138,14 @@
 
 <span class="comment">// Private methods
 </span><span class="kw">impl </span>ArgMatches {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_get_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>MatchedArg&gt;, MatchesError&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_get_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>MatchedArg&gt;, MatchesError&gt; {
         <span class="self">self</span>.verify_arg(arg)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.args.get(arg))
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_get_arg_t&lt;T: Any + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_get_arg_t&lt;T: Any + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         arg: <span class="kw-2">&amp;</span>Id,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>MatchedArg&gt;, MatchesError&gt; {
@@ -3033,8 +3159,8 @@
         <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(arg))
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>try_remove_arg_t&lt;T: Any + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_remove_arg_t&lt;T: Any + Send + Sync + <span class="lifetime">&#39;static</span>&gt;(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         arg: <span class="kw-2">&amp;</span>Id,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;MatchedArg&gt;, MatchesError&gt; {
@@ -3069,10 +3195,10 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>verify_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, _arg: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Result</span>&lt;(), MatchesError&gt; {
-        <span class="attribute">#[cfg(debug_assertions)]</span>
-        {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>verify_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, _arg: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Result</span>&lt;(), MatchesError&gt; {
+        <span class="attribute">#[cfg(debug_assertions)]
+        </span>{
             <span class="kw">if </span><span class="self">self</span>.disable_asserts || <span class="kw-2">*</span>_arg == Id::empty_hash() || <span class="self">self</span>.valid_args.contains(_arg) {
             } <span class="kw">else if </span><span class="self">self</span>.valid_subcommands.contains(_arg) {
                 <span class="macro">debug!</span>(
@@ -3093,11 +3219,11 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">fn </span>get_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>MatchedArg&gt; {
-        <span class="attribute">#[cfg(debug_assertions)]</span>
-        {
+    <span class="attribute">#[inline]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">fn </span>get_arg(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>MatchedArg&gt; {
+        <span class="attribute">#[cfg(debug_assertions)]
+        </span>{
             <span class="kw">if </span><span class="self">self</span>.disable_asserts || <span class="kw-2">*</span>arg == Id::empty_hash() || <span class="self">self</span>.valid_args.contains(arg) {
             } <span class="kw">else if </span><span class="self">self</span>.valid_subcommands.contains(arg) {
                 <span class="macro">panic!</span>(
@@ -3117,11 +3243,11 @@
         <span class="self">self</span>.args.get(arg)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-    <span class="kw">fn </span>get_subcommand(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>SubCommand&gt; {
-        <span class="attribute">#[cfg(debug_assertions)]</span>
-        {
+    <span class="attribute">#[inline]
+    #[cfg_attr(debug_assertions, track_caller)]
+    </span><span class="kw">fn </span>get_subcommand(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>Id) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>SubCommand&gt; {
+        <span class="attribute">#[cfg(debug_assertions)]
+        </span>{
             <span class="kw">if </span><span class="self">self</span>.disable_asserts
                 || <span class="kw-2">*</span>id == Id::empty_hash()
                 || <span class="self">self</span>.valid_subcommands.contains(id)
@@ -3146,8 +3272,8 @@
     </span>}
 }
 
-<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>SubCommand {
+<span class="attribute">#[derive(Debug, Clone, PartialEq, Eq)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>SubCommand {
     <span class="kw">pub</span>(<span class="kw">crate</span>) id: Id,
     <span class="kw">pub</span>(<span class="kw">crate</span>) name: String,
     <span class="kw">pub</span>(<span class="kw">crate</span>) matches: ArgMatches,
@@ -3173,10 +3299,10 @@
 /// assert_eq!(values.next(), Some(String::from(&quot;val2&quot;)));
 /// assert_eq!(values.next(), None);
 /// ```
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>Values2&lt;T&gt; {
-    <span class="attribute">#[allow(clippy::type_complexity)]</span>
-    iter: Map&lt;Flatten&lt;std::vec::IntoIter&lt;Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">fn</span>(AnyValue) -&gt; T&gt;,
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>Values2&lt;T&gt; {
+    <span class="attribute">#[allow(clippy::type_complexity)]
+    </span>iter: Map&lt;Flatten&lt;std::vec::IntoIter&lt;Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">fn</span>(AnyValue) -&gt; T&gt;,
     len: usize,
 }
 
@@ -3231,10 +3357,10 @@
 /// assert_eq!(values.next(), Some(&quot;val2&quot;));
 /// assert_eq!(values.next(), None);
 /// ```
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>ValuesRef&lt;<span class="lifetime">&#39;a</span>, T&gt; {
-    <span class="attribute">#[allow(clippy::type_complexity)]</span>
-    iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>T&gt;,
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>ValuesRef&lt;<span class="lifetime">&#39;a</span>, T&gt; {
+    <span class="attribute">#[allow(clippy::type_complexity)]
+    </span>iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>T&gt;,
     len: usize,
 }
 
@@ -3272,9 +3398,9 @@
 ///
 /// # Examples
 ///
-</span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(unix, doc = <span class="string">&quot; ```&quot;</span>)]</span>
-<span class="doccomment">/// # use clap::{Command, arg, value_parser};
+</span><span class="attribute">#[cfg_attr(not(unix), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+#[cfg_attr(unix, doc = <span class="string">&quot; ```&quot;</span>)]
+</span><span class="doccomment">/// # use clap::{Command, arg, value_parser};
 /// use std::ffi::OsString;
 /// use std::os::unix::ffi::{OsStrExt,OsStringExt};
 ///
@@ -3292,10 +3418,10 @@
 ///     [b&#39;H&#39;, b&#39;i&#39;, b&#39; &#39;, 0xe9, b&#39;!&#39;]
 /// );
 /// ```
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>RawValues&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[allow(clippy::type_complexity)]</span>
-    iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;OsString&gt;&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>OsString) -&gt; <span class="kw-2">&amp;</span>OsStr&gt;,
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>RawValues&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="attribute">#[allow(clippy::type_complexity)]
+    </span>iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;OsString&gt;&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>OsString) -&gt; <span class="kw-2">&amp;</span>OsStr&gt;,
     len: usize,
 }
 
@@ -3338,16 +3464,16 @@
 </span><span class="attribute">#[cfg_attr(
     feature = <span class="string">&quot;deprecated&quot;</span>,
     deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_many()`&quot;</span>)
-)]</span>
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[allow(clippy::type_complexity)]</span>
-    iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">for</span>&lt;<span class="lifetime">&#39;r</span>&gt; <span class="kw">fn</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;r </span>AnyValue) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;r </span>str&gt;,
+)]
+#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="attribute">#[allow(clippy::type_complexity)]
+    </span>iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">for</span>&lt;<span class="lifetime">&#39;r</span>&gt; <span class="kw">fn</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;r </span>AnyValue) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;r </span>str&gt;,
     len: usize,
 }
 
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt; {
@@ -3358,19 +3484,19 @@
     }
 }
 
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; DoubleEndedIterator <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; DoubleEndedIterator <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt; {
         <span class="self">self</span>.iter.next_back()
     }
 }
 
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ExactSizeIterator <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {}
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ExactSizeIterator <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {}
 
 <span class="doccomment">/// Creates an empty iterator.
-</span><span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Default <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
+</span><span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Default <span class="kw">for </span>Values&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="kw">static </span>EMPTY: [Vec&lt;AnyValue&gt;; <span class="number">0</span>] = [];
         Values {
@@ -3380,11 +3506,11 @@
     }
 }
 
-<span class="attribute">#[derive(Clone)]</span>
-<span class="attribute">#[allow(missing_debug_implementations)]</span>
-<span class="kw">pub struct </span>GroupedValues&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[allow(clippy::type_complexity)]</span>
-    iter: Map&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>Vec&lt;AnyValue&gt;) -&gt; Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;,
+<span class="attribute">#[derive(Clone)]
+#[allow(missing_debug_implementations)]
+</span><span class="kw">pub struct </span>GroupedValues&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="attribute">#[allow(clippy::type_complexity)]
+    </span>iter: Map&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>Vec&lt;AnyValue&gt;) -&gt; Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;,
     len: usize,
 }
 
@@ -3410,8 +3536,8 @@
 <span class="doccomment">/// Creates an empty iterator. Used for `unwrap_or_default()`.
 </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Default <span class="kw">for </span>GroupedValues&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">static </span>EMPTY: [Vec&lt;AnyValue&gt;; <span class="number">0</span>] = [];
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">static </span>EMPTY: [Vec&lt;AnyValue&gt;; <span class="number">0</span>] = [];
         GroupedValues {
             iter: EMPTY[..].iter().map(|<span class="kw">_</span>| <span class="macro">unreachable!</span>()),
             len: <span class="number">0</span>,
@@ -3423,16 +3549,16 @@
 </span><span class="attribute">#[cfg_attr(
     feature = <span class="string">&quot;deprecated&quot;</span>,
     deprecated(since = <span class="string">&quot;3.2.0&quot;</span>, note = <span class="string">&quot;Replaced with `ArgMatches::get_many()`&quot;</span>)
-)]</span>
-<span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {
-    <span class="attribute">#[allow(clippy::type_complexity)]</span>
-    iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>OsStr&gt;,
+)]
+#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {
+    <span class="attribute">#[allow(clippy::type_complexity)]
+    </span>iter: Map&lt;Flatten&lt;Iter&lt;<span class="lifetime">&#39;a</span>, Vec&lt;AnyValue&gt;&gt;&gt;, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>OsStr&gt;,
     len: usize,
 }
 
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Iterator <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">type </span>Item = <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>OsStr;
 
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>OsStr&gt; {
@@ -3443,19 +3569,19 @@
     }
 }
 
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; DoubleEndedIterator <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; DoubleEndedIterator <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {
     <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>OsStr&gt; {
         <span class="self">self</span>.iter.next_back()
     }
 }
 
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ExactSizeIterator <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {}
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; ExactSizeIterator <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;a</span>&gt; {}
 
 <span class="doccomment">/// Creates an empty iterator.
-</span><span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl </span>Default <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;_</span>&gt; {
+</span><span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl </span>Default <span class="kw">for </span>OsValues&lt;<span class="lifetime">&#39;_</span>&gt; {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="kw">static </span>EMPTY: [Vec&lt;AnyValue&gt;; <span class="number">0</span>] = [];
         OsValues {
@@ -3485,8 +3611,8 @@
 /// assert_eq!(indices.next(), None);
 /// ```
 /// [`ArgMatches::indices_of`]: ArgMatches::indices_of()
-</span><span class="attribute">#[derive(Clone, Debug)]</span>
-<span class="kw">pub struct </span>Indices&lt;<span class="lifetime">&#39;a</span>&gt; {
+</span><span class="attribute">#[derive(Clone, Debug)]
+</span><span class="kw">pub struct </span>Indices&lt;<span class="lifetime">&#39;a</span>&gt; {
     iter: Cloned&lt;Iter&lt;<span class="lifetime">&#39;a</span>, usize&gt;&gt;,
     len: usize,
 }
@@ -3522,9 +3648,9 @@
     }
 }
 
-<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>unwrap_string(value: <span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>str {
+<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]
+#[inline]
+</span><span class="kw">fn </span>unwrap_string(value: <span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>str {
     <span class="kw">match </span>value.downcast_ref::&lt;String&gt;() {
         <span class="prelude-val">Some</span>(value) =&gt; value,
         <span class="prelude-val">None </span>=&gt; {
@@ -3533,9 +3659,9 @@
     }
 }
 
-<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>unwrap_string_arg&lt;<span class="lifetime">&#39;v</span>&gt;(id: <span class="kw-2">&amp;</span>Id, value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>AnyValue) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>str {
+<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]
+#[inline]
+</span><span class="kw">fn </span>unwrap_string_arg&lt;<span class="lifetime">&#39;v</span>&gt;(id: <span class="kw-2">&amp;</span>Id, value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>AnyValue) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>str {
     <span class="kw">match </span>value.downcast_ref::&lt;String&gt;() {
         <span class="prelude-val">Some</span>(value) =&gt; value,
         <span class="prelude-val">None </span>=&gt; {
@@ -3547,9 +3673,9 @@
     }
 }
 
-<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>unwrap_os_string(value: <span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>OsStr {
+<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]
+#[inline]
+</span><span class="kw">fn </span>unwrap_os_string(value: <span class="kw-2">&amp;</span>AnyValue) -&gt; <span class="kw-2">&amp;</span>OsStr {
     <span class="kw">match </span>value.downcast_ref::&lt;OsString&gt;() {
         <span class="prelude-val">Some</span>(value) =&gt; value,
         <span class="prelude-val">None </span>=&gt; {
@@ -3558,9 +3684,9 @@
     }
 }
 
-<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]</span>
-<span class="attribute">#[inline]</span>
-<span class="kw">fn </span>unwrap_os_string_arg&lt;<span class="lifetime">&#39;v</span>&gt;(id: <span class="kw-2">&amp;</span>Id, value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>AnyValue) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>OsStr {
+<span class="attribute">#[cfg_attr(debug_assertions, track_caller)]
+#[inline]
+</span><span class="kw">fn </span>unwrap_os_string_arg&lt;<span class="lifetime">&#39;v</span>&gt;(id: <span class="kw-2">&amp;</span>Id, value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>AnyValue) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;v </span>OsStr {
     <span class="kw">match </span>value.downcast_ref::&lt;OsString&gt;() {
         <span class="prelude-val">Some</span>(value) =&gt; value,
         <span class="prelude-val">None </span>=&gt; {
@@ -3572,50 +3698,50 @@
     }
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>check_auto_traits() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>check_auto_traits() {
         <span class="macro">static_assertions::assert_impl_all!</span>(ArgMatches: Send, Sync, Unpin);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_default_values() {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span><span class="kw-2">mut </span>values: Values = Values::default();
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_default_values() {
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span><span class="kw-2">mut </span>values: Values = Values::default();
         <span class="macro">assert_eq!</span>(values.next(), <span class="prelude-val">None</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_default_osvalues() {
-        <span class="attribute">#![allow(deprecated)]</span>
-        <span class="kw">let </span><span class="kw-2">mut </span>values: OsValues = OsValues::default();
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_default_osvalues() {
+        <span class="attribute">#![allow(deprecated)]
+        </span><span class="kw">let </span><span class="kw-2">mut </span>values: OsValues = OsValues::default();
         <span class="macro">assert_eq!</span>(values.next(), <span class="prelude-val">None</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_default_raw_values() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_default_raw_values() {
         <span class="kw">let </span><span class="kw-2">mut </span>values: RawValues = Default::default();
         <span class="macro">assert_eq!</span>(values.next(), <span class="prelude-val">None</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_default_indices() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_default_indices() {
         <span class="kw">let </span><span class="kw-2">mut </span>indices: Indices = Indices::default();
         <span class="macro">assert_eq!</span>(indices.next(), <span class="prelude-val">None</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_default_indices_with_shorter_lifetime() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_default_indices_with_shorter_lifetime() {
         <span class="kw">let </span>matches = ArgMatches::default();
         <span class="kw">let </span><span class="kw-2">mut </span>indices = matches.indices_of(<span class="string">&quot;&quot;</span>).unwrap_or_default();
         <span class="macro">assert_eq!</span>(indices.next(), <span class="prelude-val">None</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>values_exact_size() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>values_exact_size() {
         <span class="kw">let </span>l = <span class="kw">crate</span>::Command::new(<span class="string">&quot;test&quot;</span>)
             .arg(
                 <span class="kw">crate</span>::Arg::new(<span class="string">&quot;POTATO&quot;</span>)
@@ -3631,8 +3757,8 @@
         <span class="macro">assert_eq!</span>(l, <span class="number">1</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>os_values_exact_size() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>os_values_exact_size() {
         <span class="kw">let </span>l = <span class="kw">crate</span>::Command::new(<span class="string">&quot;test&quot;</span>)
             .arg(
                 <span class="kw">crate</span>::Arg::new(<span class="string">&quot;POTATO&quot;</span>)
@@ -3649,8 +3775,8 @@
         <span class="macro">assert_eq!</span>(l, <span class="number">1</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>indices_exact_size() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>indices_exact_size() {
         <span class="kw">let </span>l = <span class="kw">crate</span>::Command::new(<span class="string">&quot;test&quot;</span>)
             .arg(
                 <span class="kw">crate</span>::Arg::new(<span class="string">&quot;POTATO&quot;</span>)
@@ -3667,4 +3793,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

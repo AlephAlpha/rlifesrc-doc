@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.6.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://www.rust-lang.org/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rand_core/index.html"><div class="logo-container"><img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rand_core/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/rand_core-0.6.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://www.rust-lang.org/favicon.ico"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rand_core/index.html"><div class="logo-container"><img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rand_core/index.html"><div class="logo-container">
                     <img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rand_core/index.html">
                         <img src="https://www.rust-lang.org/logos/rust-logo-128x128-blk.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -535,29 +535,29 @@
     html_logo_url = <span class="string">&quot;https://www.rust-lang.org/logos/rust-logo-128x128-blk.png&quot;</span>,
     html_favicon_url = <span class="string">&quot;https://www.rust-lang.org/favicon.ico&quot;</span>,
     html_root_url = <span class="string">&quot;https://rust-random.github.io/rand/&quot;
-</span>)]</span>
-<span class="attribute">#![deny(missing_docs)]</span>
-<span class="attribute">#![deny(missing_debug_implementations)]</span>
-<span class="attribute">#![doc(test(attr(allow(unused_variables), deny(warnings))))]</span>
-<span class="attribute">#![cfg_attr(doc_cfg, feature(doc_cfg))]</span>
-<span class="attribute">#![no_std]</span>
+</span>)]
+#![deny(missing_docs)]
+#![deny(missing_debug_implementations)]
+#![doc(test(attr(allow(unused_variables), deny(warnings))))]
+#![cfg_attr(doc_cfg, feature(doc_cfg))]
+#![no_std]
 
-<span class="kw">use </span>core::convert::AsMut;
+</span><span class="kw">use </span>core::convert::AsMut;
 <span class="kw">use </span>core::default::Default;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span> <span class="kw">extern crate </span>std;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span> <span class="kw">extern crate </span>alloc;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span> <span class="kw">use </span>alloc::boxed::Box;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)] </span><span class="kw">extern crate </span>std;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)] </span><span class="kw">extern crate </span>alloc;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)] </span><span class="kw">use </span>alloc::boxed::Box;
 
 <span class="kw">pub use </span>error::Error;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;getrandom&quot;</span>)]</span> <span class="kw">pub use </span>os::OsRng;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;getrandom&quot;</span>)] </span><span class="kw">pub use </span>os::OsRng;
 
 
 <span class="kw">pub mod </span>block;
 <span class="kw">mod </span>error;
 <span class="kw">pub mod </span>impls;
 <span class="kw">pub mod </span>le;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;getrandom&quot;</span>)]</span> <span class="kw">mod </span>os;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;getrandom&quot;</span>)] </span><span class="kw">mod </span>os;
 
 
 <span class="doccomment">/// The core of a random number generator.
@@ -882,9 +882,9 @@
     /// If [`getrandom`] is unable to provide secure entropy this method will panic.
     ///
     /// [`getrandom`]: https://docs.rs/getrandom
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;getrandom&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;getrandom&quot;</span>)))]</span>
-    <span class="kw">fn </span>from_entropy() -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;getrandom&quot;</span>)]
+    #[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;getrandom&quot;</span>)))]
+    </span><span class="kw">fn </span>from_entropy() -&gt; <span class="self">Self </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>seed = <span class="self">Self</span>::Seed::default();
         <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = getrandom::getrandom(seed.as_mut()) {
             <span class="macro">panic!</span>(<span class="string">&quot;from_entropy failed: {}&quot;</span>, err);
@@ -897,23 +897,23 @@
 // Force inlining all functions, so that it is up to the `RngCore`
 // implementation and the optimizer to decide on inlining.
 </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, R: RngCore + <span class="question-mark">?</span>Sized&gt; RngCore <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>R {
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>next_u32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u32 {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>next_u32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u32 {
         (<span class="kw-2">**</span><span class="self">self</span>).next_u32()
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>next_u64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u64 {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>next_u64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u64 {
         (<span class="kw-2">**</span><span class="self">self</span>).next_u64()
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) {
         (<span class="kw-2">**</span><span class="self">self</span>).fill_bytes(dest)
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>try_fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>try_fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
         (<span class="kw-2">**</span><span class="self">self</span>).try_fill_bytes(dest)
     }
 }
@@ -921,31 +921,31 @@
 <span class="comment">// Implement `RngCore` for boxed references to an `RngCore`.
 // Force inlining all functions, so that it is up to the `RngCore`
 // implementation and the optimizer to decide on inlining.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">impl</span>&lt;R: RngCore + <span class="question-mark">?</span>Sized&gt; RngCore <span class="kw">for </span>Box&lt;R&gt; {
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>next_u32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u32 {
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">impl</span>&lt;R: RngCore + <span class="question-mark">?</span>Sized&gt; RngCore <span class="kw">for </span>Box&lt;R&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>next_u32(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u32 {
         (<span class="kw-2">**</span><span class="self">self</span>).next_u32()
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>next_u64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u64 {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>next_u64(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; u64 {
         (<span class="kw-2">**</span><span class="self">self</span>).next_u64()
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) {
         (<span class="kw-2">**</span><span class="self">self</span>).fill_bytes(dest)
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>try_fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>try_fill_bytes(<span class="kw-2">&amp;mut </span><span class="self">self</span>, dest: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
         (<span class="kw-2">**</span><span class="self">self</span>).try_fill_bytes(dest)
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">impl </span>std::io::Read <span class="kw">for dyn </span>RngCore {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">impl </span>std::io::Read <span class="kw">for dyn </span>RngCore {
     <span class="kw">fn </span>read(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;usize, std::io::Error&gt; {
         <span class="self">self</span>.try_fill_bytes(buf)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(buf.len())
@@ -956,15 +956,15 @@
 </span><span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, R: CryptoRng + <span class="question-mark">?</span>Sized&gt; CryptoRng <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="kw-2">mut </span>R {}
 
 <span class="comment">// Implement `CryptoRng` for boxed references to an `CryptoRng`.
-</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">impl</span>&lt;R: CryptoRng + <span class="question-mark">?</span>Sized&gt; CryptoRng <span class="kw">for </span>Box&lt;R&gt; {}
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+</span><span class="kw">impl</span>&lt;R: CryptoRng + <span class="question-mark">?</span>Sized&gt; CryptoRng <span class="kw">for </span>Box&lt;R&gt; {}
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>test {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>test {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>test_seed_from_u64() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>test_seed_from_u64() {
         <span class="kw">struct </span>SeedableNum(u64);
         <span class="kw">impl </span>SeedableRng <span class="kw">for </span>SeedableNum {
             <span class="kw">type </span>Seed = [u8; <span class="number">8</span>];
@@ -1005,4 +1005,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rand_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rand_core" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

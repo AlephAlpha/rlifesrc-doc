@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.17/src/derive.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>derive.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.20/src/derive.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>derive.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../clap/index.html">
                         <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -608,9 +608,9 @@
 /// throughout the application representing the normalized values coming from
 /// the CLI.
 ///
-</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]</span>
-<span class="doccomment">/// /// My super CLI
+</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]
+</span><span class="doccomment">/// /// My super CLI
 /// #[derive(clap::Parser)]
 /// #[clap(name = &quot;demo&quot;)]
 /// struct Context {
@@ -741,9 +741,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;`StructOpt::clap` is replaced with `CommandFactory::command` (derived as part of `Parser`)&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>clap&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt; {
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">fn </span>clap&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt; {
         &lt;<span class="self">Self </span><span class="kw">as </span>CommandFactory&gt;::command()
     }
 
@@ -755,9 +755,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;`StructOpt::from_clap` is replaced with `FromArgMatches::from_arg_matches_mut` (derived as part of `Parser`)&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>from_clap(matches: <span class="kw-2">&amp;</span>ArgMatches) -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">fn </span>from_clap(matches: <span class="kw-2">&amp;</span>ArgMatches) -&gt; <span class="self">Self </span>{
         &lt;<span class="self">Self </span><span class="kw">as </span>FromArgMatches&gt;::from_arg_matches(matches).unwrap()
     }
 
@@ -768,9 +768,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;`StructOpt::from_args` is replaced with `Parser::parse` (note the change in derives)&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>from_args() -&gt; <span class="self">Self </span>{
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">fn </span>from_args() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::parse()
     }
 
@@ -781,9 +781,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;`StructOpt::from_args_safe` is replaced with `Parser::try_parse` (note the change in derives)&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>from_args_safe() -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">fn </span>from_args_safe() -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
         <span class="self">Self</span>::try_parse()
     }
 
@@ -794,9 +794,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;`StructOpt::from_iter` is replaced with `Parser::parse_from` (note the change in derives)&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>from_iter&lt;I, T&gt;(itr: I) -&gt; <span class="self">Self
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">fn </span>from_iter&lt;I, T&gt;(itr: I) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>I: IntoIterator&lt;Item = T&gt;,
         T: Into&lt;OsString&gt; + Clone,
@@ -812,9 +812,9 @@
             since = <span class="string">&quot;3.0.0&quot;</span>,
             note = <span class="string">&quot;`StructOpt::from_iter_safe` is replaced with `Parser::try_parse_from` (note the change in derives)&quot;
         </span>)
-    )]</span>
-    <span class="attribute">#[doc(hidden)]</span>
-    <span class="kw">fn </span>from_iter_safe&lt;I, T&gt;(itr: I) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt;
+    )]
+    #[doc(hidden)]
+    </span><span class="kw">fn </span>from_iter_safe&lt;I, T&gt;(itr: I) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt;
     <span class="kw">where
         </span>I: IntoIterator&lt;Item = T&gt;,
         T: Into&lt;OsString&gt; + Clone,
@@ -831,21 +831,21 @@
     ///
     /// See [`FromArgMatches::from_arg_matches_mut`] for instantiating `Self`.
     </span><span class="kw">fn </span>command&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt; {
-        <span class="attribute">#[allow(deprecated)]</span>
-        <span class="self">Self</span>::into_app()
+        <span class="attribute">#[allow(deprecated)]
+        </span><span class="self">Self</span>::into_app()
     }
     <span class="doccomment">/// Deprecated, replaced with `CommandFactory::command`
     </span><span class="attribute">#[cfg_attr(
         feature = <span class="string">&quot;deprecated&quot;</span>,
         deprecated(since = <span class="string">&quot;3.1.0&quot;</span>, note = <span class="string">&quot;Replaced with `CommandFactory::command&quot;</span>)
-    )]</span>
-    <span class="kw">fn </span>into_app&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt;;
+    )]
+    </span><span class="kw">fn </span>into_app&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt;;
     <span class="doccomment">/// Build a [`Command`] that can update `self`.
     ///
     /// See [`FromArgMatches::update_from_arg_matches_mut`] for updating `self`.
     </span><span class="kw">fn </span>command_for_update&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt; {
-        <span class="attribute">#[allow(deprecated)]</span>
-        <span class="self">Self</span>::into_app_for_update()
+        <span class="attribute">#[allow(deprecated)]
+        </span><span class="self">Self</span>::into_app_for_update()
     }
     <span class="doccomment">/// Deprecated, replaced with `CommandFactory::command_for_update`
     </span><span class="attribute">#[cfg_attr(
@@ -854,8 +854,8 @@
             since = <span class="string">&quot;3.1.0&quot;</span>,
             note = <span class="string">&quot;Replaced with `CommandFactory::command_for_update&quot;
         </span>)
-    )]</span>
-    <span class="kw">fn </span>into_app_for_update&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt;;
+    )]
+    </span><span class="kw">fn </span>into_app_for_update&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt;;
 }
 
 <span class="doccomment">/// Converts an instance of [`ArgMatches`] to a user-defined container.
@@ -867,9 +867,9 @@
     /// Motivation: If our application had two CLI options, `--name
     /// &lt;STRING&gt;` and the flag `--debug`, we may create a struct as follows:
     ///
-    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]</span>
-    <span class="doccomment">/// struct Context {
+    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+    #[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]
+    </span><span class="doccomment">/// struct Context {
     ///     name: String,
     ///     debug: bool
     /// }
@@ -878,9 +878,9 @@
     /// We then need to convert the `ArgMatches` that `clap` generated into our struct.
     /// `from_arg_matches` serves as the equivalent of:
     ///
-    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]</span>
-    <span class="doccomment">/// # use clap::ArgMatches;
+    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+    #[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]
+    </span><span class="doccomment">/// # use clap::ArgMatches;
     /// # struct Context {
     /// #   name: String,
     /// #   debug: bool
@@ -901,9 +901,9 @@
     /// Motivation: If our application had two CLI options, `--name
     /// &lt;STRING&gt;` and the flag `--debug`, we may create a struct as follows:
     ///
-    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]</span>
-    <span class="doccomment">/// struct Context {
+    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+    #[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]
+    </span><span class="doccomment">/// struct Context {
     ///     name: String,
     ///     debug: bool
     /// }
@@ -912,9 +912,9 @@
     /// We then need to convert the `ArgMatches` that `clap` generated into our struct.
     /// `from_arg_matches_mut` serves as the equivalent of:
     ///
-    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-    <span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]</span>
-    <span class="doccomment">/// # use clap::ArgMatches;
+    </span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+    #[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```no_run&quot;</span>)]
+    </span><span class="doccomment">/// # use clap::ArgMatches;
     /// # struct Context {
     /// #   name: String,
     /// #   debug: bool
@@ -955,9 +955,9 @@
 ///
 /// # Example
 ///
-</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]</span>
-<span class="doccomment">/// #[derive(clap::Parser)]
+</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]
+</span><span class="doccomment">/// #[derive(clap::Parser)]
 /// struct Args {
 ///     #[clap(flatten)]
 ///     logging: LogArgs,
@@ -997,9 +997,9 @@
 ///
 /// # Example
 ///
-</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]</span>
-<span class="doccomment">/// #[derive(clap::Parser)]
+</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]
+</span><span class="doccomment">/// #[derive(clap::Parser)]
 /// struct Args {
 ///     #[clap(subcommand)]
 ///     action: Action,
@@ -1039,9 +1039,9 @@
 ///
 /// # Example
 ///
-</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]</span>
-<span class="attribute">#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]</span>
-<span class="doccomment">/// #[derive(clap::Parser)]
+</span><span class="attribute">#[cfg_attr(not(feature = <span class="string">&quot;derive&quot;</span>), doc = <span class="string">&quot; ```ignore&quot;</span>)]
+#[cfg_attr(feature = <span class="string">&quot;derive&quot;</span>, doc = <span class="string">&quot; ```&quot;</span>)]
+</span><span class="doccomment">/// #[derive(clap::Parser)]
 /// struct Args {
 ///     #[clap(value_enum)]
 ///     level: Level,
@@ -1104,8 +1104,8 @@
     }
 }
 
-<span class="attribute">#[allow(deprecated)]</span>
-<span class="kw">impl</span>&lt;T: CommandFactory&gt; CommandFactory <span class="kw">for </span>Box&lt;T&gt; {
+<span class="attribute">#[allow(deprecated)]
+</span><span class="kw">impl</span>&lt;T: CommandFactory&gt; CommandFactory <span class="kw">for </span>Box&lt;T&gt; {
     <span class="kw">fn </span>into_app&lt;<span class="lifetime">&#39;help</span>&gt;() -&gt; Command&lt;<span class="lifetime">&#39;help</span>&gt; {
         &lt;T <span class="kw">as </span>CommandFactory&gt;::into_app()
     }
@@ -1155,4 +1155,4 @@
     err.format(<span class="kw-2">&amp;mut </span>cmd)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/bigint.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bigint.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../num_bigint/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-bigint-0.4.3/src/bigint.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bigint.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../num_bigint/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../num_bigint/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1146,9 +1146,9 @@
 <span id="1146">1146</span>
 <span id="1147">1147</span>
 </pre><pre class="rust"><code><span class="comment">// `Add`/`Sub` ops may flip from `BigInt` to its `BigUint` magnitude
-</span><span class="attribute">#![allow(clippy::suspicious_arithmetic_impl)]</span>
+</span><span class="attribute">#![allow(clippy::suspicious_arithmetic_impl)]
 
-<span class="kw">use </span><span class="kw">crate</span>::std_alloc::{String, Vec};
+</span><span class="kw">use </span><span class="kw">crate</span>::std_alloc::{String, Vec};
 <span class="kw">use </span>core::cmp::Ordering::{<span class="self">self</span>, Equal};
 <span class="kw">use </span>core::default::Default;
 <span class="kw">use </span>core::fmt;
@@ -1177,15 +1177,15 @@
 <span class="kw">mod </span>power;
 <span class="kw">mod </span>shift;
 
-<span class="attribute">#[cfg(any(feature = <span class="string">&quot;quickcheck&quot;</span>, feature = <span class="string">&quot;arbitrary&quot;</span>))]</span>
-<span class="kw">mod </span>arbitrary;
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;quickcheck&quot;</span>, feature = <span class="string">&quot;arbitrary&quot;</span>))]
+</span><span class="kw">mod </span>arbitrary;
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]</span>
-<span class="kw">mod </span>serde;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde&quot;</span>)]
+</span><span class="kw">mod </span>serde;
 
 <span class="doccomment">/// A Sign is a `BigInt`&#39;s composing element.
-</span><span class="attribute">#[derive(PartialEq, PartialOrd, Eq, Ord, Copy, Clone, Debug, Hash)]</span>
-<span class="kw">pub enum </span>Sign {
+</span><span class="attribute">#[derive(PartialEq, PartialOrd, Eq, Ord, Copy, Clone, Debug, Hash)]
+</span><span class="kw">pub enum </span>Sign {
     Minus,
     NoSign,
     Plus,
@@ -1195,8 +1195,8 @@
     <span class="kw">type </span>Output = Sign;
 
     <span class="doccomment">/// Negate Sign value.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>neg(<span class="self">self</span>) -&gt; Sign {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>neg(<span class="self">self</span>) -&gt; Sign {
         <span class="kw">match </span><span class="self">self </span>{
             Minus =&gt; Plus,
             NoSign =&gt; NoSign,
@@ -1214,24 +1214,24 @@
 <span class="comment">// Note: derived `Clone` doesn&#39;t specialize `clone_from`,
 // but we want to keep the allocation in `data`.
 </span><span class="kw">impl </span>Clone <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
         BigInt {
             sign: <span class="self">self</span>.sign,
             data: <span class="self">self</span>.data.clone(),
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>clone_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>clone_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) {
         <span class="self">self</span>.sign = other.sign;
         <span class="self">self</span>.data.clone_from(<span class="kw-2">&amp;</span>other.data);
     }
 }
 
 <span class="kw">impl </span>hash::Hash <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>hash&lt;H: hash::Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>hash&lt;H: hash::Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
         <span class="macro">debug_assert!</span>((<span class="self">self</span>.sign != NoSign) ^ <span class="self">self</span>.data.is_zero());
         <span class="self">self</span>.sign.hash(state);
         <span class="kw">if </span><span class="self">self</span>.sign != NoSign {
@@ -1241,8 +1241,8 @@
 }
 
 <span class="kw">impl </span>PartialEq <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; bool {
         <span class="macro">debug_assert!</span>((<span class="self">self</span>.sign != NoSign) ^ <span class="self">self</span>.data.is_zero());
         <span class="macro">debug_assert!</span>((other.sign != NoSign) ^ other.data.is_zero());
         <span class="self">self</span>.sign == other.sign &amp;&amp; (<span class="self">self</span>.sign == NoSign || <span class="self">self</span>.data == other.data)
@@ -1252,15 +1252,15 @@
 <span class="kw">impl </span>Eq <span class="kw">for </span>BigInt {}
 
 <span class="kw">impl </span>PartialOrd <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;Ordering&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;Ordering&gt; {
         <span class="prelude-val">Some</span>(<span class="self">self</span>.cmp(other))
     }
 }
 
 <span class="kw">impl </span>Ord <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; Ordering {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; Ordering {
         <span class="macro">debug_assert!</span>((<span class="self">self</span>.sign != NoSign) ^ <span class="self">self</span>.data.is_zero());
         <span class="macro">debug_assert!</span>((other.sign != NoSign) ^ other.data.is_zero());
         <span class="kw">let </span>scmp = <span class="self">self</span>.sign.cmp(<span class="kw-2">&amp;</span>other.sign);
@@ -1277,8 +1277,8 @@
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>default() -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>default() -&gt; BigInt {
         Zero::zero()
     }
 }
@@ -1356,58 +1356,58 @@
 }
 
 <span class="kw">impl </span>Zero <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>zero() -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>zero() -&gt; BigInt {
         BigInt {
             sign: NoSign,
             data: BigUint::zero(),
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_zero(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_zero(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.data.set_zero();
         <span class="self">self</span>.sign = NoSign;
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_zero(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_zero(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.sign == NoSign
     }
 }
 
 <span class="kw">impl </span>One <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>one() -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>one() -&gt; BigInt {
         BigInt {
             sign: Plus,
             data: BigUint::one(),
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>set_one(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>set_one(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.data.set_one();
         <span class="self">self</span>.sign = Plus;
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_one(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_one(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.sign == Plus &amp;&amp; <span class="self">self</span>.data.is_one()
     }
 }
 
 <span class="kw">impl </span>Signed <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>abs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>abs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BigInt {
         <span class="kw">match </span><span class="self">self</span>.sign {
             Plus | NoSign =&gt; <span class="self">self</span>.clone(),
             Minus =&gt; BigInt::from(<span class="self">self</span>.data.clone()),
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>abs_sub(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>abs_sub(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
         <span class="kw">if </span><span class="kw-2">*</span><span class="self">self </span>&lt;= <span class="kw-2">*</span>other {
             Zero::zero()
         } <span class="kw">else </span>{
@@ -1415,8 +1415,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>signum(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>signum(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BigInt {
         <span class="kw">match </span><span class="self">self</span>.sign {
             Plus =&gt; BigInt::one(),
             Minus =&gt; -BigInt::one(),
@@ -1424,13 +1424,13 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_positive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_positive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.sign == Plus
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_negative(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_negative(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.sign == Minus
     }
 }
@@ -1451,18 +1451,18 @@
 }
 <span class="kw">use </span><span class="self">self</span>::CheckedUnsignedAbs::{Negative, Positive};
 
-<span class="macro">macro_rules!</span> impl_unsigned_abs {
+<span class="macro">macro_rules! </span>impl_unsigned_abs {
     (<span class="macro-nonterminal">$Signed</span>:ty, <span class="macro-nonterminal">$Unsigned</span>:ty) =&gt; {
         <span class="kw">impl </span>UnsignedAbs <span class="kw">for </span><span class="macro-nonterminal">$Signed </span>{
             <span class="kw">type </span>Unsigned = <span class="macro-nonterminal">$Unsigned</span>;
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>uabs(<span class="self">self</span>) -&gt; <span class="macro-nonterminal">$Unsigned </span>{
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>uabs(<span class="self">self</span>) -&gt; <span class="macro-nonterminal">$Unsigned </span>{
                 <span class="self">self</span>.wrapping_abs() <span class="kw">as </span><span class="macro-nonterminal">$Unsigned
             </span>}
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>checked_uabs(<span class="self">self</span>) -&gt; CheckedUnsignedAbs&lt;<span class="self">Self</span>::Unsigned&gt; {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>checked_uabs(<span class="self">self</span>) -&gt; CheckedUnsignedAbs&lt;<span class="self">Self</span>::Unsigned&gt; {
                 <span class="kw">if </span><span class="self">self </span>&gt;= <span class="number">0 </span>{
                     Positive(<span class="self">self </span><span class="kw">as </span><span class="macro-nonterminal">$Unsigned</span>)
                 } <span class="kw">else </span>{
@@ -1482,8 +1482,8 @@
 <span class="kw">impl </span>Neg <span class="kw">for </span>BigInt {
     <span class="kw">type </span>Output = BigInt;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>neg(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>neg(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; BigInt {
         <span class="self">self</span>.sign = -<span class="self">self</span>.sign;
         <span class="self">self
     </span>}
@@ -1492,15 +1492,15 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Neg <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>BigInt {
     <span class="kw">type </span>Output = BigInt;
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>neg(<span class="self">self</span>) -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>neg(<span class="self">self</span>) -&gt; BigInt {
         -<span class="self">self</span>.clone()
     }
 }
 
 <span class="kw">impl </span>Integer <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>div_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; (BigInt, BigInt) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>div_rem(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; (BigInt, BigInt) {
         <span class="comment">// r.sign == self.sign
         </span><span class="kw">let </span>(d_ui, r_ui) = <span class="self">self</span>.data.div_rem(<span class="kw-2">&amp;</span>other.data);
         <span class="kw">let </span>d = BigInt::from_biguint(<span class="self">self</span>.sign, d_ui);
@@ -1512,8 +1512,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>div_floor(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>div_floor(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
         <span class="kw">let </span>(d_ui, m) = <span class="self">self</span>.data.div_mod_floor(<span class="kw-2">&amp;</span>other.data);
         <span class="kw">let </span>d = BigInt::from(d_ui);
         <span class="kw">match </span>(<span class="self">self</span>.sign, other.sign) {
@@ -1529,8 +1529,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>mod_floor(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>mod_floor(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
         <span class="comment">// m.sign == other.sign
         </span><span class="kw">let </span>m_ui = <span class="self">self</span>.data.mod_floor(<span class="kw-2">&amp;</span>other.data);
         <span class="kw">let </span>m = BigInt::from_biguint(other.sign, m_ui);
@@ -1565,8 +1565,8 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>div_ceil(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>div_ceil(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>(d_ui, m) = <span class="self">self</span>.data.div_mod_floor(<span class="kw-2">&amp;</span>other.data);
         <span class="kw">let </span>d = BigInt::from(d_ui);
         <span class="kw">match </span>(<span class="self">self</span>.sign, other.sign) {
@@ -1585,28 +1585,28 @@
     <span class="doccomment">/// Calculates the Greatest Common Divisor (GCD) of the number and `other`.
     ///
     /// The result is always positive.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>gcd(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>gcd(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
         BigInt::from(<span class="self">self</span>.data.gcd(<span class="kw-2">&amp;</span>other.data))
     }
 
     <span class="doccomment">/// Calculates the Lowest Common Multiple (LCM) of the number and `other`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>lcm(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>lcm(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; BigInt {
         BigInt::from(<span class="self">self</span>.data.lcm(<span class="kw-2">&amp;</span>other.data))
     }
 
     <span class="doccomment">/// Calculates the Greatest Common Divisor (GCD) and
     /// Lowest Common Multiple (LCM) together.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>gcd_lcm(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; (BigInt, BigInt) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>gcd_lcm(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; (BigInt, BigInt) {
         <span class="kw">let </span>(gcd, lcm) = <span class="self">self</span>.data.gcd_lcm(<span class="kw-2">&amp;</span>other.data);
         (BigInt::from(gcd), BigInt::from(lcm))
     }
 
     <span class="doccomment">/// Greatest common divisor, least common multiple, and Bézout coefficients.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>extended_gcd_lcm(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; (num_integer::ExtendedGcd&lt;BigInt&gt;, BigInt) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>extended_gcd_lcm(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; (num_integer::ExtendedGcd&lt;BigInt&gt;, BigInt) {
         <span class="kw">let </span>egcd = <span class="self">self</span>.extended_gcd(other);
         <span class="kw">let </span>lcm = <span class="kw">if </span>egcd.gcd.is_zero() {
             BigInt::zero()
@@ -1617,32 +1617,32 @@
     }
 
     <span class="doccomment">/// Deprecated, use `is_multiple_of` instead.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>divides(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>divides(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; bool {
         <span class="self">self</span>.is_multiple_of(other)
     }
 
     <span class="doccomment">/// Returns `true` if the number is a multiple of `other`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_multiple_of(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_multiple_of(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>BigInt) -&gt; bool {
         <span class="self">self</span>.data.is_multiple_of(<span class="kw-2">&amp;</span>other.data)
     }
 
     <span class="doccomment">/// Returns `true` if the number is divisible by `2`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_even(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_even(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.data.is_even()
     }
 
     <span class="doccomment">/// Returns `true` if the number is not divisible by `2`.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_odd(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_odd(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.data.is_odd()
     }
 
     <span class="doccomment">/// Rounds up to nearest multiple of argument.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>next_multiple_of(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>next_multiple_of(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>m = <span class="self">self</span>.mod_floor(other);
         <span class="kw">if </span>m.is_zero() {
             <span class="self">self</span>.clone()
@@ -1651,8 +1651,8 @@
         }
     }
     <span class="doccomment">/// Rounds down to nearest multiple of argument.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>prev_multiple_of(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>prev_multiple_of(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">self </span>- <span class="self">self</span>.mod_floor(other)
     }
 }
@@ -1680,27 +1680,27 @@
 }
 
 <span class="kw">impl </span>IntDigits <span class="kw">for </span>BigInt {
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[BigDigit] {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[BigDigit] {
         <span class="self">self</span>.data.digits()
     }
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>digits_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Vec&lt;BigDigit&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>digits_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Vec&lt;BigDigit&gt; {
         <span class="self">self</span>.data.digits_mut()
     }
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>normalize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>normalize(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.data.normalize();
         <span class="kw">if </span><span class="self">self</span>.data.is_zero() {
             <span class="self">self</span>.sign = NoSign;
         }
     }
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>capacity(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>capacity(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.data.capacity()
     }
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.data.len()
     }
 }
@@ -1717,16 +1717,16 @@
     <span class="doccomment">/// Creates and initializes a BigInt.
     ///
     /// The base 2&lt;sup&gt;32&lt;/sup&gt; digits are ordered least significant digit first.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>new(sign: Sign, digits: Vec&lt;u32&gt;) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>new(sign: Sign, digits: Vec&lt;u32&gt;) -&gt; BigInt {
         BigInt::from_biguint(sign, BigUint::new(digits))
     }
 
     <span class="doccomment">/// Creates and initializes a `BigInt`.
     ///
     /// The base 2&lt;sup&gt;32&lt;/sup&gt; digits are ordered least significant digit first.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>from_biguint(<span class="kw-2">mut </span>sign: Sign, <span class="kw-2">mut </span>data: BigUint) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>from_biguint(<span class="kw-2">mut </span>sign: Sign, <span class="kw-2">mut </span>data: BigUint) -&gt; BigInt {
         <span class="kw">if </span>sign == NoSign {
             data.assign_from_slice(<span class="kw-2">&amp;</span>[]);
         } <span class="kw">else if </span>data.is_zero() {
@@ -1739,16 +1739,16 @@
     <span class="doccomment">/// Creates and initializes a `BigInt`.
     ///
     /// The base 2&lt;sup&gt;32&lt;/sup&gt; digits are ordered least significant digit first.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>from_slice(sign: Sign, slice: <span class="kw-2">&amp;</span>[u32]) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>from_slice(sign: Sign, slice: <span class="kw-2">&amp;</span>[u32]) -&gt; BigInt {
         BigInt::from_biguint(sign, BigUint::from_slice(slice))
     }
 
     <span class="doccomment">/// Reinitializes a `BigInt`.
     ///
     /// The base 2&lt;sup&gt;32&lt;/sup&gt; digits are ordered least significant digit first.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>assign_from_slice(<span class="kw-2">&amp;mut </span><span class="self">self</span>, sign: Sign, slice: <span class="kw-2">&amp;</span>[u32]) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>assign_from_slice(<span class="kw-2">&amp;mut </span><span class="self">self</span>, sign: Sign, slice: <span class="kw-2">&amp;</span>[u32]) {
         <span class="kw">if </span>sign == NoSign {
             <span class="self">self</span>.set_zero();
         } <span class="kw">else </span>{
@@ -1775,16 +1775,16 @@
     /// assert_eq!(BigInt::from_bytes_be(Sign::Plus, b&quot;Hello world!&quot;),
     ///            BigInt::parse_bytes(b&quot;22405534230753963835153736737&quot;, 10).unwrap());
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>from_bytes_be(sign: Sign, bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>from_bytes_be(sign: Sign, bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
         BigInt::from_biguint(sign, BigUint::from_bytes_be(bytes))
     }
 
     <span class="doccomment">/// Creates and initializes a `BigInt`.
     ///
     /// The bytes are in little-endian byte order.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>from_bytes_le(sign: Sign, bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>from_bytes_le(sign: Sign, bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
         BigInt::from_biguint(sign, BigUint::from_bytes_le(bytes))
     }
 
@@ -1792,16 +1792,16 @@
     /// two&#39;s complement binary representation.
     ///
     /// The digits are in big-endian base 2&lt;sup&gt;8&lt;/sup&gt;.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>from_signed_bytes_be(digits: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>from_signed_bytes_be(digits: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
         convert::from_signed_bytes_be(digits)
     }
 
     <span class="doccomment">/// Creates and initializes a `BigInt` from an array of bytes in two&#39;s complement.
     ///
     /// The digits are in little-endian base 2&lt;sup&gt;8&lt;/sup&gt;.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>from_signed_bytes_le(digits: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>from_signed_bytes_le(digits: <span class="kw-2">&amp;</span>[u8]) -&gt; BigInt {
         convert::from_signed_bytes_le(digits)
     }
 
@@ -1816,8 +1816,8 @@
     /// assert_eq!(BigInt::parse_bytes(b&quot;ABCD&quot;, 16), ToBigInt::to_bigint(&amp;0xABCD));
     /// assert_eq!(BigInt::parse_bytes(b&quot;G&quot;, 16), None);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>parse_bytes(buf: <span class="kw-2">&amp;</span>[u8], radix: u32) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>parse_bytes(buf: <span class="kw-2">&amp;</span>[u8], radix: u32) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
         <span class="kw">let </span>s = str::from_utf8(buf).ok()<span class="question-mark">?</span>;
         BigInt::from_str_radix(s, radix).ok()
     }
@@ -1874,8 +1874,8 @@
     /// let i = -1125.to_bigint().unwrap();
     /// assert_eq!(i.to_bytes_be(), (Sign::Minus, vec![4, 101]));
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_bytes_be(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u8&gt;) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_bytes_be(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u8&gt;) {
         (<span class="self">self</span>.sign, <span class="self">self</span>.data.to_bytes_be())
     }
 
@@ -1889,8 +1889,8 @@
     /// let i = -1125.to_bigint().unwrap();
     /// assert_eq!(i.to_bytes_le(), (Sign::Minus, vec![101, 4]));
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_bytes_le(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u8&gt;) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_bytes_le(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u8&gt;) {
         (<span class="self">self</span>.sign, <span class="self">self</span>.data.to_bytes_le())
     }
 
@@ -1908,8 +1908,8 @@
     /// assert_eq!(BigInt::from(-112500000000i64).to_u32_digits(), (Sign::Minus, vec![830850304, 26]));
     /// assert_eq!(BigInt::from(112500000000i64).to_u32_digits(), (Sign::Plus, vec![830850304, 26]));
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_u32_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u32&gt;) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_u32_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u32&gt;) {
         (<span class="self">self</span>.sign, <span class="self">self</span>.data.to_u32_digits())
     }
 
@@ -1928,8 +1928,8 @@
     /// assert_eq!(BigInt::from(112500000000i64).to_u64_digits(), (Sign::Plus, vec![112500000000]));
     /// assert_eq!(BigInt::from(1u128 &lt;&lt; 64).to_u64_digits(), (Sign::Plus, vec![0, 1]));
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_u64_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u64&gt;) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_u64_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (Sign, Vec&lt;u64&gt;) {
         (<span class="self">self</span>.sign, <span class="self">self</span>.data.to_u64_digits())
     }
 
@@ -1947,8 +1947,8 @@
     /// assert_eq!(BigInt::from(-112500000000i64).iter_u32_digits().collect::&lt;Vec&lt;u32&gt;&gt;(), vec![830850304, 26]);
     /// assert_eq!(BigInt::from(112500000000i64).iter_u32_digits().collect::&lt;Vec&lt;u32&gt;&gt;(), vec![830850304, 26]);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>iter_u32_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; U32Digits&lt;<span class="lifetime">&#39;_</span>&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>iter_u32_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; U32Digits&lt;<span class="lifetime">&#39;_</span>&gt; {
         <span class="self">self</span>.data.iter_u32_digits()
     }
 
@@ -1967,8 +1967,8 @@
     /// assert_eq!(BigInt::from(112500000000i64).iter_u64_digits().collect::&lt;Vec&lt;u64&gt;&gt;(), vec![112500000000u64]);
     /// assert_eq!(BigInt::from(1u128 &lt;&lt; 64).iter_u64_digits().collect::&lt;Vec&lt;u64&gt;&gt;(), vec![0, 1]);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>iter_u64_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; U64Digits&lt;<span class="lifetime">&#39;_</span>&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>iter_u64_digits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; U64Digits&lt;<span class="lifetime">&#39;_</span>&gt; {
         <span class="self">self</span>.data.iter_u64_digits()
     }
 
@@ -1982,8 +1982,8 @@
     /// let i = -1125.to_bigint().unwrap();
     /// assert_eq!(i.to_signed_bytes_be(), vec![251, 155]);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_signed_bytes_be(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_signed_bytes_be(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
         convert::to_signed_bytes_be(<span class="self">self</span>)
     }
 
@@ -1997,8 +1997,8 @@
     /// let i = -1125.to_bigint().unwrap();
     /// assert_eq!(i.to_signed_bytes_le(), vec![155, 251]);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_signed_bytes_le(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_signed_bytes_le(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
         convert::to_signed_bytes_le(<span class="self">self</span>)
     }
 
@@ -2013,8 +2013,8 @@
     /// let i = BigInt::parse_bytes(b&quot;ff&quot;, 16).unwrap();
     /// assert_eq!(i.to_str_radix(16), &quot;ff&quot;);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_str_radix(<span class="kw-2">&amp;</span><span class="self">self</span>, radix: u32) -&gt; String {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_str_radix(<span class="kw-2">&amp;</span><span class="self">self</span>, radix: u32) -&gt; String {
         <span class="kw">let </span><span class="kw-2">mut </span>v = to_str_radix_reversed(<span class="kw-2">&amp;</span><span class="self">self</span>.data, radix);
 
         <span class="kw">if </span><span class="self">self</span>.is_negative() {
@@ -2039,8 +2039,8 @@
     ///            (Sign::Minus, vec![2, 94, 27]));
     /// // 0xFFFF = 65535 = 2*(159^2) + 94*159 + 27
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_radix_be(<span class="kw-2">&amp;</span><span class="self">self</span>, radix: u32) -&gt; (Sign, Vec&lt;u8&gt;) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_radix_be(<span class="kw-2">&amp;</span><span class="self">self</span>, radix: u32) -&gt; (Sign, Vec&lt;u8&gt;) {
         (<span class="self">self</span>.sign, <span class="self">self</span>.data.to_radix_be(radix))
     }
 
@@ -2058,8 +2058,8 @@
     ///            (Sign::Minus, vec![27, 94, 2]));
     /// // 0xFFFF = 65535 = 27 + 94*159 + 2*(159^2)
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_radix_le(<span class="kw-2">&amp;</span><span class="self">self</span>, radix: u32) -&gt; (Sign, Vec&lt;u8&gt;) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_radix_le(<span class="kw-2">&amp;</span><span class="self">self</span>, radix: u32) -&gt; (Sign, Vec&lt;u8&gt;) {
         (<span class="self">self</span>.sign, <span class="self">self</span>.data.to_radix_le(radix))
     }
 
@@ -2075,8 +2075,8 @@
     /// assert_eq!(BigInt::from(-4321).sign(), Sign::Minus);
     /// assert_eq!(BigInt::zero().sign(), Sign::NoSign);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>sign(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Sign {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>sign(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Sign {
         <span class="self">self</span>.sign
     }
 
@@ -2092,8 +2092,8 @@
     /// assert_eq!(BigInt::from(-4321).magnitude(), &amp;BigUint::from(4321u32));
     /// assert!(BigInt::zero().magnitude().is_zero());
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>magnitude(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>BigUint {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>magnitude(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>BigUint {
         <span class="kw-2">&amp;</span><span class="self">self</span>.data
     }
 
@@ -2110,21 +2110,21 @@
     /// assert_eq!(BigInt::from(-4321).into_parts(), (Sign::Minus, BigUint::from(4321u32)));
     /// assert_eq!(BigInt::zero().into_parts(), (Sign::NoSign, BigUint::zero()));
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>into_parts(<span class="self">self</span>) -&gt; (Sign, BigUint) {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>into_parts(<span class="self">self</span>) -&gt; (Sign, BigUint) {
         (<span class="self">self</span>.sign, <span class="self">self</span>.data)
     }
 
     <span class="doccomment">/// Determines the fewest bits necessary to express the `BigInt`,
     /// not including the sign.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>bits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>bits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
         <span class="self">self</span>.data.bits()
     }
 
     <span class="doccomment">/// Converts this `BigInt` into a `BigUint`, if it&#39;s not negative.
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>to_biguint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>to_biguint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BigUint&gt; {
         <span class="kw">match </span><span class="self">self</span>.sign {
             Plus =&gt; <span class="prelude-val">Some</span>(<span class="self">self</span>.data.clone()),
             NoSign =&gt; <span class="prelude-val">Some</span>(Zero::zero()),
@@ -2132,23 +2132,23 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>checked_add(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>checked_add(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
         <span class="prelude-val">Some</span>(<span class="self">self </span>+ v)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>checked_sub(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>checked_sub(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
         <span class="prelude-val">Some</span>(<span class="self">self </span>- v)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>checked_mul(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>checked_mul(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
         <span class="prelude-val">Some</span>(<span class="self">self </span>* v)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">pub fn </span>checked_div(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
+    <span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>checked_div(<span class="kw-2">&amp;</span><span class="self">self</span>, v: <span class="kw-2">&amp;</span>BigInt) -&gt; <span class="prelude-ty">Option</span>&lt;BigInt&gt; {
         <span class="kw">if </span>v.is_zero() {
             <span class="kw">return </span><span class="prelude-val">None</span>;
         }
@@ -2244,8 +2244,8 @@
     }
 }
 
-<span class="attribute">#[test]</span>
-<span class="kw">fn </span>test_from_biguint() {
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>test_from_biguint() {
     <span class="kw">fn </span>check(inp_s: Sign, inp_n: usize, ans_s: Sign, ans_n: usize) {
         <span class="kw">let </span>inp = BigInt::from_biguint(inp_s, BigUint::from(inp_n));
         <span class="kw">let </span>ans = BigInt {
@@ -2260,8 +2260,8 @@
     check(NoSign, <span class="number">1</span>, NoSign, <span class="number">0</span>);
 }
 
-<span class="attribute">#[test]</span>
-<span class="kw">fn </span>test_from_slice() {
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>test_from_slice() {
     <span class="kw">fn </span>check(inp_s: Sign, inp_n: u32, ans_s: Sign, ans_n: u32) {
         <span class="kw">let </span>inp = BigInt::from_slice(inp_s, <span class="kw-2">&amp;</span>[inp_n]);
         <span class="kw">let </span>ans = BigInt {
@@ -2276,8 +2276,8 @@
     check(NoSign, <span class="number">1</span>, NoSign, <span class="number">0</span>);
 }
 
-<span class="attribute">#[test]</span>
-<span class="kw">fn </span>test_assign_from_slice() {
+<span class="attribute">#[test]
+</span><span class="kw">fn </span>test_assign_from_slice() {
     <span class="kw">fn </span>check(inp_s: Sign, inp_n: u32, ans_s: Sign, ans_n: u32) {
         <span class="kw">let </span><span class="kw-2">mut </span>inp = BigInt::from_slice(Minus, <span class="kw-2">&amp;</span>[<span class="number">2627_u32</span>, <span class="number">0_u32</span>, <span class="number">9182_u32</span>, <span class="number">42_u32</span>]);
         inp.assign_from_slice(inp_s, <span class="kw-2">&amp;</span>[inp_n]);
@@ -2293,4 +2293,4 @@
     check(NoSign, <span class="number">1</span>, NoSign, <span class="number">0</span>);
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="num_bigint" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

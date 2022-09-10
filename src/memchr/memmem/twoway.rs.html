@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/memchr-2.5.0/src/memmem/twoway.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>twoway.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../memchr/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../memchr/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../memchr/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/memchr-2.5.0/src/memmem/twoway.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>twoway.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../memchr/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../memchr/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../memchr/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -881,12 +881,12 @@
 <span class="kw">use </span><span class="kw">crate</span>::memmem::{prefilter::Pre, util};
 
 <span class="doccomment">/// Two-Way search in the forward direction.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>Forward(TwoWay);
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>Forward(TwoWay);
 
 <span class="doccomment">/// Two-Way search in the reverse direction.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>Reverse(TwoWay);
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>Reverse(TwoWay);
 
 <span class="doccomment">/// An implementation of the TwoWay substring search algorithm, with heuristics
 /// for accelerating search based on frequency analysis.
@@ -923,8 +923,8 @@
 ///
 /// This type is wrapped in Forward and Reverse types that expose consistent
 /// forward or reverse APIs.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">struct </span>TwoWay {
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">struct </span>TwoWay {
     <span class="doccomment">/// A small bitset used as a quick prefilter (in addition to the faster
     /// SIMD based prefilter). Namely, a bit &#39;i&#39; is set if and only if b%64==i
     /// for any b in the needle.
@@ -981,8 +981,8 @@
     ///
     /// Callers must guarantee that the needle is non-empty and its length is
     /// &lt;= the haystack&#39;s length.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>find(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>find(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pre: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Pre&lt;<span class="lifetime">&#39;_</span>&gt;&gt;,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1004,8 +1004,8 @@
     <span class="doccomment">/// Like find, but handles the degenerate substring test cases. This is
     /// only useful for conveniently testing this substring implementation in
     /// isolation.
-    </span><span class="attribute">#[cfg(test)]</span>
-    <span class="kw">fn </span>find_general(
+    </span><span class="attribute">#[cfg(test)]
+    </span><span class="kw">fn </span>find_general(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         pre: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Pre&lt;<span class="lifetime">&#39;_</span>&gt;&gt;,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1026,8 +1026,8 @@
     // whether a prefilter will be used or not. The decision on which to use
     // is made in the parent meta searcher.
 
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>find_small_imp(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>find_small_imp(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="kw-2">mut </span>pre: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Pre&lt;<span class="lifetime">&#39;_</span>&gt;&gt;,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1075,8 +1075,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>find_large_imp(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>find_large_imp(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="kw-2">mut </span>pre: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span>Pre&lt;<span class="lifetime">&#39;_</span>&gt;&gt;,
         haystack: <span class="kw-2">&amp;</span>[u8],
@@ -1149,8 +1149,8 @@
     ///
     /// Callers must guarantee that the needle is non-empty and its length is
     /// &lt;= the haystack&#39;s length.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>rfind(
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>rfind(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         needle: <span class="kw-2">&amp;</span>[u8],
@@ -1174,8 +1174,8 @@
     <span class="doccomment">/// Like rfind, but handles the degenerate substring test cases. This is
     /// only useful for conveniently testing this substring implementation in
     /// isolation.
-    </span><span class="attribute">#[cfg(test)]</span>
-    <span class="kw">fn </span>rfind_general(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], needle: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+    </span><span class="attribute">#[cfg(test)]
+    </span><span class="kw">fn </span>rfind_general(<span class="kw-2">&amp;</span><span class="self">self</span>, haystack: <span class="kw-2">&amp;</span>[u8], needle: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
         <span class="kw">if </span>needle.is_empty() {
             <span class="prelude-val">Some</span>(haystack.len())
         } <span class="kw">else if </span>haystack.len() &lt; needle.len() {
@@ -1185,8 +1185,8 @@
         }
     }
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>rfind_small_imp(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>rfind_small_imp(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         needle: <span class="kw-2">&amp;</span>[u8],
@@ -1223,8 +1223,8 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>rfind_large_imp(
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>rfind_large_imp(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         haystack: <span class="kw-2">&amp;</span>[u8],
         needle: <span class="kw-2">&amp;</span>[u8],
@@ -1298,8 +1298,8 @@
 /// then we could collapse this case analysis and simplify the algorithm. The
 /// Two-Way paper suggests this is possible, but more reading is required to
 /// grok why the authors didn&#39;t pursue that path.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">enum </span>Shift {
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">enum </span>Shift {
     Small { period: usize },
     Large { shift: usize },
 }
@@ -1353,8 +1353,8 @@
 }
 
 <span class="doccomment">/// A suffix extracted from a needle along with its period.
-</span><span class="attribute">#[derive(Debug)]</span>
-<span class="kw">struct </span>Suffix {
+</span><span class="attribute">#[derive(Debug)]
+</span><span class="kw">struct </span>Suffix {
     <span class="doccomment">/// The starting position of this suffix.
     ///
     /// If this is a forward suffix, then `&amp;bytes[pos..]` can be used. If this
@@ -1461,8 +1461,8 @@
 }
 
 <span class="doccomment">/// The kind of suffix to extract.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">enum </span>SuffixKind {
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">enum </span>SuffixKind {
     <span class="doccomment">/// Extract the smallest lexicographic suffix from a string.
     ///
     /// Technically, this doesn&#39;t actually pick the smallest lexicographic
@@ -1480,8 +1480,8 @@
 }
 
 <span class="doccomment">/// The result of comparing corresponding bytes between two suffixes.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">enum </span>SuffixOrdering {
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">enum </span>SuffixOrdering {
     <span class="doccomment">/// This occurs when the given candidate byte indicates that the candidate
     /// suffix is better than the current maximal (or minimal) suffix. That is,
     /// the current candidate suffix should supplant the current maximal (or
@@ -1522,8 +1522,8 @@
 /// needle. If a particular byte in the haystack is NOT in this set, then one
 /// can conclude that it is also not in the needle, and thus, one can advance
 /// in the haystack by needle.len() bytes.
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]</span>
-<span class="kw">struct </span>ApproximateByteSet(u64);
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">struct </span>ApproximateByteSet(u64);
 
 <span class="kw">impl </span>ApproximateByteSet {
     <span class="doccomment">/// Create a new set from the given needle.
@@ -1537,14 +1537,14 @@
 
     <span class="doccomment">/// Return true if and only if the given byte might be in this set. This
     /// may return a false positive, but will never return a false negative.
-    </span><span class="attribute">#[inline(always)]</span>
-    <span class="kw">fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, byte: u8) -&gt; bool {
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, byte: u8) -&gt; bool {
         <span class="self">self</span>.<span class="number">0 </span>&amp; (<span class="number">1 </span>&lt;&lt; (byte % <span class="number">64</span>)) != <span class="number">0
     </span>}
 }
 
-<span class="attribute">#[cfg(all(test, feature = <span class="string">&quot;std&quot;</span>, not(miri)))]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(all(test, feature = <span class="string">&quot;std&quot;</span>, not(miri)))]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span>quickcheck::quickcheck;
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -1588,9 +1588,9 @@
         got
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>suffix_forward() {
-        <span class="macro">macro_rules!</span> assert_suffix_min {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>suffix_forward() {
+        <span class="macro">macro_rules! </span>assert_suffix_min {
             (<span class="macro-nonterminal">$given</span>:expr, <span class="macro-nonterminal">$expected</span>:expr, <span class="macro-nonterminal">$period</span>:expr) =&gt; {
                 <span class="kw">let </span>(got_suffix, got_period) =
                     get_suffix_forward(<span class="macro-nonterminal">$given</span>.as_bytes(), SuffixKind::Minimal);
@@ -1599,7 +1599,7 @@
             };
         }
 
-        <span class="macro">macro_rules!</span> assert_suffix_max {
+        <span class="macro">macro_rules! </span>assert_suffix_max {
             (<span class="macro-nonterminal">$given</span>:expr, <span class="macro-nonterminal">$expected</span>:expr, <span class="macro-nonterminal">$period</span>:expr) =&gt; {
                 <span class="kw">let </span>(got_suffix, got_period) =
                     get_suffix_forward(<span class="macro-nonterminal">$given</span>.as_bytes(), SuffixKind::Maximal);
@@ -1645,9 +1645,9 @@
         <span class="macro">assert_suffix_max!</span>(<span class="string">&quot;foobar&quot;</span>, <span class="string">&quot;r&quot;</span>, <span class="number">1</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>suffix_reverse() {
-        <span class="macro">macro_rules!</span> assert_suffix_min {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>suffix_reverse() {
+        <span class="macro">macro_rules! </span>assert_suffix_min {
             (<span class="macro-nonterminal">$given</span>:expr, <span class="macro-nonterminal">$expected</span>:expr, <span class="macro-nonterminal">$period</span>:expr) =&gt; {
                 <span class="kw">let </span>(got_suffix, got_period) =
                     get_suffix_reverse(<span class="macro-nonterminal">$given</span>.as_bytes(), SuffixKind::Minimal);
@@ -1656,7 +1656,7 @@
             };
         }
 
-        <span class="macro">macro_rules!</span> assert_suffix_max {
+        <span class="macro">macro_rules! </span>assert_suffix_max {
             (<span class="macro-nonterminal">$given</span>:expr, <span class="macro-nonterminal">$expected</span>:expr, <span class="macro-nonterminal">$period</span>:expr) =&gt; {
                 <span class="kw">let </span>(got_suffix, got_period) =
                     get_suffix_reverse(<span class="macro-nonterminal">$given</span>.as_bytes(), SuffixKind::Maximal);
@@ -1699,7 +1699,7 @@
         <span class="macro">assert_suffix_max!</span>(<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;aaa&quot;</span>, <span class="number">1</span>);
     }
 
-    <span class="macro">quickcheck!</span> {
+    <span class="macro">quickcheck! </span>{
         <span class="kw">fn </span>qc_suffix_forward_maximal(bytes: Vec&lt;u8&gt;) -&gt; bool {
             <span class="kw">if </span>bytes.is_empty() {
                 <span class="kw">return </span><span class="bool-val">true</span>;
@@ -1722,8 +1722,8 @@
     }
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>simpletests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>simpletests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>twoway_find(
@@ -1746,8 +1746,8 @@
     // the reverse small period handling. The bug was that we were using &#39;if j
     // == shift&#39; to determine if a match occurred, but the correct guard is &#39;if
     // j &gt;= shift&#39;, which matches the corresponding guard in the forward impl.
-    </span><span class="attribute">#[test]</span>
-    <span class="kw">fn </span>regression_rev_small_period() {
+    </span><span class="attribute">#[test]
+    </span><span class="kw">fn </span>regression_rev_small_period() {
         <span class="kw">let </span>rfind = <span class="kw">super</span>::simpletests::twoway_rfind;
         <span class="kw">let </span>haystack = <span class="string">&quot;ababaz&quot;</span>;
         <span class="kw">let </span>needle = <span class="string">&quot;abab&quot;</span>;
@@ -1755,4 +1755,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="memchr" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="memchr" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-traits-0.2.15/src/float.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>float.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../num_traits/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../num_traits/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../num_traits/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/num-traits-0.2.15/src/float.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>float.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../num_traits/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../num_traits/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../num_traits/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -2358,8 +2358,8 @@
 
 <span class="kw">use </span>{Num, NumCast, ToPrimitive};
 
-<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-<span class="kw">use </span>libm;
+<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+</span><span class="kw">use </span>libm;
 
 <span class="doccomment">/// Generic trait for floating point numbers that works with `no_std`.
 ///
@@ -2520,8 +2520,8 @@
     /// check(f64::NAN, true);
     /// check(0.0f64, false);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_nan(<span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_nan(<span class="self">self</span>) -&gt; bool {
         <span class="self">self </span>!= <span class="self">self
     </span>}
 
@@ -2544,8 +2544,8 @@
     /// check(f64::NEG_INFINITY, true);
     /// check(0.0f64, false);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_infinite(<span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_infinite(<span class="self">self</span>) -&gt; bool {
         <span class="self">self </span>== <span class="self">Self</span>::infinity() || <span class="self">self </span>== <span class="self">Self</span>::neg_infinity()
     }
 
@@ -2567,8 +2567,8 @@
     /// check(f64::MIN_POSITIVE, true);
     /// check(f64::NAN, false);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_finite(<span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_finite(<span class="self">self</span>) -&gt; bool {
         !(<span class="self">self</span>.is_nan() || <span class="self">self</span>.is_infinite())
     }
 
@@ -2590,8 +2590,8 @@
     /// check(f64::MIN_POSITIVE, true);
     /// check(0.0f64, false);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_normal(<span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_normal(<span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.classify() == FpCategory::Normal
     }
 
@@ -2641,8 +2641,8 @@
     /// check(-1.1f64, -2.0);
     /// check(f64::MIN, f64::MIN);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>floor(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>floor(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>f = <span class="self">self</span>.fract();
         <span class="kw">if </span>f.is_nan() || f.is_zero() {
             <span class="self">self
@@ -2675,8 +2675,8 @@
     /// check(-1.1f64, -1.0);
     /// check(f64::MIN, f64::MIN);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>ceil(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>ceil(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>f = <span class="self">self</span>.fract();
         <span class="kw">if </span>f.is_nan() || f.is_zero() {
             <span class="self">self
@@ -2708,8 +2708,8 @@
     /// check(-0.6f64, -1.0);
     /// check(f64::MIN, f64::MIN);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>round(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>round(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>one = <span class="self">Self</span>::one();
         <span class="kw">let </span>h = <span class="self">Self</span>::from(<span class="number">0.5</span>).expect(<span class="string">&quot;Unable to cast from 0.5&quot;</span>);
         <span class="kw">let </span>f = <span class="self">self</span>.fract();
@@ -2752,8 +2752,8 @@
     /// check(-1.1f64, -1.0);
     /// check(f64::MIN, f64::MIN);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>trunc(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>trunc(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>f = <span class="self">self</span>.fract();
         <span class="kw">if </span>f.is_nan() {
             <span class="self">self
@@ -2784,8 +2784,8 @@
     /// check(-1.25f64, -0.25);
     /// check(f64::MIN, 0.0);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span><span class="self">self</span>.is_zero() {
             <span class="self">Self</span>::zero()
         } <span class="kw">else </span>{
@@ -2813,8 +2813,8 @@
     /// check(-1.0f64, 1.0);
     /// check(f64::MIN, f64::MAX);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>abs(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>abs(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span><span class="self">self</span>.is_sign_positive() {
             <span class="kw">return </span><span class="self">self</span>;
         }
@@ -2847,8 +2847,8 @@
     /// check(-3.0f64, -1.0);
     /// check(f64::MIN, -1.0);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>signum(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>signum(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span><span class="self">self</span>.is_nan() {
             <span class="self">Self</span>::nan()
         } <span class="kw">else if </span><span class="self">self</span>.is_sign_negative() {
@@ -2880,8 +2880,8 @@
     /// check(f64::MIN_POSITIVE, true);
     /// check(-f64::NAN, false);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_sign_positive(<span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_sign_positive(<span class="self">self</span>) -&gt; bool {
         !<span class="self">self</span>.is_sign_negative()
     }
 
@@ -2907,8 +2907,8 @@
     /// check(f64::MIN_POSITIVE, false);
     /// check(f64::NAN, false);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>is_sign_negative(<span class="self">self</span>) -&gt; bool {
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>is_sign_negative(<span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>(<span class="kw">_</span>, <span class="kw">_</span>, sign) = <span class="self">self</span>.integer_decode();
         sign &lt; <span class="number">0
     </span>}
@@ -2932,8 +2932,8 @@
     /// check(1.0f64, -2.0, -2.0);
     /// check(1.0f64, f64::NAN, 1.0);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>min(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>min(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span><span class="self">self</span>.is_nan() {
             <span class="kw">return </span>other;
         }
@@ -2966,8 +2966,8 @@
     /// check(-1.0f64, 2.0, 2.0);
     /// check(-1.0f64, f64::NAN, -1.0);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>max(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>max(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span><span class="self">self</span>.is_nan() {
             <span class="kw">return </span>other;
         }
@@ -2999,8 +2999,8 @@
     /// check(-0.25f64, -4.0);
     /// check(-0.0f64, f64::NEG_INFINITY);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>recip(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>recip(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::one() / <span class="self">self
     </span>}
 
@@ -3023,8 +3023,8 @@
     /// check(4.0f64, -2, 0.0625);
     /// check(-1.0f64, std::i32::MIN, 1.0);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>powi(<span class="kw-2">mut </span><span class="self">self</span>, <span class="kw-2">mut </span>exp: i32) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>powi(<span class="kw-2">mut </span><span class="self">self</span>, <span class="kw-2">mut </span>exp: i32) -&gt; <span class="self">Self </span>{
         <span class="kw">if </span>exp &lt; <span class="number">0 </span>{
             exp = exp.wrapping_neg();
             <span class="self">self </span>= <span class="self">self</span>.recip();
@@ -3098,7 +3098,7 @@
 }
 
 <span class="kw">impl </span>FloatCore <span class="kw">for </span>f32 {
-    <span class="macro">constant!</span> {
+    <span class="macro">constant! </span>{
         infinity() -&gt; f32::INFINITY;
         neg_infinity() -&gt; f32::NEG_INFINITY;
         nan() -&gt; f32::NAN;
@@ -3109,14 +3109,14 @@
         max_value() -&gt; f32::MAX;
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
         integer_decode_f32(<span class="self">self</span>)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>classify(<span class="self">self</span>) -&gt; FpCategory {
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>classify(<span class="self">self</span>) -&gt; FpCategory {
         <span class="kw">const </span>EXP_MASK: u32 = <span class="number">0x7f800000</span>;
         <span class="kw">const </span>MAN_MASK: u32 = <span class="number">0x007fffff</span>;
 
@@ -3132,9 +3132,9 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>is_sign_negative(<span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>is_sign_negative(<span class="self">self</span>) -&gt; bool {
         <span class="kw">const </span>SIGN_MASK: u32 = <span class="number">0x80000000</span>;
 
         <span class="comment">// Safety: this identical to the implementation of f32::to_bits(),
@@ -3143,22 +3143,22 @@
         bits &amp; SIGN_MASK != <span class="number">0
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>to_degrees(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>to_degrees(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="comment">// Use a constant for better precision.
         </span><span class="kw">const </span>PIS_IN_180: f32 = <span class="number">57.2957795130823208767981548141051703_f32</span>;
         <span class="self">self </span>* PIS_IN_180
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>to_radians(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>to_radians(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">self </span>* (f32::consts::PI / <span class="number">180.0</span>)
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-    <span class="macro">forward!</span> {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+    </span><span class="macro">forward! </span>{
         <span class="self">Self</span>::is_nan(<span class="self">self</span>) -&gt; bool;
         <span class="self">Self</span>::is_infinite(<span class="self">self</span>) -&gt; bool;
         <span class="self">Self</span>::is_finite(<span class="self">self</span>) -&gt; bool;
@@ -3181,8 +3181,8 @@
         <span class="self">Self</span>::to_radians(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
     }
 
-    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="macro">forward!</span> {
+    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+    </span><span class="macro">forward! </span>{
         libm::floorf <span class="kw">as </span>floor(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::ceilf <span class="kw">as </span>ceil(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::roundf <span class="kw">as </span>round(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
@@ -3192,15 +3192,15 @@
         libm::fmaxf <span class="kw">as </span>max(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self</span>;
     }
 
-    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+    #[inline]
+    </span><span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">self </span>- libm::truncf(<span class="self">self</span>)
     }
 }
 
 <span class="kw">impl </span>FloatCore <span class="kw">for </span>f64 {
-    <span class="macro">constant!</span> {
+    <span class="macro">constant! </span>{
         infinity() -&gt; f64::INFINITY;
         neg_infinity() -&gt; f64::NEG_INFINITY;
         nan() -&gt; f64::NAN;
@@ -3211,14 +3211,14 @@
         max_value() -&gt; f64::MAX;
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
         integer_decode_f64(<span class="self">self</span>)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>classify(<span class="self">self</span>) -&gt; FpCategory {
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>classify(<span class="self">self</span>) -&gt; FpCategory {
         <span class="kw">const </span>EXP_MASK: u64 = <span class="number">0x7ff0000000000000</span>;
         <span class="kw">const </span>MAN_MASK: u64 = <span class="number">0x000fffffffffffff</span>;
 
@@ -3234,9 +3234,9 @@
         }
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>is_sign_negative(<span class="self">self</span>) -&gt; bool {
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>is_sign_negative(<span class="self">self</span>) -&gt; bool {
         <span class="kw">const </span>SIGN_MASK: u64 = <span class="number">0x8000000000000000</span>;
 
         <span class="comment">// Safety: this identical to the implementation of f64::to_bits(),
@@ -3245,23 +3245,23 @@
         bits &amp; SIGN_MASK != <span class="number">0
     </span>}
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>to_degrees(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>to_degrees(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="comment">// The division here is correctly rounded with respect to the true
         // value of 180/π. (This differs from f32, where a constant must be
         // used to ensure a correctly rounded result.)
         </span><span class="self">self </span>* (<span class="number">180.0 </span>/ f64::consts::PI)
     }
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>to_radians(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    #[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>to_radians(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">self </span>* (f64::consts::PI / <span class="number">180.0</span>)
     }
 
-    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-    <span class="macro">forward!</span> {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+    </span><span class="macro">forward! </span>{
         <span class="self">Self</span>::is_nan(<span class="self">self</span>) -&gt; bool;
         <span class="self">Self</span>::is_infinite(<span class="self">self</span>) -&gt; bool;
         <span class="self">Self</span>::is_finite(<span class="self">self</span>) -&gt; bool;
@@ -3284,8 +3284,8 @@
         <span class="self">Self</span>::to_radians(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
     }
 
-    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="macro">forward!</span> {
+    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+    </span><span class="macro">forward! </span>{
         libm::floor <span class="kw">as </span>floor(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::ceil <span class="kw">as </span>ceil(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::round <span class="kw">as </span>round(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
@@ -3295,9 +3295,9 @@
         libm::fmax <span class="kw">as </span>max(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self</span>;
     }
 
-    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+    #[inline]
+    </span><span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">self </span>- libm::trunc(<span class="self">self</span>)
     }
 }
@@ -3308,8 +3308,8 @@
 </span><span class="doccomment">/// Generic trait for floating point numbers
 ///
 /// This trait is only available with the `std` feature, or with the `libm` feature otherwise.
-</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]</span>
-<span class="kw">pub trait </span>Float: Num + Copy + NumCast + PartialOrd + Neg&lt;Output = <span class="self">Self</span>&gt; {
+</span><span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]
+</span><span class="kw">pub trait </span>Float: Num + Copy + NumCast + PartialOrd + Neg&lt;Output = <span class="self">Self</span>&gt; {
     <span class="doccomment">/// Returns the `NaN` value.
     ///
     /// ```
@@ -3830,8 +3830,8 @@
     ///
     /// assert!(abs_difference &lt; 1e-10);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_degrees(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_degrees(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>halfpi = <span class="self">Self</span>::zero().acos();
         <span class="kw">let </span>ninety = <span class="self">Self</span>::from(<span class="number">90u8</span>).unwrap();
         <span class="self">self </span>* ninety / halfpi
@@ -3848,8 +3848,8 @@
     ///
     /// assert!(abs_difference &lt; 1e-10);
     /// ```
-    </span><span class="attribute">#[inline]</span>
-    <span class="kw">fn </span>to_radians(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>to_radians(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>halfpi = <span class="self">Self</span>::zero().acos();
         <span class="kw">let </span>ninety = <span class="self">Self</span>::from(<span class="number">90u8</span>).unwrap();
         <span class="self">self </span>* halfpi / ninety
@@ -4244,11 +4244,11 @@
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="macro">macro_rules!</span> float_impl_std {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="macro">macro_rules! </span>float_impl_std {
     (<span class="macro-nonterminal">$T</span>:ident <span class="macro-nonterminal">$decode</span>:ident) =&gt; {
         <span class="kw">impl </span>Float <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
-            <span class="macro">constant!</span> {
+            <span class="macro">constant! </span>{
                 nan() -&gt; <span class="macro-nonterminal">$T::NAN</span>;
                 infinity() -&gt; <span class="macro-nonterminal">$T::INFINITY</span>;
                 neg_infinity() -&gt; <span class="macro-nonterminal">$T::NEG_INFINITY</span>;
@@ -4259,18 +4259,18 @@
                 max_value() -&gt; <span class="macro-nonterminal">$T::MAX</span>;
             }
 
-            <span class="attribute">#[inline]</span>
-            <span class="attribute">#[allow(deprecated)]</span>
-            <span class="kw">fn </span>abs_sub(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+            <span class="attribute">#[inline]
+            #[allow(deprecated)]
+            </span><span class="kw">fn </span>abs_sub(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
                 &lt;<span class="macro-nonterminal">$T</span>&gt;::abs_sub(<span class="self">self</span>, other)
             }
 
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
                 <span class="macro-nonterminal">$decode</span>(<span class="self">self</span>)
             }
 
-            <span class="macro">forward!</span> {
+            <span class="macro">forward! </span>{
                 <span class="self">Self</span>::is_nan(<span class="self">self</span>) -&gt; bool;
                 <span class="self">Self</span>::is_infinite(<span class="self">self</span>) -&gt; bool;
                 <span class="self">Self</span>::is_finite(<span class="self">self</span>) -&gt; bool;
@@ -4320,19 +4320,19 @@
                 <span class="self">Self</span>::atanh(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
             }
 
-            <span class="attribute">#[cfg(has_copysign)]</span>
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>copysign(<span class="self">self</span>, sign: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+            <span class="attribute">#[cfg(has_copysign)]
+            #[inline]
+            </span><span class="kw">fn </span>copysign(<span class="self">self</span>, sign: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
                 <span class="self">Self</span>::copysign(<span class="self">self</span>, sign)
             }
         }
     };
 }
 
-<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-<span class="macro">macro_rules!</span> float_impl_libm {
+<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+</span><span class="macro">macro_rules! </span>float_impl_libm {
     (<span class="macro-nonterminal">$T</span>:ident <span class="macro-nonterminal">$decode</span>:ident) =&gt; {
-        <span class="macro">constant!</span> {
+        <span class="macro">constant! </span>{
             nan() -&gt; <span class="macro-nonterminal">$T::NAN</span>;
             infinity() -&gt; <span class="macro-nonterminal">$T::INFINITY</span>;
             neg_infinity() -&gt; <span class="macro-nonterminal">$T::NEG_INFINITY</span>;
@@ -4343,22 +4343,22 @@
             max_value() -&gt; <span class="macro-nonterminal">$T::MAX</span>;
         }
 
-        <span class="attribute">#[inline]</span>
-        <span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
+        <span class="attribute">#[inline]
+        </span><span class="kw">fn </span>integer_decode(<span class="self">self</span>) -&gt; (u64, i16, i8) {
             <span class="macro-nonterminal">$decode</span>(<span class="self">self</span>)
         }
 
-        <span class="attribute">#[inline]</span>
-        <span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#[inline]
+        </span><span class="kw">fn </span>fract(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
             <span class="self">self </span>- Float::trunc(<span class="self">self</span>)
         }
 
-        <span class="attribute">#[inline]</span>
-        <span class="kw">fn </span>log(<span class="self">self</span>, base: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+        <span class="attribute">#[inline]
+        </span><span class="kw">fn </span>log(<span class="self">self</span>, base: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
             <span class="self">self</span>.ln() / base.ln()
         }
 
-        <span class="macro">forward!</span> {
+        <span class="macro">forward! </span>{
             FloatCore::is_nan(<span class="self">self</span>) -&gt; bool;
             FloatCore::is_infinite(<span class="self">self</span>) -&gt; bool;
             FloatCore::is_finite(<span class="self">self</span>) -&gt; bool;
@@ -4407,22 +4407,22 @@
     (mantissa, exponent, sign)
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="macro">float_impl_std!</span>(f32 integer_decode_f32);
-<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]</span>
-<span class="macro">float_impl_std!</span>(f64 integer_decode_f64);
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="macro">float_impl_std!</span>(f32 integer_decode_f32);
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="macro">float_impl_std!</span>(f64 integer_decode_f64);
 
-<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-<span class="kw">impl </span>Float <span class="kw">for </span>f32 {
+<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+</span><span class="kw">impl </span>Float <span class="kw">for </span>f32 {
     <span class="macro">float_impl_libm!</span>(f32 integer_decode_f32);
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[allow(deprecated)]</span>
-    <span class="kw">fn </span>abs_sub(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    #[allow(deprecated)]
+    </span><span class="kw">fn </span>abs_sub(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         libm::fdimf(<span class="self">self</span>, other)
     }
 
-    <span class="macro">forward!</span> {
+    <span class="macro">forward! </span>{
         libm::floorf <span class="kw">as </span>floor(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::ceilf <span class="kw">as </span>ceil(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::roundf <span class="kw">as </span>round(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
@@ -4460,17 +4460,17 @@
     }
 }
 
-<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]</span>
-<span class="kw">impl </span>Float <span class="kw">for </span>f64 {
+<span class="attribute">#[cfg(all(not(feature = <span class="string">&quot;std&quot;</span>), feature = <span class="string">&quot;libm&quot;</span>))]
+</span><span class="kw">impl </span>Float <span class="kw">for </span>f64 {
     <span class="macro">float_impl_libm!</span>(f64 integer_decode_f64);
 
-    <span class="attribute">#[inline]</span>
-    <span class="attribute">#[allow(deprecated)]</span>
-    <span class="kw">fn </span>abs_sub(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+    <span class="attribute">#[inline]
+    #[allow(deprecated)]
+    </span><span class="kw">fn </span>abs_sub(<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
         libm::fdim(<span class="self">self</span>, other)
     }
 
-    <span class="macro">forward!</span> {
+    <span class="macro">forward! </span>{
         libm::floor <span class="kw">as </span>floor(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::ceil <span class="kw">as </span>ceil(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
         libm::round <span class="kw">as </span>round(<span class="self">self</span>) -&gt; <span class="self">Self</span>;
@@ -4508,33 +4508,33 @@
     }
 }
 
-<span class="macro">macro_rules!</span> float_const_impl {
-    ($(<span class="attribute">#[<span class="macro-nonterminal">$doc</span>:meta]</span> <span class="macro-nonterminal">$constant</span>:ident,)+) =&gt; (
-        <span class="attribute">#[allow(non_snake_case)]</span>
-        <span class="kw">pub trait </span>FloatConst {
-            $(<span class="attribute">#[<span class="macro-nonterminal">$doc</span>]</span> <span class="kw">fn </span><span class="macro-nonterminal">$constant</span>() -&gt; <span class="self">Self</span>;)+
-            <span class="attribute">#[doc = <span class="string">&quot;Return the full circle constant `τ`.&quot;</span>]</span>
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>TAU() -&gt; <span class="self">Self </span><span class="kw">where </span><span class="self">Self</span>: Sized + Add&lt;<span class="self">Self</span>, Output = <span class="self">Self</span>&gt; {
+<span class="macro">macro_rules! </span>float_const_impl {
+    ($(<span class="attribute">#[<span class="macro-nonterminal">$doc</span>:meta] </span><span class="macro-nonterminal">$constant</span>:ident,)+) =&gt; (
+        <span class="attribute">#[allow(non_snake_case)]
+        </span><span class="kw">pub trait </span>FloatConst {
+            $(<span class="attribute">#[<span class="macro-nonterminal">$doc</span>] </span><span class="kw">fn </span><span class="macro-nonterminal">$constant</span>() -&gt; <span class="self">Self</span>;)+
+            <span class="attribute">#[doc = <span class="string">&quot;Return the full circle constant `τ`.&quot;</span>]
+            #[inline]
+            </span><span class="kw">fn </span>TAU() -&gt; <span class="self">Self </span><span class="kw">where </span><span class="self">Self</span>: Sized + Add&lt;<span class="self">Self</span>, Output = <span class="self">Self</span>&gt; {
                 <span class="self">Self</span>::PI() + <span class="self">Self</span>::PI()
             }
-            <span class="attribute">#[doc = <span class="string">&quot;Return `log10(2.0)`.&quot;</span>]</span>
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>LOG10_2() -&gt; <span class="self">Self </span><span class="kw">where </span><span class="self">Self</span>: Sized + Div&lt;<span class="self">Self</span>, Output = <span class="self">Self</span>&gt; {
+            <span class="attribute">#[doc = <span class="string">&quot;Return `log10(2.0)`.&quot;</span>]
+            #[inline]
+            </span><span class="kw">fn </span>LOG10_2() -&gt; <span class="self">Self </span><span class="kw">where </span><span class="self">Self</span>: Sized + Div&lt;<span class="self">Self</span>, Output = <span class="self">Self</span>&gt; {
                 <span class="self">Self</span>::LN_2() / <span class="self">Self</span>::LN_10()
             }
-            <span class="attribute">#[doc = <span class="string">&quot;Return `log2(10.0)`.&quot;</span>]</span>
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>LOG2_10() -&gt; <span class="self">Self </span><span class="kw">where </span><span class="self">Self</span>: Sized + Div&lt;<span class="self">Self</span>, Output = <span class="self">Self</span>&gt; {
+            <span class="attribute">#[doc = <span class="string">&quot;Return `log2(10.0)`.&quot;</span>]
+            #[inline]
+            </span><span class="kw">fn </span>LOG2_10() -&gt; <span class="self">Self </span><span class="kw">where </span><span class="self">Self</span>: Sized + Div&lt;<span class="self">Self</span>, Output = <span class="self">Self</span>&gt; {
                 <span class="self">Self</span>::LN_10() / <span class="self">Self</span>::LN_2()
             }
         }
-        <span class="macro">float_const_impl!</span> { @float f32, $(<span class="macro-nonterminal">$constant</span>,)+ }
-        <span class="macro">float_const_impl!</span> { @float f64, $(<span class="macro-nonterminal">$constant</span>,)+ }
+        <span class="macro">float_const_impl! </span>{ @float f32, $(<span class="macro-nonterminal">$constant</span>,)+ }
+        <span class="macro">float_const_impl! </span>{ @float f64, $(<span class="macro-nonterminal">$constant</span>,)+ }
     );
     (@float <span class="macro-nonterminal">$T</span>:ident, $(<span class="macro-nonterminal">$constant</span>:ident,)+) =&gt; (
         <span class="kw">impl </span>FloatConst <span class="kw">for </span><span class="macro-nonterminal">$T </span>{
-            <span class="macro">constant!</span> {
+            <span class="macro">constant! </span>{
                 $( <span class="macro-nonterminal">$constant</span>() -&gt; <span class="macro-nonterminal">$T::consts</span>::<span class="macro-nonterminal">$constant</span>; )+
                 TAU() -&gt; <span class="number">6.28318530717958647692528676655900577</span>;
                 LOG10_2() -&gt; <span class="number">0.301029995663981195213738894724493027</span>;
@@ -4544,43 +4544,43 @@
     );
 }
 
-<span class="macro">float_const_impl!</span> {
-    <span class="attribute">#[doc = <span class="string">&quot;Return Euler’s number.&quot;</span>]</span>
-    E,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `1.0 / π`.&quot;</span>]</span>
-    FRAC_1_PI,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `1.0 / sqrt(2.0)`.&quot;</span>]</span>
-    FRAC_1_SQRT_2,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `2.0 / π`.&quot;</span>]</span>
-    FRAC_2_PI,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `2.0 / sqrt(π)`.&quot;</span>]</span>
-    FRAC_2_SQRT_PI,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 2.0`.&quot;</span>]</span>
-    FRAC_PI_2,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 3.0`.&quot;</span>]</span>
-    FRAC_PI_3,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 4.0`.&quot;</span>]</span>
-    FRAC_PI_4,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 6.0`.&quot;</span>]</span>
-    FRAC_PI_6,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 8.0`.&quot;</span>]</span>
-    FRAC_PI_8,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `ln(10.0)`.&quot;</span>]</span>
-    LN_10,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `ln(2.0)`.&quot;</span>]</span>
-    LN_2,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `log10(e)`.&quot;</span>]</span>
-    LOG10_E,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `log2(e)`.&quot;</span>]</span>
-    LOG2_E,
-    <span class="attribute">#[doc = <span class="string">&quot;Return Archimedes’ constant `π`.&quot;</span>]</span>
-    PI,
-    <span class="attribute">#[doc = <span class="string">&quot;Return `sqrt(2.0)`.&quot;</span>]</span>
-    SQRT_2,
+<span class="macro">float_const_impl! </span>{
+    <span class="attribute">#[doc = <span class="string">&quot;Return Euler’s number.&quot;</span>]
+    </span>E,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `1.0 / π`.&quot;</span>]
+    </span>FRAC_1_PI,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `1.0 / sqrt(2.0)`.&quot;</span>]
+    </span>FRAC_1_SQRT_2,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `2.0 / π`.&quot;</span>]
+    </span>FRAC_2_PI,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `2.0 / sqrt(π)`.&quot;</span>]
+    </span>FRAC_2_SQRT_PI,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 2.0`.&quot;</span>]
+    </span>FRAC_PI_2,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 3.0`.&quot;</span>]
+    </span>FRAC_PI_3,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 4.0`.&quot;</span>]
+    </span>FRAC_PI_4,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 6.0`.&quot;</span>]
+    </span>FRAC_PI_6,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `π / 8.0`.&quot;</span>]
+    </span>FRAC_PI_8,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `ln(10.0)`.&quot;</span>]
+    </span>LN_10,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `ln(2.0)`.&quot;</span>]
+    </span>LN_2,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `log10(e)`.&quot;</span>]
+    </span>LOG10_E,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `log2(e)`.&quot;</span>]
+    </span>LOG2_E,
+    <span class="attribute">#[doc = <span class="string">&quot;Return Archimedes’ constant `π`.&quot;</span>]
+    </span>PI,
+    <span class="attribute">#[doc = <span class="string">&quot;Return `sqrt(2.0)`.&quot;</span>]
+    </span>SQRT_2,
 }
 
-<span class="attribute">#[cfg(test)]</span>
-<span class="kw">mod </span>tests {
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
     <span class="kw">use </span>core::f64::consts;
 
     <span class="kw">const </span>DEG_RAD_PAIRS: [(f64, f64); <span class="number">7</span>] = [
@@ -4593,8 +4593,8 @@
         (<span class="number">180.0</span>, consts::PI),
     ];
 
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>convert_deg_rad() {
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>convert_deg_rad() {
         <span class="kw">use </span>float::FloatCore;
 
         <span class="kw">for </span><span class="kw-2">&amp;</span>(deg, rad) <span class="kw">in </span><span class="kw-2">&amp;</span>DEG_RAD_PAIRS {
@@ -4607,9 +4607,9 @@
         }
     }
 
-    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="attribute">#[test]</span>
-    <span class="kw">fn </span>convert_deg_rad_std() {
+    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]
+    #[test]
+    </span><span class="kw">fn </span>convert_deg_rad_std() {
         <span class="kw">for </span><span class="kw-2">&amp;</span>(deg, rad) <span class="kw">in </span><span class="kw-2">&amp;</span>DEG_RAD_PAIRS {
             <span class="kw">use </span>Float;
 
@@ -4622,11 +4622,11 @@
         }
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="comment">// This fails with the forwarded `std` implementation in Rust 1.8.
+    <span class="attribute">#[test]
+    </span><span class="comment">// This fails with the forwarded `std` implementation in Rust 1.8.
     // To avoid the failure, the test is limited to `no_std` builds.
-    </span><span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]</span>
-    <span class="kw">fn </span>to_degrees_rounding() {
+    </span><span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+    </span><span class="kw">fn </span>to_degrees_rounding() {
         <span class="kw">use </span>float::FloatCore;
 
         <span class="macro">assert_eq!</span>(
@@ -4635,9 +4635,9 @@
         </span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="kw">fn </span>extra_logs() {
+    <span class="attribute">#[test]
+    #[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]
+    </span><span class="kw">fn </span>extra_logs() {
         <span class="kw">use </span>float::{Float, FloatConst};
 
         <span class="kw">fn </span>check&lt;F: Float + FloatConst&gt;(diff: F) {
@@ -4654,17 +4654,17 @@
         check::&lt;f64&gt;(<span class="number">1e-12</span>);
     }
 
-    <span class="attribute">#[test]</span>
-    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="kw">fn </span>copysign() {
+    <span class="attribute">#[test]
+    #[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]
+    </span><span class="kw">fn </span>copysign() {
         <span class="kw">use </span>float::Float;
         test_copysign_generic(<span class="number">2.0_f32</span>, -<span class="number">2.0_f32</span>, f32::nan());
         test_copysign_generic(<span class="number">2.0_f64</span>, -<span class="number">2.0_f64</span>, f64::nan());
         test_copysignf(<span class="number">2.0_f32</span>, -<span class="number">2.0_f32</span>, f32::nan());
     }
 
-    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="kw">fn </span>test_copysignf(p: f32, n: f32, nan: f32) {
+    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]
+    </span><span class="kw">fn </span>test_copysignf(p: f32, n: f32, nan: f32) {
         <span class="kw">use </span>core::ops::Neg;
         <span class="kw">use </span>float::Float;
 
@@ -4683,8 +4683,8 @@
         // assert!(Float::copysign(nan, n).is_sign_negative());
     </span>}
 
-    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]</span>
-    <span class="kw">fn </span>test_copysign_generic&lt;F: ::float::Float + ::core::fmt::Debug&gt;(p: F, n: F, nan: F) {
+    <span class="attribute">#[cfg(any(feature = <span class="string">&quot;std&quot;</span>, feature = <span class="string">&quot;libm&quot;</span>))]
+    </span><span class="kw">fn </span>test_copysign_generic&lt;F: ::float::Float + ::core::fmt::Debug&gt;(p: F, n: F, nan: F) {
         <span class="macro">assert!</span>(p.is_sign_positive());
         <span class="macro">assert!</span>(n.is_sign_negative());
         <span class="macro">assert!</span>(nan.is_nan());
@@ -4701,4 +4701,4 @@
     </span>}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="num_traits" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="num_traits" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>

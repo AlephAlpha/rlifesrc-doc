@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/auto_enums_derive-0.7.12/src/derive/core/iter.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>iter.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../auto_enums_derive/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/auto_enums_derive-0.7.12/src/derive/core/iter.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>iter.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../../normalize.css"><link rel="stylesheet" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../../ayu.css" disabled><link rel="stylesheet" href="../../../../dark.css" disabled><link rel="stylesheet" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../../auto_enums_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../auto_enums_derive/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -157,35 +157,35 @@
         <span class="comment">// TODO: When `try_trait` stabilized, add `try_fold` and remove `fold`, `find` etc. conditionally.
 
         // It is equally efficient if `try_fold` can be used.
-        </span><span class="kw">let </span>try_trait = <span class="macro">quote!</span> {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>fold&lt;__U, __F&gt;(<span class="self">self</span>, init: __U, f: __F) -&gt; __U
+        </span><span class="kw">let </span>try_trait = <span class="macro">quote! </span>{
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>fold&lt;__U, __F&gt;(<span class="self">self</span>, init: __U, f: __F) -&gt; __U
             <span class="kw">where
                 </span>__F: ::core::ops::FnMut(__U, <span class="self">Self</span>::Item) -&gt; __U;
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>find&lt;__P&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, predicate: __P) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>find&lt;__P&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, predicate: __P) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;
             <span class="kw">where
                 </span>__P: ::core::ops::FnMut(<span class="kw-2">&amp;</span><span class="self">Self</span>::Item) -&gt; bool;
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>find_map&lt;__U, __F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: __F) -&gt; ::core::option::Option&lt;__U&gt;
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>find_map&lt;__U, __F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: __F) -&gt; ::core::option::Option&lt;__U&gt;
             <span class="kw">where
                 </span>__F: ::core::ops::FnMut(<span class="self">Self</span>::Item) -&gt; ::core::option::Option&lt;__U&gt;;
         };
 
-        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::iter::Iterator), <span class="prelude-val">None</span>, <span class="macro">parse_quote!</span> {
+        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::iter::Iterator), <span class="prelude-val">None</span>, <span class="macro">parse_quote! </span>{
             <span class="kw">trait </span>Iterator {
                 <span class="kw">type </span>Item;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, ::core::option::Option&lt;usize&gt;);
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>count(<span class="self">self</span>) -&gt; usize;
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>last(<span class="self">self</span>) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;;
-                <span class="attribute">#[inline]</span>
-                <span class="attribute">#[must_use = <span class="string">&quot;if you really need to exhaust the iterator, consider `.for_each(drop)` instead&quot;</span>]</span>
-                <span class="kw">fn </span>collect&lt;__U: ::core::iter::FromIterator&lt;<span class="self">Self</span>::Item&gt;&gt;(<span class="self">self</span>) -&gt; __U;
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;;
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, ::core::option::Option&lt;usize&gt;);
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>count(<span class="self">self</span>) -&gt; usize;
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>last(<span class="self">self</span>) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;;
+                <span class="attribute">#[inline]
+                #[must_use = <span class="string">&quot;if you really need to exhaust the iterator, consider `.for_each(drop)` instead&quot;</span>]
+                </span><span class="kw">fn </span>collect&lt;__U: ::core::iter::FromIterator&lt;<span class="self">Self</span>::Item&gt;&gt;(<span class="self">self</span>) -&gt; __U;
                 #try_trait
             }
         }))
@@ -201,13 +201,13 @@
         <span class="comment">// TODO: When `try_trait` stabilized, add `try_rfold` and remove `rfold` and `rfind` conditionally.
 
         // It is equally efficient if `try_rfold` can be used.
-        </span><span class="kw">let </span>try_trait = <span class="macro">quote!</span> {
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>rfold&lt;__U, __F&gt;(<span class="self">self</span>, accum: __U, f: __F) -&gt; __U
+        </span><span class="kw">let </span>try_trait = <span class="macro">quote! </span>{
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>rfold&lt;__U, __F&gt;(<span class="self">self</span>, accum: __U, f: __F) -&gt; __U
             <span class="kw">where
                 </span>__F: ::core::ops::FnMut(__U, <span class="self">Self</span>::Item) -&gt; __U;
-            <span class="attribute">#[inline]</span>
-            <span class="kw">fn </span>rfind&lt;__P&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, predicate: __P) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;
+            <span class="attribute">#[inline]
+            </span><span class="kw">fn </span>rfind&lt;__P&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, predicate: __P) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;
             <span class="kw">where
                 </span>__P: ::core::ops::FnMut(<span class="kw-2">&amp;</span><span class="self">Self</span>::Item) -&gt; bool;
         };
@@ -216,10 +216,10 @@
             data,
             <span class="macro">parse_quote!</span>(::core::iter::DoubleEndedIterator),
             <span class="prelude-val">Some</span>(<span class="macro">format_ident!</span>(<span class="string">&quot;Item&quot;</span>)),
-            <span class="macro">parse_quote!</span> {
+            <span class="macro">parse_quote! </span>{
                 <span class="kw">trait </span>DoubleEndedIterator: ::core::iter::Iterator {
-                    <span class="attribute">#[inline]</span>
-                    <span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;;
+                    <span class="attribute">#[inline]
+                    </span><span class="kw">fn </span>next_back(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; ::core::option::Option&lt;<span class="self">Self</span>::Item&gt;;
                     #try_trait
                 }
             },
@@ -239,10 +239,10 @@
             data,
             <span class="macro">parse_quote!</span>(::core::iter::ExactSizeIterator),
             <span class="prelude-val">Some</span>(<span class="macro">format_ident!</span>(<span class="string">&quot;Item&quot;</span>)),
-            <span class="macro">parse_quote!</span> {
+            <span class="macro">parse_quote! </span>{
                 <span class="kw">trait </span>ExactSizeIterator: ::core::iter::Iterator {
-                    <span class="attribute">#[inline]</span>
-                    <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
+                    <span class="attribute">#[inline]
+                    </span><span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
                 }
             },
         ))
@@ -259,15 +259,15 @@
             data,
             <span class="macro">parse_quote!</span>(::core::iter::FusedIterator),
             <span class="prelude-val">Some</span>(<span class="macro">format_ident!</span>(<span class="string">&quot;Item&quot;</span>)),
-            <span class="macro">parse_quote!</span> {
+            <span class="macro">parse_quote! </span>{
                 <span class="kw">trait </span>FusedIterator: ::core::iter::Iterator {}
             },
         ))
     }
 }
 
-<span class="attribute">#[cfg(feature = <span class="string">&quot;trusted_len&quot;</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>trusted_len {
+<span class="attribute">#[cfg(feature = <span class="string">&quot;trusted_len&quot;</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>trusted_len {
     <span class="kw">use </span><span class="kw">crate</span>::derive::<span class="kw-2">*</span>;
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;TrustedLen&quot;</span>];
@@ -277,7 +277,7 @@
             data,
             <span class="macro">parse_quote!</span>(::core::iter::TrustedLen),
             <span class="prelude-val">Some</span>(<span class="macro">format_ident!</span>(<span class="string">&quot;Item&quot;</span>)),
-            <span class="macro">parse_quote!</span> {
+            <span class="macro">parse_quote! </span>{
                 <span class="kw">unsafe trait </span>TrustedLen: ::core::iter::Iterator {}
             },
         ))
@@ -290,13 +290,13 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[<span class="string">&quot;Extend&quot;</span>];
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>derive(data: <span class="kw-2">&amp;</span>Data) -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream&gt; {
-        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::iter::Extend), <span class="prelude-val">None</span>, <span class="macro">parse_quote!</span> {
+        <span class="prelude-val">Ok</span>(derive_trait(data, <span class="macro">parse_quote!</span>(::core::iter::Extend), <span class="prelude-val">None</span>, <span class="macro">parse_quote! </span>{
             <span class="kw">trait </span>Extend&lt;__A&gt; {
-                <span class="attribute">#[inline]</span>
-                <span class="kw">fn </span>extend&lt;__T: ::core::iter::IntoIterator&lt;Item = __A&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: __T);
+                <span class="attribute">#[inline]
+                </span><span class="kw">fn </span>extend&lt;__T: ::core::iter::IntoIterator&lt;Item = __A&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, iter: __T);
             }
         }))
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="auto_enums_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (801821d15 2022-08-14)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="auto_enums_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>
