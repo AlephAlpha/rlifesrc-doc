@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_yaml-0.9.11/src/de.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>de.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../serde_yaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_yaml-0.9.13/src/de.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>de.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../serde_yaml/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../serde_yaml/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -1820,6 +1820,33 @@
 <span id="1820">1820</span>
 <span id="1821">1821</span>
 <span id="1822">1822</span>
+<span id="1823">1823</span>
+<span id="1824">1824</span>
+<span id="1825">1825</span>
+<span id="1826">1826</span>
+<span id="1827">1827</span>
+<span id="1828">1828</span>
+<span id="1829">1829</span>
+<span id="1830">1830</span>
+<span id="1831">1831</span>
+<span id="1832">1832</span>
+<span id="1833">1833</span>
+<span id="1834">1834</span>
+<span id="1835">1835</span>
+<span id="1836">1836</span>
+<span id="1837">1837</span>
+<span id="1838">1838</span>
+<span id="1839">1839</span>
+<span id="1840">1840</span>
+<span id="1841">1841</span>
+<span id="1842">1842</span>
+<span id="1843">1843</span>
+<span id="1844">1844</span>
+<span id="1845">1845</span>
+<span id="1846">1846</span>
+<span id="1847">1847</span>
+<span id="1848">1848</span>
+<span id="1849">1849</span>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::error::{<span class="self">self</span>, Error, ErrorImpl};
 <span class="kw">use </span><span class="kw">crate</span>::libyaml::error::Mark;
 <span class="kw">use </span><span class="kw">crate</span>::libyaml::parser::{MappingStart, Scalar, ScalarStyle, SequenceStart};
@@ -2745,21 +2772,18 @@
 </span>}
 
 <span class="kw">fn </span>parse_null(scalar: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
-    <span class="kw">if </span>scalar == <span class="string">b&quot;~&quot; </span>|| scalar == <span class="string">b&quot;null&quot; </span>{
-        <span class="prelude-val">Some</span>(())
-    } <span class="kw">else </span>{
-        <span class="prelude-val">None
-    </span>}
+    <span class="kw">match </span>scalar {
+        <span class="string">b&quot;null&quot; </span>| <span class="string">b&quot;Null&quot; </span>| <span class="string">b&quot;NULL&quot; </span>| <span class="string">b&quot;~&quot; </span>=&gt; <span class="prelude-val">Some</span>(()),
+        <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+    }
 }
 
 <span class="kw">fn </span>parse_bool(scalar: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;bool&gt; {
-    <span class="kw">if </span>scalar == <span class="string">&quot;true&quot; </span>{
-        <span class="prelude-val">Some</span>(<span class="bool-val">true</span>)
-    } <span class="kw">else if </span>scalar == <span class="string">&quot;false&quot; </span>{
-        <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
-    } <span class="kw">else </span>{
-        <span class="prelude-val">None
-    </span>}
+    <span class="kw">match </span>scalar {
+        <span class="string">&quot;true&quot; </span>| <span class="string">&quot;True&quot; </span>| <span class="string">&quot;TRUE&quot; </span>=&gt; <span class="prelude-val">Some</span>(<span class="bool-val">true</span>),
+        <span class="string">&quot;false&quot; </span>| <span class="string">&quot;False&quot; </span>| <span class="string">&quot;FALSE&quot; </span>=&gt; <span class="prelude-val">Some</span>(<span class="bool-val">false</span>),
+        <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+    }
 }
 
 <span class="kw">fn </span>parse_unsigned_int&lt;T&gt;(
@@ -2971,6 +2995,18 @@
     }
 }
 
+<span class="kw">fn </span>is_plain_or_tagged_literal_scalar(
+    expected: <span class="kw-2">&amp;</span>str,
+    scalar: <span class="kw-2">&amp;</span>Scalar,
+    tagged_already: bool,
+) -&gt; bool {
+    <span class="kw">match </span>(scalar.style, <span class="kw-2">&amp;</span>scalar.tag, tagged_already) {
+        (ScalarStyle::Plain, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="bool-val">true</span>,
+        (ScalarStyle::Literal, <span class="prelude-val">Some</span>(tag), <span class="bool-val">false</span>) =&gt; tag == expected,
+        <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
+    }
+}
+
 <span class="kw">fn </span>invalid_type(event: <span class="kw-2">&amp;</span>Event, exp: <span class="kw-2">&amp;</span><span class="kw">dyn </span>Expected) -&gt; Error {
     <span class="kw">enum </span>Void {}
 
@@ -3072,11 +3108,14 @@
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
+        <span class="kw">let </span>tagged_already = <span class="self">self</span>.current_enum.is_some();
         <span class="kw">let </span>(next, mark) = <span class="self">self</span>.next_event_mark()<span class="question-mark">?</span>;
         <span class="kw">loop </span>{
             <span class="kw">match </span>next {
                 Event::Alias(<span class="kw-2">mut </span>pos) =&gt; <span class="kw">break </span><span class="self">self</span>.jump(<span class="kw-2">&amp;mut </span>pos)<span class="question-mark">?</span>.deserialize_bool(visitor),
-                Event::Scalar(scalar) <span class="kw">if </span>scalar.style == ScalarStyle::Plain =&gt; {
+                Event::Scalar(scalar)
+                    <span class="kw">if </span>is_plain_or_tagged_literal_scalar(Tag::BOOL, scalar, tagged_already) =&gt;
+                {
                     <span class="kw">if let </span><span class="prelude-val">Ok</span>(value) = str::from_utf8(<span class="kw-2">&amp;</span>scalar.value) {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(boolean) = parse_bool(value) {
                             <span class="kw">break </span>visitor.visit_bool(boolean);
@@ -3115,11 +3154,14 @@
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
+        <span class="kw">let </span>tagged_already = <span class="self">self</span>.current_enum.is_some();
         <span class="kw">let </span>(next, mark) = <span class="self">self</span>.next_event_mark()<span class="question-mark">?</span>;
         <span class="kw">loop </span>{
             <span class="kw">match </span>next {
                 Event::Alias(<span class="kw-2">mut </span>pos) =&gt; <span class="kw">break </span><span class="self">self</span>.jump(<span class="kw-2">&amp;mut </span>pos)<span class="question-mark">?</span>.deserialize_i64(visitor),
-                Event::Scalar(scalar) <span class="kw">if </span>scalar.style == ScalarStyle::Plain =&gt; {
+                Event::Scalar(scalar)
+                    <span class="kw">if </span>is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) =&gt;
+                {
                     <span class="kw">if let </span><span class="prelude-val">Ok</span>(value) = str::from_utf8(<span class="kw-2">&amp;</span>scalar.value) {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(int) = parse_signed_int(value, i64::from_str_radix) {
                             <span class="kw">break </span>visitor.visit_i64(int);
@@ -3137,11 +3179,14 @@
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
+        <span class="kw">let </span>tagged_already = <span class="self">self</span>.current_enum.is_some();
         <span class="kw">let </span>(next, mark) = <span class="self">self</span>.next_event_mark()<span class="question-mark">?</span>;
         <span class="kw">loop </span>{
             <span class="kw">match </span>next {
                 Event::Alias(<span class="kw-2">mut </span>pos) =&gt; <span class="kw">break </span><span class="self">self</span>.jump(<span class="kw-2">&amp;mut </span>pos)<span class="question-mark">?</span>.deserialize_i128(visitor),
-                Event::Scalar(scalar) <span class="kw">if </span>scalar.style == ScalarStyle::Plain =&gt; {
+                Event::Scalar(scalar)
+                    <span class="kw">if </span>is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) =&gt;
+                {
                     <span class="kw">if let </span><span class="prelude-val">Ok</span>(value) = str::from_utf8(<span class="kw-2">&amp;</span>scalar.value) {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(int) = parse_signed_int(value, i128::from_str_radix) {
                             <span class="kw">break </span>visitor.visit_i128(int);
@@ -3180,11 +3225,14 @@
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
+        <span class="kw">let </span>tagged_already = <span class="self">self</span>.current_enum.is_some();
         <span class="kw">let </span>(next, mark) = <span class="self">self</span>.next_event_mark()<span class="question-mark">?</span>;
         <span class="kw">loop </span>{
             <span class="kw">match </span>next {
                 Event::Alias(<span class="kw-2">mut </span>pos) =&gt; <span class="kw">break </span><span class="self">self</span>.jump(<span class="kw-2">&amp;mut </span>pos)<span class="question-mark">?</span>.deserialize_u64(visitor),
-                Event::Scalar(scalar) <span class="kw">if </span>scalar.style == ScalarStyle::Plain =&gt; {
+                Event::Scalar(scalar)
+                    <span class="kw">if </span>is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) =&gt;
+                {
                     <span class="kw">if let </span><span class="prelude-val">Ok</span>(value) = str::from_utf8(<span class="kw-2">&amp;</span>scalar.value) {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(int) = parse_unsigned_int(value, u64::from_str_radix) {
                             <span class="kw">break </span>visitor.visit_u64(int);
@@ -3202,11 +3250,14 @@
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
+        <span class="kw">let </span>tagged_already = <span class="self">self</span>.current_enum.is_some();
         <span class="kw">let </span>(next, mark) = <span class="self">self</span>.next_event_mark()<span class="question-mark">?</span>;
         <span class="kw">loop </span>{
             <span class="kw">match </span>next {
                 Event::Alias(<span class="kw-2">mut </span>pos) =&gt; <span class="kw">break </span><span class="self">self</span>.jump(<span class="kw-2">&amp;mut </span>pos)<span class="question-mark">?</span>.deserialize_u128(visitor),
-                Event::Scalar(scalar) <span class="kw">if </span>scalar.style == ScalarStyle::Plain =&gt; {
+                Event::Scalar(scalar)
+                    <span class="kw">if </span>is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) =&gt;
+                {
                     <span class="kw">if let </span><span class="prelude-val">Ok</span>(value) = str::from_utf8(<span class="kw-2">&amp;</span>scalar.value) {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(int) = parse_unsigned_int(value, u128::from_str_radix) {
                             <span class="kw">break </span>visitor.visit_u128(int);
@@ -3231,11 +3282,14 @@
     <span class="kw">where
         </span>V: Visitor&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
+        <span class="kw">let </span>tagged_already = <span class="self">self</span>.current_enum.is_some();
         <span class="kw">let </span>(next, mark) = <span class="self">self</span>.next_event_mark()<span class="question-mark">?</span>;
         <span class="kw">loop </span>{
             <span class="kw">match </span>next {
                 Event::Alias(<span class="kw-2">mut </span>pos) =&gt; <span class="kw">break </span><span class="self">self</span>.jump(<span class="kw-2">&amp;mut </span>pos)<span class="question-mark">?</span>.deserialize_f64(visitor),
-                Event::Scalar(scalar) <span class="kw">if </span>scalar.style == ScalarStyle::Plain =&gt; {
+                Event::Scalar(scalar)
+                    <span class="kw">if </span>is_plain_or_tagged_literal_scalar(Tag::FLOAT, scalar, tagged_already) =&gt;
+                {
                     <span class="kw">if let </span><span class="prelude-val">Ok</span>(value) = str::from_utf8(<span class="kw-2">&amp;</span>scalar.value) {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(float) = parse_f64(value) {
                             <span class="kw">break </span>visitor.visit_f64(float);
@@ -3643,4 +3697,4 @@
     T::deserialize(Deserializer::from_slice(v))
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="serde_yaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (1d37ed661 2022-09-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="serde_yaml" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (4a1467723 2022-09-23)" ></div></body></html>
