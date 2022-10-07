@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-3.2.22/src/parser/arg_matcher.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>arg_matcher.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/clap-4.0.10/src/parser/arg_matcher.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>arg_matcher.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../clap/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../clap/index.html">
-                        <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+                        <img src="https://raw.githubusercontent.com/clap-rs/clap/master/assets/clap.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -261,28 +261,8 @@
 <span id="259">259</span>
 <span id="260">260</span>
 <span id="261">261</span>
-<span id="262">262</span>
-<span id="263">263</span>
-<span id="264">264</span>
-<span id="265">265</span>
-<span id="266">266</span>
-<span id="267">267</span>
-<span id="268">268</span>
-<span id="269">269</span>
-<span id="270">270</span>
-<span id="271">271</span>
-<span id="272">272</span>
-<span id="273">273</span>
-<span id="274">274</span>
-<span id="275">275</span>
-<span id="276">276</span>
-<span id="277">277</span>
-<span id="278">278</span>
-<span id="279">279</span>
-<span id="280">280</span>
 </pre><pre class="rust"><code><span class="comment">// Std
-</span><span class="kw">use </span>std::collections::HashMap;
-<span class="kw">use </span>std::ffi::OsString;
+</span><span class="kw">use </span>std::ffi::OsString;
 <span class="kw">use </span>std::mem;
 <span class="kw">use </span>std::ops::Deref;
 
@@ -292,6 +272,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::parser::Identifier;
 <span class="kw">use </span><span class="kw">crate</span>::parser::PendingArg;
 <span class="kw">use </span><span class="kw">crate</span>::parser::{ArgMatches, MatchedArg, SubCommand, ValueSource};
+<span class="kw">use </span><span class="kw">crate</span>::util::FlatMap;
 <span class="kw">use </span><span class="kw">crate</span>::util::Id;
 <span class="kw">use </span><span class="kw">crate</span>::INTERNAL_ERROR_MSG;
 
@@ -307,22 +288,15 @@
             matches: ArgMatches {
                 <span class="attribute">#[cfg(debug_assertions)]
                 </span>valid_args: {
-                    <span class="kw">let </span>args = _cmd.get_arguments().map(|a| a.id.clone());
-                    <span class="kw">let </span>groups = _cmd.get_groups().map(|g| g.id.clone());
+                    <span class="kw">let </span>args = _cmd.get_arguments().map(|a| a.get_id().clone());
+                    <span class="kw">let </span>groups = _cmd.get_groups().map(|g| g.get_id().clone());
                     args.chain(groups).collect()
                 },
                 <span class="attribute">#[cfg(debug_assertions)]
-                </span>valid_subcommands: _cmd.get_subcommands().map(|sc| sc.get_id()).collect(),
-                <span class="comment">// HACK: Allow an external subcommand&#39;s ArgMatches be a stand-in for any ArgMatches
-                // since users can&#39;t detect it and avoid the asserts.
-                //
-                // See clap-rs/clap#3263
-                </span><span class="attribute">#[cfg(debug_assertions)]
-                #[cfg(not(feature = <span class="string">&quot;unstable-v4&quot;</span>))]
-                </span>disable_asserts: _cmd.is_allow_external_subcommands_set(),
-                <span class="attribute">#[cfg(debug_assertions)]
-                #[cfg(feature = <span class="string">&quot;unstable-v4&quot;</span>)]
-                </span>disable_asserts: <span class="bool-val">false</span>,
+                </span>valid_subcommands: _cmd
+                    .get_subcommands()
+                    .map(|sc| sc.get_name_str().clone())
+                    .collect(),
                 ..Default::default()
             },
             pending: <span class="prelude-val">None</span>,
@@ -338,14 +312,14 @@
             <span class="string">&quot;ArgMatcher::get_global_values: global_arg_vec={:?}&quot;</span>,
             global_arg_vec
         );
-        <span class="kw">let </span><span class="kw-2">mut </span>vals_map = HashMap::new();
+        <span class="kw">let </span><span class="kw-2">mut </span>vals_map = FlatMap::new();
         <span class="self">self</span>.fill_in_global_values(global_arg_vec, <span class="kw-2">&amp;mut </span>vals_map);
     }
 
     <span class="kw">fn </span>fill_in_global_values(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         global_arg_vec: <span class="kw-2">&amp;</span>[Id],
-        vals_map: <span class="kw-2">&amp;mut </span>HashMap&lt;Id, MatchedArg&gt;,
+        vals_map: <span class="kw-2">&amp;mut </span>FlatMap&lt;Id, MatchedArg&gt;,
     ) {
         <span class="kw">for </span>global_arg <span class="kw">in </span>global_arg_vec {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(ma) = <span class="self">self</span>.get(global_arg) {
@@ -390,20 +364,20 @@
         <span class="self">self</span>.matches.args.get_mut(arg)
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) {
-        <span class="self">self</span>.matches.args.swap_remove(arg);
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) -&gt; bool {
+        <span class="self">self</span>.matches.args.remove(arg).is_some()
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>contains(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) -&gt; bool {
         <span class="self">self</span>.matches.args.contains_key(arg)
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>arg_ids(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; indexmap::map::Keys&lt;Id, MatchedArg&gt; {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>arg_ids(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::slice::Iter&lt;<span class="lifetime">&#39;_</span>, Id&gt; {
         <span class="self">self</span>.matches.args.keys()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>entry(<span class="kw-2">&amp;mut </span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id) -&gt; indexmap::map::Entry&lt;Id, MatchedArg&gt; {
-        <span class="self">self</span>.matches.args.entry(arg.clone())
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>entry(<span class="kw-2">&amp;mut </span><span class="self">self</span>, arg: Id) -&gt; <span class="kw">crate</span>::util::Entry&lt;Id, MatchedArg&gt; {
+        <span class="self">self</span>.matches.args.entry(arg)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>subcommand(<span class="kw-2">&amp;mut </span><span class="self">self</span>, sc: SubCommand) {
@@ -414,16 +388,12 @@
         <span class="self">self</span>.matches.subcommand_name()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>iter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; indexmap::map::Iter&lt;Id, MatchedArg&gt; {
-        <span class="self">self</span>.matches.args.iter()
-    }
-
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>check_explicit&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id, predicate: ArgPredicate&lt;<span class="lifetime">&#39;a</span>&gt;) -&gt; bool {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>check_explicit(<span class="kw-2">&amp;</span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Id, predicate: <span class="kw-2">&amp;</span>ArgPredicate) -&gt; bool {
         <span class="self">self</span>.get(arg).map_or(<span class="bool-val">false</span>, |a| a.check_explicit(predicate))
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_custom_arg(<span class="kw-2">&amp;mut </span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Arg, source: ValueSource) {
-        <span class="kw">let </span>id = <span class="kw-2">&amp;</span>arg.id;
+        <span class="kw">let </span>id = arg.get_id().clone();
         <span class="macro">debug!</span>(
             <span class="string">&quot;ArgMatcher::start_custom_arg: id={:?}, source={:?}&quot;</span>,
             id, source
@@ -434,7 +404,7 @@
         ma.new_val_group();
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_custom_group(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>Id, source: ValueSource) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_custom_group(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: Id, source: ValueSource) {
         <span class="macro">debug!</span>(
             <span class="string">&quot;ArgMatcher::start_custom_arg: id={:?}, source={:?}&quot;</span>,
             id, source
@@ -446,28 +416,24 @@
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_occurrence_of_arg(<span class="kw-2">&amp;mut </span><span class="self">self</span>, arg: <span class="kw-2">&amp;</span>Arg) {
-        <span class="kw">let </span>id = <span class="kw-2">&amp;</span>arg.id;
+        <span class="kw">let </span>id = arg.get_id().clone();
         <span class="macro">debug!</span>(<span class="string">&quot;ArgMatcher::start_occurrence_of_arg: id={:?}&quot;</span>, id);
         <span class="kw">let </span>ma = <span class="self">self</span>.entry(id).or_insert(MatchedArg::new_arg(arg));
         <span class="macro">debug_assert_eq!</span>(ma.type_id(), <span class="prelude-val">Some</span>(arg.get_value_parser().type_id()));
         ma.set_source(ValueSource::CommandLine);
-        <span class="attribute">#[allow(deprecated)]
-        </span>ma.inc_occurrences();
         ma.new_val_group();
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_occurrence_of_group(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>Id) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_occurrence_of_group(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: Id) {
         <span class="macro">debug!</span>(<span class="string">&quot;ArgMatcher::start_occurrence_of_group: id={:?}&quot;</span>, id);
         <span class="kw">let </span>ma = <span class="self">self</span>.entry(id).or_insert(MatchedArg::new_group());
         <span class="macro">debug_assert_eq!</span>(ma.type_id(), <span class="prelude-val">None</span>);
         ma.set_source(ValueSource::CommandLine);
-        <span class="attribute">#[allow(deprecated)]
-        </span>ma.inc_occurrences();
         ma.new_val_group();
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_occurrence_of_external(<span class="kw-2">&amp;mut </span><span class="self">self</span>, cmd: <span class="kw-2">&amp;</span><span class="kw">crate</span>::Command) {
-        <span class="kw">let </span>id = <span class="kw-2">&amp;</span>Id::empty_hash();
+        <span class="kw">let </span>id = Id::from_static_ref(Id::EXTERNAL);
         <span class="macro">debug!</span>(<span class="string">&quot;ArgMatcher::start_occurrence_of_external: id={:?}&quot;</span>, id,);
         <span class="kw">let </span>ma = <span class="self">self</span>.entry(id).or_insert(MatchedArg::new_external(cmd));
         <span class="macro">debug_assert_eq!</span>(
@@ -479,8 +445,6 @@
             )
         );
         ma.set_source(ValueSource::CommandLine);
-        <span class="attribute">#[allow(deprecated)]
-        </span>ma.inc_occurrences();
         ma.new_val_group();
     }
 
@@ -495,36 +459,22 @@
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>needs_more_vals(<span class="kw-2">&amp;</span><span class="self">self</span>, o: <span class="kw-2">&amp;</span>Arg) -&gt; bool {
-        <span class="kw">let </span>num_resolved = <span class="self">self</span>.get(<span class="kw-2">&amp;</span>o.id).map(|ma| ma.num_vals()).unwrap_or(<span class="number">0</span>);
         <span class="kw">let </span>num_pending = <span class="self">self
             </span>.pending
             .as_ref()
-            .and_then(|p| (p.id == o.id).then(|| p.raw_vals.len()))
+            .and_then(|p| (p.id == <span class="kw-2">*</span>o.get_id()).then(|| p.raw_vals.len()))
             .unwrap_or(<span class="number">0</span>);
-        <span class="kw">let </span>current_num = num_resolved + num_pending;
         <span class="macro">debug!</span>(
-            <span class="string">&quot;ArgMatcher::needs_more_vals: o={}, resolved={}, pending={}&quot;</span>,
-            o.name, num_resolved, num_pending
+            <span class="string">&quot;ArgMatcher::needs_more_vals: o={}, pending={}&quot;</span>,
+            o.get_id(),
+            num_pending
         );
-        <span class="kw">if </span>current_num == <span class="number">0 </span>{
-            <span class="bool-val">true
-        </span>} <span class="kw">else if let </span><span class="prelude-val">Some</span>(num) = o.num_vals {
-            <span class="macro">debug!</span>(<span class="string">&quot;ArgMatcher::needs_more_vals: num_vals...{}&quot;</span>, num);
-            <span class="attribute">#[allow(deprecated)]
-            </span><span class="kw">if </span>o.is_multiple_occurrences_set() {
-                (current_num % num) != <span class="number">0
-            </span>} <span class="kw">else </span>{
-                num != current_num
-            }
-        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(num) = o.max_vals {
-            <span class="macro">debug!</span>(<span class="string">&quot;ArgMatcher::needs_more_vals: max_vals...{}&quot;</span>, num);
-            current_num &lt; num
-        } <span class="kw">else if </span>o.min_vals.is_some() {
-            <span class="macro">debug!</span>(<span class="string">&quot;ArgMatcher::needs_more_vals: min_vals...true&quot;</span>);
-            <span class="bool-val">true
-        </span>} <span class="kw">else </span>{
-            o.is_multiple_values_set()
-        }
+        <span class="kw">let </span>expected = o.get_num_args().expect(INTERNAL_ERROR_MSG);
+        <span class="macro">debug!</span>(
+            <span class="string">&quot;ArgMatcher::needs_more_vals: expected={}, actual={}&quot;</span>,
+            expected, num_pending
+        );
+        expected.accepts_more(num_pending)
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>pending_arg_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Id&gt; {
@@ -535,17 +485,29 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         id: <span class="kw-2">&amp;</span>Id,
         ident: <span class="prelude-ty">Option</span>&lt;Identifier&gt;,
+        trailing_values: bool,
     ) -&gt; <span class="kw-2">&amp;mut </span>Vec&lt;OsString&gt; {
         <span class="kw">let </span>pending = <span class="self">self</span>.pending.get_or_insert_with(|| PendingArg {
             id: id.clone(),
             ident,
             raw_vals: Default::default(),
+            trailing_idx: <span class="prelude-val">None</span>,
         });
         <span class="macro">debug_assert_eq!</span>(pending.id, <span class="kw-2">*</span>id, <span class="string">&quot;{}&quot;</span>, INTERNAL_ERROR_MSG);
         <span class="kw">if </span>ident.is_some() {
             <span class="macro">debug_assert_eq!</span>(pending.ident, ident, <span class="string">&quot;{}&quot;</span>, INTERNAL_ERROR_MSG);
         }
+        <span class="kw">if </span>trailing_values {
+            pending.trailing_idx.get_or_insert(pending.raw_vals.len());
+        }
         <span class="kw-2">&amp;mut </span>pending.raw_vals
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>start_trailing(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(pending) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.pending {
+            <span class="comment">// Allow asserting its started on subsequent calls
+            </span>pending.trailing_idx.get_or_insert(pending.raw_vals.len());
+        }
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>take_pending(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;PendingArg&gt; {
@@ -561,4 +523,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (4a1467723 2022-09-23)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="clap" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (0ca356586 2022-10-06)" ></div></body></html>

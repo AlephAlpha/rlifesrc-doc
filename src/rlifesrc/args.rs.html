@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `tui/src/args.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>args.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rlifesrc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rlifesrc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rlifesrc/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `tui/src/args.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>args.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../rlifesrc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../rlifesrc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../rlifesrc/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -385,51 +385,21 @@
 <span id="385">385</span>
 <span id="386">386</span>
 <span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
-<span id="392">392</span>
-<span id="393">393</span>
-<span id="394">394</span>
-<span id="395">395</span>
-<span id="396">396</span>
-<span id="397">397</span>
-<span id="398">398</span>
-<span id="399">399</span>
-<span id="400">400</span>
-<span id="401">401</span>
-<span id="402">402</span>
-<span id="403">403</span>
-<span id="404">404</span>
-<span id="405">405</span>
-<span id="406">406</span>
-<span id="407">407</span>
-<span id="408">408</span>
-<span id="409">409</span>
-<span id="410">410</span>
-<span id="411">411</span>
-<span id="412">412</span>
-<span id="413">413</span>
-<span id="414">414</span>
-<span id="415">415</span>
-<span id="416">416</span>
-<span id="417">417</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Parsing command-line arguments.
 
-</span><span class="kw">use </span>clap::{command, Arg, ErrorKind, <span class="prelude-ty">Result</span>};
+</span><span class="kw">use </span>clap::{
+    command,
+    error::{ErrorKind, <span class="prelude-ty">Result</span>},
+    value_parser, Arg, ArgAction,
+};
 <span class="kw">use </span>rlifesrc_lib::{
     rules::NtLifeGen, Config, NewState, PolyWorld, SearchOrder, Symmetry, Transform,
 };
 <span class="kw">use </span>std::{
     fs::File,
     io::{BufReader, Read},
-    path::Path,
+    path::PathBuf,
 };
-
-<span class="kw">fn </span>is_positive(s: <span class="kw-2">&amp;</span>str) -&gt; bool {
-    s.chars().all(|c| c.is_ascii_digit()) &amp;&amp; s != <span class="string">&quot;0&quot; </span>&amp;&amp; !s.starts_with(<span class="string">&#39;-&#39;</span>)
-}
 
 <span class="doccomment">/// A struct to store the parse results.
 </span><span class="kw">pub struct </span>Args {
@@ -453,9 +423,8 @@
                  \n\
                  For a detailed help, please visit:\n\
                  https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README.md (In Chinese)\n\
-                 https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README_en.md (In English)\n&quot;</span>,
+                 https://github.com/AlephAlpha/rlifesrc/blob/master/tui/README_en.md (In English)&quot;</span>,
             )
-            .allow_negative_numbers(<span class="bool-val">true</span>)
             .arg(
                 Arg::new(<span class="string">&quot;CONFIG&quot;</span>)
                     .help(<span class="string">&quot;Read config from a file&quot;</span>)
@@ -463,58 +432,43 @@
                         <span class="string">&quot;Read config from a file\n\
                          Supported formats: JSON, YAML, TOML.\n\
                          When a config file is provided, all the other flags and options, \
-                         except --all (-a), --reset-time, --no-tui (-n), are ignored.\n&quot;</span>,
+                         except --all (-a), --reset-time, --no-tui (-n), are ignored.&quot;</span>,
                     )
                     .short(<span class="string">&#39;C&#39;</span>)
                     .long(<span class="string">&quot;config&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>),
+                    .value_parser(<span class="macro">value_parser!</span>(PathBuf)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;X&quot;</span>)
                     .help(<span class="string">&quot;Width of the pattern&quot;</span>)
                     .required_unless_present(<span class="string">&quot;CONFIG&quot;</span>)
-                    .index(<span class="number">1</span>)
-                    .validator(|x| {
-                        is_positive(x)
-                            .then(|| ())
-                            .ok_or_else(|| String::from(<span class="string">&quot;width must be a positive integer&quot;</span>))
-                    }),
+                    .value_parser(<span class="macro">value_parser!</span>(i32).range(<span class="number">1</span>..)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;Y&quot;</span>)
                     .help(<span class="string">&quot;Height of the pattern&quot;</span>)
                     .required_unless_present(<span class="string">&quot;CONFIG&quot;</span>)
-                    .index(<span class="number">2</span>)
-                    .validator(|y| {
-                        is_positive(y)
-                            .then(|| ())
-                            .ok_or_else(|| String::from(<span class="string">&quot;height must be a positive integer&quot;</span>))
-                    }),
+                    .value_parser(<span class="macro">value_parser!</span>(i32).range(<span class="number">1</span>..)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;P&quot;</span>)
                     .help(<span class="string">&quot;Period of the pattern&quot;</span>)
                     .default_value(<span class="string">&quot;1&quot;</span>)
-                    .index(<span class="number">3</span>)
-                    .validator(|p| {
-                        is_positive(p)
-                            .then(|| ())
-                            .ok_or_else(|| String::from(<span class="string">&quot;period must be a positive integer&quot;</span>))
-                    }),
+                    .value_parser(<span class="macro">value_parser!</span>(i32).range(<span class="number">1</span>..)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;DX&quot;</span>)
                     .help(<span class="string">&quot;Horizontal translation&quot;</span>)
                     .default_value(<span class="string">&quot;0&quot;</span>)
-                    .index(<span class="number">4</span>)
-                    .validator(|d| d.parse::&lt;i32&gt;().map(|<span class="kw">_</span>| ()).map_err(|e| e.to_string())),
+                    .allow_negative_numbers(<span class="bool-val">true</span>)
+                    .value_parser(<span class="macro">value_parser!</span>(i32)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;DY&quot;</span>)
                     .help(<span class="string">&quot;Vertical translation&quot;</span>)
                     .default_value(<span class="string">&quot;0&quot;</span>)
-                    .index(<span class="number">5</span>)
-                    .validator(|d| d.parse::&lt;i32&gt;().map(|<span class="kw">_</span>| ()).map_err(|e| e.to_string())),
+                    .allow_negative_numbers(<span class="bool-val">true</span>)
+                    .value_parser(<span class="macro">value_parser!</span>(i32)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;DIAG&quot;</span>)
@@ -523,19 +477,12 @@
                         <span class="string">&quot;Diagonal width\n\
                          If the diagonal width is n &gt; 0, the cells at position (x, y) \
                          where abs(x - y) &gt;= n are assumed to be dead.\n\
-                         If this value is set to 0, it would be ignored.\n&quot;</span>,
+                         If this value is set to 0, it would be ignored.&quot;</span>,
                     )
                     .short(<span class="string">&#39;d&#39;</span>)
                     .long(<span class="string">&quot;diag&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>)
                     .default_value(<span class="string">&quot;0&quot;</span>)
-                    .validator(|d| {
-                        <span class="kw">if </span>is_positive(d) || d == <span class="string">&quot;0&quot; </span>{
-                            <span class="prelude-val">Ok</span>(())
-                        } <span class="kw">else </span>{
-                            <span class="prelude-val">Err</span>(String::from(<span class="string">&quot;diagonal width must be a positive integer&quot;</span>))
-                        }
-                    }),
+                    .value_parser(<span class="macro">value_parser!</span>(i32).range(<span class="number">0</span>..)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;TRANSFORM&quot;</span>)
@@ -546,14 +493,14 @@
                          the first generation, applying this transformation first, \
                          and then the translation defined by DX and DY.\n\
                          You may need to add quotation marks for some of the transformations.\n\
-                         \&quot;Id\&quot; is the identical transformation.\n\
-                         \&quot;R\&quot; means counterclockwise rotation.\n\
-                         \&quot;F\&quot; means flipping (reflection) across an axis.\n&quot;</span>,
+                         Supported values are Id, R90, R180, R270, F|, F-, F\\, F/.\n\
+                         Id is the identical transformation.\n\
+                         R means counterclockwise rotation.\n\
+                         F means flipping (reflection) across an axis.&quot;</span>,
                     )
                     .short(<span class="string">&#39;t&#39;</span>)
                     .long(<span class="string">&quot;transform&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>)
-                    .possible_values(<span class="kw-2">&amp;</span>[<span class="string">&quot;Id&quot;</span>, <span class="string">&quot;R90&quot;</span>, <span class="string">&quot;R180&quot;</span>, <span class="string">&quot;R270&quot;</span>, <span class="string">&quot;F|&quot;</span>, <span class="string">&quot;F-&quot;</span>, <span class="string">&quot;F\\&quot;</span>, <span class="string">&quot;F/&quot;</span>])
+                    .value_parser(<span class="macro">value_parser!</span>(Transform))
                     .default_value(<span class="string">&quot;Id&quot;</span>),
             )
             .arg(
@@ -564,14 +511,12 @@
                          You may need to add quotation marks for some of the symmetries.\n\
                          The usages of these symmetries are the same as Oscar Cunningham&#39;s \
                          Logic Life Search.\n\
-                         See [https://conwaylife.com/wiki/Static_symmetry#Reflectional] \n&quot;</span>,
+                         Supported values are C1, C2, C4, D2|, D2-, D2\\, D2/, D4+, D4X, D8.\n\
+                         See [https://conwaylife.com/wiki/Static_symmetry#Reflectional] &quot;</span>,
                     )
                     .short(<span class="string">&#39;s&#39;</span>)
                     .long(<span class="string">&quot;symmetry&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>)
-                    .possible_values(<span class="kw-2">&amp;</span>[
-                        <span class="string">&quot;C1&quot;</span>, <span class="string">&quot;C2&quot;</span>, <span class="string">&quot;C4&quot;</span>, <span class="string">&quot;D2|&quot;</span>, <span class="string">&quot;D2-&quot;</span>, <span class="string">&quot;D2\\&quot;</span>, <span class="string">&quot;D2/&quot;</span>, <span class="string">&quot;D4+&quot;</span>, <span class="string">&quot;D4X&quot;</span>, <span class="string">&quot;D8&quot;</span>,
-                    ])
+                    .value_parser(<span class="macro">value_parser!</span>(Symmetry))
                     .default_value(<span class="string">&quot;C1&quot;</span>),
             )
             .arg(
@@ -580,29 +525,23 @@
                     .long_help(
                         <span class="string">&quot;Rule of the cellular automaton\n\
                          Supports Life-like, isotropic non-totalistic, hexagonal, MAP rules, \
-                         and their corresponding Generations rules.\n&quot;</span>,
+                         and their corresponding Generations rules.&quot;</span>,
                     )
                     .short(<span class="string">&#39;r&#39;</span>)
                     .long(<span class="string">&quot;rule&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>)
                     .default_value(<span class="string">&quot;B3/S23&quot;</span>)
-                    .validator(|d| {
-                        d.parse::&lt;NtLifeGen&gt;()
-                            .map(|<span class="kw">_</span>| ())
-                            .map_err(|e| e.to_string())
-                    }),
+                    .value_parser(|d: <span class="kw-2">&amp;</span>str| d.parse::&lt;NtLifeGen&gt;().map(|<span class="kw">_</span>| d.to_string())),
             )
             .arg(
                 Arg::new(<span class="string">&quot;ORDER&quot;</span>)
                     .help(<span class="string">&quot;Search order&quot;</span>)
                     .long_help(
                         <span class="string">&quot;Search order\n\
-                         Row first or column first.\n&quot;</span>,
+                         Row first or column first.&quot;</span>,
                     )
                     .short(<span class="string">&#39;o&#39;</span>)
                     .long(<span class="string">&quot;order&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>)
-                    .possible_values(<span class="kw-2">&amp;</span>[
+                    .value_parser([
                         <span class="string">&quot;row&quot;</span>,
                         <span class="string">&quot;column&quot;</span>,
                         <span class="string">&quot;automatic&quot;</span>,
@@ -616,11 +555,10 @@
             )
             .arg(
                 Arg::new(<span class="string">&quot;CHOOSE&quot;</span>)
-                    .help(<span class="string">&quot;How to choose a state for unknown cells\n&quot;</span>)
+                    .help(<span class="string">&quot;How to choose a state for unknown cells&quot;</span>)
                     .short(<span class="string">&#39;c&#39;</span>)
                     .long(<span class="string">&quot;choose&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>)
-                    .possible_values(<span class="kw-2">&amp;</span>[<span class="string">&quot;dead&quot;</span>, <span class="string">&quot;alive&quot;</span>, <span class="string">&quot;random&quot;</span>, <span class="string">&quot;d&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;r&quot;</span>])
+                    .value_parser([<span class="string">&quot;dead&quot;</span>, <span class="string">&quot;alive&quot;</span>, <span class="string">&quot;random&quot;</span>, <span class="string">&quot;d&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;r&quot;</span>])
                     .default_value(<span class="string">&quot;alive&quot;</span>),
             )
             .arg(
@@ -628,13 +566,12 @@
                     .help(<span class="string">&quot;Upper bound of numbers of minimum living cells in all generations&quot;</span>)
                     .long_help(
                         <span class="string">&quot;Upper bound of numbers of minimum living cells in all generations\n\
-                         If this value is set to 0, it means there is no limitation.\n&quot;</span>,
+                         If this value is set to 0, it means there is no limitation.&quot;</span>,
                     )
                     .short(<span class="string">&#39;m&#39;</span>)
                     .long(<span class="string">&quot;max&quot;</span>)
-                    .takes_value(<span class="bool-val">true</span>)
                     .default_value(<span class="string">&quot;0&quot;</span>)
-                    .validator(|d| d.parse::&lt;u32&gt;().map(|<span class="kw">_</span>| ()).map_err(|e| e.to_string())),
+                    .value_parser(<span class="macro">value_parser!</span>(u32)),
             )
             .arg(
                 Arg::new(<span class="string">&quot;REDUCE&quot;</span>)
@@ -642,11 +579,11 @@
                     .long_help(
                         <span class="string">&quot;Reduce the max cell count when a result is found\n\
                          The new max cell count will be set to the cell count of \
-                         the current result minus one.\n&quot;</span>,
+                         the current result minus one.&quot;</span>,
                     )
                     .short(<span class="string">&#39;R&#39;</span>)
                     .long(<span class="string">&quot;reduce&quot;</span>)
-                    .takes_value(<span class="bool-val">false</span>),
+                    .action(ArgAction::SetTrue),
             )
             .arg(
                 Arg::new(<span class="string">&quot;SUBPERIOD&quot;</span>)
@@ -654,7 +591,7 @@
                     .long_help(<span class="string">&quot;Allow patterns whose fundamental period are smaller than the given period&quot;</span>)
                     .short(<span class="string">&#39;p&#39;</span>)
                     .long(<span class="string">&quot;subperiod&quot;</span>)
-                    .takes_value(<span class="bool-val">false</span>),
+                    .action(ArgAction::SetTrue),
             )
             .arg(
                 Arg::new(<span class="string">&quot;SKIPSUBSYM&quot;</span>)
@@ -663,11 +600,11 @@
                         <span class="string">&quot;Skip patterns which are invariant under more transformations than \
                          required by the given symmetry.\n\
                          In another word, skip patterns whose symmetry group properly contains \
-                         the given symmetry group.\n&quot;</span>,
+                         the given symmetry group.&quot;</span>,
                     )
                     .short(<span class="string">&#39;S&#39;</span>)
                     .long(<span class="string">&quot;skip-subsym&quot;</span>)
-                    .takes_value(<span class="bool-val">false</span>),
+                    .action(ArgAction::SetTrue),
             )
             .arg(
                 Arg::new(<span class="string">&quot;BACKJUMP&quot;</span>)
@@ -678,7 +615,7 @@
                         useful for large (e.g., 64x64) still lifes.&quot;</span>,
                     )
                     .long(<span class="string">&quot;backjump&quot;</span>)
-                    .takes_value(<span class="bool-val">false</span>),
+                    .action(ArgAction::SetTrue),
             );
 
         <span class="attribute">#[cfg(feature = <span class="string">&quot;tui&quot;</span>)]
@@ -689,23 +626,26 @@
                         .help(<span class="string">&quot;Prints all possible results instead of only the first one&quot;</span>)
                         .long_help(
                             <span class="string">&quot;Prints all possible results instead of only the first one\n\
-                             Only useful when --no-tui is set.\n&quot;</span>,
+                             Only useful when --no-tui is set.&quot;</span>,
                         )
                         .short(<span class="string">&#39;a&#39;</span>)
                         .long(<span class="string">&quot;all&quot;</span>)
-                        .requires(<span class="string">&quot;NOTUI&quot;</span>),
+                        .requires(<span class="string">&quot;NOTUI&quot;</span>)
+                        .action(ArgAction::SetTrue),
                 )
                 .arg(
                     Arg::new(<span class="string">&quot;RESET&quot;</span>)
                         .help(<span class="string">&quot;Resets the time when starting a new search&quot;</span>)
                         .long(<span class="string">&quot;reset-time&quot;</span>)
-                        .conflicts_with(<span class="string">&quot;NOTUI&quot;</span>),
+                        .conflicts_with(<span class="string">&quot;NOTUI&quot;</span>)
+                        .action(ArgAction::SetTrue),
                 )
                 .arg(
                     Arg::new(<span class="string">&quot;NOTUI&quot;</span>)
                         .help(<span class="string">&quot;Starts searching immediately, without entering the TUI&quot;</span>)
                         .short(<span class="string">&#39;n&#39;</span>)
-                        .long(<span class="string">&quot;no-tui&quot;</span>),
+                        .long(<span class="string">&quot;no-tui&quot;</span>)
+                        .action(ArgAction::SetTrue),
                 );
         }
 
@@ -716,7 +656,8 @@
                     .help(<span class="string">&quot;Searches for all possible pattern&quot;</span>)
                     .long_help(<span class="string">&quot;Searches for all possible pattern&quot;</span>)
                     .short(<span class="string">&#39;a&#39;</span>)
-                    .long(<span class="string">&quot;all&quot;</span>),
+                    .long(<span class="string">&quot;all&quot;</span>)
+                    .action(ArgAction::SetTrue),
             );
         }
 
@@ -724,8 +665,7 @@
 
         <span class="kw">let </span>config;
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(config_file) = matches.value_of(<span class="string">&quot;CONFIG&quot;</span>) {
-            <span class="kw">let </span>path = Path::new(config_file);
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(path) = matches.get_one::&lt;PathBuf&gt;(<span class="string">&quot;CONFIG&quot;</span>) {
             <span class="kw">let </span>file = File::open(path).map_err(|e| app.error(ErrorKind::Io, e))<span class="question-mark">?</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>reader = BufReader::new(file);
             <span class="kw">match </span>path.extension().and_then(|s| s.to_str()) {
@@ -751,44 +691,44 @@
                 <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(app.error(ErrorKind::Io, <span class="string">&quot;Unsupported config file format&quot;</span>)),
             }
         } <span class="kw">else </span>{
-            <span class="kw">let </span>width = matches.value_of(<span class="string">&quot;X&quot;</span>).unwrap().parse().unwrap();
-            <span class="kw">let </span>height = matches.value_of(<span class="string">&quot;Y&quot;</span>).unwrap().parse().unwrap();
-            <span class="kw">let </span>period = matches.value_of(<span class="string">&quot;P&quot;</span>).unwrap().parse().unwrap();
+            <span class="kw">let </span>width = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;X&quot;</span>).unwrap();
+            <span class="kw">let </span>height = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;Y&quot;</span>).unwrap();
+            <span class="kw">let </span>period = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;P&quot;</span>).unwrap();
 
-            <span class="kw">let </span>dx = matches.value_of(<span class="string">&quot;DX&quot;</span>).unwrap().parse().unwrap();
-            <span class="kw">let </span>dy = matches.value_of(<span class="string">&quot;DY&quot;</span>).unwrap().parse().unwrap();
+            <span class="kw">let </span>dx = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;DX&quot;</span>).unwrap();
+            <span class="kw">let </span>dy = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;DY&quot;</span>).unwrap();
 
-            <span class="kw">let </span>transform: Transform = matches.value_of(<span class="string">&quot;TRANSFORM&quot;</span>).unwrap().parse().unwrap();
-            <span class="kw">let </span>symmetry: Symmetry = matches.value_of(<span class="string">&quot;SYMMETRY&quot;</span>).unwrap().parse().unwrap();
+            <span class="kw">let </span>transform = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;TRANSFORM&quot;</span>).unwrap();
+            <span class="kw">let </span>symmetry = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;SYMMETRY&quot;</span>).unwrap();
 
-            <span class="kw">let </span>search_order = <span class="kw">match </span>matches.value_of(<span class="string">&quot;ORDER&quot;</span>).unwrap() {
+            <span class="kw">let </span>search_order = <span class="kw">match </span>matches.get_one::&lt;String&gt;(<span class="string">&quot;ORDER&quot;</span>).unwrap().as_str() {
                 <span class="string">&quot;row&quot; </span>| <span class="string">&quot;r&quot; </span>=&gt; <span class="prelude-val">Some</span>(SearchOrder::RowFirst),
                 <span class="string">&quot;column&quot; </span>| <span class="string">&quot;c&quot; </span>=&gt; <span class="prelude-val">Some</span>(SearchOrder::ColumnFirst),
                 <span class="string">&quot;diagonal&quot; </span>| <span class="string">&quot;d&quot; </span>=&gt; <span class="prelude-val">Some</span>(SearchOrder::Diagonal),
                 <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
             };
-            <span class="kw">let </span>new_state = <span class="kw">match </span>matches.value_of(<span class="string">&quot;CHOOSE&quot;</span>).unwrap() {
+            <span class="kw">let </span>new_state = <span class="kw">match </span>matches.get_one::&lt;String&gt;(<span class="string">&quot;CHOOSE&quot;</span>).unwrap().as_str() {
                 <span class="string">&quot;dead&quot; </span>| <span class="string">&quot;d&quot; </span>=&gt; NewState::ChooseDead,
                 <span class="string">&quot;alive&quot; </span>| <span class="string">&quot;a&quot; </span>=&gt; NewState::ChooseAlive,
                 <span class="string">&quot;random&quot; </span>| <span class="string">&quot;r&quot; </span>=&gt; NewState::Random,
                 <span class="kw">_ </span>=&gt; NewState::ChooseAlive,
             };
-            <span class="kw">let </span>max_cell_count = matches.value_of(<span class="string">&quot;MAX&quot;</span>).unwrap().parse().unwrap();
+            <span class="kw">let </span>max_cell_count = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;MAX&quot;</span>).unwrap();
             <span class="kw">let </span>max_cell_count = <span class="kw">match </span>max_cell_count {
                 <span class="number">0 </span>=&gt; <span class="prelude-val">None</span>,
                 i =&gt; <span class="prelude-val">Some</span>(i),
             };
-            <span class="kw">let </span>diagonal_width = matches.value_of(<span class="string">&quot;DIAG&quot;</span>).unwrap().parse().unwrap();
+            <span class="kw">let </span>diagonal_width = <span class="kw-2">*</span>matches.get_one(<span class="string">&quot;DIAG&quot;</span>).unwrap();
             <span class="kw">let </span>diagonal_width = <span class="kw">match </span>diagonal_width {
                 <span class="number">0 </span>=&gt; <span class="prelude-val">None</span>,
                 i =&gt; <span class="prelude-val">Some</span>(i),
             };
-            <span class="kw">let </span>reduce_max = matches.is_present(<span class="string">&quot;REDUCE&quot;</span>);
-            <span class="kw">let </span>skip_subperiod = !matches.is_present(<span class="string">&quot;SUBPERIOD&quot;</span>);
-            <span class="kw">let </span>skip_subsymmetry = matches.is_present(<span class="string">&quot;SKIPSUBSYM&quot;</span>);
-            <span class="kw">let </span>backjump = matches.is_present(<span class="string">&quot;BACKJUMP&quot;</span>);
+            <span class="kw">let </span>reduce_max = matches.get_flag(<span class="string">&quot;REDUCE&quot;</span>);
+            <span class="kw">let </span>skip_subperiod = !matches.get_flag(<span class="string">&quot;SUBPERIOD&quot;</span>);
+            <span class="kw">let </span>skip_subsymmetry = matches.get_flag(<span class="string">&quot;SKIPSUBSYM&quot;</span>);
+            <span class="kw">let </span>backjump = matches.get_flag(<span class="string">&quot;BACKJUMP&quot;</span>);
 
-            <span class="kw">let </span>rule_string = matches.value_of(<span class="string">&quot;RULE&quot;</span>).unwrap().to_string();
+            <span class="kw">let </span>rule_string = matches.get_one::&lt;String&gt;(<span class="string">&quot;RULE&quot;</span>).unwrap().to_string();
 
             config = Config::new(width, height, period)
                 .set_translate(dx, dy)
@@ -805,11 +745,11 @@
                 .set_backjump(backjump);
         }
 
-        <span class="kw">let </span>all = matches.is_present(<span class="string">&quot;ALL&quot;</span>);
+        <span class="kw">let </span>all = matches.get_flag(<span class="string">&quot;ALL&quot;</span>);
         <span class="attribute">#[cfg(feature = <span class="string">&quot;tui&quot;</span>)]
-        </span><span class="kw">let </span>reset = matches.is_present(<span class="string">&quot;RESET&quot;</span>);
+        </span><span class="kw">let </span>reset = matches.get_flag(<span class="string">&quot;RESET&quot;</span>);
         <span class="attribute">#[cfg(feature = <span class="string">&quot;tui&quot;</span>)]
-        </span><span class="kw">let </span>no_tui = matches.is_present(<span class="string">&quot;NOTUI&quot;</span>);
+        </span><span class="kw">let </span>no_tui = matches.get_flag(<span class="string">&quot;NOTUI&quot;</span>);
 
         <span class="kw">let </span>world = config
             .world()
@@ -833,4 +773,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (4a1467723 2022-09-23)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="rlifesrc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (0ca356586 2022-10-06)" ></div></body></html>
