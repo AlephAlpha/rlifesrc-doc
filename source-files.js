@@ -30,7 +30,7 @@ var sourcesIndex = JSON.parse('{\
 "getrandom":["",[],["error.rs","error_impls.rs","lib.rs","linux_android.rs","use_file.rs","util.rs","util_libc.rs"]],\
 "hashbrown":["",[["external_trait_impls",[],["mod.rs"]],["raw",[],["alloc.rs","bitmask.rs","mod.rs","sse2.rs"]]],["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs"]],\
 "ident_case":["",[],["lib.rs"]],\
-"indexmap":["",[["map",[["core",[],["raw.rs"]]],["core.rs"]]],["equivalent.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","set.rs","util.rs"]],\
+"indexmap":["",[["map",[["core",[],["raw.rs"]]],["core.rs"]]],["arbitrary.rs","equivalent.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","set.rs","util.rs"]],\
 "itoa":["",[],["lib.rs","udiv128.rs"]],\
 "lazy_regex":["",[],["lib.rs"]],\
 "lazy_regex_proc_macros":["",[],["args.rs","mod.rs","regex_code.rs"]],\
