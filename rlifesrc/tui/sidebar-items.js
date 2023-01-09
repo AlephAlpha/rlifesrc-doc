@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":[["VIEW_FREQ",""]],"enum":[["Mode","Different modes to handle events."]],"fn":[["tui","Runs the search with a TUI."]],"struct":[["App",""]]};
+window.SIDEBAR_ITEMS = {"constant":[["ASK_QUIT",""],["FOUND",""],["INITIAL",""],["NONE",""],["PAUSED",""],["SEARCHING",""],["VIEW_FREQ",""]],"enum":[["Mode","Different modes to handle events."],["__PrivResult",""]],"fn":[["tui","Runs the search with a TUI."]],"opaque":[["",""]],"struct":[["App",""]]};
