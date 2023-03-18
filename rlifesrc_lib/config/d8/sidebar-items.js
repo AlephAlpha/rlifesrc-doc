@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":[["VARIANTS",""]],"enum":[["Symmetry","Symmetries of the pattern."],["Transform","Transformations (rotations and reflections) after the last generation in a period."],["__Field",""]],"macro":[["try",""]],"struct":[["__FieldVisitor",""],["__Visitor",""]]};
+window.SIDEBAR_ITEMS = {"constant":["VARIANTS"],"enum":["Symmetry","Transform","__Field"],"struct":["__FieldVisitor","__Visitor"]};

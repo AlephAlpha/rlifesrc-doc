@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["main",""],["run_search","Runs the search without TUI."]],"mod":[["args","Parsing command-line arguments."],["tui",""]]};
+window.SIDEBAR_ITEMS = {"fn":["main","run_search"],"mod":["args","tui"]};

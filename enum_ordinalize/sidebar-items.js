@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":[["Ordinalize",""]]};
+window.SIDEBAR_ITEMS = {"derive":["Ordinalize"]};

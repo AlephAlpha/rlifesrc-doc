@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["apgcode","Parsers for apgcode format and Extended Wechsler format."],["macrocell","A parser for Macrocell format."],["plaintext","A parser for Plaintext format."],["rle","A parser for Golly’s Extended RLE format."]],"struct":[["CellData","Position and state of a cell."]],"trait":[["Input","Types that can be passed to parsers as input."]],"type":[["Coordinates",""]]};
+window.SIDEBAR_ITEMS = {"mod":["apgcode","macrocell","plaintext","rle"],"struct":["CellData"],"trait":["Input"],"type":["Coordinates"]};

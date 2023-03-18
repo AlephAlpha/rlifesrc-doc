@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":[["Reason","Reasons for setting a cell."]]};
+window.SIDEBAR_ITEMS = {"trait":["Reason"]};

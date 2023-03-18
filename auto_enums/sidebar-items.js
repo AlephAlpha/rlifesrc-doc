@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"attr":[["auto_enum","An attribute macro for to allow multiple return types by automatically generated enum."],["enum_derive","An attribute macro like a wrapper of `#[derive]`, implementing the supported traits and passing unsupported traits to `#[derive]`."]]};
+window.SIDEBAR_ITEMS = {"attr":["auto_enum","enum_derive"]};

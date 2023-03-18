@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":[["Sealed","A helper trait for sealing the `Algorithm` trait."]]};
+window.SIDEBAR_ITEMS = {"trait":["Sealed"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":[["Educe",""]]};
+window.SIDEBAR_ITEMS = {"derive":["Educe"]};

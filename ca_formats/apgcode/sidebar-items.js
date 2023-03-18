@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Error","Errors that can be returned when parsing a apgcode string."],["PatternType","Type of a pattern."]],"struct":[["ApgCode","A parser for apgcode format."],["Wechsler","A parser for Extended Wechsler format."]]};
+window.SIDEBAR_ITEMS = {"enum":["Error","PatternType"],"struct":["ApgCode","Wechsler"]};

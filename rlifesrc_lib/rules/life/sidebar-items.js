@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["ImplFlags","Flags to imply the state of a cell and its neighbors."],["Life","Totalistic Life-like rules."],["LifeGen","Totalistic Life-like Generations rules."],["NbhdDesc","The neighborhood descriptor."],["NbhdDescGen","The neighborhood descriptor."]],"trait":[["__BitFlags",""]]};
+window.SIDEBAR_ITEMS = {"constant":["NUM_FLAGS","OPTIONS","OPTIONS_NAMES"],"struct":["ImplFlags","InternalBitFlags","Iter","IterRaw","Life","LifeGen","NbhdDesc","NbhdDescGen"]};
