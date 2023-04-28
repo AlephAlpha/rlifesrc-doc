@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["VARIANTS"],"enum":["Status","__Field"],"mod":["backjump","lifesrc","private","reason"],"struct":["Backjump","LifeSrc","SetCell","__FieldVisitor","__Visitor"],"trait":["Algorithm"]};
+window.SIDEBAR_ITEMS = {"enum":["Status"],"mod":["backjump","lifesrc","private","reason"],"struct":["Backjump","LifeSrc","SetCell"],"trait":["Algorithm"]};

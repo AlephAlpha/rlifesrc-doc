@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["FIELDS","VARIANTS"],"enum":["ReasonSer","__Field"],"struct":["SetCellSer","WorldSer","__FieldVisitor","__Visitor"]};
+window.SIDEBAR_ITEMS = {"enum":["ReasonSer"],"struct":["SetCellSer","WorldSer"]};

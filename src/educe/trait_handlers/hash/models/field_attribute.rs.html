@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/educe-0.4.20/src/trait_handlers/hash/models/field_attribute.rs`."><title>field_attribute.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../static.files/rustdoc-c4dbdcde0fbd8430.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../../../" data-static-root-path="../../../../../static.files/" data-current-crate="educe" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0-nightly (13afbdaa0 2023-03-17)" data-search-js="search-d1bc581867fd0849.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" data-theme-light-css="light-db279b6232be9c13.css" data-theme-dark-css="dark-cf923f49f397b216.css" data-theme-ayu-css="ayu-be46fdc453a55015.css" ></div><script src="../../../../../static.files/storage-9184409068f70b79.js"></script><script defer src="../../../../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../../../../source-files.js"></script><script defer src="../../../../../static.files/main-f5a2577c5297a973.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" href="../../../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../../educe/index.html"><img class="rust-logo" src="../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/educe-0.4.22/src/trait_handlers/hash/models/field_attribute.rs`."><title>field_attribute.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../../../" data-static-root-path="../../../../../static.files/" data-current-crate="educe" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (1a6ae3d69 2023-04-27)" data-search-js="search-618e954b235f6acc.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../../../source-files.js"></script><script defer src="../../../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../../educe/index.html"><img class="rust-logo" src="../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -279,45 +279,23 @@
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
-<a href="#282" id="282">282</a>
-<a href="#283" id="283">283</a>
-<a href="#284" id="284">284</a>
-<a href="#285" id="285">285</a>
-<a href="#286" id="286">286</a>
-<a href="#287" id="287">287</a>
-<a href="#288" id="288">288</a>
-<a href="#289" id="289">289</a>
-<a href="#290" id="290">290</a>
-<a href="#291" id="291">291</a>
-<a href="#292" id="292">292</a>
-<a href="#293" id="293">293</a>
-<a href="#294" id="294">294</a>
-<a href="#295" id="295">295</a>
-<a href="#296" id="296">296</a>
-<a href="#297" id="297">297</a>
-<a href="#298" id="298">298</a>
-<a href="#299" id="299">299</a>
-<a href="#300" id="300">300</a>
-<a href="#301" id="301">301</a>
-</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::create_path_string_from_lit_str;
-
-<span class="kw">use </span><span class="kw">crate</span>::panic;
-<span class="kw">use </span><span class="kw">crate</span>::Trait;
-
-<span class="kw">use </span>quote::ToTokens;
+</pre></div><pre class="rust"><code><span class="kw">use </span>quote::ToTokens;
 <span class="kw">use </span>syn::{Attribute, Lit, Meta, NestedMeta};
+
+<span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::<span class="kw">super</span>::create_path_string_from_lit_str;
+<span class="kw">use crate</span>::{panic, Trait};
 
 <span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>FieldAttribute {
-    <span class="kw">pub </span>ignore: bool,
+    <span class="kw">pub </span>ignore:      bool,
     <span class="kw">pub </span>hash_method: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="kw">pub </span>hash_trait: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="kw">pub </span>hash_trait:  <span class="prelude-ty">Option</span>&lt;String&gt;,
 }
 
 <span class="attr">#[derive(Debug, Clone)]
 </span><span class="kw">pub struct </span>FieldAttributeBuilder {
     <span class="kw">pub </span>enable_ignore: bool,
-    <span class="kw">pub </span>enable_impl: bool,
+    <span class="kw">pub </span>enable_impl:   bool,
 }
 
 <span class="kw">impl </span>FieldAttributeBuilder {
@@ -382,15 +360,13 @@
                                             ignore_is_set = <span class="bool-val">true</span>;
 
                                             ignore = <span class="bool-val">true</span>;
-                                        }
-                                        <span class="kw">_ </span>=&gt; {
-                                            panic::parameter_incorrect_format(
-                                                meta_name.as_str(),
-                                                <span class="kw-2">&amp;</span>correct_usage_for_ignore,
-                                            )
-                                        }
+                                        },
+                                        <span class="kw">_ </span>=&gt; panic::parameter_incorrect_format(
+                                            meta_name.as_str(),
+                                            <span class="kw-2">&amp;</span>correct_usage_for_ignore,
+                                        ),
                                     }
-                                }
+                                },
                                 <span class="string">&quot;method&quot; </span>=&gt; {
                                     <span class="kw">if </span>!<span class="self">self</span>.enable_impl {
                                         panic::unknown_parameter(<span class="string">&quot;Hash&quot;</span>, meta_name.as_str());
@@ -416,16 +392,14 @@
                                                                 meta_name.as_str(),
                                                             );
                                                         }
-                                                    }
-                                                    <span class="kw">_ </span>=&gt; {
-                                                        panic::parameter_incorrect_format(
-                                                            meta_name.as_str(),
-                                                            <span class="kw-2">&amp;</span>correct_usage_for_impl,
-                                                        )
-                                                    }
+                                                    },
+                                                    <span class="kw">_ </span>=&gt; panic::parameter_incorrect_format(
+                                                        meta_name.as_str(),
+                                                        <span class="kw-2">&amp;</span>correct_usage_for_impl,
+                                                    ),
                                                 }
                                             }
-                                        }
+                                        },
                                         Meta::NameValue(named_value) =&gt; {
                                             <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>named_value.lit;
 
@@ -442,23 +416,19 @@
                                                     } <span class="kw">else </span>{
                                                         panic::empty_parameter(meta_name.as_str());
                                                     }
-                                                }
-                                                <span class="kw">_ </span>=&gt; {
-                                                    panic::parameter_incorrect_format(
-                                                        meta_name.as_str(),
-                                                        <span class="kw-2">&amp;</span>correct_usage_for_impl,
-                                                    )
-                                                }
+                                                },
+                                                <span class="kw">_ </span>=&gt; panic::parameter_incorrect_format(
+                                                    meta_name.as_str(),
+                                                    <span class="kw-2">&amp;</span>correct_usage_for_impl,
+                                                ),
                                             }
-                                        }
-                                        <span class="kw">_ </span>=&gt; {
-                                            panic::parameter_incorrect_format(
-                                                meta_name.as_str(),
-                                                <span class="kw-2">&amp;</span>correct_usage_for_impl,
-                                            )
-                                        }
+                                        },
+                                        <span class="kw">_ </span>=&gt; panic::parameter_incorrect_format(
+                                            meta_name.as_str(),
+                                            <span class="kw-2">&amp;</span>correct_usage_for_impl,
+                                        ),
                                     }
-                                }
+                                },
                                 <span class="string">&quot;trait&quot; </span>=&gt; {
                                     <span class="kw">if </span>!<span class="self">self</span>.enable_impl {
                                         panic::unknown_parameter(<span class="string">&quot;Hash&quot;</span>, meta_name.as_str());
@@ -484,16 +454,14 @@
                                                                 meta_name.as_str(),
                                                             );
                                                         }
-                                                    }
-                                                    <span class="kw">_ </span>=&gt; {
-                                                        panic::parameter_incorrect_format(
-                                                            meta_name.as_str(),
-                                                            <span class="kw-2">&amp;</span>correct_usage_for_impl,
-                                                        )
-                                                    }
+                                                    },
+                                                    <span class="kw">_ </span>=&gt; panic::parameter_incorrect_format(
+                                                        meta_name.as_str(),
+                                                        <span class="kw-2">&amp;</span>correct_usage_for_impl,
+                                                    ),
                                                 }
                                             }
-                                        }
+                                        },
                                         Meta::NameValue(named_value) =&gt; {
                                             <span class="kw">let </span>lit = <span class="kw-2">&amp;</span>named_value.lit;
 
@@ -510,35 +478,29 @@
                                                     } <span class="kw">else </span>{
                                                         panic::empty_parameter(meta_name.as_str());
                                                     }
-                                                }
-                                                <span class="kw">_ </span>=&gt; {
-                                                    panic::parameter_incorrect_format(
-                                                        meta_name.as_str(),
-                                                        <span class="kw-2">&amp;</span>correct_usage_for_impl,
-                                                    )
-                                                }
+                                                },
+                                                <span class="kw">_ </span>=&gt; panic::parameter_incorrect_format(
+                                                    meta_name.as_str(),
+                                                    <span class="kw-2">&amp;</span>correct_usage_for_impl,
+                                                ),
                                             }
-                                        }
-                                        <span class="kw">_ </span>=&gt; {
-                                            panic::parameter_incorrect_format(
-                                                meta_name.as_str(),
-                                                <span class="kw-2">&amp;</span>correct_usage_for_impl,
-                                            )
-                                        }
+                                        },
+                                        <span class="kw">_ </span>=&gt; panic::parameter_incorrect_format(
+                                            meta_name.as_str(),
+                                            <span class="kw-2">&amp;</span>correct_usage_for_impl,
+                                        ),
                                     }
-                                }
+                                },
                                 <span class="kw">_ </span>=&gt; panic::unknown_parameter(<span class="string">&quot;Hash&quot;</span>, meta_name.as_str()),
                             }
-                        }
-                        <span class="kw">_ </span>=&gt; {
-                            panic::attribute_incorrect_format(
-                                <span class="string">&quot;Hash&quot;</span>,
-                                <span class="kw-2">&amp;</span>correct_usage_for_hash_attribute,
-                            )
-                        }
+                        },
+                        <span class="kw">_ </span>=&gt; panic::attribute_incorrect_format(
+                            <span class="string">&quot;Hash&quot;</span>,
+                            <span class="kw-2">&amp;</span>correct_usage_for_hash_attribute,
+                        ),
                     }
                 }
-            }
+            },
             <span class="kw">_ </span>=&gt; panic::attribute_incorrect_format(<span class="string">&quot;Hash&quot;</span>, <span class="kw-2">&amp;</span>correct_usage_for_hash_attribute),
         }
 
@@ -558,11 +520,9 @@
         <span class="kw">let </span><span class="kw-2">mut </span>result = <span class="prelude-val">None</span>;
 
         <span class="kw">for </span>attribute <span class="kw">in </span>attributes.iter() {
-            <span class="kw">let </span>meta = attribute.parse_meta().unwrap();
+            <span class="kw">if </span>attribute.path.is_ident(<span class="string">&quot;educe&quot;</span>) {
+                <span class="kw">let </span>meta = attribute.parse_meta().unwrap();
 
-            <span class="kw">let </span>meta_name = meta.path().into_token_stream().to_string();
-
-            <span class="kw">if </span>meta_name.as_str() == <span class="string">&quot;educe&quot; </span>{
                 <span class="kw">match </span>meta {
                     Meta::List(list) =&gt; {
                         <span class="kw">for </span>p <span class="kw">in </span>list.nested.iter() {
@@ -583,22 +543,21 @@
 
                                         result = <span class="prelude-val">Some</span>(<span class="self">self</span>.from_hash_meta(meta));
                                     }
-                                }
+                                },
                                 <span class="kw">_ </span>=&gt; panic::educe_format_incorrect(),
                             }
                         }
-                    }
+                    },
                     <span class="kw">_ </span>=&gt; panic::educe_format_incorrect(),
                 }
             }
         }
 
         result.unwrap_or(FieldAttribute {
-            ignore: <span class="bool-val">false</span>,
+            ignore:      <span class="bool-val">false</span>,
             hash_method: <span class="prelude-val">None</span>,
-            hash_trait: <span class="prelude-val">None</span>,
+            hash_trait:  <span class="prelude-val">None</span>,
         })
     }
 }
-</code></pre></div>
-</section></main></body></html>
+</code></pre></div></section></main></body></html>

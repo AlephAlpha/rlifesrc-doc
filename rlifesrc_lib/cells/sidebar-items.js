@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["ALIVE","DEAD"],"struct":["CellRef","LifeCell","State","__Visitor"],"type":["Coord"]};
+window.SIDEBAR_ITEMS = {"constant":["ALIVE","DEAD"],"struct":["CellRef","LifeCell","State"],"type":["Coord"]};

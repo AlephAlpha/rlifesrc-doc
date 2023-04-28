@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["VARIANTS"],"enum":["SearchOrder","__Enum14559090585743473379","__Field"],"opaque":[""],"struct":["__FieldVisitor","__Visitor"]};
+window.SIDEBAR_ITEMS = {"enum":["SearchOrder","__Enum14559090585743473379"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["FIELDS","VARIANTS"],"enum":["NewState","__Field"],"macro":["new_world","new_world_gen"],"mod":["d8","search_order"],"struct":["Config","KnownCell","__FieldVisitor","__Visitor"]};
+window.SIDEBAR_ITEMS = {"enum":["NewState"],"macro":["new_world","new_world_gen"],"mod":["d8","search_order"],"struct":["Config","KnownCell"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["NUM_FLAGS","OPTIONS","OPTIONS_NAMES"],"struct":["ImplFlags","InternalBitFlags","Iter","IterRaw","Life","LifeGen","NbhdDesc","NbhdDescGen"]};
+window.SIDEBAR_ITEMS = {"constant":["NUM_FLAGS","OPTIONS","OPTIONS_NAMES"],"struct":["ImplFlags","Life","LifeGen","NbhdDesc","NbhdDescGen"]};
