@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["NUM_FLAGS","OPTIONS","OPTIONS_NAMES"],"fn":["permute_bits","transform_neigh"],"struct":["ImplFlags","NbhdDesc","NbhdDescGen","NtLife","NtLifeGen"]};
+window.SIDEBAR_ITEMS = {"fn":["permute_bits","transform_neigh"],"struct":["ImplFlags","NbhdDesc","NbhdDescGen","NtLife","NtLifeGen"]};
