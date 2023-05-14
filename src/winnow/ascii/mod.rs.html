@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/winnow-0.4.4/src/ascii/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="winnow" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2a8221dbd 2023-05-11)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../winnow/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/winnow-0.4.6/src/ascii/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="winnow" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2c41369ac 2023-05-13)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../winnow/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1781,31 +1781,6 @@
 <a href="#1781" id="1781">1781</a>
 <a href="#1782" id="1782">1782</a>
 <a href="#1783" id="1783">1783</a>
-<a href="#1784" id="1784">1784</a>
-<a href="#1785" id="1785">1785</a>
-<a href="#1786" id="1786">1786</a>
-<a href="#1787" id="1787">1787</a>
-<a href="#1788" id="1788">1788</a>
-<a href="#1789" id="1789">1789</a>
-<a href="#1790" id="1790">1790</a>
-<a href="#1791" id="1791">1791</a>
-<a href="#1792" id="1792">1792</a>
-<a href="#1793" id="1793">1793</a>
-<a href="#1794" id="1794">1794</a>
-<a href="#1795" id="1795">1795</a>
-<a href="#1796" id="1796">1796</a>
-<a href="#1797" id="1797">1797</a>
-<a href="#1798" id="1798">1798</a>
-<a href="#1799" id="1799">1799</a>
-<a href="#1800" id="1800">1800</a>
-<a href="#1801" id="1801">1801</a>
-<a href="#1802" id="1802">1802</a>
-<a href="#1803" id="1803">1803</a>
-<a href="#1804" id="1804">1804</a>
-<a href="#1805" id="1805">1805</a>
-<a href="#1806" id="1806">1806</a>
-<a href="#1807" id="1807">1807</a>
-<a href="#1808" id="1808">1808</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Character specific parsers and combinators
 //!
 //! Functions recognizing specific characters
@@ -1825,8 +1800,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::stream::ContainsToken;
 <span class="kw">use </span><span class="kw">crate</span>::stream::{AsBStr, AsChar, Offset, ParseSlice, Stream, StreamIsPartial};
 <span class="kw">use </span><span class="kw">crate</span>::stream::{Compare, CompareResult};
-<span class="kw">use </span><span class="kw">crate</span>::token::take_while0;
-<span class="kw">use </span><span class="kw">crate</span>::token::take_while1;
+<span class="kw">use </span><span class="kw">crate</span>::token::take_while;
 <span class="kw">use </span><span class="kw">crate</span>::trace::trace;
 <span class="kw">use </span><span class="kw">crate</span>::IResult;
 <span class="kw">use </span><span class="kw">crate</span>::Parser;
@@ -1911,63 +1885,29 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;not_line_ending&quot;</span>, <span class="kw">move </span>|input: I| {
-        <span class="kw">if </span>input.is_partial() {
-            streaming_not_line_ending(input)
+        <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported() {
+            not_line_ending_::&lt;<span class="kw">_</span>, <span class="kw">_</span>, <span class="bool-val">true</span>&gt;(input)
         } <span class="kw">else </span>{
-            complete_not_line_ending(input)
+            not_line_ending_::&lt;<span class="kw">_</span>, <span class="kw">_</span>, <span class="bool-val">false</span>&gt;(input)
         }
     })
     .parse_next(input)
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>streaming_not_line_ending&lt;T, E: ParseError&lt;T&gt;&gt;(
-    input: T,
-) -&gt; IResult&lt;T, &lt;T <span class="kw">as </span>Stream&gt;::Slice, E&gt;
+<span class="kw">fn </span>not_line_ending_&lt;I, E: ParseError&lt;I&gt;, <span class="kw">const </span>PARTIAL: bool&gt;(
+    input: I,
+) -&gt; IResult&lt;I, &lt;I <span class="kw">as </span>Stream&gt;::Slice, E&gt;
 <span class="kw">where
-    </span>T: Stream + AsBStr,
-    T: Compare&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;,
-    &lt;T <span class="kw">as </span>Stream&gt;::Token: AsChar,
+    </span>I: StreamIsPartial,
+    I: Stream + AsBStr,
+    I: Compare&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;,
+    &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     <span class="kw">match </span>input.offset_for(|item| {
         <span class="kw">let </span>c = item.as_char();
         c == <span class="string">&#39;\r&#39; </span>|| c == <span class="string">&#39;\n&#39;
     </span>}) {
-        <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::Unknown)),
-        <span class="prelude-val">Some</span>(offset) =&gt; {
-            <span class="kw">let </span>(new_input, res) = input.next_slice(offset);
-            <span class="kw">let </span>bytes = new_input.as_bstr();
-            <span class="kw">let </span>nth = bytes[<span class="number">0</span>];
-            <span class="kw">if </span>nth == <span class="string">b&#39;\r&#39; </span>{
-                <span class="kw">let </span>comp = new_input.compare(<span class="string">&quot;\r\n&quot;</span>);
-                <span class="kw">match </span>comp {
-                    <span class="comment">//FIXME: calculate the right index
-                    </span>CompareResult::Ok =&gt; {}
-                    CompareResult::Incomplete =&gt; {
-                        <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::Unknown));
-                    }
-                    CompareResult::Error =&gt; {
-                        <span class="kw">let </span>e: ErrorKind = ErrorKind::Tag;
-                        <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::from_error_kind(input, e));
-                    }
-                }
-            }
-            <span class="prelude-val">Ok</span>((new_input, res))
-        }
-    }
-}
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>complete_not_line_ending&lt;T, E: ParseError&lt;T&gt;&gt;(
-    input: T,
-) -&gt; IResult&lt;T, &lt;T <span class="kw">as </span>Stream&gt;::Slice, E&gt;
-<span class="kw">where
-    </span>T: Stream + AsBStr,
-    T: Compare&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;,
-    &lt;T <span class="kw">as </span>Stream&gt;::Token: AsChar,
-{
-    <span class="kw">match </span>input.offset_for(|item| {
-        <span class="kw">let </span>c = item.as_char();
-        c == <span class="string">&#39;\r&#39; </span>|| c == <span class="string">&#39;\n&#39;
-    </span>}) {
+        <span class="prelude-val">None </span><span class="kw">if </span>PARTIAL &amp;&amp; input.is_partial() =&gt; <span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::Unknown)),
         <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(input.next_slice(input.eof_offset())),
         <span class="prelude-val">Some</span>(offset) =&gt; {
             <span class="kw">let </span>(new_input, res) = input.next_slice(offset);
@@ -1978,6 +1918,9 @@
                 <span class="kw">match </span>comp {
                     <span class="comment">//FIXME: calculate the right index
                     </span>CompareResult::Ok =&gt; {}
+                    CompareResult::Incomplete <span class="kw">if </span>PARTIAL &amp;&amp; input.is_partial() =&gt; {
+                        <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::Unknown));
+                    }
                     CompareResult::Incomplete | CompareResult::Error =&gt; {
                         <span class="kw">let </span>e: ErrorKind = ErrorKind::Tag;
                         <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::from_error_kind(input, e));
@@ -2152,7 +2095,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;alpha0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while0(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alpha()).parse_next(input)
+        take_while(<span class="number">0</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alpha()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2195,7 +2138,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;alpha1&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while1(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alpha()).parse_next(input)
+        take_while(<span class="number">1</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alpha()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2239,7 +2182,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;digit0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while0(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_dec_digit()).parse_next(input)
+        take_while(<span class="number">0</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_dec_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2298,7 +2241,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;digit1&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while1(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_dec_digit()).parse_next(input)
+        take_while(<span class="number">1</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_dec_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2340,7 +2283,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;hex_digit0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while0(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_hex_digit()).parse_next(input)
+        take_while(<span class="number">0</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_hex_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2383,7 +2326,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;hex_digit1&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while1(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_hex_digit()).parse_next(input)
+        take_while(<span class="number">1</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_hex_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2426,7 +2369,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;oct_digit0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while0(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_oct_digit()).parse_next(input)
+        take_while(<span class="number">0</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_oct_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2469,7 +2412,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;oct_digit0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while1(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_oct_digit()).parse_next(input)
+        take_while(<span class="number">1</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_oct_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2512,7 +2455,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;alphanumeric0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while0(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alphanum()).parse_next(input)
+        take_while(<span class="number">0</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alphanum()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2555,7 +2498,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar,
 {
     trace(<span class="string">&quot;alphanumeric1&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while1(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alphanum()).parse_next(input)
+        take_while(<span class="number">1</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| c.is_alphanum()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -2586,7 +2529,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar + Copy,
 {
     trace(<span class="string">&quot;space0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while0(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
+        take_while(<span class="number">0</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
             <span class="kw">let </span>ch = c.as_char();
             <span class="macro">matches!</span>(ch, <span class="string">&#39; &#39; </span>| <span class="string">&#39;\t&#39;</span>)
         })
@@ -2633,7 +2576,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar + Copy,
 {
     trace(<span class="string">&quot;space1&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while1(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
+        take_while(<span class="number">1</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
             <span class="kw">let </span>ch = c.as_char();
             <span class="macro">matches!</span>(ch, <span class="string">&#39; &#39; </span>| <span class="string">&#39;\t&#39;</span>)
         })
@@ -2680,7 +2623,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar + Copy,
 {
     trace(<span class="string">&quot;multispace0&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while0(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
+        take_while(<span class="number">0</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
             <span class="kw">let </span>ch = c.as_char();
             <span class="macro">matches!</span>(ch, <span class="string">&#39; &#39; </span>| <span class="string">&#39;\t&#39; </span>| <span class="string">&#39;\r&#39; </span>| <span class="string">&#39;\n&#39;</span>)
         })
@@ -2727,7 +2670,7 @@
     &lt;I <span class="kw">as </span>Stream&gt;::Token: AsChar + Copy,
 {
     trace(<span class="string">&quot;multispace1&quot;</span>, <span class="kw">move </span>|input: I| {
-        take_while1(|c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
+        take_while(<span class="number">1</span>.., |c: &lt;I <span class="kw">as </span>Stream&gt;::Token| {
             <span class="kw">let </span>ch = c.as_char();
             <span class="macro">matches!</span>(ch, <span class="string">&#39; &#39; </span>| <span class="string">&#39;\t&#39; </span>| <span class="string">&#39;\r&#39; </span>| <span class="string">&#39;\n&#39;</span>)
         })
@@ -2755,7 +2698,7 @@
 {
     trace(<span class="string">&quot;dec_uint&quot;</span>, <span class="kw">move </span>|input: I| {
         <span class="kw">if </span>input.eof_offset() == <span class="number">0 </span>{
-            <span class="kw">if </span>input.is_partial() {
+            <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported() &amp;&amp; input.is_partial() {
                 <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::new(<span class="number">1</span>)));
             } <span class="kw">else </span>{
                 <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::from_error_kind(input, ErrorKind::Slice));
@@ -2782,7 +2725,7 @@
             }
         }
 
-        <span class="kw">if </span>input.is_partial() {
+        <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported() &amp;&amp; input.is_partial() {
             <span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::new(<span class="number">1</span>)))
         } <span class="kw">else </span>{
             <span class="prelude-val">Ok</span>((input.next_slice(input.eof_offset()).<span class="number">0</span>, value))
@@ -2916,7 +2859,7 @@
             .parse_next(input)<span class="question-mark">?</span>;
 
         <span class="kw">if </span>input.eof_offset() == <span class="number">0 </span>{
-            <span class="kw">if </span>input.is_partial() {
+            <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported() &amp;&amp; input.is_partial() {
                 <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::new(<span class="number">1</span>)));
             } <span class="kw">else </span>{
                 <span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::from_error_kind(input, ErrorKind::Slice));
@@ -2947,7 +2890,7 @@
             }
         }
 
-        <span class="kw">if </span>input.is_partial() {
+        <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported() &amp;&amp; input.is_partial() {
             <span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::new(<span class="number">1</span>)))
         } <span class="kw">else </span>{
             <span class="prelude-val">Ok</span>((input.next_slice(input.eof_offset()).<span class="number">0</span>, value))
@@ -3058,7 +3001,10 @@
                 }
             }
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                <span class="kw">if </span>input.is_partial() &amp;&amp; invalid_offset == input.eof_offset() {
+                <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported()
+                    &amp;&amp; input.is_partial()
+                    &amp;&amp; invalid_offset == input.eof_offset()
+                {
                     <span class="comment">// Only the next byte is guaranteed required
                     </span><span class="kw">return </span><span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::new(<span class="number">1</span>)));
                 } <span class="kw">else </span>{
@@ -3289,7 +3235,7 @@
     Error: ParseError&lt;I&gt;,
 {
     trace(<span class="string">&quot;escaped&quot;</span>, <span class="kw">move </span>|input: I| {
-        <span class="kw">if </span>input.is_partial() {
+        <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported() &amp;&amp; input.is_partial() {
             streaming_escaped_internal(input, <span class="kw-2">&amp;mut </span>normal, control_char, <span class="kw-2">&amp;mut </span>escapable)
         } <span class="kw">else </span>{
             complete_escaped_internal(input, <span class="kw-2">&amp;mut </span>normal, control_char, <span class="kw-2">&amp;mut </span>escapable)
@@ -3297,14 +3243,15 @@
     })
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>streaming_escaped_internal&lt;I, Error, F, G, O1, O2&gt;(
+<span class="kw">fn </span>streaming_escaped_internal&lt;I, Error, F, G, O1, O2&gt;(
     input: I,
     normal: <span class="kw-2">&amp;mut </span>F,
     control_char: char,
     escapable: <span class="kw-2">&amp;mut </span>G,
 ) -&gt; IResult&lt;I, &lt;I <span class="kw">as </span>Stream&gt;::Slice, Error&gt;
 <span class="kw">where
-    </span>I: Stream + Offset,
+    </span>I: StreamIsPartial,
+    I: Stream + Offset,
     &lt;I <span class="kw">as </span>Stream&gt;::Token: <span class="kw">crate</span>::stream::AsChar,
     F: Parser&lt;I, O1, Error&gt;,
     G: Parser&lt;I, O2, Error&gt;,
@@ -3353,14 +3300,15 @@
     <span class="prelude-val">Err</span>(ErrMode::Incomplete(Needed::Unknown))
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>complete_escaped_internal&lt;<span class="lifetime">&#39;a</span>, I: <span class="lifetime">&#39;a</span>, Error, F, G, O1, O2&gt;(
+<span class="kw">fn </span>complete_escaped_internal&lt;<span class="lifetime">&#39;a</span>, I: <span class="lifetime">&#39;a</span>, Error, F, G, O1, O2&gt;(
     input: I,
     normal: <span class="kw-2">&amp;mut </span>F,
     control_char: char,
     escapable: <span class="kw-2">&amp;mut </span>G,
 ) -&gt; IResult&lt;I, &lt;I <span class="kw">as </span>Stream&gt;::Slice, Error&gt;
 <span class="kw">where
-    </span>I: Stream + Offset,
+    </span>I: StreamIsPartial,
+    I: Stream + Offset,
     &lt;I <span class="kw">as </span>Stream&gt;::Token: <span class="kw">crate</span>::stream::AsChar,
     F: Parser&lt;I, O1, Error&gt;,
     G: Parser&lt;I, O2, Error&gt;,
@@ -3487,7 +3435,7 @@
     Error: ParseError&lt;I&gt;,
 {
     trace(<span class="string">&quot;escaped_transform&quot;</span>, <span class="kw">move </span>|input: I| {
-        <span class="kw">if </span>input.is_partial() {
+        <span class="kw">if </span>&lt;I <span class="kw">as </span>StreamIsPartial&gt;::is_partial_supported() &amp;&amp; input.is_partial() {
             streaming_escaped_transform_internal(input, <span class="kw-2">&amp;mut </span>normal, control_char, <span class="kw-2">&amp;mut </span>transform)
         } <span class="kw">else </span>{
             complete_escaped_transform_internal(input, <span class="kw-2">&amp;mut </span>normal, control_char, <span class="kw-2">&amp;mut </span>transform)
@@ -3496,14 +3444,15 @@
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
-</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>streaming_escaped_transform_internal&lt;I, Error, F, G, Output&gt;(
+</span><span class="kw">fn </span>streaming_escaped_transform_internal&lt;I, Error, F, G, Output&gt;(
     input: I,
     normal: <span class="kw-2">&amp;mut </span>F,
     control_char: char,
     transform: <span class="kw-2">&amp;mut </span>G,
 ) -&gt; IResult&lt;I, Output, Error&gt;
 <span class="kw">where
-    </span>I: Stream + Offset,
+    </span>I: StreamIsPartial,
+    I: Stream + Offset,
     &lt;I <span class="kw">as </span>Stream&gt;::Token: <span class="kw">crate</span>::stream::AsChar,
     Output: <span class="kw">crate</span>::stream::Accumulate&lt;&lt;I <span class="kw">as </span>Stream&gt;::Slice&gt;,
     F: Parser&lt;I, &lt;I <span class="kw">as </span>Stream&gt;::Slice, Error&gt;,
@@ -3554,14 +3503,15 @@
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
-</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>complete_escaped_transform_internal&lt;I, Error, F, G, Output&gt;(
+</span><span class="kw">fn </span>complete_escaped_transform_internal&lt;I, Error, F, G, Output&gt;(
     input: I,
     normal: <span class="kw-2">&amp;mut </span>F,
     control_char: char,
     transform: <span class="kw-2">&amp;mut </span>G,
 ) -&gt; IResult&lt;I, Output, Error&gt;
 <span class="kw">where
-    </span>I: Stream + Offset,
+    </span>I: StreamIsPartial,
+    I: Stream + Offset,
     &lt;I <span class="kw">as </span>Stream&gt;::Token: <span class="kw">crate</span>::stream::AsChar,
     Output: <span class="kw">crate</span>::stream::Accumulate&lt;&lt;I <span class="kw">as </span>Stream&gt;::Slice&gt;,
     F: Parser&lt;I, &lt;I <span class="kw">as </span>Stream&gt;::Slice, Error&gt;,
