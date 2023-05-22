@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["SearchOrder","__Enum14559090585743473379"]};
+window.SIDEBAR_ITEMS = {"enum":["SearchOrder"]};

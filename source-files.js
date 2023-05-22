@@ -6,7 +6,7 @@ var sourcesIndex = JSON.parse('{\
 "anstyle_query":["",[],["lib.rs","windows.rs"]],\
 "auto_enums":["",[["auto_enum",[],["context.rs","expr.rs","mod.rs","visitor.rs"]],["derive",[["core",[],["fmt.rs","future.rs","iter.rs","mod.rs","ops.rs"]],["external",[],["mod.rs"]],["std",[],["error.rs","io.rs","mod.rs"]],["ty_impls",[],["mod.rs"]]],["mod.rs"]]],["enum_derive.rs","lib.rs","utils.rs"]],\
 "base64":["",[["engine",[["general_purpose",[],["decode.rs","decode_suffix.rs","mod.rs"]]],["mod.rs"]],["read",[],["decoder.rs","mod.rs"]],["write",[],["encoder.rs","encoder_string_writer.rs","mod.rs"]]],["alphabet.rs","chunked_encoder.rs","decode.rs","display.rs","encode.rs","lib.rs","prelude.rs"]],\
-"bitflags":["",[],["external.rs","internal.rs","lib.rs","parser.rs","public.rs","traits.rs"]],\
+"bitflags":["",[],["external.rs","internal.rs","iter.rs","lib.rs","parser.rs","public.rs","traits.rs"]],\
 "ca_formats":["",[],["apgcode.rs","input.rs","lib.rs","macrocell.rs","plaintext.rs","rle.rs"]],\
 "ca_rules":["",[["rules",[],["hex.rs","life.rs","mod.rs","neumann.rs","nthex.rs","ntlife.rs","ntneumann.rs"]]],["error.rs","lib.rs","macros.rs"]],\
 "cfg_if":["",[],["lib.rs"]],\

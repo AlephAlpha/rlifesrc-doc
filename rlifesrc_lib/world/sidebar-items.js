@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["NBHD"],"struct":["World"]};
+window.SIDEBAR_ITEMS = {"struct":["World"]};

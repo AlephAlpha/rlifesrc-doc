@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["NewState"],"macro":["new_world","new_world_gen"],"mod":["d8","search_order"],"struct":["Config","KnownCell"]};
+window.SIDEBAR_ITEMS = {"enum":["NewState"],"mod":["d8","search_order"],"struct":["Config","KnownCell"]};
