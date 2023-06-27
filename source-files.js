@@ -22,6 +22,7 @@ var sourcesIndex = JSON.parse('{\
 "displaydoc":["",[],["attr.rs","expand.rs","fmt.rs","lib.rs"]],\
 "educe":["",[["trait_handlers",[["clone",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["clone_enum.rs","clone_struct.rs","clone_union.rs","mod.rs"]],["copy",[["models",[],["mod.rs","type_attribute.rs"]]],["mod.rs"]],["debug",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["debug_enum.rs","debug_struct.rs","debug_union.rs","mod.rs"]],["default",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["default_enum.rs","default_struct.rs","default_union.rs","mod.rs"]],["deref",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["deref_enum.rs","deref_struct.rs","mod.rs"]],["deref_mut",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["deref_mut_enum.rs","deref_mut_struct.rs","mod.rs"]],["eq",[["models",[],["mod.rs","type_attribute.rs"]]],["mod.rs"]],["hash",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["hash_enum.rs","hash_struct.rs","mod.rs"]],["ord",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["mod.rs","ord_enum.rs","ord_struct.rs"]],["partial_eq",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["mod.rs","partial_eq_enum.rs","partial_eq_struct.rs"]],["partial_ord",[["models",[],["field_attribute.rs","mod.rs","type_attribute.rs"]]],["mod.rs","partial_ord_enum.rs","partial_ord_struct.rs"]]],["mod.rs"]]],["lib.rs","panic.rs","support_traits.rs"]],\
 "enum_ordinalize":["",[],["big_int_wrapper.rs","lib.rs","panic.rs","variant_type.rs"]],\
+"equivalent":["",[],["lib.rs"]],\
 "fnv":["",[],["lib.rs"]],\
 "from_variants":["",[],["lib.rs"]],\
 "from_variants_impl":["",[],["from_impl.rs","lib.rs","parser.rs"]],\
@@ -33,7 +34,7 @@ var sourcesIndex = JSON.parse('{\
 "getrandom":["",[],["error.rs","error_impls.rs","lib.rs","linux_android.rs","use_file.rs","util.rs","util_libc.rs"]],\
 "hashbrown":["",[["external_trait_impls",[],["mod.rs"]],["raw",[],["alloc.rs","bitmask.rs","mod.rs","sse2.rs"]]],["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs"]],\
 "ident_case":["",[],["lib.rs"]],\
-"indexmap":["",[["map",[["core",[],["raw.rs"]]],["core.rs"]]],["arbitrary.rs","equivalent.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","set.rs","util.rs"]],\
+"indexmap":["",[["map",[["core",[],["raw.rs"]]],["core.rs","iter.rs","slice.rs"]],["set",[],["iter.rs","slice.rs"]]],["arbitrary.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","set.rs","util.rs"]],\
 "io_lifetimes":["",[],["example_ffi.rs","lib.rs","portability.rs","raw.rs","traits.rs","views.rs"]],\
 "is_terminal":["",[],["lib.rs"]],\
 "itoa":["",[],["lib.rs","udiv128.rs"]],\
