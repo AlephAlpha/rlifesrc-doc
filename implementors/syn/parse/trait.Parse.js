@@ -1,3 +1,3 @@
 (function() {var implementors = {
-"derive_utils":[["impl <a class=\"trait\" href=\"https://docs.rs/syn/2.0.29/syn/parse/trait.Parse.html\" title=\"trait syn::parse::Parse\">Parse</a> for <a class=\"struct\" href=\"derive_utils/struct.EnumData.html\" title=\"struct derive_utils::EnumData\">EnumData</a>"]]
+"derive_utils":[["impl <a class=\"trait\" href=\"https://docs.rs/syn/2.0.38/syn/parse/trait.Parse.html\" title=\"trait syn::parse::Parse\">Parse</a> for <a class=\"struct\" href=\"derive_utils/struct.EnumData.html\" title=\"struct derive_utils::EnumData\">EnumData</a>"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
